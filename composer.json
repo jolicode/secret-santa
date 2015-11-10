@@ -12,9 +12,18 @@
             "Joli\\SlackSecretSanta\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Joli\\SlackSecretSanta\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "bramdevries/oauth2-slack": "^0.1.0",
         "cleentfaar/slack": "^0.17.1",
         "symfony/symfony": "2.8.x@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.0",
+        "fabpot/php-cs-fixer": "^1.10"
     }
 }
