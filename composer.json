@@ -7,5 +7,7 @@
             "email": "coucou@jolicode.com"
         }
     ],
-    "require": {}
+    "require": {
+        "bramdevries/oauth2-slack": "^0.1.0"
+    }
 }
