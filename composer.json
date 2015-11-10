@@ -1,0 +1,11 @@
+{
+    "name": "jolicode/slack-secret-santa",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "JoliCode",
+            "email": "coucou@jolicode.com"
+        }
+    ],
+    "require": {}
+}
