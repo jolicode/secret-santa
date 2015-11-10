@@ -5,7 +5,6 @@
 - Give your heroku details to Damien to be able to deploy
 
     $ heroku login
-
     $ heroku git:remote -a slack-secret-santa
 
 Deploy your application : Commit your code to the repository and deploy it to Heroku using Git.
