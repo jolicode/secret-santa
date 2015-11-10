@@ -4,6 +4,8 @@ if (empty($_ENV['SLACK_CLIENT_SECRET']) || empty($_ENV['SLACK_CLIENT_ID'])) {
     die('Missing env. variables, abort!');
 }
 
+include '../vendor/autoload.php';
+
 $provider = new Bramdevries\Oauth\Client\Provider\Slack([
     'clientId'          => $_ENV['SLACK_CLIENT_ID'],
     'clientSecret'      => $_ENV['SLACK_CLIENT_SECRET'],
