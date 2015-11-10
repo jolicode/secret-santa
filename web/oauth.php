@@ -17,7 +17,7 @@ $provider = new Bramdevries\Oauth\Client\Provider\Slack([
 if (!isset($_GET['code'])) {
     // If we don't have an authorization code then get one
     $options = [
-        'scope' => ['chat:write:bot', 'users:read'] // array or string
+        'scope' => ['chat:write:bot', 'users:read', 'channels:read'] // array or string
     ];
     $authUrl = $provider->getAuthorizationUrl($options);
 
