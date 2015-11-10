@@ -6,6 +6,8 @@ if (empty($_ENV['SLACK_CLIENT_SECRET']) || empty($_ENV['SLACK_CLIENT_ID'])) {
 
 include '../vendor/autoload.php';
 
+session_start();
+
 $provider = new Bramdevries\Oauth\Client\Provider\Slack([
     'clientId'          => $_ENV['SLACK_CLIENT_ID'],
     'clientSecret'      => $_ENV['SLACK_CLIENT_SECRET'],
@@ -17,10 +19,13 @@ if (!isset($_GET['code'])) {
     $options = [
         'scope' => ['chat:write:bot', 'users:read'] // array or string
     ];
-
     $authUrl = $provider->getAuthorizationUrl($options);
+
+    var_dump($provider->getState());
+    var_dump($authUrl);
+
     $_SESSION['oauth2state'] = $provider->getState();
-    header('Location: '.$authUrl);
+    //header('Location: '.$authUrl);
     exit;
 
 // Check given state against previously stored one to mitigate CSRF attack
