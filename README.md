@@ -1,4 +1,4 @@
-# slack-secret-santa
+# Slack Secret Santa app
 
 - Download and install the Heroku Toolbelt or learn more about the Heroku Command Line Interface.
 - If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.
@@ -12,4 +12,8 @@ Deploy your application : Commit your code to the repository and deploy it to He
     $ git add .
     $ git commit -am "make it better"
     $ git push heroku master
+    
+## Run the project
+
+    ./bin/console server:run
     

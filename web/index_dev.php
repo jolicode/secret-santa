@@ -5,7 +5,7 @@ include '../vendor/autoload.php';
 use Joli\SlackSecretSanta\SantaKernel;
 use Symfony\Component\HttpFoundation\Request;
 
-$kernel     = new SantaKernel('prod', false);
+$kernel     = new SantaKernel('dev', true);
 $request    = Request::createFromGlobals();
 $response   = $kernel->handle($request);
 

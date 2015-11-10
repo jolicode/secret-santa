@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
@@ -24,20 +23,6 @@ class SantaKernel extends Kernel
         return $bundles;
     }
 
-    public function home()
-    {
-        return new Response('Coucou, change me!');
-    }
-
-    /**
-     * Loads the container configuration.
-     *
-     * @param LoaderInterface $loader A LoaderInterface instance
-     */
-    public function registerContainerConfiguration(LoaderInterface $loader)
-    {
-    }
-
     /**
      * Add or import routes into your application.
      *
@@ -48,6 +33,7 @@ class SantaKernel extends Kernel
      */
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
+        $routes->add('/', 'controller.santa:homepage');
     }
 
     /**
@@ -72,5 +58,28 @@ class SantaKernel extends Kernel
      */
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
+        $c->loadFromExtension('framework', array(
+          'secret' => 'NotSoRandom...:)',
+          'session' => true,
+        ));
+
+        $controller = $c->register('controller.santa', 'Joli\SlackSecretSanta\Controller\SantaController');
+        $controller->addArgument($c->getDefinition('session.storage'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCacheDir()
+    {
+        return $this->rootDir.'/../var/cache/'.$this->environment;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLogDir()
+    {
+        return $this->rootDir.'/../var/logs';
     }
 }
