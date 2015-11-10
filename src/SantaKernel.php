@@ -33,7 +33,7 @@ class SantaKernel extends Kernel
      */
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
-        $routes->add('/', 'controller.santa:homepage');
+        $routes->add('/', 'santa.controller:homepage');
     }
 
     /**
@@ -63,7 +63,7 @@ class SantaKernel extends Kernel
           'session' => true,
         ));
 
-        $controller = $c->register('controller.santa', 'Joli\SlackSecretSanta\Controller\SantaController');
+        $controller = $c->register('santa.controller', 'Joli\SlackSecretSanta\Controller\SantaController');
         $controller->addArgument($c->getDefinition('session.storage'));
     }
 

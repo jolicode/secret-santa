@@ -1,15 +1,9 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
-use CL\Slack\Payload\ChannelsInfoPayload;
-use CL\Slack\Payload\ChannelsInfoPayloadResponse;
-use CL\Slack\Payload\ChatPostMessagePayload;
-use CL\Slack\Payload\ChatPostMessagePayloadResponse;
-use CL\Slack\Payload\UsersListPayload;
-use CL\Slack\Payload\UsersListPayloadResponse;
 use CL\Slack\Transport\ApiClient;
-use CL\Slack\Transport\Events\ResponseEvent;
+use Joli\SlackSecretSanta\UserExtractor;
 
 $TOKEN = '__TOKEN__';
 
@@ -17,63 +11,19 @@ $apiClient = new ApiClient($TOKEN);
 
 $channelId = $argc > 1 ? $argv[1] : null;
 
+$userExtractor = new UserExtractor($apiClient);
+
 if ($channelId) {
     echo 'getting members for channel ', $channelId, PHP_EOL;
 
-    $payload = new ChannelsInfoPayload();
-    $payload->setChannelId($channelId);
-
-    /** @var $response ChannelsInfoPayloadResponse */
-    $response = $apiClient->send($payload);
-
-    if ($response->isOk()) {
-        // information has been retrieved
-        $response->getChannel()->getId(); // ID of the channel
-        $response->getChannel()->getName(); // name of the channel
-        // $response->get...
-
-
-        $members = $response->getChannel()->getMembers();
-    } else {
-        // something went wrong, but what?
-
-        // simple error (Slack's error message)
-        echo $response->getError(), PHP_EOL;
-
-        // explained error (Slack's explanation of the error, according to the documentation)
-        echo $response->getErrorExplanation();
-
-        die();
-    }
+    $users = $userExtractor->extractAllFromChannel($channelId);
 } else {
     echo 'getting all members', PHP_EOL;
 
-    $payload = new UsersListPayload();
-    $payload->getResponseClass();
-
-    /** @var $response UsersListPayloadResponse */
-    $response = $apiClient->send($payload);
-
-    if ($response->isOk()) {
-
-        $members = $response->getUsers();
-
-    } else {
-        // something went wrong, but what?
-
-        // simple error (Slack's error message)
-        echo $response->getError(), PHP_EOL;
-
-        // explained error (Slack's explanation of the error, according to the documentation)
-        echo $response->getErrorExplanation();
-
-        die();
-    }
+    $users = $userExtractor->extractAll();
 }
 
-dump($members);
-
-
+dump($users);
 
 //
 //$payload = new ChatPostMessagePayload();
@@ -94,3 +44,4 @@ dump($members);
 //} else {
 //    echo sprintf('Failed to post message to Slack: %s', $response->getErrorExplanation());
 //}
+
