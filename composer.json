@@ -25,5 +25,8 @@
     "require-dev": {
         "phpunit/phpunit": "^5.0",
         "fabpot/php-cs-fixer": "^1.10"
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }

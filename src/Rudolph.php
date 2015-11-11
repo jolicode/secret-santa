@@ -20,7 +20,7 @@ class Rudolph
     {
         $this->assertUserListCorrect($users);
 
-        $userCount = count($users);
+        $userCount    = count($users);
         $associations = [];
 
         shuffle($users);

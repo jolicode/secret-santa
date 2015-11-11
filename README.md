@@ -1,5 +1,11 @@
 # Slack Secret Santa app
 
+<a href="https://slack.com/oauth/authorize?scope=commands&client_id=2167807910.14252538375"><img 
+alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" 
+srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x"></a>
+
+## Install
+
 - Download and install the Heroku Toolbelt or learn more about the Heroku Command Line Interface.
 - If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.
 - Give your heroku details to Damien to be able to deploy
@@ -15,5 +21,15 @@ Deploy your application : Commit your code to the repository and deploy it to He
     
 ## Run the project
 
-    ./bin/console server:run
+As we rely on env variables, we cannot use `server:run`:
+
+    SLACK_CLIENT_SECRET=TOTO SLACK_CLIENT_ID=TOTO php -d variables_order=EGPCS -S 127.0.0.1:8000 etc/router.php
     
+Variables are:
+
+- SLACK_CLIENT_SECRET: Application secret from Slack;
+- SLACK_CLIENT_ID: Application id from Slack;
+
+## Mock a slash command call
+
+

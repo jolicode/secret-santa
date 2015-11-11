@@ -1,6 +1,6 @@
 <?php
 
-include '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use Joli\SlackSecretSanta\SantaKernel;
 use Symfony\Component\HttpFoundation\Request;

@@ -3,12 +3,12 @@
 namespace Joli\SlackSecretSanta;
 
 use CL\Slack\Model\User;
-use CL\Slack\Payload\PayloadInterface;
-use CL\Slack\Transport\ApiClient;
 use CL\Slack\Payload\ChannelsInfoPayload;
 use CL\Slack\Payload\ChannelsInfoPayloadResponse;
+use CL\Slack\Payload\PayloadInterface;
 use CL\Slack\Payload\UsersListPayload;
 use CL\Slack\Payload\UsersListPayloadResponse;
+use CL\Slack\Transport\ApiClient;
 
 class UserExtractor
 {

@@ -1,0 +1,13 @@
+<h1>Slack Secret Santa</h1>
+
+
+<ul>
+
+{% for user in users %}
+    <li>
+        {{ user.id }}: {{ user.name }}
+    </li>
+{% else %}
+    <li>Woups, no users?</li>
+{% endfor %}
+</ul>

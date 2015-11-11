@@ -1,2 +1,4 @@
 /vendor/
 /var/*
+/bin/php-cs-fixer
+/bin/phpunit
