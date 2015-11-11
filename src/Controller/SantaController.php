@@ -3,6 +3,8 @@
 namespace Joli\SlackSecretSanta\Controller;
 
 use Bramdevries\Oauth\Client\Provider\Slack;
+use CL\Slack\Payload\ChatPostMessagePayload;
+use CL\Slack\Payload\ChatPostMessagePayloadResponse;
 use CL\Slack\Transport\ApiClient;
 use Joli\SlackSecretSanta\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
@@ -29,7 +31,7 @@ class SantaController
         $this->router            = $router;
         $this->slackClientId     = $slackClientId;
         $this->slackClientSecret = $slackClientSecret;
-        $this->twig = $twig;
+        $this->twig              = $twig;
     }
 
     public function homepage(Request $request)
@@ -40,17 +42,33 @@ class SantaController
             return new RedirectResponse($this->router->generate('authenticate'));
         }
 
+        $apiClient = new ApiClient($token->getToken());
+
+        if ($request->isMethod('POST')) {
+            $selectedUsers = $request->request->get('users');
+
+            // @todo loop
+            $message = new ChatPostMessagePayload();
+            $message->setChannel($selectedUsers[0]);
+            $message->setText("Hi there, you have been chosen to be part of a Secret Santa!! WIP");
+            $message->setUsername("Secret Santa Bot");
+            $message->setIconEmoji(":santa:");
+
+            /** @var ChatPostMessagePayloadResponse $response */
+            $response = $apiClient->send($message);
+
+            return new Response('Thank you, messages have been sent!');
+        }
+
         try {
-            $apiClient      = new ApiClient($token->getToken());
             $userExtractor  = new UserExtractor($apiClient);
             $users          = $userExtractor->extractAll();
+            $content = $this->twig->render('index.html.twig', ['users' => $users]);
+            return new Response($content);
+
         } catch (\RuntimeException $e) {
             return new RedirectResponse($this->router->generate('authenticate'));
         }
-
-        $content = $this->twig->render('index.html.twig', ['users' => $users]);
-
-        return new Response($content);
     }
 
     /**
