@@ -20,9 +20,9 @@ class Result
      */
     public function __construct($hash, array $remainingAssociations, $error = null)
     {
-        $this->hash = $hash;
+        $this->hash                  = $hash;
         $this->remainingAssociations = $remainingAssociations;
-        $this->error = $error;
+        $this->error                 = $error;
     }
 
     /**

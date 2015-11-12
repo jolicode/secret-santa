@@ -27,12 +27,12 @@ class SecretDispatcher
      */
     public function dispatchTo($userIds, $adminMessage = null)
     {
-        $rudolph = new Rudolph();
+        $rudolph         = new Rudolph();
         $associatedUsers = $rudolph->associateUsers($userIds);
 
-        $hash = md5(serialize($associatedUsers));
+        $hash                  = md5(serialize($associatedUsers));
         $remainingAssociations = $associatedUsers;
-        $error = null;
+        $error                 = null;
 
         try {
             foreach ($associatedUsers as $giver => $receiver) {
@@ -40,7 +40,7 @@ class SecretDispatcher
 Someone have been chosen to get you a gift; and *you* have been chosen to gift <@%s>!", $receiver);
 
                 if (!empty($adminMessage)) {
-                    $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```".strip_tags($adminMessage).'```';
+                    $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . strip_tags($adminMessage) . '```';
                 }
 
                 $message = new ChatPostMessagePayload();

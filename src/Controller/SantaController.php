@@ -27,11 +27,11 @@ class SantaController
 
     public function __construct(SessionInterface $session, RouterInterface $router, \Twig_Environment $twig, $slackClientId, $slackClientSecret)
     {
-        $this->session = $session;
-        $this->router = $router;
-        $this->slackClientId = $slackClientId;
+        $this->session           = $session;
+        $this->router            = $router;
+        $this->slackClientId     = $slackClientId;
         $this->slackClientSecret = $slackClientSecret;
-        $this->twig = $twig;
+        $this->twig              = $twig;
     }
 
     public function homepage()
@@ -53,10 +53,10 @@ class SantaController
 
         if ($request->isMethod('POST')) {
             $selectedUsers = $request->request->get('users');
-            $message = $request->request->get('message');
+            $message       = $request->request->get('message');
 
             $secretDispatcher = new SecretDispatcher($apiClient);
-            $result = $secretDispatcher->dispatchTo($selectedUsers, $message);
+            $result           = $secretDispatcher->dispatchTo($selectedUsers, $message);
 
             $request->getSession()->set(
                 $this->getResultSessionKey(
@@ -69,8 +69,8 @@ class SantaController
 
         try {
             $userExtractor = new UserExtractor($apiClient);
-            $users = $userExtractor->extractAll();
-            $content = $this->twig->render('run.html.twig', ['users' => $users]);
+            $users         = $userExtractor->extractAll();
+            $content       = $this->twig->render('run.html.twig', ['users' => $users]);
 
             return new Response($content);
         } catch (\RuntimeException $e) {
@@ -121,9 +121,9 @@ class SantaController
     public function authenticate(Request $request)
     {
         $provider = new Slack([
-            'clientId' => $this->slackClientId,
+            'clientId'     => $this->slackClientId,
             'clientSecret' => $this->slackClientSecret,
-            'redirectUri' => $this->router->generate('authenticate', [], RouterInterface::ABSOLUTE_URL),
+            'redirectUri'  => $this->router->generate('authenticate', [], RouterInterface::ABSOLUTE_URL),
         ]);
 
         if (!$request->query->has('code')) {

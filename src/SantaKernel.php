@@ -21,7 +21,7 @@ class SantaKernel extends Kernel
 
     public function __construct($environment, $debug)
     {
-        Request::setTrustedProxies(array('0.0.0.0/0'));
+        Request::setTrustedProxies(['0.0.0.0/0']);
 
         parent::__construct($environment, $debug);
     }
@@ -88,13 +88,13 @@ class SantaKernel extends Kernel
         ]);
         $c->loadFromExtension('twig', [
           'paths'  => [
-              __DIR__.'/../views/'
-          ]
+              __DIR__ . '/../views/',
+          ],
         ]);
 
         if (empty($_ENV['SLACK_CLIENT_SECRET']) || empty($_ENV['SLACK_CLIENT_ID'])) {
             $_ENV['SLACK_CLIENT_SECRET'] = 'dummy';
-            $_ENV['SLACK_CLIENT_ID'] = 'dummy';
+            $_ENV['SLACK_CLIENT_ID']     = 'dummy';
         }
 
         if (empty($_ENV['REDIS_URL'])) {
