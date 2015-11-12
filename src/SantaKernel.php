@@ -44,6 +44,10 @@ class SantaKernel extends Kernel
      */
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
+        if (isset($_ENV['FORCE_SSL'])) {
+            $routes->setSchemes('https');
+        }
+
         $routes->add('/', 'santa.controller:homepage', 'homepage');
         $routes->add('/run', 'santa.controller:run', 'run');
         $routes->add('/finish', 'santa.controller:finish', 'finish');
@@ -98,13 +102,6 @@ class SantaKernel extends Kernel
         $controller->addArgument(new Reference('twig'));
         $controller->addArgument(new Parameter('slack.client_id'));
         $controller->addArgument(new Parameter('slack.client_secret'));
-/**
-        $twig = $c->getDefinition('twig.loader');
-
-        $loader = new \Twig_Loader_Filesystem(array());
-        $loader->addPath(__DIR__.'/../views/');
-        $twig->addMethodCall('addLoader', $loader);
-**/
     }
 
     /**
