@@ -1,16 +1,51 @@
-<h1>Slack Secret Santa</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+    <title>Slack Secret Santa!</title>
+</head>
+<body>
+
+<div class="container">
+    <h1>Slack Secret Santa</h1>
+
+    {% if users %}
+        <form method="post">
+            {% spaceless %}{% for user in users if not user.isBot and not user.deleted %}
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="users[]" value="{{ user.id }}"> {{ user.profile.realName }} ({{ user.name }})
+                    </label>
+                </div>
+            {% endfor %}{% endspaceless %}
+
+            <div class="form-group">
+                <label for="message">Custom message</label>
+                <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+                <p class="help-block">Anything you want, but this is the right place to give a deadline and a price limit!</p>
+            </div>
+
+            <button type="submit" class="btn btn-default">Send Secret Santa messages!</button>
+        </form>
+    {% else %}
+        <div class="alert alert-danger" role="alert">No user found.</div>
+    {% endif %}
+</div>
 
 
-<form action="" method="post">
-    <ul>
-        {% for user in users %}
-            <li>
-                <input type="checkbox" name="users[]" value="{{ user.id }}"> {{ user.id }}: {{ user.name }}
-            </li>
-        {% else %}
-            <li>Woups, no users?</li>
-        {% endfor %}
-    </ul>
+<!-- Latest compiled and minified JavaScript
+Add jQuery too.
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+-->
 
-    <input type="submit" value="Secret Santa!">
-</form>
+</body>
+</html>

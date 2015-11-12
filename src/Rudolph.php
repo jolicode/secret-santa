@@ -3,7 +3,7 @@
 namespace Joli\SlackSecretSanta;
 
 /**
- * Rudolphe is the Reindeer guiding Santa.
+ * Rudolph is the Reindeer guiding Santa.
  *
  * It will help Santa by deciding whom which user should offer a gift to.
  *

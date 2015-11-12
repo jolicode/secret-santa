@@ -6,6 +6,7 @@ use Bramdevries\Oauth\Client\Provider\Slack;
 use CL\Slack\Payload\ChatPostMessagePayload;
 use CL\Slack\Payload\ChatPostMessagePayloadResponse;
 use CL\Slack\Transport\ApiClient;
+use Joli\SlackSecretSanta\SecretDispatcher;
 use Joli\SlackSecretSanta\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -46,16 +47,10 @@ class SantaController
 
         if ($request->isMethod('POST')) {
             $selectedUsers = $request->request->get('users');
+            $message       = $request->request->get('message');
 
-            // @todo loop
-            $message = new ChatPostMessagePayload();
-            $message->setChannel($selectedUsers[0]);
-            $message->setText("Hi there, you have been chosen to be part of a Secret Santa!! WIP");
-            $message->setUsername("Secret Santa Bot");
-            $message->setIconEmoji(":santa:");
-
-            /** @var ChatPostMessagePayloadResponse $response */
-            $response = $apiClient->send($message);
+            $secretDispatcher = new SecretDispatcher($apiClient);
+            $secretDispatcher->dispatchTo($selectedUsers, $message);
 
             return new Response('Thank you, messages have been sent!');
         }
