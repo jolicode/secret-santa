@@ -60,7 +60,6 @@ class SantaController
             $users          = $userExtractor->extractAll();
             $content = $this->twig->render('index.html.twig', ['users' => $users]);
             return new Response($content);
-
         } catch (\RuntimeException $e) {
             return new RedirectResponse($this->router->generate('authenticate'));
         }
@@ -89,6 +88,8 @@ class SantaController
      */
     public function authenticate(Request $request)
     {
+        var_dump($this->router);
+        
         $provider = new Slack([
             'clientId'          => $this->slackClientId,
             'clientSecret'      => $this->slackClientSecret,
