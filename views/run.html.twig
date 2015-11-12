@@ -1,0 +1,32 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    {% if users %}
+        <form method="post">
+            <div class="form-group">
+                <label for="message">Users</label>
+                {% spaceless %}
+                    <div class="list-group checked-list-box">
+                        {% for user in users if not user.isBot and not user.deleted %}
+                            <label class="list-group-item" for="user-{{ user.id }}">
+                                <input type="checkbox" name="users[]" value="{{ user.id }}" id="user-{{ user.id }}">
+                                <img src="{{ user.profile.image32 }}" alt="{{ user.profile.realName }}" />
+                                <span>{{ user.profile.realName }} ({{ user.name }})</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% endspaceless %}
+            </div>
+
+            <div class="form-group">
+                <label for="message">Custom message</label>
+                <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+                <p class="help-block">Anything you want, but this is the right place to give a deadline and a price limit!</p>
+            </div>
+
+            <button type="submit" class="btn btn-default">Send Secret Santa messages!</button>
+        </form>
+    {% else %}
+        <div class="alert alert-danger" role="alert">No user found.</div>
+    {% endif %}
+{% endblock content %}

@@ -35,7 +35,14 @@ class SantaController
         $this->twig              = $twig;
     }
 
-    public function homepage(Request $request)
+    public function homepage()
+    {
+        $content = $this->twig->render('index.html.twig');
+
+        return new Response($content);
+    }
+
+    public function run(Request $request)
     {
         $token = $this->session->get(self::TOKEN_SESSION_KEY);
 
@@ -58,7 +65,7 @@ class SantaController
         try {
             $userExtractor  = new UserExtractor($apiClient);
             $users          = $userExtractor->extractAll();
-            $content = $this->twig->render('index.html.twig', ['users' => $users]);
+            $content = $this->twig->render('run.html.twig', ['users' => $users]);
             return new Response($content);
         } catch (\RuntimeException $e) {
             return new RedirectResponse($this->router->generate('authenticate'));

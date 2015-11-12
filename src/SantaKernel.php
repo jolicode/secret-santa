@@ -45,6 +45,7 @@ class SantaKernel extends Kernel
     protected function configureRoutes(RouteCollectionBuilder $routes)
     {
         $routes->add('/', 'santa.controller:homepage', 'homepage');
+        $routes->add('/run', 'santa.controller:run', 'run');
         $routes->add('/auth', 'santa.controller:authenticate', 'authenticate');
         $routes->add('/command', 'santa.controller:command', 'command');
     }

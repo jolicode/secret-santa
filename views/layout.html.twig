@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
+
+    <title>Slack Secret Santa!</title>
+    <style>
+        .list-group { max-height:400px; overflow:auto; border-top:1px solid #DDD; border-bottom:1px solid #DDD; }
+        .list-group > .list-group-item { -moz-user-select: none; -webkit-user-select: none; user-select: none; }
+        .list-group > .list-group-item:hover { cursor: pointer; background-color:#EEE; }
+        .list-group > .list-group-item:first-child { border-top: 0 none; }
+        .list-group > .list-group-item:last-child { border-bottom: 0 none; }
+        .list-group > .list-group-item > * { margin-right:10px; }
+        .list-group > .list-group-item > img { border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>
+        Slack Secret Santa
+        <small>Throw a Secret Santa with your Slack friends in a click of a button!</small>
+    </h1>
+
+    {% block content %}
+    {% endblock content %}
+
+    <footer style="margin-top: 100px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <small>
+                    Emoji and logo provided free by <a href="http://emojione.com">Emoji One</a>
+                    &dash;
+                    Make with ♥ by <a href="http://jolicode.com">JoliCode</a>
+                </small>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+<!-- Latest compiled and minified JavaScript
+Add jQuery too.
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+-->
+
+</body>
+</html>

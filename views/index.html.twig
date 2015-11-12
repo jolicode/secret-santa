@@ -1,48 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends 'layout.html.twig' %}
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
-
-    <title>Slack Secret Santa!</title>
-    <style>
-        .list-group { max-height:400px; overflow:auto; border-top:1px solid #DDD; border-bottom:1px solid #DDD; }
-        .list-group > .list-group-item { -moz-user-select: none; -webkit-user-select: none; user-select: none; }
-        .list-group > .list-group-item:hover { cursor: pointer; background-color:#EEE; }
-        .list-group > .list-group-item:first-child { border-top: 0 none; }
-        .list-group > .list-group-item:last-child { border-bottom: 0 none; }
-        .list-group > .list-group-item > * { margin-right:10px; }
-        .list-group > .list-group-item > img { border-radius: 4px; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>
-        Slack Secret Santa
-        <small>Throw a Secret Santa with your Slack friends in a click of a button!</small>
-    </h1>
-
+{% block content %}
     <div class="jumbotron">
         <h1>Merry Christmas!</h1>
 
         <p>Secret Santa is a Western Christmas tradition in which members of a group or
             community are randomly assigned a person to whom they anonymously give a gift.</p>
         <p>At <a href="http://jolicode.com/">JoliCode</a>, we do this every year, and every year we have to ask
-        someone from outside the company to be our "Secret Santa", running a script and sending emails to everyone.</p>
+            someone from outside the company to be our "Secret Santa", running a script and sending emails to everyone.</p>
         <p>This time is gone! With this Slack application, just select the peoples you want to do a Secret Santa with,
-        and let <a href="https://github.com/jolicode/slack-secret-santa/blob/master/src/Rudolph.php">Rudolph</a> decide and notify, by private message, each user.</p>
+            and let <a href="https://github.com/jolicode/slack-secret-santa/blob/master/src/Rudolph.php">Rudolph</a> decide and notify, by private message, each user.</p>
         <p>This application does not store anything and is integrally open-source.</p>
 
         <p>
-            <a class="btn btn-success btn-lg" href="#" role="button">
+            <a class="btn btn-success btn-lg" href="{{ path('run') }}" role="button">
                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                 Start a Secret Santa
                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span></a>
@@ -50,54 +21,4 @@
             <a class="btn btn-default btn-sm" href="https://en.wikipedia.org/wiki/Secret_Santa" role="button">Learn more about Secret Santa</a>
         </p>
     </div>
-
-    {% if users %}
-        <form method="post">
-            <div class="form-group">
-                <label for="message">Users</label>
-                {% spaceless %}
-                    <div class="list-group checked-list-box">
-                        {% for user in users if not user.isBot and not user.deleted %}
-                            <label class="list-group-item" for="user-{{ user.id }}">
-                                <input type="checkbox" name="users[]" value="{{ user.id }}" id="user-{{ user.id }}">
-                                <img src="{{ user.profile.image32 }}" alt="{{ user.profile.realName }}" />
-                                <span>{{ user.profile.realName }} ({{ user.name }})</span>
-                            </label>
-                        {% endfor %}
-                    </div>
-                {% endspaceless %}
-            </div>
-
-            <div class="form-group">
-                <label for="message">Custom message</label>
-                <textarea name="message" id="message" class="form-control" rows="3"></textarea>
-                <p class="help-block">Anything you want, but this is the right place to give a deadline and a price limit!</p>
-            </div>
-
-            <button type="submit" class="btn btn-default">Send Secret Santa messages!</button>
-        </form>
-    {% else %}
-        <div class="alert alert-danger" role="alert">No user found.</div>
-    {% endif %}
-
-    <footer style="margin-top: 100px;">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <small>
-                    Emoji and logo provided free by <a href="http://emojione.com">Emoji One</a>
-                    &dash;
-                    Make with ♥ by <a href="http://jolicode.com">JoliCode</a>
-                </small>
-            </div>
-        </div>
-    </footer>
-</div>
-
-
-<!-- Latest compiled and minified JavaScript
-Add jQuery too.
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
--->
-
-</body>
-</html>
+{% endblock content %}
