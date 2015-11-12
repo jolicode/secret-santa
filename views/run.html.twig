@@ -24,7 +24,20 @@
                 <p class="help-block">Anything you want, but this is the right place to give a deadline and a price limit!</p>
             </div>
 
-            <button type="submit" class="btn btn-default">Send Secret Santa messages!</button>
+            <div class="panel panel-default">
+                <div class="panel-heading">What happens next?</div>
+                <div class="panel-body">
+                    We are going to shuffle selected users and send them all a privage message in Slack, looking like this:
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                        Send Secret Santa messages!
+                </button>
+            </div>
+
         </form>
     {% else %}
         <div class="alert alert-danger" role="alert">No user found.</div>

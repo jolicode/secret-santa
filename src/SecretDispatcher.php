@@ -25,18 +25,18 @@ class SecretDispatcher
         $associatedUsers = $rudolph->associateUsers($userIds);
 
         foreach ($associatedUsers as $giver => $receiver) {
-            $text = sprintf("Hi there, you have been chosen to be part of a Secret Santa!\n
+            $text = sprintf("Hi! You have been chosen to be part of a Secret Santa!\n
 Someone have been chosen to get you a gift; and *you* have been chosen to gift <@%s>!", $receiver);
 
             if (!empty($adminMessage)) {
-                $text .= "\n\nHere is a message from the Secret Santa admin:\n\n> ".strip_tags(str_replace("\n", "", $adminMessage));
+                $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```".strip_tags($adminMessage)."```";
             }
 
             $message = new ChatPostMessagePayload();
             $message->setChannel($giver);
             $message->setText($text);
             $message->setUsername("Secret Santa Bot");
-            $message->setIconEmoji(":santa:");
+            $message->setIconUrl("https://slack-secret-santa.herokuapp.com/images/logo.png");
 
             $this->sendPayload($message);
         }
