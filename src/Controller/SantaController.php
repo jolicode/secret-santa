@@ -111,7 +111,10 @@ class SantaController
         if (!$request->query->has('code')) {
             // If we don't have an authorization code then get one
             $options = [
-                'scope' => ['chat:write:bot', 'users:read', 'channels:read'], // array or string
+                'scope' => [
+                    'chat:write:bot',
+                    'users:read',
+                ], // array or string
             ];
             $authUrl = $provider->getAuthorizationUrl($options);
 
@@ -130,7 +133,7 @@ class SantaController
 
             $this->session->set(self::TOKEN_SESSION_KEY, $token);
 
-            return new RedirectResponse($this->router->generate('homepage'));
+            return new RedirectResponse($this->router->generate('run'));
         }
     }
 }
