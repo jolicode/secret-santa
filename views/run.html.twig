@@ -3,24 +3,31 @@
 {% block content %}
     {% if users %}
         <form method="post" id="run_form">
-            <div class="form-group">
-                <label for="message">Users</label>
+            <div class="form-group{{ errors.users ? ' has-error' : '' }}">
+                <label class="control-label" for="message">Users</label>
                 {% spaceless %}
                     <div class="list-group checked-list-box">
                         {% for user in users if not user.isBot and not user.deleted %}
                             <label class="list-group-item" for="user-{{ user.id }}">
-                                <input type="checkbox" name="users[]" value="{{ user.name }}" id="user-{{ user.id }}">
+                                <input type="checkbox"
+                                       {{ user.name in selectedUsers ? 'checked="checked"' : '' }}
+                                       name="users[]"
+                                       value="{{ user.name }}"
+                                       id="user-{{ user.id }}">
                                 <img src="{{ user.profile.image32 }}" alt="{{ user.profile.realName }}" />
                                 <span>{{ user.profile.realName }} ({{ user.name }})</span>
                             </label>
                         {% endfor %}
                     </div>
                 {% endspaceless %}
+                {% if errors.users %}
+                    <span class="help-block alert alert-danger">{{ errors.users|join('<br />') }}</span>
+                {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="message">Custom message</label>
-                <textarea name="message" id="message" class="form-control" rows="3"></textarea>
+                <label class="control-label" for="message">Custom message</label>
+                <textarea name="message" id="message" class="form-control" rows="3">{{ message }}</textarea>
                 <p class="help-block">Anything you want, but this is the right place to give a deadline and a price limit!</p>
             </div>
 

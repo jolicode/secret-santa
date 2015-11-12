@@ -51,26 +51,39 @@ class SantaController
 
         $apiClient = new ApiClient($token->getToken());
 
+        $selectedUsers = [];
+        $message       = '';
+        $errors        = [];
+
         if ($request->isMethod('POST')) {
             $selectedUsers = $request->request->get('users');
             $message       = $request->request->get('message');
 
-            $secretDispatcher = new SecretDispatcher($apiClient);
-            $result           = $secretDispatcher->dispatchTo($selectedUsers, $message);
+            $errors = $this->validate($selectedUsers, $message);
 
-            $request->getSession()->set(
-                $this->getResultSessionKey(
-                    $result->getHash()
-                ), $result
-            );
+            if (count($errors) < 1) {
+                $secretDispatcher = new SecretDispatcher($apiClient);
+                $result           = $secretDispatcher->dispatchTo($selectedUsers, $message);
 
-            return new RedirectResponse($this->router->generate('finish', ['hash' => $result->getHash()]));
+                $request->getSession()->set(
+                    $this->getResultSessionKey(
+                        $result->getHash()
+                    ), $result
+                );
+
+                return new RedirectResponse($this->router->generate('finish', ['hash' => $result->getHash()]));
+            }
         }
 
         try {
             $userExtractor = new UserExtractor($apiClient);
             $users         = $userExtractor->extractAll();
-            $content       = $this->twig->render('run.html.twig', ['users' => $users]);
+            $content       = $this->twig->render('run.html.twig', [
+                'users'         => $users,
+                'selectedUsers' => $selectedUsers,
+                'message'       => $message,
+                'errors'        => $errors,
+            ]);
 
             return new Response($content);
         } catch (\RuntimeException $e) {
@@ -163,5 +176,22 @@ class SantaController
     private function getResultSessionKey($hash)
     {
         return sprintf('result-%s', $hash);
+    }
+
+    /**
+     * @param string[] $selectedUsers
+     * @param string   $message
+     *
+     * @return array
+     */
+    private function validate($selectedUsers, $message)
+    {
+        $errors = [];
+
+        if (count($selectedUsers) < 2) {
+            $errors['users'][] = 'At least 2 users should be selected';
+        }
+
+        return $errors;
     }
 }
