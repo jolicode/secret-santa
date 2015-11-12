@@ -88,8 +88,6 @@ class SantaController
      */
     public function authenticate(Request $request)
     {
-        var_dump($this->router);
-        
         $provider = new Slack([
             'clientId'          => $this->slackClientId,
             'clientSecret'      => $this->slackClientSecret,

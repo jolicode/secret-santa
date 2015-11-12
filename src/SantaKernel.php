@@ -9,12 +9,20 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
 class SantaKernel extends Kernel
 {
     use MicroKernelTrait;
+
+    public function __construct($environment, $debug)
+    {
+        Request::setTrustedProxies(array('0.0.0.0/0'));
+
+        parent::__construct($environment, $debug);
+    }
 
     public function registerBundles()
     {
