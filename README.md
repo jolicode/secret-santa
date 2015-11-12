@@ -17,10 +17,12 @@ Code source is under MIT License.
 - If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.
 - Give your heroku details to Damien to be able to deploy
 
-    $ heroku login
-    $ heroku git:remote -a slack-secret-santa
-    $ heroku plugins:install heroku-redis
-    $ git push heroku master
+```
+$ heroku login
+$ heroku git:remote -a slack-secret-santa
+$ heroku plugins:install heroku-redis
+$ git push heroku master
+```
 
 The app require:
 
