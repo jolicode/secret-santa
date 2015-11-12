@@ -19,27 +19,45 @@ class SecretDispatcher
         $this->apiClient = $apiClient;
     }
 
+    /**
+     * @param string[]    $userIds
+     * @param string|null $adminMessage
+     *
+     * @return Result
+     */
     public function dispatchTo($userIds, $adminMessage = null)
     {
         $rudolph = new Rudolph();
         $associatedUsers = $rudolph->associateUsers($userIds);
 
-        foreach ($associatedUsers as $giver => $receiver) {
-            $text = sprintf("Hi! You have been chosen to be part of a Secret Santa!\n
+        $hash = md5(serialize($associatedUsers));
+        $remainingAssociations = $associatedUsers;
+        $error = null;
+
+        try {
+            foreach ($associatedUsers as $giver => $receiver) {
+                $text = sprintf("Hi! You have been chosen to be part of a Secret Santa!\n
 Someone have been chosen to get you a gift; and *you* have been chosen to gift <@%s>!", $receiver);
 
-            if (!empty($adminMessage)) {
-                $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```".strip_tags($adminMessage)."```";
+                if (!empty($adminMessage)) {
+                    $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```".strip_tags($adminMessage).'```';
+                }
+
+                $message = new ChatPostMessagePayload();
+                $message->setChannel(sprintf('@%s', $giver));
+                $message->setText($text);
+                $message->setUsername('Secret Santa Bot');
+                $message->setIconUrl('https://slack-secret-santa.herokuapp.com/images/logo.png');
+
+                $this->sendPayload($message);
+
+                unset($remainingAssociations[$giver]);
             }
-
-            $message = new ChatPostMessagePayload();
-            $message->setChannel($giver);
-            $message->setText($text);
-            $message->setUsername("Secret Santa Bot");
-            $message->setIconUrl("https://slack-secret-santa.herokuapp.com/images/logo.png");
-
-            $this->sendPayload($message);
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
         }
+
+        return new Result($hash, $remainingAssociations, $error);
     }
 
     /**

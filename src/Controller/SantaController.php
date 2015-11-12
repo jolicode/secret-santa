@@ -3,8 +3,6 @@
 namespace Joli\SlackSecretSanta\Controller;
 
 use Bramdevries\Oauth\Client\Provider\Slack;
-use CL\Slack\Payload\ChatPostMessagePayload;
-use CL\Slack\Payload\ChatPostMessagePayloadResponse;
 use CL\Slack\Transport\ApiClient;
 use Joli\SlackSecretSanta\SecretDispatcher;
 use Joli\SlackSecretSanta\UserExtractor;
@@ -13,6 +11,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 class SantaController
@@ -28,11 +27,11 @@ class SantaController
 
     public function __construct(SessionInterface $session, RouterInterface $router, \Twig_Environment $twig, $slackClientId, $slackClientSecret)
     {
-        $this->session           = $session;
-        $this->router            = $router;
-        $this->slackClientId     = $slackClientId;
+        $this->session = $session;
+        $this->router = $router;
+        $this->slackClientId = $slackClientId;
         $this->slackClientSecret = $slackClientSecret;
-        $this->twig              = $twig;
+        $this->twig = $twig;
     }
 
     public function homepage()
@@ -54,27 +53,46 @@ class SantaController
 
         if ($request->isMethod('POST')) {
             $selectedUsers = $request->request->get('users');
-            $message       = $request->request->get('message');
+            $message = $request->request->get('message');
 
             $secretDispatcher = new SecretDispatcher($apiClient);
-            $secretDispatcher->dispatchTo($selectedUsers, $message);
+            $result = $secretDispatcher->dispatchTo($selectedUsers, $message);
 
-            return new RedirectResponse($this->router->generate('finish'));
+            $request->getSession()->set(
+                $this->getResultSessionKey(
+                    $result->getHash()
+                ), $result
+            );
+
+            return new RedirectResponse($this->router->generate('finish', ['hash' => $result->getHash()]));
         }
 
         try {
-            $userExtractor  = new UserExtractor($apiClient);
-            $users          = $userExtractor->extractAll();
+            $userExtractor = new UserExtractor($apiClient);
+            $users = $userExtractor->extractAll();
             $content = $this->twig->render('run.html.twig', ['users' => $users]);
+
             return new Response($content);
         } catch (\RuntimeException $e) {
             return new RedirectResponse($this->router->generate('authenticate'));
         }
     }
 
-    public function finish(Request $request)
+    public function finish(Request $request, $hash)
     {
-        $content = $this->twig->render('finish.html.twig');
+        $result = $request->getSession()->get(
+            $this->getResultSessionKey(
+                $hash
+            )
+        );
+
+        if (!$result) {
+            throw new NotFoundHttpException();
+        }
+
+        $content = $this->twig->render('finish.html.twig', [
+            'result' => $result,
+        ]);
 
         return new Response($content);
     }
@@ -103,9 +121,9 @@ class SantaController
     public function authenticate(Request $request)
     {
         $provider = new Slack([
-            'clientId'          => $this->slackClientId,
-            'clientSecret'      => $this->slackClientSecret,
-            'redirectUri'       => $this->router->generate('authenticate', [], RouterInterface::ABSOLUTE_URL),
+            'clientId' => $this->slackClientId,
+            'clientSecret' => $this->slackClientSecret,
+            'redirectUri' => $this->router->generate('authenticate', [], RouterInterface::ABSOLUTE_URL),
         ]);
 
         if (!$request->query->has('code')) {
@@ -135,5 +153,15 @@ class SantaController
 
             return new RedirectResponse($this->router->generate('run'));
         }
+    }
+
+    /**
+     * @param string $hash
+     *
+     * @return string
+     */
+    private function getResultSessionKey($hash)
+    {
+        return sprintf('result-%s', $hash);
     }
 }
