@@ -23,7 +23,31 @@
 <body>
 
 <div class="container">
-    <h1>Slack Secret Santa</h1>
+    <h1>
+        Slack Secret Santa
+        <small>Throw a Secret Santa with your Slack friends in a click of a button!</small>
+    </h1>
+
+    <div class="jumbotron">
+        <h1>Merry Christmas!</h1>
+
+        <p>Secret Santa is a Western Christmas tradition in which members of a group or
+            community are randomly assigned a person to whom they anonymously give a gift.</p>
+        <p>At <a href="http://jolicode.com/">JoliCode</a>, we do this every year, and every year we have to ask
+        someone from outside the company to be our "Secret Santa", running a script and sending emails to everyone.</p>
+        <p>This time is gone! With this Slack application, just select the peoples you want to do a Secret Santa with,
+        and let <a href="https://github.com/jolicode/slack-secret-santa/blob/master/src/Rudolph.php">Rudolph</a> decide and notify, by private message, each user.</p>
+        <p>This application does not store anything and is integrally open-source.</p>
+
+        <p>
+            <a class="btn btn-success btn-lg" href="#" role="button">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                Start a Secret Santa
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span></a>
+            <a class="btn btn-default btn-sm" href="https://github.com/jolicode/slack-secret-santa/" role="button">Show me the code</a>
+            <a class="btn btn-default btn-sm" href="https://en.wikipedia.org/wiki/Secret_Santa" role="button">Learn more about Secret Santa</a>
+        </p>
+    </div>
 
     {% if users %}
         <form method="post">
@@ -51,6 +75,18 @@
     {% else %}
         <div class="alert alert-danger" role="alert">No user found.</div>
     {% endif %}
+
+    <footer style="margin-top: 100px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <small>
+                    Emoji and logo provided free by <a href="http://emojione.com">Emoji One</a>
+                    &dash;
+                    Make with ♥ by <a href="http://jolicode.com">JoliCode</a>
+                </small>
+            </div>
+        </div>
+    </footer>
 </div>
 
 
