@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" integrity="sha384-aUGj/X2zp5rLCbBxumKTCw2Z50WgIr1vs/PFN4praOTvYXWlVyh2UtNUU0KAUhAX" crossorigin="anonymous">
 
     <title>Slack Secret Santa!</title>
+    <style>
+        .list-group { max-height:400px; overflow:auto; border-top:1px solid #DDD; border-bottom:1px solid #DDD; }
+        .list-group > .list-group-item { -moz-user-select: none; -webkit-user-select: none; user-select: none; }
+        .list-group > .list-group-item:hover { cursor: pointer; background-color:#EEE; }
+        .list-group > .list-group-item:first-child { border-top: 0 none; }
+        .list-group > .list-group-item:last-child { border-bottom: 0 none; }
+    </style>
 </head>
 <body>
 
@@ -20,13 +27,18 @@
 
     {% if users %}
         <form method="post">
-            {% spaceless %}{% for user in users if not user.isBot and not user.deleted %}
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="users[]" value="{{ user.id }}"> {{ user.profile.realName }} ({{ user.name }})
-                    </label>
-                </div>
-            {% endfor %}{% endspaceless %}
+            <div class="form-group">
+                <label for="message">Users</label>
+                {% spaceless %}
+                    <div class="list-group checked-list-box">
+                        {% for user in users if not user.isBot and not user.deleted %}
+                            <label class="list-group-item" for="user-{{ user.id }}">
+                                <input type="checkbox" name="users[]" value="{{ user.id }}" id="user-{{ user.id }}"> {{ user.profile.realName }} ({{ user.name }})
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% endspaceless %}
+            </div>
 
             <div class="form-group">
                 <label for="message">Custom message</label>
