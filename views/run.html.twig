@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if users %}
-        <form method="post">
+        <form method="post" id="run_form">
             <div class="form-group">
                 <label for="message">Users</label>
                 {% spaceless %}
@@ -42,13 +42,36 @@
             </div>
 
             <div class="text-center">
-                <button type="submit" class="btn btn-danger btn-lg">
+                <button type="submit" class="btn btn-danger btn-lg" id="run_btn">
                     <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
                         Send Secret Santa messages!
                 </button>
             </div>
 
         </form>
+
+        <script type="text/javascript">
+            /**
+             * I did know this is a global and I feel bad.
+             * Next time I will install 10mb of npm and react javascript to switch a flag :)
+             *
+             * @type {boolean}
+             */
+            var secretSantaFormSubmitted = false;
+
+            /**
+             * Prevent the multi-submit of the form
+             */
+            document.getElementById('run_form').addEventListener("submit", function(e) {
+                if (secretSantaFormSubmitted) {
+                    e.preventDefault();
+                } else {
+                    secretSantaFormSubmitted = true;
+                    document.getElementById('run_btn').disabled = true;
+                    document.getElementById('run_btn').children[0].className = 'glyphicon glyphicon-hourglass';
+                }
+            }, false);
+        </script>
     {% else %}
         <div class="alert alert-danger" role="alert">No user found.</div>
     {% endif %}
