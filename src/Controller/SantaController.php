@@ -59,7 +59,7 @@ class SantaController
             $secretDispatcher = new SecretDispatcher($apiClient);
             $secretDispatcher->dispatchTo($selectedUsers, $message);
 
-            return new Response('Thank you, messages have been sent!');
+            return new RedirectResponse($this->router->generate('finish'));
         }
 
         try {
@@ -70,6 +70,13 @@ class SantaController
         } catch (\RuntimeException $e) {
             return new RedirectResponse($this->router->generate('authenticate'));
         }
+    }
+
+    public function finish(Request $request)
+    {
+        $content = $this->twig->render('finish.html.twig');
+
+        return new Response($content);
     }
 
     /**
