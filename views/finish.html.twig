@@ -8,19 +8,30 @@
             </div>
         {% else %}
             <div class="alert alert-danger" role="alert">
-                <p>An technical error occurred when sending messages to users: "{{ result.error }}"</p>
+                <p>A technical error occurred when sending messages to users: "{{ result.error }}"</p>
             </div>
+
             <p>
                 Here is the list of users that were not informed:
-                <ul>
-                    {% for giver,receiver in result.remainingAssociations %}
-                        <li><strong>@{{ giver }}</strong> should offer a gift to <strong>@{{ receiver }}</strong></li>
-                    {% endfor %}
-                </ul>
             </p>
+
+            <ul>
+                {% for giver,receiver in result.remainingAssociations %}
+                    <li><strong>@{{ giver }}</strong> should offer a gift to <strong>@{{ receiver }}</strong></li>
+                {% endfor %}
+            </ul>
+
             <p>
-                Sorry for the inconvenience, you will need to contact them <strong>manually</strong>.
+                Sorry for the inconvenience, you will need to contact them <strong>manually</strong>. <a
+                        href="https://github.com/jolicode/slack-secret-santa/issues">Let us know too!</a>
             </p>
         {% endif %}
+
+        <div class="text-center">
+            <a class="btn btn-success btn-lg" href="{{ path('run') }}" role="button">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                Start another Secret Santa
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span></a>
+        </div>
     {% endif %}
 {% endblock content %}
