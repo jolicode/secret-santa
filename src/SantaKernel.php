@@ -2,6 +2,8 @@
 
 namespace Joli\SlackSecretSanta;
 
+use Predis\Client;
+use Predis\Session\Handler;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\TwigBundle\TwigBundle;
@@ -79,7 +81,10 @@ class SantaKernel extends Kernel
     {
         $c->loadFromExtension('framework', [
           'secret'  => 'NotSoRandom...:)',
-          'session' => true,
+          'session' => [
+              'handler_id'  => 'session.handler.predis',
+              'name'        => 'santaSession',
+          ],
         ]);
         $c->loadFromExtension('twig', [
           'paths'  => [
@@ -92,6 +97,10 @@ class SantaKernel extends Kernel
             $_ENV['SLACK_CLIENT_ID'] = 'dummy';
         }
 
+        if (empty($_ENV['REDIS_URL'])) {
+            $_ENV['REDIS_URL'] = 'redis://localhost:6379';
+        }
+
         // Slack application credentials
         $c->setParameter('slack.client_secret', $_ENV['SLACK_CLIENT_SECRET']);
         $c->setParameter('slack.client_id', $_ENV['SLACK_CLIENT_ID']);
@@ -102,6 +111,13 @@ class SantaKernel extends Kernel
         $controller->addArgument(new Reference('twig'));
         $controller->addArgument(new Parameter('slack.client_id'));
         $controller->addArgument(new Parameter('slack.client_secret'));
+
+        $sessionHandler = $c->register('session.handler.predis', Handler::class);
+        $sessionHandler->setPublic(false);
+        $sessionHandler->addArgument(new Reference('predis'));
+
+        $predis = $c->register('predis', Client::class);
+        $predis->addArgument($_ENV['REDIS_URL']);
     }
 
     /**

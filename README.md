@@ -12,16 +12,18 @@ srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platfor
 - If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.
 - Give your heroku details to Damien to be able to deploy
 
+
     $ heroku login
     $ heroku git:remote -a slack-secret-santa
-
-Deploy your application : Commit your code to the repository and deploy it to Heroku using Git.
-
-    $ git add .
-    $ git commit -am "make it better"
+    $ heroku plugins:install heroku-redis
     $ git push heroku master
     
 ## Run the project
+
+The app require:
+
+- a Redis server
+- PHP 5.6+
 
 As we rely on env variables, we cannot use `server:run`. From `web/`:
 
@@ -31,3 +33,5 @@ Variables are:
 
 - SLACK_CLIENT_SECRET: Application secret from Slack;
 - SLACK_CLIENT_ID: Application id from Slack;
+- REDIS_URL: The full redis connexion url (default `redis://localhost:6379`)
+    
