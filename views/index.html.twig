@@ -18,6 +18,8 @@
         .list-group > .list-group-item:hover { cursor: pointer; background-color:#EEE; }
         .list-group > .list-group-item:first-child { border-top: 0 none; }
         .list-group > .list-group-item:last-child { border-bottom: 0 none; }
+        .list-group > .list-group-item > * { margin-right:10px; }
+        .list-group > .list-group-item > img { border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -57,7 +59,9 @@
                     <div class="list-group checked-list-box">
                         {% for user in users if not user.isBot and not user.deleted %}
                             <label class="list-group-item" for="user-{{ user.id }}">
-                                <input type="checkbox" name="users[]" value="{{ user.id }}" id="user-{{ user.id }}"> {{ user.profile.realName }} ({{ user.name }})
+                                <input type="checkbox" name="users[]" value="{{ user.id }}" id="user-{{ user.id }}">
+                                <img src="{{ user.profile.image32 }}" alt="{{ user.profile.realName }}" />
+                                <span>{{ user.profile.realName }} ({{ user.name }})</span>
                             </label>
                         {% endfor %}
                     </div>
