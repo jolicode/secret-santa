@@ -3,6 +3,7 @@
 namespace Joli\SlackSecretSanta\Controller;
 
 use Bramdevries\Oauth\Client\Provider\Slack;
+use CL\Slack\Payload\AuthTestPayload;
 use CL\Slack\Transport\ApiClient;
 use Joli\SlackSecretSanta\SecretDispatcher;
 use Joli\SlackSecretSanta\UserExtractor;
@@ -16,8 +17,9 @@ use Symfony\Component\Routing\RouterInterface;
 
 class SantaController
 {
-    const STATE_SESSION_KEY = 'santa.slack.state';
-    const TOKEN_SESSION_KEY = 'santa.slack.token';
+    const STATE_SESSION_KEY   = 'santa.slack.state';
+    const TOKEN_SESSION_KEY   = 'santa.slack.token';
+    const USER_ID_SESSION_KEY = 'santa.slack.user_id';
 
     private $session;
     private $router;
@@ -43,7 +45,8 @@ class SantaController
 
     public function run(Request $request)
     {
-        $token = $this->session->get(self::TOKEN_SESSION_KEY);
+        $token  = $this->session->get(self::TOKEN_SESSION_KEY);
+        $userId = $this->session->get(self::USER_ID_SESSION_KEY);
 
         if (!($token instanceof AccessToken)) {
             return new RedirectResponse($this->router->generate('authenticate'));
@@ -63,7 +66,7 @@ class SantaController
 
             if (count($errors) < 1) {
                 $secretDispatcher = new SecretDispatcher($apiClient);
-                $result           = $secretDispatcher->dispatchTo($selectedUsers, $message);
+                $result           = $secretDispatcher->dispatchTo($selectedUsers, $message, $userId);
 
                 $request->getSession()->set(
                     $this->getResultSessionKey(
@@ -162,9 +165,19 @@ class SantaController
                 'code' => $request->query->get('code'),
             ]);
 
-            $this->session->set(self::TOKEN_SESSION_KEY, $token);
+            // Who Am I?
+            $test       = new AuthTestPayload();
+            $apiClient  = new ApiClient($token->getToken());
+            $response   = $apiClient->send($test);
 
-            return new RedirectResponse($this->router->generate('run'));
+            if ($response->isOk()) {
+                $this->session->set(self::TOKEN_SESSION_KEY, $token);
+                $this->session->set(self::USER_ID_SESSION_KEY, $response->getUserId());
+
+                return new RedirectResponse($this->router->generate('run'));
+            } else {
+                return new RedirectResponse($this->router->generate('homepage'));
+            }
         }
     }
 

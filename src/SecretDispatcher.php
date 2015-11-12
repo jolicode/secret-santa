@@ -20,12 +20,13 @@ class SecretDispatcher
     }
 
     /**
-     * @param string[]    $userIds
+     * @param string[] $userIds
      * @param string|null $adminMessage
+     * @param null $adminUserId
      *
      * @return Result
      */
-    public function dispatchTo($userIds, $adminMessage = null)
+    public function dispatchTo($userIds, $adminMessage = null, $adminUserId = null)
     {
         $rudolph         = new Rudolph();
         $associatedUsers = $rudolph->associateUsers($userIds);
@@ -41,6 +42,10 @@ Someone have been chosen to get you a gift; and *you* have been chosen to gift <
 
                 if (!empty($adminMessage)) {
                     $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . strip_tags($adminMessage) . '```';
+                }
+
+                if ($adminUserId) {
+                    $text .= sprintf("\n\nMessage sent via <@%s>.", $adminUserId);
                 }
 
                 $message = new ChatPostMessagePayload();
