@@ -38,7 +38,7 @@ class SecretDispatcher
         try {
             foreach ($associatedUsers as $giver => $receiver) {
                 $text = sprintf("Hi! You have been chosen to be part of a Secret Santa!\n
-Someone have been chosen to get you a gift; and *you* have been chosen to gift <@%s>!", $receiver);
+Someone has been chosen to get you a gift; and *you* have been chosen to gift <@%s>!", $receiver);
 
                 if (!empty($adminMessage)) {
                     $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . strip_tags($adminMessage) . '```';
