@@ -20,9 +20,9 @@ class SecretDispatcher
     }
 
     /**
-     * @param string[] $userIds
+     * @param string[]    $userIds
      * @param string|null $adminMessage
-     * @param null $adminUserId
+     * @param null        $adminUserId
      *
      * @return Result
      */
