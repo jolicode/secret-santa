@@ -83,7 +83,7 @@
     var snowStarted = false;
     window.goSnow = function() {
         if (snowStarted) {
-            return;
+            return false;
         }
 
         snowStarted = true;
@@ -171,6 +171,7 @@
 
         //animation loop
         setInterval(draw, 33);
+        return false;
     }
 </script>
 </body>
