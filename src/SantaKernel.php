@@ -2,6 +2,7 @@
 
 namespace Joli\SlackSecretSanta;
 
+use Joli\SlackSecretSanta\Controller\SantaController;
 use Predis\Client;
 use Predis\Session\Handler;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -105,18 +106,17 @@ class SantaKernel extends Kernel
         $c->setParameter('slack.client_secret', $_ENV['SLACK_CLIENT_SECRET']);
         $c->setParameter('slack.client_id', $_ENV['SLACK_CLIENT_ID']);
 
-        $controller = $c->register('santa.controller', 'Joli\SlackSecretSanta\Controller\SantaController');
-        $controller->addArgument(new Reference('session'));
-        $controller->addArgument(new Reference('router'));
-        $controller->addArgument(new Reference('twig'));
+        $controller = $c->register('santa.controller', SantaController::class);
+        $controller->setAutowired(true);
         $controller->addArgument(new Parameter('slack.client_id'));
         $controller->addArgument(new Parameter('slack.client_secret'));
 
         $sessionHandler = $c->register('session.handler.predis', Handler::class);
         $sessionHandler->setPublic(false);
-        $sessionHandler->addArgument(new Reference('predis'));
+        $sessionHandler->setAutowired(true);
 
         $predis = $c->register('predis', Client::class);
+        $predis->setPublic(false);
         $predis->addArgument($_ENV['REDIS_URL']);
     }
 

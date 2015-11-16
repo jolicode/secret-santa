@@ -21,13 +21,13 @@ class SantaController
     const TOKEN_SESSION_KEY   = 'santa.slack.token';
     const USER_ID_SESSION_KEY = 'santa.slack.user_id';
 
-    private $session;
-    private $router;
     private $slackClientId;
     private $slackClientSecret;
+    private $session;
+    private $router;
     private $twig;
 
-    public function __construct(SessionInterface $session, RouterInterface $router, \Twig_Environment $twig, $slackClientId, $slackClientSecret)
+    public function __construct($slackClientId, $slackClientSecret, SessionInterface $session, RouterInterface $router, \Twig_Environment $twig)
     {
         $this->session           = $session;
         $this->router            = $router;
