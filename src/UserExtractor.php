@@ -38,22 +38,6 @@ class UserExtractor
     }
 
     /**
-     * @param $channelId
-     *
-     * @return User[]
-     */
-    public function extractAllFromChannel($channelId)
-    {
-        $payload = new ChannelsInfoPayload();
-        $payload->setChannelId($channelId);
-
-        /** @var $response ChannelsInfoPayloadResponse */
-        $response = $this->sendPayload($payload);
-
-        return $response->getChannel()->getMembers();
-    }
-
-    /**
      * @param PayloadInterface $payload
      *
      * @return \CL\Slack\Payload\PayloadResponseInterface
