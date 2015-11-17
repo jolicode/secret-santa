@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "87f426aee8b6eaaaa44903dc97dfa9be",
-    "content-hash": "2a679bfd5ba10a97db84f8ed20ac2996",
+    "hash": "6a4f59b7d64c1507601b85431aab61a9",
+    "content-hash": "7dd532a952943dc09ff4c8844589a99e",
     "packages": [
         {
             "name": "bramdevries/oauth2-slack",
@@ -979,16 +979,16 @@
         },
         {
             "name": "league/oauth2-client",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-client.git",
-                "reference": "32d94d0ffc846b7f0fd9a115a7b0795a47a2d11c"
+                "reference": "b523109adfdab8ec7d45c7fb2ced16ce36138ca9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/32d94d0ffc846b7f0fd9a115a7b0795a47a2d11c",
-                "reference": "32d94d0ffc846b7f0fd9a115a7b0795a47a2d11c",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-client/zipball/b523109adfdab8ec7d45c7fb2ced16ce36138ca9",
+                "reference": "b523109adfdab8ec7d45c7fb2ced16ce36138ca9",
                 "shasum": ""
             },
             "require": {
@@ -1038,7 +1038,7 @@
                 "oauth2",
                 "single sign on"
             ],
-            "time": "2015-09-22 18:26:19"
+            "time": "2015-11-13 16:55:24"
         },
         {
             "name": "paragonie/random_compat",
@@ -1776,16 +1776,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "2.8.x-dev",
+            "version": "v2.8.0-BETA1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "fef28b2fa143119161e421a5c8ecd558189d2938"
+                "reference": "3b99b3a6e71da0f7d3fb07cf5c728ad04a326416"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/fef28b2fa143119161e421a5c8ecd558189d2938",
-                "reference": "fef28b2fa143119161e421a5c8ecd558189d2938",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/3b99b3a6e71da0f7d3fb07cf5c728ad04a326416",
+                "reference": "3b99b3a6e71da0f7d3fb07cf5c728ad04a326416",
                 "shasum": ""
             },
             "require": {
@@ -1905,7 +1905,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-11-12 01:14:48"
+            "time": "2015-11-16 09:09:38"
         },
         {
             "name": "twig/twig",
@@ -3016,7 +3016,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "symfony/symfony": 20
+        "symfony/symfony": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,
