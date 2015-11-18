@@ -80,12 +80,19 @@ class SantaKernel extends Kernel
      */
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
+        $session = [
+            'handler_id'  => 'session.handler.predis',
+            'name'        => 'santaSession',
+        ];
+
+        if ($c->getParameter('kernel.environment') === 'test') {
+            $session['storage_id'] = 'session.storage.filesystem';
+            $session['handler_id'] = 'session.handler.native_file';
+        }
+
         $c->loadFromExtension('framework', [
           'secret'  => 'NotSoRandom...:)',
-          'session' => [
-              'handler_id'  => 'session.handler.predis',
-              'name'        => 'santaSession',
-          ],
+          'session' => $session,
         ]);
         $c->loadFromExtension('twig', [
           'paths'  => [
