@@ -93,6 +93,7 @@ class SantaKernel extends Kernel
         $c->loadFromExtension('framework', [
           'secret'  => 'NotSoRandom...:)',
           'session' => $session,
+          'assets' => []
         ]);
         $c->loadFromExtension('twig', [
           'paths'  => [
