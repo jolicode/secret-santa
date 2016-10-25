@@ -32,6 +32,7 @@ The app require:
 As we rely on env variables, we cannot use `server:run`. From `web/`:
 
     cd web/ && SLACK_CLIENT_SECRET=TOTO SLACK_CLIENT_ID=TOTO php -d variables_order=EGPCS -S 127.0.0.1:8000 ../etc/router.php
+    open http://127.0.0.1:8000/
     
 Variables are:
 

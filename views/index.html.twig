@@ -8,14 +8,11 @@
             community are randomly assigned a person to whom they anonymously give a gift.</p>
         <p>At <a href="http://jolicode.com/">JoliCode</a>, we do this every year, and every year we have to ask
             someone from outside the company to be our "Secret Santa", running a script and sending emails to everyone.</p>
-        <p>This time is gone! With this Slack application, just select the peoples you want to do a Secret Santa with,
+        <p>This time is gone! With this Slack Application, just select the peoples you want to do a Secret Santa with,
             and let <a href="https://github.com/jolicode/slack-secret-santa/blob/master/src/Rudolph.php">Rudolph</a> decide and notify, by private message, each user.</p>
 
         <p>
-            <a class="btn btn-success btn-lg" href="{{ path('run') }}" role="button">
-                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                Start a Secret Santa
-                <span class="glyphicon glyphicon-star" aria-hidden="true"></span></a>
+            <a href="{{ path('run') }}"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
             <a class="btn btn-default btn-sm" href="https://github.com/jolicode/slack-secret-santa/" role="button">Show me the code</a>
             <a class="btn btn-default btn-sm" href="https://en.wikipedia.org/wiki/Secret_Santa" role="button">Learn more about Secret Santa</a>
             <a class="btn btn-default btn-sm" onclick="goSnow();" href="#" role="button">Let it snow!</a>
@@ -32,7 +29,7 @@
                 <img src="/images/sample2.png" alt="" />
                 <div class="caption">
                     <h3>Select a group of people</h3>
-                    <p>We fetch all the users from your Slack account and show them to you (excluding the bots, because they don't do nice gifts).</p>
+                    <p>We fetch all the users from your Slack team and show them to you (excluding the bots, because they don't do nice gifts).</p>
                 </div>
             </div>
         </div>
