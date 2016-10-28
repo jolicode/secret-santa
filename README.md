@@ -4,12 +4,12 @@ Just go to https://slack-secret-santa.herokuapp.com/ and have fun.
 
 Code source is under MIT License.
 
-- This application is powered by Symfony 2.8 and his new Micro Kernel;
+- This application is powered by Symfony 3 and its Micro Kernel;
 - Hosting is provided by Heroku;
 - Session are stored in Heroku Redis servers;
 - Frontend is built with bootstrap, obviously (any help welcome from designer ^^);
 - For now, the calls to "ChatPostMessage" Slack API are done procedurally, this may be hard on the API / PHP / Heroku for big Secret Santa... Let us know!
-- Built with ♥ by @pyrech and @damienalexandre.
+- Built with ♥ by [@pyrech](https://github.com/pyrech) and [@damienalexandre](https://github.com/damienalexandre).
 
 ## Install, run and deploy
 
@@ -24,7 +24,7 @@ $ heroku plugins:install heroku-redis
 $ git push heroku master
 ```
 
-The app require:
+The app requires:
 
 - a Redis server
 - PHP 5.6+
