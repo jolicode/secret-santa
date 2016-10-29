@@ -121,7 +121,7 @@ class SantaControllerTest extends KernelTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertGreaterThan(
             0,
-            $crawler->filter("html:contains('A technical error occurred when sending messages to users: \"Error message\"')")->count()
+            $crawler->filter("html:contains('A technical error occurred when sending messages to users')")->count()
         );
         $this->assertGreaterThan(
             0,

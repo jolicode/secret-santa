@@ -1,0 +1,272 @@
+.pure-img-responsive {
+    max-width: 100%;
+    height: auto;
+}
+.is-center {
+    text-align: center;
+}
+.btn-submit {
+    display: inline-block;
+    padding: 2em;
+    background-color: #E03A4D;
+    color: white;
+    border: 0 none;
+    text-decoration: none;
+}
+
+/**
+ * Header
+ */
+.home-menu {
+    background-color: white;
+    position: relative;
+    display: flex;
+}
+.home-menu .pure-menu-heading a {
+    color: #E03A4D;
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+}
+.home-menu .pure-menu-heading h1 {
+    font-size: 1.5em;
+}
+.home-menu .pure-menu-list a {
+    color: #25333A;
+    text-decoration: none;
+}
+.logo-wrapper {
+    float: left;
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 50%;
+}
+@media screen and (max-width: 537px) {
+    .home-menu .pure-menu-item {
+        display: block;
+        height: auto;
+        text-align: center;
+    }
+}
+@media screen and (max-width: 1023px) {
+    .home-menu {
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 1em;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .home-menu {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/**
+ * Footer
+ */
+footer {
+    position: static;
+    bottom: 0;
+    padding: 0.5em;
+    color: white;
+    background-color: #E03A4D;
+    font-size: 0.8em;
+}
+footer a {
+    color: white;
+}
+
+/**
+ * Content
+ */
+.content {
+    padding: 4em 2em;
+}
+.content-head {
+    color: #E03A4D;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 3em 0;
+}
+.content-subhead {
+    color: #E03A4D;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/**
+ * Jumbotron
+ */
+.jumbotron {
+    color: white;
+    background-color: #E03A4D;
+    padding: 2em;
+    text-align: center;
+}
+.jumbotron h1 {
+    display: inline-block;
+    border: 1px solid white;
+    border-radius: 2px;
+    padding: 1em;
+    margin: 1em 0 1em 0;
+    text-align: center;
+}
+.jumbotron a {
+    color: white;
+}
+.jumbotron q {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1.2em;
+    max-width: 900px;
+}
+.jumbotron q:before,
+.jumbotron q:after {
+    font-size: 2em;
+}
+.jumbotron .action {
+    display: inline-block;
+    margin-top: 3em;
+}
+@media screen and (min-width: 768px) {
+    .jumbotron {
+        padding: 5em;
+    }
+    .jumbotron h1 {
+        padding: 3em;
+        margin: 2em 0 3em 0;
+    }
+}
+
+/**
+ * How
+ */
+.how-item {
+    margin-top: 2em;
+}
+.how-item > * {
+    margin: 1em;
+}
+.how-item a {
+    color: #E03A4D;
+    text-decoration: none;
+}
+.how-item p {
+    line-height: 1.5em;
+}
+
+/**
+ * Sample message
+ */
+.sample-message {
+    padding: 3em;
+    background-color: #E03A4D;
+    color: white;
+}
+.sample-message h2,
+.sample-message p {
+    text-align: center;
+    color: white;
+}
+.sample-message img {
+    border-radius: 2px;
+}
+
+@media screen and (min-width: 1024px) {
+    .sample-message {
+        display: flex;
+        align-items: center;
+    }
+    .sample-message img {
+        margin-left: 1em;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .sample-message img {
+        margin-top: 1em;
+    }
+}
+
+/**
+ * Love
+ */
+.love-block h2,
+.love-block p {
+    text-align: center;
+}
+
+/**
+ * Run form
+ */
+.run-block {
+    padding: 0 2em;
+    margin-bottom: 3em;
+}
+.run-block h2 {
+    margin-top: 2em;
+    color: #E03A4D;
+}
+.run-block .error {
+    display: block;
+    margin-bottom: 1em;
+    color: #CC3850;
+}
+.user-list {
+    max-height: 400px;
+    overflow-y: scroll;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+.user-list .user-item {
+    min-height: 3em;
+    line-height: 3em;
+    vertical-align: middle;
+    border-bottom: 1px solid #CCCCCC;
+    display: flex;
+    align-items: center;
+}
+.user-list .user-item:hover {
+   background-color: #EEEEEE;
+    cursor: pointer;
+}
+.user-list .user-item * {
+    margin: 0 0 0 1em;
+}
+.message-field textarea {
+    width: 100%;
+    max-height: 100px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+.help {
+    color: #7A7A7A;
+    font-style: italic;
+}
+
+/**
+ * Result block
+ */
+.result-block h2 {
+    color: #E03A4D;
+}
+.result-block .result-error {
+    margin-bottom: 4em;
+}
+.result-block .result-error a {
+    color: #E03A4D;
+    text-decoration: none;
+}
+
+/**
+ * Let it snow
+ */
+#snow {
+    display: block;
+    position: absolute;
+    top: 0;
+}
