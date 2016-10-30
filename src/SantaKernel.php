@@ -60,6 +60,7 @@ class SantaKernel extends Kernel
         if ($this->getEnvironment() === 'dev') {
             $routes->import('@WebProfilerBundle/Resources/config/routing/wdt.xml', '/_wdt');
             $routes->import('@WebProfilerBundle/Resources/config/routing/profiler.xml', '/_profiler');
+            $routes->import('@TwigBundle/Resources/config/routing/errors.xml', '/_error');
         }
 
         $routes->add('/', 'santa.controller:homepage', 'homepage');
@@ -105,12 +106,12 @@ class SantaKernel extends Kernel
           'secret' => 'NotSoRandom...:)',
           'session' => $session,
           'assets' => [],
+          'templating' => [
+              'engines' => ['twig'],
+          ],
         ]);
         $c->loadFromExtension('twig', [
           'debug' => '%kernel.debug%',
-          'paths' => [
-              __DIR__ . '/../views/',
-          ],
         ]);
 
         if ($c->getParameter('kernel.environment') === 'dev') {
@@ -155,9 +156,21 @@ class SantaKernel extends Kernel
     /**
      * {@inheritdoc}
      */
+    public function getRootDir()
+    {
+        if (null === $this->rootDir) {
+            $this->rootDir = dirname(__DIR__);
+        }
+
+        return $this->rootDir;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCacheDir()
     {
-        return $this->rootDir . '/../var/cache/' . $this->environment;
+        return $this->rootDir . '/var/cache/' . $this->environment;
     }
 
     /**
@@ -165,6 +178,6 @@ class SantaKernel extends Kernel
      */
     public function getLogDir()
     {
-        return $this->rootDir . '/../var/logs';
+        return $this->rootDir . '/var/logs';
     }
 }
