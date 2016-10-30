@@ -5,13 +5,14 @@ namespace Joli\SlackSecretSanta;
 use Joli\SlackSecretSanta\Controller\SantaController;
 use Predis\Client;
 use Predis\Session\Handler;
+use Symfony\Bundle\DebugBundle\DebugBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\TwigBundle\TwigBundle;
+use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
@@ -34,6 +35,11 @@ class SantaKernel extends Kernel
             new TwigBundle(),
         ];
 
+        if ($this->getEnvironment() === 'dev') {
+            $bundles[] = new DebugBundle();
+            $bundles[] = new WebProfilerBundle();
+        }
+
         return $bundles;
     }
 
@@ -49,6 +55,11 @@ class SantaKernel extends Kernel
     {
         if (isset($_ENV['FORCE_SSL'])) {
             $routes->setSchemes('https');
+        }
+
+        if ($this->getEnvironment() === 'dev') {
+            $routes->import('@WebProfilerBundle/Resources/config/routing/wdt.xml', '/_wdt');
+            $routes->import('@WebProfilerBundle/Resources/config/routing/profiler.xml', '/_profiler');
         }
 
         $routes->add('/', 'santa.controller:homepage', 'homepage');
@@ -81,8 +92,8 @@ class SantaKernel extends Kernel
     protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
     {
         $session = [
-            'handler_id'  => 'session.handler.predis',
-            'name'        => 'santaSession',
+            'handler_id' => 'session.handler.predis',
+            'name' => 'santaSession',
         ];
 
         if ($c->getParameter('kernel.environment') === 'test') {
@@ -91,19 +102,32 @@ class SantaKernel extends Kernel
         }
 
         $c->loadFromExtension('framework', [
-          'secret'  => 'NotSoRandom...:)',
+          'secret' => 'NotSoRandom...:)',
           'session' => $session,
-          'assets' => []
+          'assets' => [],
         ]);
         $c->loadFromExtension('twig', [
-          'paths'  => [
+          'debug' => '%kernel.debug%',
+          'paths' => [
               __DIR__ . '/../views/',
           ],
         ]);
 
+        if ($c->getParameter('kernel.environment') === 'dev') {
+            $c->loadFromExtension('framework', [
+                'profiler' => [
+                    'only_exceptions' => false,
+                ],
+            ]);
+            $c->loadFromExtension('web_profiler', [
+                'toolbar' => true,
+                'intercept_redirects' => false,
+            ]);
+        }
+
         if (empty($_ENV['SLACK_CLIENT_SECRET']) || empty($_ENV['SLACK_CLIENT_ID'])) {
             $_ENV['SLACK_CLIENT_SECRET'] = 'dummy';
-            $_ENV['SLACK_CLIENT_ID']     = 'dummy';
+            $_ENV['SLACK_CLIENT_ID'] = 'dummy';
         }
 
         if (empty($_ENV['REDIS_URL'])) {
