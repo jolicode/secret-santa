@@ -193,6 +193,18 @@ footer a {
 }
 
 /**
+ * Why
+ */
+.why-block a {
+    text-decoration: none;
+    color: #E03A4D;
+}
+.why-block h2,
+.why-block p {
+    text-align: center;
+}
+
+/**
  * Love
  */
 .love-block h2,
