@@ -5,7 +5,7 @@
 .is-center {
     text-align: center;
 }
-.btn-submit {
+.big-button {
     display: inline-block;
     padding: 2em;
     background-color: #E03A4D;
@@ -272,6 +272,16 @@ footer a {
 .result-block .result-error a {
     color: #E03A4D;
     text-decoration: none;
+}
+
+/**
+ * Error page
+ */
+.error-page h2 {
+    color: #E03A4D;
+}
+.error-page .big-button {
+    margin-top: 2em;
 }
 
 /**
