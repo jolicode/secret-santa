@@ -273,6 +273,10 @@ footer a {
     color: #E03A4D;
     text-decoration: none;
 }
+.result-block .summary a {
+    color: #E03A4D;
+    text-decoration: none;
+}
 
 /**
  * Error page

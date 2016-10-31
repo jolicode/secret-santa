@@ -90,7 +90,7 @@ class SantaControllerTest extends KernelTestCase
 
     public function test_finish_page_works_with_valid_hash_for_success_result()
     {
-        $result = new Result('azerty', [], null);
+        $result = new Result('azerty', [], [], null);
 
         $client = static::createClient();
         $this->prepareSession($client, 'result-azerty', $result);
@@ -110,6 +110,9 @@ class SantaControllerTest extends KernelTestCase
         $result = new Result('azerty', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
+        ], [
+            'toto1' => 'toto2',
+            'toto2' => 'toto3',
         ], 'Error message');
 
         $client = static::createClient();
@@ -125,8 +128,37 @@ class SantaControllerTest extends KernelTestCase
         );
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("@toto1 should offer a gift to @toto2")')->count()
+            $crawler->filter('html:contains("@toto1 must offer a gift to @toto2")')->count()
         );
+    }
+
+    public function test_summary_works_with_invalid_hash()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/summary/13456');
+        $response = $client->getResponse();
+
+        $this->assertSame(404, $response->getStatusCode());
+    }
+
+    public function test_summary_works_with_valid_hash()
+    {
+        $result = new Result('yolo', [
+            'toto1' => 'toto2',
+            'toto2' => 'toto3',
+            'toto3' => 'toto1',
+        ], [], null);
+
+        $client = static::createClient();
+        $this->prepareSession($client, 'result-yolo', $result);
+
+        $crawler = $client->request('GET', '/summary/yolo');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertContains('Spoiler alert', $response->getContent());
+        $this->assertContains('@toto1 must offer a gift to @toto2', $response->getContent());
     }
 
     /**

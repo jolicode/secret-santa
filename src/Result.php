@@ -8,6 +8,9 @@ class Result
     private $hash;
 
     /** @var array */
+    private $associations;
+
+    /** @var array */
     private $remainingAssociations;
 
     /** @var string|null */
@@ -15,14 +18,16 @@ class Result
 
     /**
      * @param string      $hash
+     * @param array       $associations
      * @param array       $remainingAssociations
      * @param string|null $error
      */
-    public function __construct($hash, array $remainingAssociations, $error = null)
+    public function __construct($hash, array $associations, array $remainingAssociations, $error = null)
     {
-        $this->hash                  = $hash;
+        $this->hash = $hash;
+        $this->associations = $associations;
         $this->remainingAssociations = $remainingAssociations;
-        $this->error                 = $error;
+        $this->error = $error;
     }
 
     /**
@@ -31,6 +36,14 @@ class Result
     public function getHash()
     {
         return $this->hash;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAssociations()
+    {
+        return $this->associations;
     }
 
     /**
