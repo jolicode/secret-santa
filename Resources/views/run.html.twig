@@ -6,7 +6,7 @@
             <form method="post" id="run_form">
                 <div class="user-field">
                     <h2>Select the participants of your Secret Santa</h2>
-                    {% if errors.users %}
+                    {% if errors and errors.users %}
                         <span class="error">{{ errors.users|join('<br />') }}</span>
                     {% endif %}
                     {% spaceless %}
