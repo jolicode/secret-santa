@@ -67,7 +67,6 @@ class SantaKernel extends Kernel
         $routes->add('/run', 'santa.controller:run', 'run');
         $routes->add('/finish/{hash}', 'santa.controller:finish', 'finish');
         $routes->add('/auth', 'santa.controller:authenticate', 'authenticate');
-        $routes->add('/command', 'santa.controller:command', 'command');
     }
 
     /**
