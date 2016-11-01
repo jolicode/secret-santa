@@ -1,5 +1,13 @@
 {% extends 'layout.html.twig' %}
 
+{% macro userSummary(user) %}
+    <span class="user-summary">
+        <img src="{{ user.profile.image32 }}" alt="" />
+        <span>{{ user.profile.realName }}</span>
+        <span data-uncheck-user="user-{{ user.id }}" class="fa fa-times" title="Unselect this user"></span>
+    </span>
+{% endmacro %}
+
 {% block content %}
     <div class="run-block">
         {% if users|length >= 2 %}
@@ -9,21 +17,46 @@
                     {% if errors and errors.users %}
                         <span class="error">{{ errors.users|join('<br />') }}</span>
                     {% endif %}
+                    <div class="user-search">
+                        <div class="search-wrapper">
+                            <input placeholder="Filter users by searching by real name or username" type="text" id="user-search-input" />
+                            <span class="search-cleaner fa fa-times" id="search-cleaner"></span>
+                        </div>
+                        <div class="helper">
+                            <label>
+                                <input type="checkbox" checked="checked" id="restrict-user-checkbox" value="" />
+                                <span>Show restricted user</span>
+                            </label>
+                            <span class="check-all" id="all-checker">Check all</span>
+                            /
+                            <span class="uncheck-all" id="all-unchecker">Uncheck all</span>
+                        </div>
+                    </div>
                     {% spaceless %}
-                        <div class="user-list">
-                            {% for user in users if not user.isBot and not user.deleted %}
-                                <label class="user-item" for="user-{{ user.id }}">
+                        <div class="user-list" id="user-list">
+                            {% for user in users %}
+                                <label
+                                    class="user-item {{ user.isRestricted ? 'restricted' : '' }}"
+                                    for="user-{{ user.id }}"
+                                    data-search-index="{{ user.name ~ ' ' ~ user.profile.realName }}"
+                                >
                                     <input type="checkbox"
-                                           {{ user.name in selectedUsers ? 'checked="checked"' : '' }}
-                                           name="users[]"
-                                           value="{{ user.name }}"
-                                           id="user-{{ user.id }}">
+                                       {{ user.name in selectedUsers ? 'checked="checked"' : '' }}
+                                       name="users[]"
+                                       value="{{ user.name }}"
+                                       id="user-{{ user.id }}"
+                                       data-summary="{{ _self.userSummary(user)|escape('html_attr') }}"
+                                    >
                                     <img src="{{ user.profile.image32 }}" alt="{{ user.profile.realName }}" />
                                     <span>{{ user.profile.realName }} ({{ user.name }})</span>
                                 </label>
                             {% endfor %}
                         </div>
                     {% endspaceless %}
+                    <div class="checked-users-summary">
+                        <span>Selection summary :</span>
+                        <div id="checked-users-summary"></div>
+                    </div>
                 </div>
 
                 <div class="message-field">
@@ -53,7 +86,7 @@
                 </div>
 
                 <div class="is-center">
-                    <button type="submit" class="big-button" id="run_btn">
+                    <button type="submit" class="big-button" id="submit-button">
                         <span class="fa fa-paper-plane" aria-hidden="true"></span>
                         Finish and send Secret Santa messages!
                     </button>
@@ -70,18 +103,182 @@
                  */
                 var secretSantaFormSubmitted = false;
 
+                var searchCleaner = document.getElementById('search-cleaner');
+                var userSearchInput = document.getElementById('user-search-input');
+                var restrictUserCheckbox = document.getElementById('restrict-user-checkbox');
+                var allChecker = document.getElementById('all-checker');
+                var allUnchecker = document.getElementById('all-unchecker');
+                var userList = document.getElementById('user-list');
+                var checkedUsersSummary = document.getElementById('checked-users-summary');
+                var submitButton = document.getElementById('submit-button');
+
                 /**
                  * Prevent the multi-submit of the form
                  */
-                document.getElementById('run_form').addEventListener("submit", function(e) {
+                document.getElementById('run_form').addEventListener('submit', function(e) {
                     if (secretSantaFormSubmitted) {
                         e.preventDefault();
                     } else {
                         secretSantaFormSubmitted = true;
-                        document.getElementById('run_btn').disabled = true;
-                        document.getElementById('run_btn').children[0].className = 'fa fa-hourglass-start';
+                        submitButton.disabled = true;
+                        submitButton.children[0].className = 'fa fa-hourglass-start';
                     }
                 }, false);
+
+                /**
+                 * Render the summary of already checked users
+                 */
+                function updateSummary() {
+                    var users = userList.querySelectorAll('.user-item input:checked');
+                    var html = '';
+
+                    if (users.length > 0) {
+                        for(var i=0; i<users.length; i++) {
+                            html += users[i].dataset.summary;
+                        }
+                    } else {
+                        html = 'No user selected';
+                    }
+
+                    checkedUsersSummary.innerHTML = html;
+                }
+
+                /**
+                 * Handle uncheck user from summary
+                 */
+                function uncheckUser(e) {
+                    if (!e.target.dataset.uncheckUser) {
+                        return;
+                    }
+
+                    var input = document.getElementById(e.target.dataset.uncheckUser);
+
+                    if (!input) {
+                        return;
+                    }
+
+                    input.checked = false;
+                    updateSummary();
+                }
+
+                /**
+                 * Enable user search behavior
+                 */
+                function initUserList() {
+                    var users = userList.querySelectorAll('.user-item');
+
+                    for(var i=0; i<users.length; i++) {
+                        users[i].dataset.searchIndex = analyzeName(users[i].dataset.searchIndex);
+                    }
+                }
+
+                /**
+                 * Enable user search behavior
+                 */
+                function onUserSearch() {
+                    var query = analyzeName(userSearchInput.value);
+
+                    if (!query) {
+                        userList.classList.remove('hide-not-matching');
+                        return;
+                    }
+
+                    userList.classList.add('hide-not-matching');
+
+                    var users = userList.querySelectorAll('.user-item');
+
+                    for(var i=0; i<users.length; i++) {
+                        if (users[i].dataset.searchIndex.includes(query)) {
+                            users[i].classList.remove('not-matching');
+                        } else {
+                            users[i].classList.add('not-matching');
+                        }
+                    }
+                }
+
+                /**
+                 * Clean the current search
+                 */
+                function cleanSearch() {
+                    userSearchInput.value = '';
+                    onUserSearch();
+                }
+
+                /**
+                 * Analyze a string for searching purposes
+                 */
+                function analyzeName(string) {
+                    // Todo Damien :)
+
+                    return string.trim();
+                }
+
+                /**
+                 * Enable restricted user display behavior
+                 */
+                function onRestrictUserChange() {
+                    if (restrictUserCheckbox.checked) {
+                        userList.classList.remove('hide-restricted');
+                    } else {
+                        userList.classList.add('hide-restricted');
+                    }
+                }
+
+                /**
+                 * Check all visibled items
+                 */
+                function checkAllVisibleUsers() {
+                    var checkboxes = getVisibleUsersCheckboxes();
+
+                    for(var i=0; i<checkboxes.length; i++) {
+                        checkboxes[i].checked = true;
+                    }
+
+                    updateSummary();
+                }
+
+                /**
+                 * Unheck all visibled items
+                 */
+                function uncheckAllVisibleUsers() {
+                    var checkboxes = getVisibleUsersCheckboxes();
+
+                    for(var i=0; i<checkboxes.length; i++) {
+                        checkboxes[i].checked = false;
+                    }
+
+                    updateSummary();
+                }
+
+                /**
+                 * Return all the users currently visible in the list
+                 */
+                function getVisibleUsersCheckboxes() {
+                    var selector = '.user-item';
+
+                    if (userList.classList.contains('hide-not-matching')) {
+                        selector += ':not(.not-matching)';
+                    }
+                    if (userList.classList.contains('hide-restricted')) {
+                        selector += ':not(.restricted)';
+                    }
+
+                    return userList.querySelectorAll(selector+' input[type="checkbox"]');
+                }
+
+
+                userSearchInput.addEventListener('keyup', onUserSearch, false);
+                searchCleaner.addEventListener('click', cleanSearch, false);
+                restrictUserCheckbox.addEventListener('change', onRestrictUserChange, false);
+                allChecker.addEventListener('click', checkAllVisibleUsers, false);
+                allUnchecker.addEventListener('click', uncheckAllVisibleUsers, false);
+                userList.addEventListener('change', updateSummary);
+                checkedUsersSummary.addEventListener('click', uncheckUser);
+
+                initUserList();
+                updateSummary();
+                onUserSearch();
+                onRestrictUserChange();
             </script>
         {% else %}
             <div class="error" role="alert">
