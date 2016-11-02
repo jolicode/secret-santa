@@ -2,70 +2,77 @@
 
 {% block content %}
     <div class="jumbotron">
-        <h1>Throw a Secret Santa with your Slack team!</h1>
+        <div class="jumbotron-inner">
+            <h1>Throw a Secret Santa with<br> your Slack team!</h1>
 
-        <q><strong>Secret Santa</strong> is a Western Christmas tradition in which members of a group or
-            community are <strong>randomly</strong> assigned a person to whom they anonymously <strong>give a gift</strong>.</q>
+            <q><strong>Secret Santa</strong> is a Western Christmas tradition in which members of a group or
+                community are <strong>randomly</strong> assigned a person to whom they anonymously <strong>give a gift</strong>.</q>
 
-        <a class="action" href="{{ path('run') }}">
-            <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
-        </a>
+            <a class="action hvr-buzz" href="{{ path('run') }}">
+                <i class="fa fa-slack"></i> Add to Slack now
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-titan-white">
+        <div class="app-outer-container">
+            <div class="">
+                <div class="app-container">
+                    <img class="upper-app" src="/images/app-home.png" alt="Lingo Mac App">
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="content how-block">
         <h2 class="content-head is-center">How does it works?</h2>
 
-        <div class="pure-g">
-            <div class="how-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                <span class="content-subhead">
-                    <i class="fa fa-plug"></i>
-                    Connect to your Slack
-                </span>
-                <p>
-                    Authorize the app to access your Slack team.
-                </p>
+        <section class="step-feature">
+            <img src="/images/step-slack.png">
+            <div class="step-feature-text">
+                <h3>1. Connect to Your Slack</h3>
+                <p>Click on the "Add to Slack" button below then authorize the app to access your Slack team.</p>
             </div>
-            <div class="how-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                <span class="content-subhead">
-                    <i class="fa fa-users"></i>
-                    Select users
-                </span>
-                <p>
-                    We show you all your Slack users (<small>excluding the bots, because they don't do nice gifts</small>). Just select which users will take part to your secret santa.
-                </p>
+        </section>
+
+        <section class="step-feature reverse">
+            <img src="/images/step-users.png">
+            <div class="step-feature-text">
+                <h3>2. Select Users</h3>
+                <p>We show you all your Slack users (excluding the bots, because they don't do nice gifts). Just select which users will take part to your secret santa.</p>
             </div>
-            <div class="how-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                <span class="content-subhead">
-                    <i class="fa fa-check"></i>
-                    Inform users
-                </span>
-                <p>
-                    After <a href="https://github.com/jolicode/slack-secret-santa/blob/master/src/Rudolph.php">Rudolph</a> shuffled the users, we throw at each participant a private message with his peer name and an optional admin message.
-                </p>
+        </section>
+
+        <section class="step-feature">
+            <img src="/images/step-inform.png">
+            <div class="step-feature-text">
+                <h3>3. Inform Users</h3>
+                <p>After <a href="https://github.com/jolicode/slack-secret-santa/blob/master/src/Rudolph.php">Rudolph</a> shuffled the users, we throw at each participant a private message with his peer name and an optional admin message.</p>
             </div>
-            <div class="how-item pure-u-1 pure-u-md-1-2 pure-u-lg-1-4">
-                <span class="content-subhead">
-                    <i class="fa fa-shopping-cart"></i>
-                    Buy a gift
-                </span>
-                <p>
-                    Everything is now setup. Just go buy a gift for your peer before your party. Merry Christmas!
-                </p>
+        </section>
+
+        <section class="step-feature reverse">
+            <img src="/images/step-buy.png">
+            <div class="step-feature-text">
+                <h3>4. Buy a Gift</h3>
+                <p>Everything is now setup. Just go buy a gift for your peer before your party. Merry Christmas!</p>
             </div>
-        </div>
+        </section>
     </div>
 
     <div class="sample-message pure-g">
-        <div class="pure-u-1 pure-u-md-1-1 pure-u-lg-2-5">
-            <h2 class="content-head">Private message sent to users</h2>
+        <div class="sample-message-inner">
+            <div class="pure-u-1 pure-u-md-1-1 pure-u-lg-2-5">
+                <h2 class="content-head">Private message sent to users</h2>
 
-            <p>
-                Each user will receive a private message to inform them of their peer name.
-                You can provide an optional message to inform your team about budget or deadline.
-            </p>
-        </div>
-        <div class="is-center pure-u-1 pure-u-md-1-1 pure-u-lg-3-5">
-            <img class="pure-img-responsive" alt="Sample message received by users" src="/images/sample.png">
+                <p>
+                    Each user will receive a private message to inform them of their peer name.
+                    You can provide an optional message to inform your team about budget or deadline.
+                </p>
+            </div>
+            <div class="is-center pure-u-1 pure-u-md-1-1 pure-u-lg-3-5">
+                <img class="pure-img-responsive" alt="Sample message received by users" src="/images/sample.png">
+            </div>
         </div>
     </div>
 

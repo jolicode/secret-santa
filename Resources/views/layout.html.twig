@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
         <link rel="stylesheet" href="/style.css">
 
         <title>Slack Secret Santa!</title>
@@ -22,23 +23,20 @@
         <header class="header">
             <div class="home-menu pure-menu pure-menu-horizontal">
                 <div class="pure-menu-heading">
-                    <a href="{{ path('homepage') }}">
+                    <a class="hvr-buzz" href="{{ path('homepage') }}">
                         <div class="logo-wrapper">
-                            <img src="/images/logo.png" style="width: 90px;" alt="Secret Santa" />
+                            <img src="/images/logo.png" alt="Secret Santa" />
                         </div>
-                        <h1>Slack Secret Santa</h1>
+                        <h1>Slack<br>Secret Santa</h1>
                     </a>
                 </div>
 
                 <ul class="pure-menu-list">
                     <li class="pure-menu-item">
-                        <a href="https://en.wikipedia.org/wiki/Secret_Santa" class="pure-menu-link">More about Secret Santa</a>
+                        <a class="pure-menu-link" href="https://github.com/jolicode/slack-secret-santa/"><i class="fa fa-github"></i> Fork me</a>
                     </li>
                     <li class="pure-menu-item">
-                        <a class="pure-menu-link" href="https://github.com/jolicode/slack-secret-santa/">Fork me on GitHub</a>
-                    </li>
-                    <li class="pure-menu-item">
-                        <a class="pure-menu-link" onclick="goSnow(); return false;" href="">Let it snow!</a>
+                        <a class="pure-menu-link" onclick="goSnow(); return false;" href=""><i class="fa fa-snowflake-o"></i>  Let it snow!</a>
                     </li>
                 </ul>
             </div>
