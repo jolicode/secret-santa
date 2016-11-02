@@ -1,6 +1,13 @@
 body, html {
   font-family: 'Montserrat', sans-serif;
 }
+a:hover {
+    text-decoration: underline;
+}
+a {
+    text-decoration: none;
+    color: #E03A4D;
+}
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
@@ -73,13 +80,7 @@ body, html {
   border-radius: 5px;
   margin-right: 6px;
 }
-@media screen and (max-width: 537px) {
-    .home-menu .pure-menu-item {
-        display: block;
-        height: auto;
-        text-align: center;
-    }
-}
+
 @media screen and (max-width: 1023px) {
     .home-menu {
         flex-direction: column;
@@ -119,13 +120,29 @@ body, html {
 footer {
     position: static;
     bottom: 0;
-    padding: 0.5em;
+    padding: 2em;
     color: white;
     background-color: #E03A4D;
-    font-size: 0.8em;
+    font-size: 0.9em;
+}
+footer a.support-link {
+    display: inline-block;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+    text-decoration: none;
+    background-color: white;
+    border: 3px solid white;
+    color: #E03A4D;
+    border-radius: 10px;
+    padding: 1em;
+}
+footer a.support-link:hover {
+    background-color: transparent;
+    color: white;
 }
 footer a {
     color: white;
+    text-decoration: underline;
 }
 
 /**
@@ -176,7 +193,7 @@ footer a {
     font-size: 1.2em;
     line-height: 1.2em;
     box-sizing: content-box;
-    padding: 10px;
+    padding: 1em;
 }
 .jumbotron .action:hover {
   color: #56B68B;
@@ -232,6 +249,7 @@ footer a {
     flex-direction: row-reverse;
 }
 .step-feature {
+    box-sizing: border-box;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -251,20 +269,23 @@ footer a {
     color: #E03A4D;
 }
 .step-feature-text p {
+    box-sizing: border-box;
     line-height: 1.5em;
 }
 .step-feature-text h3 {
     color: #E03A4D;
     font-size: 1.6em;
+    box-sizing: border-box;
 }
 @media screen and (max-width: 860px) {
     .step-feature {
         display: block;
         align-items: center;
+        text-align: center;
     }
     .step-feature p, .step-feature h3 {
         max-width: 456px;
-        padding: 0 24px;
+        padding: 0 24px 20px;
         text-align: left;
         width: 100%;
         margin: 0 auto;
@@ -333,6 +354,7 @@ footer a {
 }
 .why-block p {
     font-size: 1.2em;
+    line-height: 1.5em;
 }
 /**
  * Love
