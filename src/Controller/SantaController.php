@@ -114,20 +114,6 @@ class SantaController
     }
 
     /**
-     * Called when someone type /secretsanta in a group or channel.
-     *
-     * @todo We need a way to "install" this command, and this needs storage of tokens too...
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function command(Request $request)
-    {
-        return new Response('Not implemented yet.');
-    }
-
-    /**
      * Ask for Slack authentication and store the AccessToken in Session.
      *
      * @param Request $request
