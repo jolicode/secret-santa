@@ -5,6 +5,7 @@ namespace Joli\SlackSecretSanta\Controller;
 use Bramdevries\Oauth\Client\Provider\Slack;
 use CL\Slack\Payload\AuthTestPayload;
 use CL\Slack\Transport\ApiClient;
+use GuzzleHttp\Client;
 use Joli\SlackSecretSanta\SecretDispatcher;
 use Joli\SlackSecretSanta\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
@@ -45,14 +46,16 @@ class SantaController
 
     public function run(Request $request)
     {
-        $token  = $this->session->get(self::TOKEN_SESSION_KEY);
+        $token = $this->session->get(self::TOKEN_SESSION_KEY);
         $userId = $this->session->get(self::USER_ID_SESSION_KEY);
 
         if (!($token instanceof AccessToken)) {
             return new RedirectResponse($this->router->generate('authenticate'));
         }
 
-        $apiClient = new ApiClient($token->getToken());
+        $apiClient = new ApiClient($token->getToken(), new Client([
+            'timeout' => 2,
+        ]));
 
         $selectedUsers = [];
         $message       = '';

@@ -20,6 +20,8 @@ class SecretDispatcher
     }
 
     /**
+     * This method is limited to 20 seconds because we are limited on time by Heroku
+     *
      * @param string[]    $userIds
      * @param string|null $adminMessage
      * @param null        $adminUserId
@@ -28,15 +30,19 @@ class SecretDispatcher
      */
     public function dispatchTo($userIds, $adminMessage = null, $adminUserId = null)
     {
-        $rudolph         = new Rudolph();
+        $startTime = time();
+        $rudolph = new Rudolph();
         $associatedUsers = $rudolph->associateUsers($userIds);
-
-        $hash                  = md5(serialize($associatedUsers));
+        $hash = md5(serialize($associatedUsers));
         $remainingAssociations = $associatedUsers;
-        $error                 = null;
+        $error = null;
 
         try {
             foreach ($associatedUsers as $giver => $receiver) {
+                if ((time() - $startTime) > 19) {
+                    throw new \Exception("It takes too much time to contact Slack! Please press the Retry button.");
+                }
+
                 $text = sprintf("Hi! You have been chosen to be part of a Secret Santa!\n
 Someone has been chosen to get you a gift; and *you* have been chosen to gift <@%s>!", $receiver);
 
