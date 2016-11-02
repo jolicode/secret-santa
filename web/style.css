@@ -17,13 +17,16 @@ a {
 }
 .big-button {
     display: inline-block;
-    padding: 2em;
-    background-color: #E03A4D;
-    color: white;
-    border: 0 none;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    font-size: 1.2em;
     text-decoration: none;
+    background-color: #E03A4D;
+    border: 3px solid white;
+    color: white;
+    border-radius: 10px;
+    padding: 1em;
 }
-
 /**
  * Header
  */
@@ -125,6 +128,9 @@ footer {
     background-color: #E03A4D;
     font-size: 0.9em;
 }
+footer.stick-bottom {
+    display: none;
+}
 footer a.support-link {
     display: inline-block;
     margin-bottom: 1em;
@@ -165,6 +171,7 @@ footer a {
  * Jumbotron
  */
 .jumbotron {
+    overflow: hidden;
     position: relative;
     color: white;
     background-color: #E03A4D;
@@ -380,6 +387,7 @@ footer a {
     padding: 0 2em;
     max-width: 960px;
     margin: 0 auto;
+    margin-bottom: 4em;
     position: relative;
 }
 .run-block h2 {
@@ -387,12 +395,17 @@ footer a {
     color: #E03A4D;
 }
 .run-block .error {
+    background-color: #ffb6c0;
     display: block;
     margin-bottom: 1em;
-    color: #CC3850;
+    padding: 1em;
+    color: #7a2428;
+    border-radius: 8px;
 }
 .message-field textarea {
     width: 100%;
+    box-sizing: border-box;
+    padding: 1em;
     max-height: 100px;
     border: 1px solid #CCCCCC;
     border-radius: 4px;
@@ -401,7 +414,9 @@ footer a {
     color: #7A7A7A;
     font-style: italic;
 }
-
+.next {
+    text-align: center;
+}
 /**
  * User list
  */
@@ -411,6 +426,15 @@ footer a {
     border: 1px solid #CCCCCC;
     border-radius: 4px 4px 0 0;
     line-height: 3em;
+}
+@media screen and (max-width: 1024px) {
+    .user-search {
+        line-height: 1.2em;
+    }
+    .user-search .helper {
+        padding: 1em;
+        padding-top: 0;
+    }
 }
 .user-search .search-wrapper {
     flex: 1;
@@ -490,6 +514,11 @@ footer a {
 /**
  * Result block
  */
+.result-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
 .result-block h2 {
     color: #E03A4D;
 }
@@ -526,7 +555,6 @@ footer a {
     z-index: 1;
     pointer-events: none;
 }
-
 
 /**
  * Logo effect
@@ -567,4 +595,62 @@ footer a {
   animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
+}
+
+/**
+ * Snow animation
+ * from https://codepen.io/jpschwinghamer/pen/QwwbgO
+ */
+.snow {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    -webkit-animation: snow linear;
+    animation: snow linear;
+}
+.snow.foreground {
+    background-image: url(/images/snow-large.png);
+    -webkit-animation-duration: 15s;
+    animation-duration: 15s;
+}
+.snow.foreground.layered {
+    -webkit-animation-delay: 7.5s;
+    animation-delay: 7.5s;
+}
+.snow.middleground {
+    background-image: url(/images/snow-medium.png);
+    -webkit-animation-duration: 20s;
+    animation-duration: 20s;
+}
+.snow.middleground.layered {
+    -webkit-animation-delay: 10s;
+    animation-delay: 10s;
+}
+@-webkit-keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
+}
+
+@keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
 }

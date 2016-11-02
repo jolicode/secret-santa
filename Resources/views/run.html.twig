@@ -15,7 +15,7 @@
                 <div class="user-field">
                     <h2>Select the participants of your Secret Santa</h2>
                     {% if errors and errors.users %}
-                        <span class="error">{{ errors.users|join('<br />') }}</span>
+                        <span class="error"><i class="fa fa-warning"></i> {{ errors.users|join('<br />') }}</span>
                     {% endif %}
                     <div class="user-search">
                         <div class="search-wrapper">
@@ -86,7 +86,7 @@
                 </div>
 
                 <div class="is-center">
-                    <button type="submit" class="big-button" id="submit-button">
+                    <button type="submit" class="big-button hvr-buzz" id="submit-button">
                         <span class="fa fa-paper-plane" aria-hidden="true"></span>
                         Finish and send Secret Santa messages!
                     </button>
