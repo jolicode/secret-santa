@@ -207,7 +207,7 @@ footer a {
 }
 .jumbotron .action {
     display: inline-block;
-    margin: 2em 0 1em;
+    margin: 1em 0 2em;
     font-size: 2.5em;
     text-decoration: none;
     background-color: white;
@@ -542,18 +542,6 @@ footer a {
 }
 .error-page .big-button {
     margin-top: 2em;
-}
-
-/**
- * Let it snow
- */
-#snow {
-    display: block;
-    position: absolute;
-    height: 642px;
-    width: 100%;
-    z-index: 1;
-    pointer-events: none;
 }
 
 /**
