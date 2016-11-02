@@ -228,27 +228,6 @@ footer a {
     margin-bottom: 1em;
     color: #CC3850;
 }
-.user-list {
-    max-height: 400px;
-    overflow-y: scroll;
-    border: 1px solid #CCCCCC;
-    border-radius: 4px;
-}
-.user-list .user-item {
-    min-height: 3em;
-    line-height: 3em;
-    vertical-align: middle;
-    border-bottom: 1px solid #CCCCCC;
-    display: flex;
-    align-items: center;
-}
-.user-list .user-item:hover {
-   background-color: #EEEEEE;
-    cursor: pointer;
-}
-.user-list .user-item * {
-    margin: 0 0 0 1em;
-}
 .message-field textarea {
     width: 100%;
     max-height: 100px;
@@ -258,6 +237,91 @@ footer a {
 .help {
     color: #7A7A7A;
     font-style: italic;
+}
+
+/**
+ * User list
+ */
+.user-search {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px 4px 0 0;
+    line-height: 3em;
+}
+.user-search .search-wrapper {
+    flex: 1;
+}
+.user-search .search-wrapper input {
+    border: 0 none;
+    padding: 1em;
+}
+.user-search .helper label {
+    cursor: pointer;
+}
+.user-search .helper .check-all,
+.user-search .helper .uncheck-all {
+    color: #E03A4D;
+    cursor: pointer;
+}
+.user-list {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #CCCCCC;
+    border-top: 0 none;
+}
+.user-list .user-item {
+    min-height: 3em;
+    vertical-align: middle;
+    border-bottom: 1px solid #CCCCCC;
+    display: flex;
+    align-items: center;
+}
+.user-list.hide-restricted .user-item.restricted,
+.user-list.hide-not-matching .user-item.not-matching {
+    display: none;
+}
+.user-list .user-item:hover {
+   background-color: #EEEEEE;
+    cursor: pointer;
+}
+.user-list .user-item * {
+    margin: 0 0 0 1em;
+}
+.checked-users-summary {
+    border: 1px solid #CCCCCC;
+    border-top: 0 none;
+    border-radius: 0 0 4px 4px;
+    padding: 1em;
+}
+.checked-users-summary .user-summary {
+    background-color: #EEEEEE;
+    padding: 0 0.5em;
+    border-radius: 5px;
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+}
+.checked-users-summary .user-summary img {
+    width: 20px;
+    vertical-align: middle;
+}
+.checked-users-summary .user-summary span[data-uncheck-user] {
+    cursor: pointer;
+}
+@media screen and (min-width: 1024px) {
+    .user-search {
+        flex-direction: row;
+        align-content: space-between;
+    }
+    .user-search .search-wrapper input {
+        width: 400px;
+    }
+    .user-search .helper {
+        margin-right: 1em;
+    }
 }
 
 /**

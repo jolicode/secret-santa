@@ -111,6 +111,7 @@ class SantaKernel extends Kernel
           ],
         ]);
         $c->loadFromExtension('twig', [
+          'strict_variables' => '%kernel.debug%',
           'debug' => '%kernel.debug%',
         ]);
 

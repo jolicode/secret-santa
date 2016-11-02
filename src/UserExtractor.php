@@ -34,7 +34,9 @@ class UserExtractor
         /** @var $response UsersListPayloadResponse */
         $response = $this->sendPayload($payload);
 
-        return $response->getUsers();
+        return array_filter($response->getUsers(), function(User $user) {
+            return !$user->isBot() && !$user->isDeleted();
+        });
     }
 
     /**
