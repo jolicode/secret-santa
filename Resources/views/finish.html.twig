@@ -19,7 +19,7 @@
 
                     <ul>
                         {% for giver,receiver in result.remainingAssociations %}
-                            <li><strong>@{{ giver }}</strong> should offer a gift to <strong>@{{ receiver }}</strong></li>
+                            <li><strong>@{{ giver }}</strong> must offer a gift to <strong>@{{ receiver }}</strong></li>
                         {% endfor %}
                     </ul>
 
@@ -29,6 +29,12 @@
                     </p>
                 </div>
             {% endif %}
+
+            <p class="summary">
+                A summary of the repartition is available for download. Keep it secret, even for you, to avoid breaking the Secret Santa spirit.<br />
+                Be aware that we do not persist anything forever so the summary is only available now, you will not be able to get it back later.<br />
+                <a href="{{ path('summary', {hash: result.hash}) }}" download="summary.txt">Download the summary</a>.
+            </p>
 
             <div class="is-center">
                 <a href="{{ path('run') }}" class="big-button">

@@ -62,7 +62,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
             $error = $e->getMessage();
         }
 
-        return new Result($hash, $remainingAssociations, $error);
+        return new Result($hash, $associatedUsers, $remainingAssociations, $error);
     }
 
     /**

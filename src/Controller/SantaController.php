@@ -113,6 +113,31 @@ class SantaController
         return new Response($content);
     }
 
+    public function summary(Request $request, $hash)
+    {
+        $result = $request->getSession()->get(
+            $this->getResultSessionKey(
+                $hash
+            )
+        );
+
+        if (!$result) {
+            throw new NotFoundHttpException();
+        }
+
+        $content = $this->twig->render('summary.txt.twig', [
+            'result' => $result,
+        ]);
+
+        $response = new Response($content);
+
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', 'text/plain');
+        $response->headers->set('Content-Disposition', 'attachment; filename="summary.txt";');
+
+        return $response;
+    }
+
     /**
      * Ask for Slack authentication and store the AccessToken in Session.
      *
