@@ -262,13 +262,16 @@ footer a {
     padding: 24px 0;
 }
 
-.step-feature img {
+.step-feature-image {
     padding: 0;
     display: block;
     margin: auto;
     max-width: 440px;
     width: 100%;
     margin: 0 30px 0 30px;
+}
+.step-feature-image img {
+    width: 100%;
 }
 
 .step-feature-text p a {
@@ -296,7 +299,7 @@ footer a {
         width: 100%;
         margin: 0 auto;
     }
-    .step-feature img {
+    .step-feature-image {
         margin: 0 auto;
     }
 }
