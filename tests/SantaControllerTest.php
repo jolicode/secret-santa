@@ -101,7 +101,7 @@ class SantaControllerTest extends KernelTestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("Well done! All messages were sent.")')->count()
+            $crawler->filter('html:contains("Well done! All messages were sent")')->count()
         );
     }
 
