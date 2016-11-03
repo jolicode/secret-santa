@@ -1,3 +1,13 @@
+body, html {
+  font-family: 'Montserrat', sans-serif;
+}
+a:hover {
+    text-decoration: underline;
+}
+a {
+    text-decoration: none;
+    color: #E03A4D;
+}
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
@@ -7,23 +17,31 @@
 }
 .big-button {
     display: inline-block;
-    padding: 2em;
-    background-color: #E03A4D;
-    color: white;
-    border: 0 none;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    font-size: 1.2em;
     text-decoration: none;
+    background-color: #E03A4D;
+    border: 3px solid white;
+    color: white;
+    border-radius: 10px;
+    padding: 1em;
 }
-
 /**
  * Header
  */
+.header {
+  background-color: #E03A4D;
+}
+
 .home-menu {
-    background-color: white;
     position: relative;
     display: flex;
+    max-width: 960px;
+    margin: 0 auto;
 }
 .home-menu .pure-menu-heading a {
-    color: #E03A4D;
+    color: white;
     text-decoration: none;
     align-items: center;
     display: flex;
@@ -32,22 +50,39 @@
     font-size: 1.5em;
 }
 .home-menu .pure-menu-list a {
-    color: #25333A;
+    color: white;
     text-decoration: none;
 }
 .logo-wrapper {
     float: left;
     margin-top: 10px;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    position: relative;
     background-color: white;
     border-radius: 50%;
+    margin-right: 10px;
 }
-@media screen and (max-width: 537px) {
-    .home-menu .pure-menu-item {
-        display: block;
-        height: auto;
-        text-align: center;
-    }
+.logo-wrapper img {
+  position: absolute;
+  left: 10px;
+  left: 3px;
+  top: 5px;
+  width: 95px;
 }
+.home-menu .pure-menu-link:hover {
+  background-color: white;
+  color: #E03A4D;
+}
+
+.home-menu .pure-menu-link {
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 5px;
+  margin-right: 6px;
+}
+
 @media screen and (max-width: 1023px) {
     .home-menu {
         flex-direction: column;
@@ -64,32 +99,66 @@
 }
 
 /**
+ * Home app picture
+ */
+.app-container {
+    text-align:center;
+    margin-top: 48px;
+    position: relative;
+    top: -200px;
+    margin-bottom: -200px;
+    z-index: 1;
+}
+.app-container img {
+    position: relative;
+    max-width: 1080px;
+    margin: auto;
+    width: 100%;
+}
+
+/**
  * Footer
  */
 footer {
     position: static;
     bottom: 0;
-    padding: 0.5em;
+    padding: 2em;
     color: white;
     background-color: #E03A4D;
-    font-size: 0.8em;
+    font-size: 0.9em;
+}
+footer.stick-bottom {
+    display: none;
+}
+footer a.support-link {
+    display: inline-block;
+    margin-bottom: 1em;
+    font-size: 1.2em;
+    text-decoration: none;
+    background-color: white;
+    border: 3px solid white;
+    color: #E03A4D;
+    border-radius: 10px;
+    padding: 1em;
+}
+footer a.support-link:hover {
+    background-color: transparent;
+    color: white;
 }
 footer a {
     color: white;
+    text-decoration: underline;
 }
 
 /**
  * Content
  */
 .content {
-    padding: 4em 2em;
+    padding: 2em 2em;
 }
 .content-head {
     color: #E03A4D;
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 0 0 3em 0;
+    font-size: 2em;
 }
 .content-subhead {
     color: #E03A4D;
@@ -101,18 +170,24 @@ footer a {
  * Jumbotron
  */
 .jumbotron {
+    overflow: hidden;
+    position: relative;
     color: white;
     background-color: #E03A4D;
-    padding: 2em;
+    padding-bottom: 10em;
     text-align: center;
+}
+.jumbotron-inner {
+  max-width: 960px;
+  margin: 0 auto;
 }
 .jumbotron h1 {
     display: inline-block;
-    border: 1px solid white;
     border-radius: 2px;
-    padding: 1em;
-    margin: 1em 0 1em 0;
     text-align: center;
+    font-size: 3em;
+    margin-top: 2em;
+    margin-bottom: 0.5em;
 }
 .jumbotron a {
     color: white;
@@ -122,29 +197,43 @@ footer a {
     margin: 0 auto;
     text-align: center;
     font-size: 1.2em;
-    max-width: 900px;
+    line-height: 1.2em;
+    box-sizing: content-box;
+    padding: 1em;
 }
-.jumbotron q:before,
-.jumbotron q:after {
-    font-size: 2em;
+.jumbotron .action:hover {
+  color: #56B68B;
 }
 .jumbotron .action {
     display: inline-block;
-    margin-top: 3em;
-}
-@media screen and (min-width: 768px) {
-    .jumbotron {
-        padding: 5em;
-    }
-    .jumbotron h1 {
-        padding: 3em;
-        margin: 2em 0 3em 0;
-    }
-}
+    margin: 1em 0 2em;
+    font-size: 2.5em;
+    text-decoration: none;
+    background-color: white;
+    border: 3px solid white;
+    color: #E03A4D;
+    border-radius: 10px;
+    padding: 18px;
 
+}
+@media screen and (max-width: 860px) {
+    .jumbotron h1 {
+        font-size: 2em;
+        margin-top: 1em;
+    }
+    .jumbotron .action {
+        font-size: 1.5em;
+    }
+}
 /**
  * How
  */
+.how-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+}
 .how-item {
     margin-top: 2em;
 }
@@ -160,6 +249,61 @@ footer a {
 }
 
 /**
+ * Steps
+ */
+.step-feature.reverse {
+    flex-direction: row-reverse;
+}
+.step-feature {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+}
+
+.step-feature-image {
+    padding: 0;
+    display: block;
+    margin: auto;
+    max-width: 440px;
+    width: 100%;
+    margin: 0 30px 0 30px;
+}
+.step-feature-image img {
+    width: 100%;
+}
+
+.step-feature-text p a {
+    color: #E03A4D;
+}
+.step-feature-text p {
+    box-sizing: border-box;
+    line-height: 1.5em;
+}
+.step-feature-text h3 {
+    color: #E03A4D;
+    font-size: 1.6em;
+    box-sizing: border-box;
+}
+@media screen and (max-width: 860px) {
+    .step-feature {
+        display: block;
+        align-items: center;
+        text-align: center;
+    }
+    .step-feature p, .step-feature h3 {
+        max-width: 456px;
+        padding: 0 24px 20px;
+        text-align: left;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .step-feature-image {
+        margin: 0 auto;
+    }
+}
+/**
  * Sample message
  */
 .sample-message {
@@ -167,10 +311,19 @@ footer a {
     background-color: #E03A4D;
     color: white;
 }
+.sample-message-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
 .sample-message h2,
 .sample-message p {
+    font-family: 'Montserrat', sans-serif;
     text-align: center;
     color: white;
+}
+.sample-message p {
+    font-size: 1.2em;
 }
 .sample-message img {
     border-radius: 2px;
@@ -195,6 +348,11 @@ footer a {
 /**
  * Why
  */
+.why-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
 .why-block a {
     text-decoration: none;
     color: #E03A4D;
@@ -203,33 +361,53 @@ footer a {
 .why-block p {
     text-align: center;
 }
-
+.why-block p {
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
 /**
  * Love
  */
+.love-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 0;
+}
 .love-block h2,
 .love-block p {
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
 }
-
+.love-block p {
+    font-size: 1.2em;
+}
 /**
  * Run form
  */
 .run-block {
     padding: 0 2em;
-    margin-bottom: 3em;
+    max-width: 960px;
+    margin: 0 auto;
+    margin-bottom: 4em;
+    position: relative;
 }
 .run-block h2 {
     margin-top: 2em;
     color: #E03A4D;
 }
 .run-block .error {
+    background-color: #ffb6c0;
     display: block;
     margin-bottom: 1em;
-    color: #CC3850;
+    padding: 1em;
+    color: #7a2428;
+    border-radius: 8px;
 }
 .message-field textarea {
     width: 100%;
+    box-sizing: border-box;
+    padding: 1em;
     max-height: 100px;
     border: 1px solid #CCCCCC;
     border-radius: 4px;
@@ -238,7 +416,9 @@ footer a {
     color: #7A7A7A;
     font-style: italic;
 }
-
+.next {
+    text-align: center;
+}
 /**
  * User list
  */
@@ -249,15 +429,39 @@ footer a {
     border-radius: 4px 4px 0 0;
     line-height: 3em;
 }
+@media screen and (max-width: 1024px) {
+    .user-search {
+        line-height: 1.2em;
+    }
+    .user-search .helper {
+        padding: 1em;
+        padding-top: 0;
+    }
+}
 .user-search .search-wrapper {
     flex: 1;
+    display: flex;
+    align-items: center;
+    margin-right: 1em;
 }
 .user-search .search-wrapper input {
     border: 0 none;
     padding: 1em;
+    flex: 1;
+}
+.user-search .search-wrapper span {
+    cursor: pointer;
+}
+.user-search .helper {
+    display: flex;
+    align-items: center;
 }
 .user-search .helper label {
     cursor: pointer;
+    margin-right: 1em;
+}
+.user-search .helper input {
+    vertical-align: middle;
 }
 .user-search .helper .check-all,
 .user-search .helper .uncheck-all {
@@ -327,6 +531,11 @@ footer a {
 /**
  * Result block
  */
+.result-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
 .result-block h2 {
     color: #E03A4D;
 }
@@ -353,10 +562,100 @@ footer a {
 }
 
 /**
- * Let it snow
+ * Logo effect
  */
-#snow {
+@-webkit-keyframes hvr-buzz {
+  50% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+  100% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+}
+@keyframes hvr-buzz {
+  50% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+  100% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+}
+.hvr-buzz {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px transparent;
+}
+.hvr-buzz:hover, .hvr-buzz:focus, .hvr-buzz:active {
+  -webkit-animation-name: hvr-buzz;
+  animation-name: hvr-buzz;
+  -webkit-animation-duration: 0.15s;
+  animation-duration: 0.15s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+/**
+ * Snow animation
+ * from https://codepen.io/jpschwinghamer/pen/QwwbgO
+ */
+.snow {
     display: block;
     position: absolute;
+    z-index: 2;
     top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    -webkit-animation: snow linear;
+    animation: snow linear;
+}
+.snow.foreground {
+    background-image: url(/images/snow-large.png);
+    -webkit-animation-duration: 15s;
+    animation-duration: 15s;
+}
+.snow.foreground.layered {
+    -webkit-animation-delay: 7.5s;
+    animation-delay: 7.5s;
+}
+.snow.middleground {
+    background-image: url(/images/snow-medium.png);
+    -webkit-animation-duration: 20s;
+    animation-duration: 20s;
+}
+.snow.middleground.layered {
+    -webkit-animation-delay: 10s;
+    animation-delay: 10s;
+}
+@-webkit-keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
+}
+
+@keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
 }
