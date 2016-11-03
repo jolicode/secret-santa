@@ -419,6 +419,12 @@ footer a {
 .next {
     text-align: center;
 }
+.next .pure-img-responsive {
+    box-shadow: 10px 10px 25px rgb(204, 204, 204);
+}
+.next p {
+    margin-top: 2em;
+}
 /**
  * User list
  */
@@ -467,6 +473,7 @@ footer a {
 .user-search .helper .uncheck-all {
     color: #E03A4D;
     cursor: pointer;
+    padding: 0 1em;
 }
 .user-list {
     height: 300px;
