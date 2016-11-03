@@ -2,18 +2,22 @@
 
 {% block content %}
     <div class="content error-page">
-        <h2>Error 500</h2>
-
-        <p>Hu... It looks like something didn't work as expected...</p>
-
         <div class="is-center">
-            <img class="pure-img-responsive" alt="Error 500" src="/images/error-500.gif">
-        </div>
+            <h2>Error 500</h2>
 
+            <p>Hu... It looks like something didn't work as expected...</p>
+
+            <img class="is-center" alt="Error 500" src="/images/error-500.gif">
+        </div>
         <div class="is-center">
             <a href="{{ path('homepage') }}" class="big-button">
                 <span class="fa fa-angle-left" aria-hidden="true"></span>
                 Go back to home page
+            </a>
+
+            <a href="mailto:coucou+secretsanta@jolicode.com" class="big-button">
+                <span class="fa fa-support" aria-hidden="true"></span>
+                Contact support
             </a>
         </div>
     </div>

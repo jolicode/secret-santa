@@ -4,7 +4,7 @@
     {% if result %}
         <div class="content result-block">
             {% if result.isOk %}
-                <h2>Well done! All messages were sent.</h2>
+                <h2>Well done! All messages were sent</h2>
             {% else %}
                 <h2>A technical error occurred when sending messages to users</h2>
 
@@ -31,12 +31,18 @@
             {% endif %}
 
             <p class="summary">
-                A summary of the repartition is available for download. Keep it secret, even for you, to avoid breaking the Secret Santa spirit.<br />
-                Be aware that we do not persist anything forever so the summary is only available now, you will not be able to get it back later.<br />
-                <a href="{{ path('summary', {hash: result.hash}) }}" download="summary.txt">Download the summary</a>.
+                A summary of the repartition is available for download. Keep it secret, even for you, to avoid breaking the Secret Santa spirit.
+            </p>
+
+            <p>
+                Be aware that we do not persist anything forever so the summary is only available now, you will not be able to get it back later.
             </p>
 
             <div class="is-center">
+                <a href="{{ path('summary', {hash: result.hash}) }}" class="big-button" download="summary.txt">
+                    <span class="fa fa-download" aria-hidden="true"></span>
+                    Download summary
+                </a>
                 <a href="{{ path('run') }}" class="big-button">
                     <span class="fa fa-repeat" aria-hidden="true"></span>
                     Start another Secret Santa
@@ -45,5 +51,3 @@
         </div>
     {% endif %}
 {% endblock content %}
-
-{% block footerClass %}stick-bottom{% endblock %}

@@ -1,6 +1,12 @@
 body, html {
   font-family: 'Montserrat', sans-serif;
 }
+html {
+    background-color:#E03A4D;
+}
+body {
+    background-color:#FFFFFF;
+}
 a:hover {
     text-decoration: underline;
 }
@@ -126,9 +132,6 @@ footer {
     color: white;
     background-color: #E03A4D;
     font-size: 0.9em;
-}
-footer.stick-bottom {
-    display: none;
 }
 footer a.support-link {
     display: inline-block;
@@ -561,6 +564,12 @@ footer a {
 /**
  * Error page
  */
+.error-page {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+}
 .error-page h2 {
     color: #E03A4D;
 }
