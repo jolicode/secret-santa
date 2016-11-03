@@ -2,11 +2,10 @@
 
 namespace Joli\SlackSecretSanta\tests;
 
-use Joli\SlackSecretSanta\Result;
 use Joli\SlackSecretSanta\SantaKernel;
+use Joli\SlackSecretSanta\SecretSanta;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 
 class SantaControllerTest extends KernelTestCase
 {
@@ -21,7 +20,7 @@ class SantaControllerTest extends KernelTestCase
     /**
      * {@inheritdoc}
      */
-    protected static function createClient(array $options = array(), array $server = array())
+    protected static function createClient(array $options = [], array $server = [])
     {
         static::bootKernel($options);
 
@@ -88,12 +87,17 @@ class SantaControllerTest extends KernelTestCase
         $this->assertSame(404, $response->getStatusCode());
     }
 
-    public function test_finish_page_works_with_valid_hash_for_success_result()
+    public function test_finish_page_works_with_valid_hash_for_successful_secret_santa()
     {
-        $result = new Result('azerty', [], [], null);
+        $secretSanta = new SecretSanta('azerty', [
+            'toto1' => 'toto2',
+            'toto2' => 'toto3',
+        ], null);
+        $secretSanta->markAssociationAsProceeded('toto1');
+        $secretSanta->markAssociationAsProceeded('toto2');
 
         $client = static::createClient();
-        $this->prepareSession($client, 'result-azerty', $result);
+        $this->prepareSession($client, 'secret-santa-azerty', $secretSanta);
 
         $crawler = $client->request('GET', '/finish/azerty');
         $response = $client->getResponse();
@@ -105,18 +109,15 @@ class SantaControllerTest extends KernelTestCase
         );
     }
 
-    public function test_finish_page_works_with_valid_hash_for_failed_result()
+    public function test_finish_page_works_with_valid_hash_for_failed_secret_santa()
     {
-        $result = new Result('azerty', [
+        $secretSanta = new SecretSanta('azerty', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
-        ], [
-            'toto1' => 'toto2',
-            'toto2' => 'toto3',
-        ], 'Error message');
+        ], null);
 
         $client = static::createClient();
-        $this->prepareSession($client, 'result-azerty', $result);
+        $this->prepareSession($client, 'secret-santa-azerty', $secretSanta);
 
         $crawler = $client->request('GET', '/finish/azerty');
         $response = $client->getResponse();
@@ -144,14 +145,17 @@ class SantaControllerTest extends KernelTestCase
 
     public function test_summary_works_with_valid_hash()
     {
-        $result = new Result('yolo', [
+        $secretSanta = new SecretSanta('yolo', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
             'toto3' => 'toto1',
-        ], [], null);
+        ], null);
+        $secretSanta->markAssociationAsProceeded('toto1');
+        $secretSanta->markAssociationAsProceeded('toto2');
+        $secretSanta->markAssociationAsProceeded('toto3');
 
         $client = static::createClient();
-        $this->prepareSession($client, 'result-yolo', $result);
+        $this->prepareSession($client, 'secret-santa-yolo', $secretSanta);
 
         $crawler = $client->request('GET', '/summary/yolo');
         $response = $client->getResponse();
