@@ -20,32 +20,33 @@ class SecretDispatcher
     }
 
     /**
-     * @param string[]    $userIds
-     * @param string|null $adminMessage
-     * @param null        $adminUserId
+     * Send messages for remaining associations.
      *
-     * @return Result
+     * This method is limited to 20 seconds to be able to display nice error message instead of being timed out by Heroku.
+     *
+     * @param SecretSanta $secretSanta
+     *
+     * @throws \RuntimeException
      */
-    public function dispatchTo($userIds, $adminMessage = null, $adminUserId = null)
+    public function dispatchRemainingMessages(SecretSanta $secretSanta)
     {
-        $rudolph         = new Rudolph();
-        $associatedUsers = $rudolph->associateUsers($userIds);
-
-        $hash                  = md5(serialize($associatedUsers));
-        $remainingAssociations = $associatedUsers;
-        $error                 = null;
+        $startTime = time();
 
         try {
-            foreach ($associatedUsers as $giver => $receiver) {
+            foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
+                if ((time() - $startTime) > 19) {
+                    throw new \RuntimeException('It takes too much time to contact Slack! Please press the Retry button.');
+                }
+
                 $text = sprintf("Hi! You have been chosen to be part of a Secret Santa!\n
 Someone has been chosen to get you a gift; and *you* have been chosen to gift <@%s>!", $receiver);
 
-                if (!empty($adminMessage)) {
-                    $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . strip_tags($adminMessage) . '```';
+                if (!empty($secretSanta->getAdminMessage())) {
+                    $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
                 }
 
-                if ($adminUserId) {
-                    $text .= sprintf("\n\nMessage sent via <@%s>.", $adminUserId);
+                if ($secretSanta->getAdminUserId()) {
+                    $text .= sprintf("\n\nMessage sent via <@%s>.", $secretSanta->getAdminUserId());
                 }
 
                 $message = new ChatPostMessagePayload();
@@ -56,13 +57,11 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
 
                 $this->sendPayload($message);
 
-                unset($remainingAssociations[$giver]);
+                $secretSanta->markAssociationAsProceeded($giver);
             }
         } catch (\Exception $e) {
-            $error = $e->getMessage();
+            $secretSanta->setError($e->getMessage());
         }
-
-        return new Result($hash, $associatedUsers, $remainingAssociations, $error);
     }
 
     /**

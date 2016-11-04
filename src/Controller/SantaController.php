@@ -5,7 +5,10 @@ namespace Joli\SlackSecretSanta\Controller;
 use Bramdevries\Oauth\Client\Provider\Slack;
 use CL\Slack\Payload\AuthTestPayload;
 use CL\Slack\Transport\ApiClient;
+use GuzzleHttp\Client;
+use Joli\SlackSecretSanta\Rudolph;
 use Joli\SlackSecretSanta\SecretDispatcher;
+use Joli\SlackSecretSanta\SecretSanta;
 use Joli\SlackSecretSanta\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,8 +20,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 class SantaController
 {
-    const STATE_SESSION_KEY   = 'santa.slack.state';
-    const TOKEN_SESSION_KEY   = 'santa.slack.token';
+    const STATE_SESSION_KEY = 'santa.slack.state';
+    const TOKEN_SESSION_KEY = 'santa.slack.token';
     const USER_ID_SESSION_KEY = 'santa.slack.user_id';
 
     private $slackClientId;
@@ -29,11 +32,11 @@ class SantaController
 
     public function __construct($slackClientId, $slackClientSecret, SessionInterface $session, RouterInterface $router, \Twig_Environment $twig)
     {
-        $this->session           = $session;
-        $this->router            = $router;
-        $this->slackClientId     = $slackClientId;
+        $this->session = $session;
+        $this->router = $router;
+        $this->slackClientId = $slackClientId;
         $this->slackClientSecret = $slackClientSecret;
-        $this->twig              = $twig;
+        $this->twig = $twig;
     }
 
     public function homepage()
@@ -45,47 +48,51 @@ class SantaController
 
     public function run(Request $request)
     {
-        $token  = $this->session->get(self::TOKEN_SESSION_KEY);
+        $token = $this->session->get(self::TOKEN_SESSION_KEY);
         $userId = $this->session->get(self::USER_ID_SESSION_KEY);
 
         if (!($token instanceof AccessToken)) {
             return new RedirectResponse($this->router->generate('authenticate'));
         }
 
-        $apiClient = new ApiClient($token->getToken());
+        $apiClient = $this->getApiClient($token);
 
         $selectedUsers = [];
-        $message       = '';
-        $errors        = [];
+        $message = null;
+        $errors = [];
 
         if ($request->isMethod('POST')) {
             $selectedUsers = $request->request->get('users');
-            $message       = $request->request->get('message');
+            $message = $request->request->get('message');
 
             $errors = $this->validate($selectedUsers, $message);
 
             if (count($errors) < 1) {
-                $secretDispatcher = new SecretDispatcher($apiClient);
-                $result           = $secretDispatcher->dispatchTo($selectedUsers, $message, $userId);
+                $associatedUsers = (new Rudolph())->associateUsers($selectedUsers);
+                $hash = md5(serialize($associatedUsers));
+
+                $secretSanta = new SecretSanta($hash, $associatedUsers, $userId, strip_tags($message));
+
+                (new SecretDispatcher($apiClient))->dispatchRemainingMessages($secretSanta);
 
                 $request->getSession()->set(
-                    $this->getResultSessionKey(
-                        $result->getHash()
-                    ), $result
+                    $this->getSecretSantaSessionKey(
+                        $secretSanta->getHash()
+                    ), $secretSanta
                 );
 
-                return new RedirectResponse($this->router->generate('finish', ['hash' => $result->getHash()]));
+                return new RedirectResponse($this->router->generate('finish', ['hash' => $secretSanta->getHash()]));
             }
         }
 
         try {
             $userExtractor = new UserExtractor($apiClient);
-            $users         = $userExtractor->extractAll();
-            $content       = $this->twig->render('run.html.twig', [
-                'users'         => $users,
+            $users = $userExtractor->extractAll();
+            $content = $this->twig->render('run.html.twig', [
+                'users' => $users,
                 'selectedUsers' => $selectedUsers,
-                'message'       => $message,
-                'errors'        => $errors,
+                'message' => $message,
+                'errors' => $errors,
             ]);
 
             return new Response($content);
@@ -96,18 +103,10 @@ class SantaController
 
     public function finish(Request $request, $hash)
     {
-        $result = $request->getSession()->get(
-            $this->getResultSessionKey(
-                $hash
-            )
-        );
-
-        if (!$result) {
-            throw new NotFoundHttpException();
-        }
+        $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
 
         $content = $this->twig->render('finish.html.twig', [
-            'result' => $result,
+            'secretSanta' => $secretSanta,
         ]);
 
         return new Response($content);
@@ -115,18 +114,10 @@ class SantaController
 
     public function summary(Request $request, $hash)
     {
-        $result = $request->getSession()->get(
-            $this->getResultSessionKey(
-                $hash
-            )
-        );
-
-        if (!$result) {
-            throw new NotFoundHttpException();
-        }
+        $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
 
         $content = $this->twig->render('summary.txt.twig', [
-            'result' => $result,
+            'secretSanta' => $secretSanta,
         ]);
 
         $response = new Response($content);
@@ -136,6 +127,29 @@ class SantaController
         $response->headers->set('Content-Disposition', 'attachment; filename="summary.txt";');
 
         return $response;
+    }
+
+    public function retry(Request $request, $hash)
+    {
+        $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
+
+        $token = $this->session->get(self::TOKEN_SESSION_KEY);
+
+        if (!($token instanceof AccessToken)) {
+            return new RedirectResponse($this->router->generate('authenticate'));
+        }
+
+        $apiClient = $this->getApiClient($token);
+
+        (new SecretDispatcher($apiClient))->dispatchRemainingMessages($secretSanta);
+
+        $request->getSession()->set(
+            $this->getSecretSantaSessionKey(
+                $secretSanta->getHash()
+            ), $secretSanta
+        );
+
+        return new RedirectResponse($this->router->generate('finish', ['hash' => $secretSanta->getHash()]));
     }
 
     /**
@@ -148,9 +162,9 @@ class SantaController
     public function authenticate(Request $request)
     {
         $provider = new Slack([
-            'clientId'     => $this->slackClientId,
+            'clientId' => $this->slackClientId,
             'clientSecret' => $this->slackClientSecret,
-            'redirectUri'  => $this->router->generate('authenticate', [], RouterInterface::ABSOLUTE_URL),
+            'redirectUri' => $this->router->generate('authenticate', [], RouterInterface::ABSOLUTE_URL),
         ]);
 
         if (!$request->query->has('code')) {
@@ -177,9 +191,8 @@ class SantaController
             ]);
 
             // Who Am I?
-            $test       = new AuthTestPayload();
-            $apiClient  = new ApiClient($token->getToken());
-            $response   = $apiClient->send($test);
+            $test = new AuthTestPayload();
+            $response = $this->getApiClient($token)->send($test);
 
             if ($response->isOk()) {
                 $this->session->set(self::TOKEN_SESSION_KEY, $token);
@@ -193,13 +206,46 @@ class SantaController
     }
 
     /**
+     * @param AccessToken $token
+     *
+     * @return ApiClient
+     */
+    private function getApiClient(AccessToken $token)
+    {
+        return new ApiClient($token->getToken(), new Client([
+            'timeout' => 2,
+        ]));
+    }
+
+    /**
      * @param string $hash
      *
      * @return string
      */
-    private function getResultSessionKey($hash)
+    private function getSecretSantaSessionKey($hash)
     {
-        return sprintf('result-%s', $hash);
+        return sprintf('secret-santa-%s', $hash);
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $hash
+     *
+     * @return SecretSanta
+     */
+    private function getSecretSantaOrThrow404(Request $request, $hash)
+    {
+        $secretSanta = $request->getSession()->get(
+            $this->getSecretSantaSessionKey(
+                $hash
+            )
+        );
+
+        if (!$secretSanta) {
+            throw new NotFoundHttpException();
+        }
+
+        return $secretSanta;
     }
 
     /**

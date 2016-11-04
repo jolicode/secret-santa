@@ -7,8 +7,6 @@ Code source is under MIT License.
 - This application is powered by Symfony 3 and its Micro Kernel;
 - Hosting is provided by Heroku;
 - Session are stored in Heroku Redis servers;
-- Frontend is built with bootstrap, obviously (any help welcome from designer ^^);
-- For now, the calls to "ChatPostMessage" Slack API are done procedurally, this may be hard on the API / PHP / Heroku for big Secret Santa... Let us know!
 - Built with ♥ by [@pyrech](https://github.com/pyrech) and [@damienalexandre](https://github.com/damienalexandre).
 
 ## Install, run and deploy
@@ -29,13 +27,14 @@ The app requires:
 - a Redis server
 - PHP 5.6+
 
-As we rely on env variables, we cannot use `server:run`. From `web/`:
+As we rely on env variables, we cannot use `server:run`. Run:
 
-    cd web/ && SLACK_CLIENT_SECRET=TOTO SLACK_CLIENT_ID=TOTO php -d variables_order=EGPCS -S 127.0.0.1:8000 ../etc/router.php
+    cd web/
+    SLACK_CLIENT_SECRET=TOTO SLACK_CLIENT_ID=TOTO php -d variables_order=EGPCS -S 127.0.0.1:8000 ../etc/router.php
     open http://127.0.0.1:8000/
     
 Variables are:
 
-- SLACK_CLIENT_SECRET: Application secret from Slack;
-- SLACK_CLIENT_ID: Application id from Slack;
-- REDIS_URL: The full redis connexion url (default `redis://localhost:6379`)
+- `SLACK_CLIENT_SECRET`: Application secret from Slack;
+- `SLACK_CLIENT_ID`: Application id from Slack;
+- `REDIS_URL`: The full redis connexion url (default `redis://localhost:6379`)
