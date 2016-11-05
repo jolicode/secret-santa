@@ -71,7 +71,7 @@ class SantaController
                 $associatedUsers = (new Rudolph())->associateUsers($selectedUsers);
                 $hash = md5(serialize($associatedUsers));
 
-                $secretSanta = new SecretSanta($hash, $associatedUsers, $userId, strip_tags($message));
+                $secretSanta = new SecretSanta($hash, $associatedUsers, $userId, str_replace('```', '', $message));
 
                 (new SecretDispatcher($apiClient))->dispatchRemainingMessages($secretSanta);
 
