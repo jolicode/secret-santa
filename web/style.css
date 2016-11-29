@@ -438,6 +438,10 @@ footer a {
 .next p {
     margin-top: 2em;
 }
+.big-santa-warning {
+    font-size: 0.8em;
+    color: #7A7A7A;
+}
 /**
  * User list
  */
