@@ -35,7 +35,11 @@ class UserExtractor
         $response = $this->sendPayload($payload);
 
         return array_filter($response->getUsers(), function(User $user) {
-            return !$user->isBot() && !$user->isDeleted();
+            return
+                !$user->isBot()
+                && !$user->isDeleted()
+                && $user->getName() !== 'slackbot'
+            ;
         });
     }
 
