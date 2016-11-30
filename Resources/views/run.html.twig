@@ -54,7 +54,7 @@
                         </div>
                     {% endspaceless %}
                     <div class="checked-users-summary">
-                        <span>Selection summary :</span>
+                        <span>Selection summary <span id="summary-count"></span>:</span>
                         <div id="checked-users-summary"></div>
                     </div>
                 </div>
@@ -116,6 +116,7 @@
                 var allChecker = document.getElementById('all-checker');
                 var allUnchecker = document.getElementById('all-unchecker');
                 var userList = document.getElementById('user-list');
+                var summaryCount = document.getElementById('summary-count');
                 var checkedUsersSummary = document.getElementById('checked-users-summary');
                 var submitButton = document.getElementById('submit-button');
 
@@ -147,6 +148,7 @@
                         html = 'No user selected';
                     }
 
+                    summaryCount.innerHTML = '(' + users.length + ')';
                     checkedUsersSummary.innerHTML = html;
                 }
 
