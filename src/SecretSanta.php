@@ -19,8 +19,8 @@ class SecretSanta
     /** @var string|null */
     private $adminMessage;
 
-    /** @var string|null */
-    private $error;
+    /** @var string[] */
+    private $errors = [];
 
     /**
      * @param string $hash
@@ -62,11 +62,11 @@ class SecretSanta
     }
 
     /**
-     * @return string|null
+     * @return string[]
      */
-    public function getError()
+    public function getErrors()
     {
-        return $this->error;
+        return $this->errors;
     }
 
     /**
@@ -104,8 +104,8 @@ class SecretSanta
     /**
      * @param string $error
      */
-    public function setError($error)
+    public function addError($error)
     {
-        $this->error = $error;
+        $this->errors[] = $error;
     }
 }

@@ -60,7 +60,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
                 $secretSanta->markAssociationAsProceeded($giver);
             }
         } catch (\Exception $e) {
-            $secretSanta->setError($e->getMessage());
+            $secretSanta->addError($e->getMessage());
         }
     }
 
