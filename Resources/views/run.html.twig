@@ -83,7 +83,7 @@
                             Anything else is up to you, have fun!
                         </p>
 
-                        <p class="big-santa-warning">
+                        <p class="big-santa-warning hidden" id="big-santa-warning">
                             For Secret Santa with a lot of participants, the final step (send Slack private messages)
                             can take some time (up to 20 sec).<br />
                             Don't worry, in case something goes wrong, a "Retry" button will allow you to send remaining
@@ -118,6 +118,7 @@
                 var userList = document.getElementById('user-list');
                 var summaryCount = document.getElementById('summary-count');
                 var checkedUsersSummary = document.getElementById('checked-users-summary');
+                var bigSantaWarning = document.getElementById('big-santa-warning');
                 var submitButton = document.getElementById('submit-button');
 
                 /**
@@ -150,6 +151,12 @@
 
                     summaryCount.innerHTML = '(' + users.length + ')';
                     checkedUsersSummary.innerHTML = html;
+
+                    if (users.length >= 30) {
+                        bigSantaWarning.classList.remove('hidden');
+                    } else {
+                        bigSantaWarning.classList.add('hidden');
+                    }
                 }
 
                 /**
