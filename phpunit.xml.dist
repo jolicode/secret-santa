@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.1/phpunit.xsd"
          backupGlobals="false"
          colors="true"
          bootstrap="vendor/autoload.php"
-        >
+>
     <php>
         <ini name="error_reporting" value="-1" />
+        <server name="KERNEL_CLASS" value="Joli\SlackSecretSanta\SantaKernel" />
+        <env name="SLACK_CLIENT_ID" value="DUMMY"/>
+        <env name="SLACK_CLIENT_SECRET" value="DUMMY"/>
     </php>
 
     <testsuites>
         <testsuite name="Slack Secret Santa Test Suite">
-            <directory>./tests/</directory>
+            <directory>tests/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./vendor</directory>
-                <directory>./tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 </phpunit>

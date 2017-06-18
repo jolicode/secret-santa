@@ -1,0 +1,15 @@
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    env(REDIS_URL): redis://localhost:6379
+
+services:
+    Predis\Client:
+        public: false
+        arguments:
+            $parameters: '%env(REDIS_URL)%'
+
+    session.handler.predis:
+        class: Predis\Session\Handler
+        public: false
+        autowire: true

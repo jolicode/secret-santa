@@ -18,16 +18,51 @@
         }
     },
     "require": {
+        "php": "^7.1.3",
         "bramdevries/oauth2-slack": "~0.1.0",
         "cleentfaar/slack": "~0.17",
-        "symfony/symfony": "~3.1",
-        "predis/predis": "^1.0"
+        "predis/predis": "^1.0",
+        "symfony/flex": "^1.0",
+        "symfony/framework-bundle": "^3.3",
+        "symfony/twig-bundle": "^3.3",
+        "symfony/yaml": "^3.3",
+        "ircmaxell/random-lib": "~1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.0",
-        "friendsofphp/php-cs-fixer": "^1.9.3"
+        "friendsofphp/php-cs-fixer": "^1.9.3",
+        "phpunit/phpunit": "^6.2",
+        "symfony/browser-kit": "^3.3",
+        "symfony/css-selector": "^3.3",
+        "symfony/dotenv": "^3.3",
+        "symfony/phpunit-bridge": "^3.3",
+        "symfony/profiler-pack": "^1.0"
     },
     "config": {
-        "bin-dir": "bin"
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "auto-scripts": {
+            "make cache-warmup": "script"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*",
+        "symfony/twig-bundle": "<3.3",
+        "symfony/debug": "<3.3"
+    },
+    "extra": {
+        "symfony": {
+            "id": "01BJXX8ZDDPMDF82T76S0FA56S",
+            "allow-contrib": false
+        }
     }
 }

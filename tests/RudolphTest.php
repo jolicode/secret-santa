@@ -3,8 +3,9 @@
 namespace Joli\SlackSecretSanta\Tests;
 
 use Joli\SlackSecretSanta\Rudolph;
+use PHPUnit\Framework\TestCase;
 
-class RudolphTest extends \PHPUnit_Framework_TestCase
+class RudolphTest extends TestCase
 {
     /** @var Rudolph */
     private $SUT;

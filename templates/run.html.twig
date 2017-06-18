@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
+{% import _self as current %}
+
 {% macro userSummary(user) %}
     <span class="user-summary">
         <img src="{{ user.profile.image32 }}" alt="" />
@@ -45,7 +47,7 @@
                                        name="users[]"
                                        value="{{ user.name }}"
                                        id="user-{{ user.id }}"
-                                       data-summary="{{ _self.userSummary(user)|escape('html_attr') }}"
+                                       data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
                                     >
                                     <img src="{{ user.profile.image32 }}" alt="{{ user.profile.realName }}" />
                                     <span>{{ user.profile.realName }} ({{ user.name }})</span>
