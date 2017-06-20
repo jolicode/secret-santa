@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Slack Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Joli\SlackSecretSanta\Controller;
 
 use AdamPaterson\OAuth2\Client\Provider\Slack;
@@ -185,25 +194,25 @@ class SantaController
             $this->session->remove(self::STATE_SESSION_KEY);
 
             return new Response('Invalid state', 401);
-        } else {
-            // Try to get an access token (using the authorization code grant)
-            $token = $provider->getAccessToken('authorization_code', [
-                'code' => $request->query->get('code'),
-            ]);
-
-            // Who Am I?
-            $test = new AuthTestPayload();
-            $response = $this->getApiClient($token)->send($test);
-
-            if ($response->isOk()) {
-                $this->session->set(self::TOKEN_SESSION_KEY, $token);
-                $this->session->set(self::USER_ID_SESSION_KEY, $response->getUserId());
-
-                return new RedirectResponse($this->router->generate('run'));
-            } else {
-                return new RedirectResponse($this->router->generate('homepage'));
-            }
         }
+
+        // Try to get an access token (using the authorization code grant)
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $request->query->get('code'),
+        ]);
+
+        // Who Am I?
+        $test = new AuthTestPayload();
+        $response = $this->getApiClient($token)->send($test);
+
+        if ($response->isOk()) {
+            $this->session->set(self::TOKEN_SESSION_KEY, $token);
+            $this->session->set(self::USER_ID_SESSION_KEY, $response->getUserId());
+
+            return new RedirectResponse($this->router->generate('run'));
+        }
+
+        return new RedirectResponse($this->router->generate('homepage'));
     }
 
     /**

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Slack Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Joli\SlackSecretSanta;
 
 /**
@@ -20,7 +29,7 @@ class Rudolph
     {
         $this->assertUserListCorrect($users);
 
-        $userCount    = count($users);
+        $userCount = count($users);
         $associations = [];
 
         shuffle($users);
@@ -41,7 +50,7 @@ class Rudolph
     {
         $filteredUsers = array_unique($users);
 
-        if (count($filteredUsers) != count($users)) {
+        if (count($filteredUsers) !== count($users)) {
             $duplicated = array_unique(array_diff_key($users, $filteredUsers));
             throw new \LogicException(
                 sprintf(

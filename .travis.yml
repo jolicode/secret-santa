@@ -17,3 +17,9 @@ env:
 
 install:
     - composer install --prefer-dist;
+
+
+
+script:
+    - vendor/bin/phpunit
+    - vendor/bin/php-cs-fixer fix --config=.php_cs --dry-run --diff
