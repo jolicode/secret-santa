@@ -2,7 +2,7 @@
 
 namespace Joli\SlackSecretSanta\Controller;
 
-use Bramdevries\Oauth\Client\Provider\Slack;
+use AdamPaterson\OAuth2\Client\Provider\Slack;
 use CL\Slack\Payload\AuthTestPayload;
 use CL\Slack\Transport\ApiClient;
 use GuzzleHttp\Client;
@@ -180,10 +180,11 @@ class SantaController
             $this->session->set(self::STATE_SESSION_KEY, $provider->getState());
 
             return new RedirectResponse($authUrl);
+        // Check given state against previously stored one to mitigate CSRF attack
         } elseif (empty($request->query->get('state')) || ($request->query->get('state') !== $this->session->get(self::STATE_SESSION_KEY))) {
             $this->session->remove(self::STATE_SESSION_KEY);
 
-            return new Response('Invalid states.', 401);
+            return new Response('Invalid state', 401);
         } else {
             // Try to get an access token (using the authorization code grant)
             $token = $provider->getAccessToken('authorization_code', [
