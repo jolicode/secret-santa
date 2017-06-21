@@ -1,10 +1,17 @@
 <?php
 
+/*
+ * This file is part of the Slack Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Joli\SlackSecretSanta;
 
 use CL\Slack\Model\User;
-use CL\Slack\Payload\ChannelsInfoPayload;
-use CL\Slack\Payload\ChannelsInfoPayloadResponse;
 use CL\Slack\Payload\PayloadInterface;
 use CL\Slack\Payload\UsersListPayload;
 use CL\Slack\Payload\UsersListPayloadResponse;
@@ -34,7 +41,7 @@ class UserExtractor
         /** @var $response UsersListPayloadResponse */
         $response = $this->sendPayload($payload);
 
-        return array_filter($response->getUsers(), function(User $user) {
+        return array_filter($response->getUsers(), function (User $user) {
             return
                 !$user->isBot()
                 && !$user->isDeleted()

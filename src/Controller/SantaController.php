@@ -1,8 +1,17 @@
 <?php
 
+/*
+ * This file is part of the Slack Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Joli\SlackSecretSanta\Controller;
 
-use Bramdevries\Oauth\Client\Provider\Slack;
+use AdamPaterson\OAuth2\Client\Provider\Slack;
 use CL\Slack\Payload\AuthTestPayload;
 use CL\Slack\Transport\ApiClient;
 use GuzzleHttp\Client;
@@ -180,29 +189,30 @@ class SantaController
             $this->session->set(self::STATE_SESSION_KEY, $provider->getState());
 
             return new RedirectResponse($authUrl);
+        // Check given state against previously stored one to mitigate CSRF attack
         } elseif (empty($request->query->get('state')) || ($request->query->get('state') !== $this->session->get(self::STATE_SESSION_KEY))) {
             $this->session->remove(self::STATE_SESSION_KEY);
 
-            return new Response('Invalid states.', 401);
-        } else {
-            // Try to get an access token (using the authorization code grant)
-            $token = $provider->getAccessToken('authorization_code', [
-                'code' => $request->query->get('code'),
-            ]);
-
-            // Who Am I?
-            $test = new AuthTestPayload();
-            $response = $this->getApiClient($token)->send($test);
-
-            if ($response->isOk()) {
-                $this->session->set(self::TOKEN_SESSION_KEY, $token);
-                $this->session->set(self::USER_ID_SESSION_KEY, $response->getUserId());
-
-                return new RedirectResponse($this->router->generate('run'));
-            } else {
-                return new RedirectResponse($this->router->generate('homepage'));
-            }
+            return new Response('Invalid state', 401);
         }
+
+        // Try to get an access token (using the authorization code grant)
+        $token = $provider->getAccessToken('authorization_code', [
+            'code' => $request->query->get('code'),
+        ]);
+
+        // Who Am I?
+        $test = new AuthTestPayload();
+        $response = $this->getApiClient($token)->send($test);
+
+        if ($response->isOk()) {
+            $this->session->set(self::TOKEN_SESSION_KEY, $token);
+            $this->session->set(self::USER_ID_SESSION_KEY, $response->getUserId());
+
+            return new RedirectResponse($this->router->generate('run'));
+        }
+
+        return new RedirectResponse($this->router->generate('homepage'));
     }
 
     /**

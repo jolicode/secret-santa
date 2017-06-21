@@ -8,9 +8,18 @@ cache:
 
 matrix:
     include:
-        - php: hhvm
-        - php: 5.6
-        - php: 7.0
+        - php: 7.1
+
+env:
+    global:
+        - APP_ENV=test
+        - APP_DEBUG=0
 
 install:
-    - composer --prefer-source update;
+    - composer install --prefer-dist;
+
+
+
+script:
+    - vendor/bin/phpunit
+    - vendor/bin/php-cs-fixer fix --config=.php_cs --dry-run --diff

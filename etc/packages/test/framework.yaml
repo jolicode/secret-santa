@@ -1,0 +1,5 @@
+framework:
+    test: null
+    session:
+        storage_id: session.storage.mock_file
+        handler_id: session.handler.native_file

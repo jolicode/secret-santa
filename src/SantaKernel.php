@@ -1,19 +1,19 @@
 <?php
 
+/*
+ * This file is part of the Slack Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Joli\SlackSecretSanta;
 
-use Joli\SlackSecretSanta\Controller\SantaController;
-use Predis\Client;
-use Predis\Session\Handler;
-use Symfony\Bundle\DebugBundle\DebugBundle;
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
-use Symfony\Bundle\TwigBundle\TwigBundle;
-use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Parameter;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
@@ -21,165 +21,51 @@ class SantaKernel extends Kernel
 {
     use MicroKernelTrait;
 
-    public function __construct($environment, $debug)
-    {
-        Request::setTrustedProxies(['0.0.0.0/0']);
+    private const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
-        parent::__construct($environment, $debug);
+    public function getCacheDir(): string
+    {
+        return dirname(__DIR__) . '/var/cache/' . $this->environment;
     }
 
-    public function registerBundles()
+    public function getLogDir(): string
     {
-        $bundles = [
-            new FrameworkBundle(),
-            new TwigBundle(),
-        ];
+        return dirname(__DIR__) . '/var/logs';
+    }
 
-        if ($this->getEnvironment() === 'dev') {
-            $bundles[] = new DebugBundle();
-            $bundles[] = new WebProfilerBundle();
+    public function registerBundles(): iterable
+    {
+        $contents = require dirname(__DIR__) . '/etc/bundles.php';
+        foreach ($contents as $class => $envs) {
+            if (isset($envs['all']) || isset($envs[$this->environment])) {
+                yield new $class();
+            }
         }
-
-        return $bundles;
     }
 
-    /**
-     * Add or import routes into your application.
-     *
-     *     $routes->import('config/routing.yml');
-     *     $routes->add('/admin', 'AppBundle:Admin:dashboard', 'admin_dashboard');
-     *
-     * @param RouteCollectionBuilder $routes
-     */
-    protected function configureRoutes(RouteCollectionBuilder $routes)
+    protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
+    {
+        $confDir = dirname(__DIR__) . '/etc';
+        $loader->load($confDir . '/packages/*' . self::CONFIG_EXTS, 'glob');
+        if (is_dir($confDir . '/packages/' . $this->environment)) {
+            $loader->load($confDir . '/packages/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
+        }
+        $loader->load($confDir . '/container' . self::CONFIG_EXTS, 'glob');
+    }
+
+    protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
         if (isset($_ENV['FORCE_SSL'])) {
             $routes->setSchemes('https');
         }
 
-        if ($this->getEnvironment() === 'dev') {
-            $routes->import('@WebProfilerBundle/Resources/config/routing/wdt.xml', '/_wdt');
-            $routes->import('@WebProfilerBundle/Resources/config/routing/profiler.xml', '/_profiler');
-            $routes->import('@TwigBundle/Resources/config/routing/errors.xml', '/_error');
+        $confDir = dirname(__DIR__) . '/etc';
+        if (is_dir($confDir . '/routing/')) {
+            $routes->import($confDir . '/routing/*' . self::CONFIG_EXTS, '/', 'glob');
         }
-
-        $routes->add('/', 'santa.controller:homepage', 'homepage');
-        $routes->add('/run', 'santa.controller:run', 'run');
-        $routes->add('/finish/{hash}', 'santa.controller:finish', 'finish');
-        $routes->add('/summary/{hash}', 'santa.controller:summary', 'summary');
-        $routes->add('/retry/{hash}', 'santa.controller:retry', 'retry');
-        $routes->add('/auth', 'santa.controller:authenticate', 'authenticate');
-    }
-
-    /**
-     * Configures the container.
-     *
-     * You can register extensions:
-     *
-     * $c->loadFromExtension('framework', array(
-     *     'secret' => '%secret%'
-     * ));
-     *
-     * Or services:
-     *
-     * $c->register('halloween', 'FooBundle\HalloweenProvider');
-     *
-     * Or parameters:
-     *
-     * $c->setParameter('halloween', 'lot of fun');
-     *
-     * @param ContainerBuilder $c
-     * @param LoaderInterface  $loader
-     */
-    protected function configureContainer(ContainerBuilder $c, LoaderInterface $loader)
-    {
-        $session = [
-            'handler_id' => 'session.handler.predis',
-            'name' => 'santaSession',
-        ];
-
-        if ($c->getParameter('kernel.environment') === 'test') {
-            $session['storage_id'] = 'session.storage.filesystem';
-            $session['handler_id'] = 'session.handler.native_file';
+        if (is_dir($confDir . '/routing/' . $this->environment)) {
+            $routes->import($confDir . '/routing/' . $this->environment . '/**/*' . self::CONFIG_EXTS, '/', 'glob');
         }
-
-        $c->loadFromExtension('framework', [
-          'secret' => 'NotSoRandom...:)',
-          'session' => $session,
-          'assets' => [],
-          'templating' => [
-              'engines' => ['twig'],
-          ],
-        ]);
-        $c->loadFromExtension('twig', [
-          'strict_variables' => '%kernel.debug%',
-          'debug' => '%kernel.debug%',
-        ]);
-
-        if ($c->getParameter('kernel.environment') === 'dev') {
-            $c->loadFromExtension('framework', [
-                'profiler' => [
-                    'only_exceptions' => false,
-                ],
-            ]);
-            $c->loadFromExtension('web_profiler', [
-                'toolbar' => true,
-                'intercept_redirects' => false,
-            ]);
-        }
-
-        if (empty($_ENV['SLACK_CLIENT_SECRET']) || empty($_ENV['SLACK_CLIENT_ID'])) {
-            $_ENV['SLACK_CLIENT_SECRET'] = 'dummy';
-            $_ENV['SLACK_CLIENT_ID'] = 'dummy';
-        }
-
-        if (empty($_ENV['REDIS_URL'])) {
-            $_ENV['REDIS_URL'] = 'redis://localhost:6379';
-        }
-
-        // Slack application credentials
-        $c->setParameter('slack.client_secret', $_ENV['SLACK_CLIENT_SECRET']);
-        $c->setParameter('slack.client_id', $_ENV['SLACK_CLIENT_ID']);
-
-        $controller = $c->register('santa.controller', SantaController::class);
-        $controller->setAutowired(true);
-        $controller->addArgument(new Parameter('slack.client_id'));
-        $controller->addArgument(new Parameter('slack.client_secret'));
-
-        $sessionHandler = $c->register('session.handler.predis', Handler::class);
-        $sessionHandler->setPublic(false);
-        $sessionHandler->setAutowired(true);
-
-        $predis = $c->register('predis', Client::class);
-        $predis->setPublic(false);
-        $predis->addArgument($_ENV['REDIS_URL']);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRootDir()
-    {
-        if (null === $this->rootDir) {
-            $this->rootDir = dirname(__DIR__);
-        }
-
-        return $this->rootDir;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheDir()
-    {
-        return $this->rootDir . '/var/cache/' . $this->environment;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLogDir()
-    {
-        return $this->rootDir . '/var/logs';
+        $routes->import($confDir . '/routing' . self::CONFIG_EXTS, '/', 'glob');
     }
 }

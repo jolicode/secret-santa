@@ -1,4 +1,11 @@
+.php_cs.cache
+
+###> symfony/framework-bundle ###
+.env
+/var/
 /vendor/
-/var/*
-/bin/php-cs-fixer
-/bin/phpunit
+/web/bundles/
+###< symfony/framework-bundle ###
+###> symfony/phpunit-bridge ###
+/phpunit.xml
+###< symfony/phpunit-bridge ###
