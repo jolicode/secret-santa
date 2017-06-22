@@ -9,6 +9,9 @@ services:
         arguments:
             $parameters: '%env(REDIS_URL)%'
 
+    Predis\ClientInterface:
+        alias: Predis\Client
+
     session.handler.predis:
         class: Predis\Session\Handler
         public: false
