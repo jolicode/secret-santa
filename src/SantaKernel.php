@@ -55,10 +55,6 @@ class SantaKernel extends Kernel
 
     protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
-        if (isset($_ENV['FORCE_SSL'])) {
-            $routes->setSchemes('https');
-        }
-
         $confDir = dirname(__DIR__) . '/etc';
         if (is_dir($confDir . '/routing/')) {
             $routes->import($confDir . '/routing/*' . self::CONFIG_EXTS, '/', 'glob');
