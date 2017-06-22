@@ -39,7 +39,7 @@ class SantaController
     private $router;
     private $twig;
 
-    public function __construct($slackClientId, $slackClientSecret, SessionInterface $session, RouterInterface $router, \Twig_Environment $twig)
+    public function __construct(string $slackClientId, string $slackClientSecret, SessionInterface $session, RouterInterface $router, \Twig_Environment $twig)
     {
         $this->session = $session;
         $this->router = $router;
@@ -48,14 +48,14 @@ class SantaController
         $this->twig = $twig;
     }
 
-    public function homepage()
+    public function homepage(): Response
     {
         $content = $this->twig->render('index.html.twig');
 
         return new Response($content);
     }
 
-    public function run(Request $request)
+    public function run(Request $request): Response
     {
         $token = $this->session->get(self::TOKEN_SESSION_KEY);
         $userId = $this->session->get(self::USER_ID_SESSION_KEY);
@@ -110,7 +110,7 @@ class SantaController
         }
     }
 
-    public function finish(Request $request, $hash)
+    public function finish(Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
 
@@ -121,7 +121,7 @@ class SantaController
         return new Response($content);
     }
 
-    public function summary(Request $request, $hash)
+    public function summary(Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
 
@@ -138,7 +138,7 @@ class SantaController
         return $response;
     }
 
-    public function retry(Request $request, $hash)
+    public function retry(Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
 
@@ -163,12 +163,8 @@ class SantaController
 
     /**
      * Ask for Slack authentication and store the AccessToken in Session.
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse|Response
      */
-    public function authenticate(Request $request)
+    public function authenticate(Request $request): Response
     {
         $provider = new Slack([
             'clientId' => $this->slackClientId,
@@ -215,35 +211,19 @@ class SantaController
         return new RedirectResponse($this->router->generate('homepage'));
     }
 
-    /**
-     * @param AccessToken $token
-     *
-     * @return ApiClient
-     */
-    private function getApiClient(AccessToken $token)
+    private function getApiClient(AccessToken $token): ApiClient
     {
         return new ApiClient($token->getToken(), new Client([
             'timeout' => 2,
         ]));
     }
 
-    /**
-     * @param string $hash
-     *
-     * @return string
-     */
-    private function getSecretSantaSessionKey($hash)
+    private function getSecretSantaSessionKey(string $hash): string
     {
         return sprintf('secret-santa-%s', $hash);
     }
 
-    /**
-     * @param Request $request
-     * @param string  $hash
-     *
-     * @return SecretSanta
-     */
-    private function getSecretSantaOrThrow404(Request $request, $hash)
+    private function getSecretSantaOrThrow404(Request $request, string $hash): SecretSanta
     {
         $secretSanta = $request->getSession()->get(
             $this->getSecretSantaSessionKey(
@@ -258,13 +238,7 @@ class SantaController
         return $secretSanta;
     }
 
-    /**
-     * @param string[] $selectedUsers
-     * @param string   $message
-     *
-     * @return array
-     */
-    private function validate($selectedUsers, $message)
+    private function validate(array $selectedUsers, string $message): array
     {
         $errors = [];
 

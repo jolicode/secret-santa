@@ -13,6 +13,7 @@ namespace Joli\SlackSecretSanta;
 
 use CL\Slack\Model\User;
 use CL\Slack\Payload\PayloadInterface;
+use CL\Slack\Payload\PayloadResponseInterface;
 use CL\Slack\Payload\UsersListPayload;
 use CL\Slack\Payload\UsersListPayloadResponse;
 use CL\Slack\Transport\ApiClient;
@@ -22,9 +23,6 @@ class UserExtractor
     /** @var ApiClient */
     private $apiClient;
 
-    /**
-     * @param ApiClient $apiClient
-     */
     public function __construct(ApiClient $apiClient)
     {
         $this->apiClient = $apiClient;
@@ -33,7 +31,7 @@ class UserExtractor
     /**
      * @return User[]
      */
-    public function extractAll()
+    public function extractAll(): array
     {
         $payload = new UsersListPayload();
         $payload->getResponseClass();
@@ -50,12 +48,7 @@ class UserExtractor
         });
     }
 
-    /**
-     * @param PayloadInterface $payload
-     *
-     * @return \CL\Slack\Payload\PayloadResponseInterface
-     */
-    private function sendPayload(PayloadInterface $payload)
+    private function sendPayload(PayloadInterface $payload): PayloadResponseInterface
     {
         $response = $this->apiClient->send($payload);
 

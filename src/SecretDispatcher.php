@@ -13,6 +13,7 @@ namespace Joli\SlackSecretSanta;
 
 use CL\Slack\Payload\ChatPostMessagePayload;
 use CL\Slack\Payload\PayloadInterface;
+use CL\Slack\Payload\PayloadResponseInterface;
 use CL\Slack\Transport\ApiClient;
 
 class SecretDispatcher
@@ -20,9 +21,6 @@ class SecretDispatcher
     /** @var ApiClient */
     private $apiClient;
 
-    /**
-     * @param ApiClient $apiClient
-     */
     public function __construct(ApiClient $apiClient)
     {
         $this->apiClient = $apiClient;
@@ -33,11 +31,9 @@ class SecretDispatcher
      *
      * This method is limited to 20 seconds to be able to display nice error message instead of being timed out by Heroku.
      *
-     * @param SecretSanta $secretSanta
-     *
      * @throws \RuntimeException
      */
-    public function dispatchRemainingMessages(SecretSanta $secretSanta)
+    public function dispatchRemainingMessages(SecretSanta $secretSanta): void
     {
         $startTime = time();
 
@@ -73,12 +69,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         }
     }
 
-    /**
-     * @param PayloadInterface $payload
-     *
-     * @return \CL\Slack\Payload\PayloadResponseInterface
-     */
-    private function sendPayload(PayloadInterface $payload)
+    private function sendPayload(PayloadInterface $payload): PayloadResponseInterface
     {
         $response = $this->apiClient->send($payload);
 

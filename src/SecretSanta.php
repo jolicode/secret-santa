@@ -31,13 +31,7 @@ class SecretSanta
     /** @var string[] */
     private $errors = [];
 
-    /**
-     * @param string $hash
-     * @param array  $associations
-     * @param string $adminMessage
-     * @param string $adminUserId
-     */
-    public function __construct($hash, array $associations, $adminUserId, $adminMessage = null)
+    public function __construct(string $hash, array $associations, ?string $adminUserId, ?string $adminMessage)
     {
         $this->hash = $hash;
         $this->associations = $associations;
@@ -46,74 +40,47 @@ class SecretSanta
         $this->adminMessage = $adminMessage;
     }
 
-    /**
-     * @return string
-     */
-    public function getHash()
+    public function getHash(): ?string
     {
         return $this->hash;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getAssociations()
+    public function getAssociations(): array
     {
         return $this->associations;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getRemainingAssociations()
+    public function getRemainingAssociations(): array
     {
         return $this->remainingAssociations;
     }
 
-    /**
-     * @return string[]
-     */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
 
-    /**
-     * @return string
-     */
-    public function getAdminUserId()
+    public function getAdminUserId(): ?string
     {
         return $this->adminUserId;
     }
 
-    /**
-     * @return string
-     */
-    public function getAdminMessage()
+    public function getAdminMessage(): ?string
     {
         return $this->adminMessage;
     }
 
-    /**
-     * @return bool
-     */
-    public function isDone()
+    public function isDone(): bool
     {
         return empty($this->remainingAssociations);
     }
 
-    /**
-     * @param string $giver
-     */
-    public function markAssociationAsProceeded($giver)
+    public function markAssociationAsProceeded(string $giver): void
     {
         unset($this->remainingAssociations[$giver]);
     }
 
-    /**
-     * @param string $error
-     */
-    public function addError($error)
+    public function addError(string $error): void
     {
         $this->errors[] = $error;
     }
