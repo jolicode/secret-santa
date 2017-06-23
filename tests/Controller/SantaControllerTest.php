@@ -92,7 +92,7 @@ class SantaControllerTest extends KernelTestCase
         $secretSanta = new SecretSanta('azerty', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
-        ], null);
+        ], null, null);
         $secretSanta->markAssociationAsProceeded('toto1');
         $secretSanta->markAssociationAsProceeded('toto2');
 
@@ -114,7 +114,7 @@ class SantaControllerTest extends KernelTestCase
         $secretSanta = new SecretSanta('azerty', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
-        ], null);
+        ], null, null);
 
         $client = static::createClient();
         $this->prepareSession($client, 'secret-santa-azerty', $secretSanta);
@@ -149,7 +149,7 @@ class SantaControllerTest extends KernelTestCase
             'toto1' => 'toto2',
             'toto2' => 'toto3',
             'toto3' => 'toto1',
-        ], null);
+        ], null, null);
         $secretSanta->markAssociationAsProceeded('toto1');
         $secretSanta->markAssociationAsProceeded('toto2');
         $secretSanta->markAssociationAsProceeded('toto3');

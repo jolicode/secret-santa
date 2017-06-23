@@ -20,12 +20,7 @@ namespace Joli\SlackSecretSanta;
  */
 class Rudolph
 {
-    /**
-     * @param string[] $users
-     *
-     * @return array
-     */
-    public function associateUsers(array $users)
+    public function associateUsers(array $users): array
     {
         $this->assertUserListCorrect($users);
 
@@ -43,10 +38,7 @@ class Rudolph
         return $associations;
     }
 
-    /**
-     * @param string[] $users
-     */
-    private function assertUserListCorrect(array $users)
+    private function assertUserListCorrect(array $users): void
     {
         $filteredUsers = array_unique($users);
 
