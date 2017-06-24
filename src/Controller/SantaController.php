@@ -20,6 +20,7 @@ use Joli\SlackSecretSanta\SecretDispatcher;
 use Joli\SlackSecretSanta\SecretSanta;
 use Joli\SlackSecretSanta\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
-class SantaController
+class SantaController extends AbstractController
 {
     const STATE_SESSION_KEY = 'santa.slack.state';
     const TOKEN_SESSION_KEY = 'santa.slack.token';
@@ -55,7 +56,7 @@ class SantaController
         return new Response($content);
     }
 
-    public function run(Request $request): Response
+    public function run(Request $request, SecretDispatcher $secretDispatcher, UserExtractor $userExtractor, Rudolph $rudolph): Response
     {
         $token = $this->session->get(self::TOKEN_SESSION_KEY);
         $userId = $this->session->get(self::USER_ID_SESSION_KEY);
@@ -63,8 +64,6 @@ class SantaController
         if (!($token instanceof AccessToken)) {
             return new RedirectResponse($this->router->generate('authenticate'));
         }
-
-        $apiClient = $this->getApiClient($token);
 
         $selectedUsers = [];
         $message = null;
@@ -77,12 +76,12 @@ class SantaController
             $errors = $this->validate($selectedUsers, $message);
 
             if (count($errors) < 1) {
-                $associatedUsers = (new Rudolph())->associateUsers($selectedUsers);
+                $associatedUsers = $rudolph->associateUsers($selectedUsers);
                 $hash = md5(serialize($associatedUsers));
 
                 $secretSanta = new SecretSanta($hash, $associatedUsers, $userId, str_replace('```', '', $message));
 
-                (new SecretDispatcher($apiClient))->dispatchRemainingMessages($secretSanta);
+                $secretDispatcher->dispatchRemainingMessages($secretSanta, $token->getToken());
 
                 $request->getSession()->set(
                     $this->getSecretSantaSessionKey(
@@ -95,8 +94,7 @@ class SantaController
         }
 
         try {
-            $userExtractor = new UserExtractor($apiClient);
-            $users = $userExtractor->extractAll();
+            $users = $userExtractor->extractAll($token->getToken());
             $content = $this->twig->render('run.html.twig', [
                 'users' => $users,
                 'selectedUsers' => $selectedUsers,
@@ -138,7 +136,7 @@ class SantaController
         return $response;
     }
 
-    public function retry(Request $request, string $hash): Response
+    public function retry(Request $request, string $hash, SecretDispatcher $secretDispatcher): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
 
@@ -148,9 +146,7 @@ class SantaController
             return new RedirectResponse($this->router->generate('authenticate'));
         }
 
-        $apiClient = $this->getApiClient($token);
-
-        (new SecretDispatcher($apiClient))->dispatchRemainingMessages($secretSanta);
+        $secretDispatcher->dispatchRemainingMessages($secretSanta, $token->getToken());
 
         $request->getSession()->set(
             $this->getSecretSantaSessionKey(
@@ -164,7 +160,7 @@ class SantaController
     /**
      * Ask for Slack authentication and store the AccessToken in Session.
      */
-    public function authenticate(Request $request): Response
+    public function authenticate(Request $request, ApiClient $apiClient): Response
     {
         $provider = new Slack([
             'clientId' => $this->slackClientId,
@@ -199,7 +195,7 @@ class SantaController
 
         // Who Am I?
         $test = new AuthTestPayload();
-        $response = $this->getApiClient($token)->send($test);
+        $response = $apiClient->send($test, $token->getToken());
 
         if ($response->isOk()) {
             $this->session->set(self::TOKEN_SESSION_KEY, $token);
@@ -209,13 +205,6 @@ class SantaController
         }
 
         return new RedirectResponse($this->router->generate('homepage'));
-    }
-
-    private function getApiClient(AccessToken $token): ApiClient
-    {
-        return new ApiClient($token->getToken(), new Client([
-            'timeout' => 2,
-        ]));
     }
 
     private function getSecretSantaSessionKey(string $hash): string

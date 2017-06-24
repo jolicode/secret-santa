@@ -4,8 +4,12 @@ parameters:
     env(REDIS_URL): redis://localhost:6379
 
 services:
-    Predis\Client:
+    _defaults:
+        autowire: true
+        autoconfigure: true
         public: false
+
+    Predis\Client:
         arguments:
             $parameters: '%env(REDIS_URL)%'
 
@@ -14,5 +18,15 @@ services:
 
     session.handler.predis:
         class: Predis\Session\Handler
-        public: false
         autowire: true
+
+    GuzzleHttp\Client:
+        arguments:
+            $config: {timeout: 2}
+
+    GuzzleHttp\ClientInterface:
+        alias: GuzzleHttp\Client
+
+    CL\Slack\Transport\ApiClient:
+        arguments:
+            $token: ~

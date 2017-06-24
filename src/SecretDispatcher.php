@@ -33,7 +33,7 @@ class SecretDispatcher
      *
      * @throws \RuntimeException
      */
-    public function dispatchRemainingMessages(SecretSanta $secretSanta): void
+    public function dispatchRemainingMessages(SecretSanta $secretSanta, string $token): void
     {
         $startTime = time();
 
@@ -60,7 +60,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
                 $message->setUsername('Secret Santa Bot');
                 $message->setIconUrl('https://slack-secret-santa.herokuapp.com/images/logo.png');
 
-                $this->sendPayload($message);
+                $this->sendPayload($message, $token);
 
                 $secretSanta->markAssociationAsProceeded($giver);
             }
@@ -69,9 +69,9 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         }
     }
 
-    private function sendPayload(PayloadInterface $payload): PayloadResponseInterface
+    private function sendPayload(PayloadInterface $payload, string $token): PayloadResponseInterface
     {
-        $response = $this->apiClient->send($payload);
+        $response = $this->apiClient->send($payload, $token);
 
         if (!$response->isOk()) {
             throw new \RuntimeException(

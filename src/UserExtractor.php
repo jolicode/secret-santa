@@ -31,13 +31,12 @@ class UserExtractor
     /**
      * @return User[]
      */
-    public function extractAll(): array
+    public function extractAll(string $token): array
     {
         $payload = new UsersListPayload();
-        $payload->getResponseClass();
 
         /** @var $response UsersListPayloadResponse */
-        $response = $this->sendPayload($payload);
+        $response = $this->sendPayload($payload, $token);
 
         return array_filter($response->getUsers(), function (User $user) {
             return
@@ -48,9 +47,9 @@ class UserExtractor
         });
     }
 
-    private function sendPayload(PayloadInterface $payload): PayloadResponseInterface
+    private function sendPayload(PayloadInterface $payload, string $token): PayloadResponseInterface
     {
-        $response = $this->apiClient->send($payload);
+        $response = $this->apiClient->send($payload, $token);
 
         if (!$response->isOk()) {
             throw new \RuntimeException(
