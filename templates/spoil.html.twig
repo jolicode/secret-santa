@@ -1,0 +1,51 @@
+{% set spoilInProgress = true %}
+
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="content spoil-block">
+        <h2>Spoiling Santa</h2>
+
+        {% if associations %}
+            <p>
+                Here is the secret repartition:
+            </p>
+
+            <ul>
+                {% for giver,receiver in associations %}
+                    <li><strong>@{{ giver }}</strong> must offer a gift to <strong>@{{ receiver }}</strong></li>
+                {% endfor %}
+            </ul>
+
+            <div class="is-center">
+                <a href="{{ path('run') }}" class="big-button">
+                    <span class="fa fa-repeat" aria-hidden="true"></span>
+                    Start another Secret Santa
+                </a>
+            </div>
+        {% else %}
+            <p>
+                Paste below the code you received in Slack and submit the form to access the secret repartition.
+            </p>
+
+            {% if invalidCode %}
+                <p class="error">
+                    Content could not be decoded. Please make sure you copied correctly the code and try again.
+                </p>
+            {% endif %}
+
+            <form method="post" id="run_form">
+                <div class="code-field">
+                    <textarea name="code" id="code" rows="6" placeholder="Paste your code here">{{ code }}</textarea>
+                </div>
+
+                <div class="is-center">
+                    <button type="submit" class="big-button">
+                        <span class="fa fa-user-secret" aria-hidden="true"></span>
+                        Decode!
+                    </button>
+                </div>
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}

@@ -409,7 +409,7 @@ footer a {
     margin-top: 2em;
     color: #E03A4D;
 }
-.run-block .error {
+.error {
     background-color: #ffb6c0;
     display: block;
     margin-bottom: 1em;
@@ -417,13 +417,16 @@ footer a {
     color: #7a2428;
     border-radius: 8px;
 }
-.message-field textarea {
+textarea {
     width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
     padding: 1em;
-    max-height: 100px;
     border: 1px solid #CCCCCC;
     border-radius: 4px;
+}
+.message-field textarea {
+    max-height: 100px;
 }
 .help {
     color: #7A7A7A;
@@ -589,6 +592,19 @@ footer a {
 }
 .error-page .big-button {
     margin-top: 2em;
+}
+/**
+ * Spoil form
+ */
+.spoil-block {
+    padding: 0 2em;
+    max-width: 960px;
+    margin: 0 auto;
+    margin-bottom: 4em;
+    position: relative;
+}
+.code-field textarea {
+    max-height: 200px;
 }
 
 /**

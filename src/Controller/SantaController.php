@@ -14,10 +14,10 @@ namespace Joli\SlackSecretSanta\Controller;
 use AdamPaterson\OAuth2\Client\Provider\Slack;
 use CL\Slack\Payload\AuthTestPayload;
 use CL\Slack\Transport\ApiClient;
-use GuzzleHttp\Client;
 use Joli\SlackSecretSanta\Rudolph;
 use Joli\SlackSecretSanta\SecretDispatcher;
 use Joli\SlackSecretSanta\SecretSanta;
+use Joli\SlackSecretSanta\Spoiler;
 use Joli\SlackSecretSanta\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -119,21 +119,27 @@ class SantaController extends AbstractController
         return new Response($content);
     }
 
-    public function summary(Request $request, string $hash): Response
+    public function spoil(Request $request, Spoiler $spoiler): Response
     {
-        $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
+        $code = $request->request->get('code');
+        $invalidCode = false;
+        $associations = null;
 
-        $content = $this->twig->render('summary.txt.twig', [
-            'secretSanta' => $secretSanta,
+        if ($code) {
+            $associations = $spoiler->decode($code);
+
+            if ($associations === null) {
+                $invalidCode = true;
+            }
+        }
+
+        $content = $this->twig->render('spoil.html.twig', [
+            'code' => $code,
+            'invalidCode' => $invalidCode,
+            'associations' => $associations,
         ]);
 
-        $response = new Response($content);
-
-        $response->headers->set('Cache-Control', 'private');
-        $response->headers->set('Content-type', 'text/plain');
-        $response->headers->set('Content-Disposition', 'attachment; filename="summary.txt";');
-
-        return $response;
+        return new Response($content);
     }
 
     public function retry(Request $request, string $hash, SecretDispatcher $secretDispatcher): Response

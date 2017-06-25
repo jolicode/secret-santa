@@ -55,18 +55,10 @@
         {% endif %}
 
         <p class="summary">
-            A summary of the repartition is available for download. Keep it secret, even for you, to avoid breaking the Secret Santa spirit.
-        </p>
-
-        <p>
-            Be aware that we do not persist anything forever so the summary is only available now, you will not be able to get it back later.
+            You have received a private message explaining how to retrieve the santa repartition. You should probably don't look at it, to avoid breaking the Secret Santa spirit.
         </p>
 
         <div class="is-center">
-            <a href="{{ path('summary', {hash: secretSanta.hash}) }}" class="big-button" download="summary.txt">
-                <span class="fa fa-download" aria-hidden="true"></span>
-                Download summary
-            </a>
             <a href="{{ path('run') }}" class="big-button">
                 <span class="fa fa-repeat" aria-hidden="true"></span>
                 Start another Secret Santa
