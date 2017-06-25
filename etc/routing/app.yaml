@@ -10,10 +10,6 @@ finish:
     path:     /finish/{hash}
     defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:finish }
 
-summary:
-    path:     /summary/{hash}
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:summary }
-
 retry:
     path:     /retry/{hash}
     defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:retry }
@@ -21,3 +17,7 @@ retry:
 authenticate:
     path:     /auth
     defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:authenticate }
+
+spoil:
+    path:     /spoil
+    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:spoil }

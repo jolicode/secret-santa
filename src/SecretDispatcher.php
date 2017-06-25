@@ -15,15 +15,24 @@ use CL\Slack\Payload\ChatPostMessagePayload;
 use CL\Slack\Payload\PayloadInterface;
 use CL\Slack\Payload\PayloadResponseInterface;
 use CL\Slack\Transport\ApiClient;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SecretDispatcher
 {
     /** @var ApiClient */
     private $apiClient;
 
-    public function __construct(ApiClient $apiClient)
+    /** @var Spoiler */
+    private $spoiler;
+
+    /** @var UrlGeneratorInterface */
+    private $urlGenerator;
+
+    public function __construct(ApiClient $apiClient, UrlGeneratorInterface $urlGenerator, Spoiler $spoiler)
     {
         $this->apiClient = $apiClient;
+        $this->spoiler = $spoiler;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -33,7 +42,7 @@ class SecretDispatcher
      *
      * @throws \RuntimeException
      */
-    public function dispatchRemainingMessages(SecretSanta $secretSanta): void
+    public function dispatchRemainingMessages(SecretSanta $secretSanta, string $token): void
     {
         $startTime = time();
 
@@ -60,18 +69,43 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
                 $message->setUsername('Secret Santa Bot');
                 $message->setIconUrl('https://slack-secret-santa.herokuapp.com/images/logo.png');
 
-                $this->sendPayload($message);
+                $this->sendPayload($message, $token);
 
                 $secretSanta->markAssociationAsProceeded($giver);
             }
-        } catch (\Exception $e) {
-            $secretSanta->addError($e->getMessage());
+
+            // Send a summary to the santa admin
+            if ($secretSanta->getAdminUserId()) {
+                $text = sprintf(
+'Dear santa admin,
+
+You want to be spoiled? Here is a way to retrieve the secret repartition:
+
+- Copy the following content:
+```%s```
+- Paste the content on <%s|this page> then submit
+
+Happy secret santa!',
+                    $this->spoiler->encode($secretSanta),
+                    $this->urlGenerator->generate('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL)
+                );
+
+                $message = new ChatPostMessagePayload();
+                $message->setChannel($secretSanta->getAdminUserId());
+                $message->setText($text);
+                $message->setUsername('Secret Santa Bot Spoiler');
+                $message->setIconUrl('https://slack-secret-santa.herokuapp.com/images/logo-spoiler.png');
+
+                $this->sendPayload($message, $token);
+            }
+        } catch (\Throwable $t) {
+            $secretSanta->addError($t->getMessage());
         }
     }
 
-    private function sendPayload(PayloadInterface $payload): PayloadResponseInterface
+    private function sendPayload(PayloadInterface $payload, string $token): PayloadResponseInterface
     {
-        $response = $this->apiClient->send($payload);
+        $response = $this->apiClient->send($payload, $token);
 
         if (!$response->isOk()) {
             throw new \RuntimeException(

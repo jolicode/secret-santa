@@ -133,36 +133,45 @@ class SantaControllerTest extends KernelTestCase
         );
     }
 
-    public function test_summary_works_with_invalid_hash()
+    public function test_spoil_works_with_valid_code()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/summary/13456');
-        $response = $client->getResponse();
-
-        $this->assertSame(404, $response->getStatusCode());
-    }
-
-    public function test_summary_works_with_valid_hash()
-    {
-        $secretSanta = new SecretSanta('yolo', [
-            'toto1' => 'toto2',
-            'toto2' => 'toto3',
-            'toto3' => 'toto1',
-        ], null, null);
-        $secretSanta->markAssociationAsProceeded('toto1');
-        $secretSanta->markAssociationAsProceeded('toto2');
-        $secretSanta->markAssociationAsProceeded('toto3');
-
-        $client = static::createClient();
-        $this->prepareSession($client, 'secret-santa-yolo', $secretSanta);
-
-        $crawler = $client->request('GET', '/summary/yolo');
+        $crawler = $client->request('GET', '/spoil');
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertContains('Spoiler alert', $response->getContent());
-        $this->assertContains('@toto1 must offer a gift to @toto2', $response->getContent());
+
+        $form = $crawler->selectButton('Decode!')->form();
+        $form['code']->setValue('v1@eyJ0b3RvMSI6InRvdG8yIiwidG90bzIiOiJ0b3RvMyIsInRvdG8zIjoidG90bzEifQ==');
+
+        $crawler = $client->submit($form);
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertContains('Here is the secret repartition', $response->getContent());
+        $this->assertContains('<strong>@toto1</strong> must offer a gift to <strong>@toto2</strong>', $response->getContent());
+        $this->assertContains('<strong>@toto2</strong> must offer a gift to <strong>@toto3</strong>', $response->getContent());
+        $this->assertContains('<strong>@toto3</strong> must offer a gift to <strong>@toto1</strong>', $response->getContent());
+    }
+
+    public function test_spoil_works_with_invalid_code()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/spoil');
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $form = $crawler->selectButton('Decode!')->form();
+        $form['code']->setValue('v1@yolo');
+
+        $crawler = $client->submit($form);
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertContains('Content could not be decoded', $response->getContent());
     }
 
     /**
