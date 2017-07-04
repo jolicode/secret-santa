@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fe8e79ae4e5762a0fc8783dbc21e75c",
+    "content-hash": "23c1ae4668fe27e410f49f5272e4eacf",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",
@@ -1834,16 +1834,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.7",
+            "version": "v1.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "84ad7b3f8f6e10135f29ce402c88376e2a3c4c64"
+                "reference": "d1c0b0245de0d7a29242e19cec3e2f65a2a2cc64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/84ad7b3f8f6e10135f29ce402c88376e2a3c4c64",
-                "reference": "84ad7b3f8f6e10135f29ce402c88376e2a3c4c64",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/d1c0b0245de0d7a29242e19cec3e2f65a2a2cc64",
+                "reference": "d1c0b0245de0d7a29242e19cec3e2f65a2a2cc64",
                 "shasum": ""
             },
             "require": {
@@ -1876,7 +1876,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-06-17T01:02:40+00:00"
+            "time": "2017-07-03T12:27:59+00:00"
         },
         {
             "name": "symfony/framework-bundle",
