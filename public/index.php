@@ -17,11 +17,11 @@ use Symfony\Component\HttpFoundation\Request;
 require __DIR__ . '/../vendor/autoload.php';
 
 // The check is to ensure we don't use .env in production
-if (!getenv('APP_ENV')) {
+if (!isset($_SERVER['APP_ENV'])) {
     (new Dotenv())->load(__DIR__ . '/../.env');
 }
 
-if (getenv('APP_DEBUG')) {
+if ($_SERVER['APP_DEBUG'] ?? true) {
     // This check prevents access to debug front controllers that are deployed by accident to production servers.
     // Feel free to remove this, extend it, or make something more sophisticated.
     if (isset($_SERVER['HTTP_CLIENT_IP'])
@@ -37,7 +37,7 @@ if (getenv('APP_DEBUG')) {
 
 Request::setTrustedProxies(['0.0.0.0/0'], Request::HEADER_FORWARDED | Request::HEADER_X_FORWARDED_ALL);
 
-$kernel = new SantaKernel(getenv('APP_ENV'), getenv('APP_DEBUG'));
+$kernel = new SantaKernel($_SERVER['APP_ENV'] ?? 'dev', $_SERVER['APP_DEBUG'] ?? true);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
