@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use Joli\SlackSecretSanta\SantaKernel;
+use Joli\SlackSecretSanta\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,7 @@ if ($_SERVER['APP_DEBUG'] ?? false) {
 
 Request::setTrustedProxies(['0.0.0.0/0'], Request::HEADER_FORWARDED | Request::HEADER_X_FORWARDED_ALL);
 
-$kernel = new SantaKernel($_SERVER['APP_ENV'] ?? 'dev', $_SERVER['APP_DEBUG'] ?? false);
+$kernel = new Kernel($_SERVER['APP_ENV'] ?? 'dev', $_SERVER['APP_DEBUG'] ?? false);
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();

@@ -1,6 +1,6 @@
 homepage:
     path:     /
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:homepage }
+    defaults: { _controller: Joli\SlackSecretSanta\Controller\ContentController:homepage }
 
 run:
     path:     /run
