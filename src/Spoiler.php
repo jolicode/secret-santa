@@ -25,7 +25,7 @@ class Spoiler
         $encoded = trim($encoded);
         $version = substr($encoded, 0, 2);
 
-        if ($version !== 'v1') {
+        if ('v1' !== $version) {
             return null;
         }
 

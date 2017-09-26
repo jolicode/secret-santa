@@ -2,7 +2,7 @@
 
 namespace Joli\SlackSecretSanta\tests;
 
-use Joli\SlackSecretSanta\SantaKernel;
+use Joli\SlackSecretSanta\Kernel;
 use Joli\SlackSecretSanta\SecretSanta;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -14,7 +14,7 @@ class SantaControllerTest extends KernelTestCase
      */
     protected static function getKernelClass()
     {
-        return SantaKernel::class;
+        return Kernel::class;
     }
 
     /**

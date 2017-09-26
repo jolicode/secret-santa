@@ -9,7 +9,7 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <server name="KERNEL_CLASS" value="Joli\SlackSecretSanta\SantaKernel" />
+        <server name="KERNEL_CLASS" value="Joli\SlackSecretSanta\Kernel" />
         <env name="SLACK_CLIENT_ID" value="DUMMY"/>
         <env name="SLACK_CLIENT_SECRET" value="DUMMY"/>
     </php>

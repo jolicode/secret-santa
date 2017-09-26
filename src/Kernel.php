@@ -14,10 +14,10 @@ namespace Joli\SlackSecretSanta;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
-class SantaKernel extends Kernel
+class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
@@ -51,6 +51,7 @@ class SantaKernel extends Kernel
             $loader->load($confDir . '/packages/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
         }
         $loader->load($confDir . '/services' . self::CONFIG_EXTS, 'glob');
+        $loader->load($confDir . '/services_' . $this->environment . self::CONFIG_EXTS, 'glob');
     }
 
     protected function configureRoutes(RouteCollectionBuilder $routes): void

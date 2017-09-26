@@ -33,6 +33,9 @@
 
                 <ul class="pure-menu-list">
                     <li class="pure-menu-item">
+                        <a class="pure-menu-link" href="{{ path('hall_of_fame') }}"><i class="fa fa-star"></i> Hall of Fame</a>
+                    </li>
+                    <li class="pure-menu-item">
                         <a target="_blank" class="pure-menu-link" href="https://github.com/jolicode/slack-secret-santa/"><i class="fa fa-github"></i> Fork me on GitHub</a>
                     </li>
                 </ul>
@@ -44,7 +47,9 @@
             {% endblock content %}
 
             <footer class="footer is-center {% block footerClass %}{% endblock %}">
-                <a href="mailto:coucou+secretsanta@jolicode.com" class="support-link"><i class="fa fa-support"></i> Need help? Contact us!</a>
+                {% block contact %}
+                    <a href="mailto:coucou+secretsanta@jolicode.com" class="support-link"><i class="fa fa-support"></i> Need help? Contact us!</a>
+                {% endblock contact %}
                 <p>
                     Made with ♥ by <a href="http://jolicode.com">JoliCode</a>
                     &mdash;
