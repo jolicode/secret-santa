@@ -35,6 +35,16 @@ class ContentController extends AbstractController
     {
         $companies = [
             [
+                'label' => 'Cap Collectif',
+                'link' => 'https://cap-collectif.com/',
+                'image' => 'cap-collectif.png',
+            ],
+            [
+                'label' => 'Digital Ping Pong',
+                'link' => 'https://digitalpingpong.com/',
+                'image' => 'digital-ping-pong.jpg',
+            ],
+            [
                 'label' => 'JoliCode',
                 'link' => 'https://jolicode.com',
                 'image' => 'jolicode.svg',
@@ -43,16 +53,6 @@ class ContentController extends AbstractController
                 'label' => 'Monsieur Biz',
                 'link' => 'https://monsieurbiz.com/',
                 'image' => 'monsieur-biz.png',
-            ],
-            [
-                'label' => 'Digital Ping Pong',
-                'link' => 'https://digitalpingpong.com/',
-                'image' => 'digital-ping-pong.jpg',
-            ],
-            [
-                'label' => 'Cap Collectif',
-                'link' => 'https://cap-collectif.com/',
-                'image' => 'cap-collectif.png',
             ],
         ];
 
