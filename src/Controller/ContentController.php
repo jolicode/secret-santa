@@ -12,21 +12,8 @@
 namespace Joli\SlackSecretSanta\Controller;
 
 use AdamPaterson\OAuth2\Client\Provider\Slack;
-use CL\Slack\Payload\AuthTestPayload;
-use CL\Slack\Transport\ApiClient;
-use Joli\SlackSecretSanta\Rudolph;
-use Joli\SlackSecretSanta\SecretDispatcher;
-use Joli\SlackSecretSanta\SecretSanta;
-use Joli\SlackSecretSanta\Spoiler;
-use Joli\SlackSecretSanta\UserExtractor;
-use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\RouterInterface;
 
 class ContentController extends AbstractController
 {
@@ -40,6 +27,38 @@ class ContentController extends AbstractController
     public function homepage(): Response
     {
         $content = $this->twig->render('content/homepage.html.twig');
+
+        return new Response($content);
+    }
+
+    public function hallOfFame(): Response
+    {
+        $companies = [
+            [
+                'label' => 'JoliCode',
+                'link' => 'https://jolicode.com',
+                'image' => 'jolicode.svg',
+            ],
+            [
+                'label' => 'Monsieur Biz',
+                'link' => 'https://monsieurbiz.com/',
+                'image' => 'monsieur-biz.png',
+            ],
+            [
+                'label' => 'Digital Ping Pong',
+                'link' => 'https://digitalpingpong.com/',
+                'image' => 'digital-ping-pong.jpg',
+            ],
+            [
+                'label' => 'Cap Collectif',
+                'link' => 'https://cap-collectif.com/',
+                'image' => 'cap-collectif.png',
+            ],
+        ];
+
+        $content = $this->twig->render('content/hall_of_fame.html.twig', [
+            'companies' => $companies,
+        ]);
 
         return new Response($content);
     }

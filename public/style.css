@@ -190,6 +190,9 @@ footer a {
     padding-bottom: 10em;
     text-align: center;
 }
+.hall-of-fame .jumbotron {
+    padding-bottom: 2em;
+}
 .jumbotron-inner {
   max-width: 960px;
   margin: 0 auto;
@@ -202,10 +205,14 @@ footer a {
     margin-top: 2em;
     margin-bottom: 0.5em;
 }
+.hall-of-fame .jumbotron h1 {
+    margin-top: 1em;
+}
 .jumbotron a {
     color: white;
 }
-.jumbotron q {
+.jumbotron q,
+.jumbotron p {
     display: block;
     margin: 0 auto;
     text-align: center;
@@ -703,5 +710,34 @@ textarea {
     100% {
         -webkit-transform: translate3d(15%, 100%, 0);
         transform: translate3d(15%, 100%, 0);
+    }
+}
+
+/**
+ * Hall of Fame
+ */
+.hall-of-fame .they-use-it ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0;
+}
+.hall-of-fame .they-use-it li {
+    list-style: none;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2em;
+}
+.hall-of-fame .they-use-it li img {
+    width: 100%;
+}
+@media screen and (min-width: 800px) {
+    .hall-of-fame .they-use-it li {
+        width: 21%;
     }
 }
