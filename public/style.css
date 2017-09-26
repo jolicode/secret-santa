@@ -735,7 +735,6 @@ textarea {
 }
 .hall-of-fame .they-use-it li img {
     width: 100%;
-    max-height: 100px;
 }
 @media screen and (min-width: 800px) {
     .hall-of-fame .they-use-it li {
