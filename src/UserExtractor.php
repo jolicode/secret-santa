@@ -42,7 +42,7 @@ class UserExtractor
             return
                 !$user->isBot()
                 && !$user->isDeleted()
-                && $user->getName() !== 'slackbot'
+                && 'slackbot' !== $user->getName()
             ;
         });
     }

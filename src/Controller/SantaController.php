@@ -121,7 +121,7 @@ class SantaController extends AbstractController
         if ($code) {
             $associations = $spoiler->decode($code);
 
-            if ($associations === null) {
+            if (null === $associations) {
                 $invalidCode = true;
             }
         }
@@ -180,7 +180,7 @@ class SantaController extends AbstractController
             $this->session->set(self::STATE_SESSION_KEY, $provider->getState());
 
             return new RedirectResponse($authUrl);
-        // Check given state against previously stored one to mitigate CSRF attack
+            // Check given state against previously stored one to mitigate CSRF attack
         } elseif (empty($request->query->get('state')) || ($request->query->get('state') !== $this->session->get(self::STATE_SESSION_KEY))) {
             $this->session->remove(self::STATE_SESSION_KEY);
 
