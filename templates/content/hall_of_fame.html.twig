@@ -1,5 +1,12 @@
 {% extends 'layout.html.twig' %}
 
+{% block seo %}
+    {{ include('_seo.html.twig', {
+        title: 'Slack Secret Santa - Hall of Fame',
+        description: 'List of awesome companies using Slack Secret Santa',
+    }) }}
+{% endblock %}
+
 {% block content %}
     <div class="hall-of-fame">
         <div class="jumbotron">
@@ -18,7 +25,7 @@
                 {% for company in companies %}
                 <li>
                     <a href="{{ company.link }}">
-                        <img src="/images/hall-of-fame/{{ company.image }}" alt="{{ company.label }}"/>
+                        <img src="{{ asset('images/hall-of-fame/' ~ company.image) }}" alt="{{ company.label }}"/>
                     </a>
                 </li>
                 {% endfor %}

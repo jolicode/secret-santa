@@ -12,6 +12,12 @@
         <server name="KERNEL_CLASS" value="Joli\SlackSecretSanta\Kernel" />
         <env name="SLACK_CLIENT_ID" value="DUMMY"/>
         <env name="SLACK_CLIENT_SECRET" value="DUMMY"/>
+
+        <!-- ###+ symfony/framework-bundle ### -->
+        <env name="APP_ENV" value="dev" />
+        <env name="APP_DEBUG" value="1" />
+        <env name="APP_SECRET" value="d79fd8874f7f115e50ec2009e7b6f0ac" />
+        <!-- ###- symfony/framework-bundle ### -->
     </php>
 
     <testsuites>

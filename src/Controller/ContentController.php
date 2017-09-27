@@ -35,6 +35,11 @@ class ContentController extends AbstractController
     {
         $companies = [
             [
+                'label' => '20minutes',
+                'link' => 'http://www.20minutes.fr/',
+                'image' => '20minutes.png',
+            ],
+            [
                 'label' => 'Cap Collectif',
                 'link' => 'https://cap-collectif.com/',
                 'image' => 'cap-collectif.png',

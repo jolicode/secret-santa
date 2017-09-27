@@ -1,0 +1,10 @@
+{% set title = title|default('Slack Secret Santa - The Secret Santa bot for your Slack team') %}
+{% set description = description|default('A Slack application to throw Secret Santa with your team.') %}
+
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<meta name="author" content="JoliCode">
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ title }}" />
+<meta property="og:description" content="{{ description }}" />
+<meta property="og:url" content="{{ app.request.uri }}" />
