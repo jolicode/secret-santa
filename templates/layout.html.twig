@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:og="http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +16,9 @@
 
         <meta name="slack-app-id" content="A0E7EFUB1">
 
-        <title>Slack Secret Santa - The Secret Santa bot for your Slack team</title>
+        {% block seo %}
+            {{ include('_seo.html.twig') }}
+        {% endblock %}
     </head>
     <body>
 

@@ -1,5 +1,12 @@
 {% extends 'layout.html.twig' %}
 
+{% block seo %}
+    {{ include('_seo.html.twig', {
+        title: 'Slack Secret Santa - Hall of Fame',
+        description: 'List of awesome companies using Slack Secret Santa',
+    }) }}
+{% endblock %}
+
 {% block content %}
     <div class="hall-of-fame">
         <div class="jumbotron">
