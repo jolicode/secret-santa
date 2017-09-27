@@ -22,6 +22,7 @@
         "adam-paterson/oauth2-slack": "^1.1.3",
         "cleentfaar/slack": "~0.17",
         "predis/predis": "^1.0",
+        "symfony/asset": "^3.3",
         "symfony/flex": "^1.0.11",
         "symfony/framework-bundle": "^3.3",
         "symfony/monolog-bundle": "^3.1",

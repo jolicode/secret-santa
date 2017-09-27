@@ -23,7 +23,7 @@
         <div class="app-outer-container">
             <div class="">
                 <div class="app-container">
-                    <img class="upper-app" src="/images/app-home.png" alt="Lingo Mac App">
+                    <img class="upper-app" src="{{ asset('images/app-home.png') }}" alt="Lingo Mac App">
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
 
         <section class="step-feature">
             <div class="step-feature-image">
-                <img src="/images/step-slack.png">
+                <img src="{{ asset('images/step-slack.png') }}">
             </div>
             <div class="step-feature-text">
                 <h3>1. Connect to Your Slack</h3>
@@ -44,7 +44,7 @@
 
         <section class="step-feature reverse">
             <div class="step-feature-image">
-                <img src="/images/step-users.png">
+                <img src="{{ asset('images/step-users.png') }}">
             </div>
             <div class="step-feature-text">
                 <h3>2. Select Users</h3>
@@ -54,7 +54,7 @@
 
         <section class="step-feature">
             <div class="step-feature-image">
-                <img src="/images/step-inform.png">
+                <img src="{{ asset('images/step-inform.png') }}">
             </div>
             <div class="step-feature-text">
                 <h3>3. Inform Users</h3>
@@ -64,7 +64,7 @@
 
         <section class="step-feature reverse">
             <div class="step-feature-image">
-                <img src="/images/step-buy.png">
+                <img src="{{ asset('images/step-buy.png') }}">
             </div>
             <div class="step-feature-text">
                 <h3>4. Buy a Gift</h3>
@@ -84,7 +84,7 @@
                 </p>
             </div>
             <div class="is-center pure-u-1 pure-u-md-1-1 pure-u-lg-3-5">
-                <img class="pure-img-responsive" alt="Sample message received by users" src="/images/sample.png">
+                <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/sample.png') }}">
             </div>
         </div>
     </div>
@@ -108,7 +108,9 @@
         <div class="pure-u-1">
             <h2 class="content-head">Enjoy gifts, love and privacy</h2>
             <p>
-                Secret Santa is about sharing and having a good time! This application does not persist anything on disk, does not use web analytics, does not need any registration, does not send spam, does not collect any kind of personal information and is integrally <a href="https://github.com/jolicode/slack-secret-santa/">open-source</a>.
+                Secret Santa is about sharing and having a good time! This application does not persist anything on disk,
+                does not use web analytics, does not need any registration, does not send spam, does not collect any kind
+                of personal information and is integrally <a href="https://github.com/jolicode/slack-secret-santa/">open-source</a>.
             </p>
         </div>
     </div>

@@ -5,14 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+        <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="{{ asset('style.css') }}">
 
         <meta name="slack-app-id" content="A0E7EFUB1">
 
@@ -25,7 +25,7 @@
                 <div class="pure-menu-heading">
                     <a href="{{ path('homepage') }}">
                         <div class="logo-wrapper">
-                            <img src="/images/logo{{ spoilInProgress is defined ? '-spoiler' : '' }}.png" alt="Secret Santa" />
+                            <img src="{{ asset('images/logo' ~ (spoilInProgress is defined ? '-spoiler' : '') ~ '.png') }}" alt="Secret Santa" />
                         </div>
                         <h1>Slack<br>Secret Santa</h1>
                     </a>

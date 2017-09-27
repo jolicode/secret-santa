@@ -18,7 +18,7 @@
                 {% for company in companies %}
                 <li>
                     <a href="{{ company.link }}">
-                        <img src="/images/hall-of-fame/{{ company.image }}" alt="{{ company.label }}"/>
+                        <img src="{{ asset('images/hall-of-fame/' ~ company.image) }}" alt="{{ company.label }}"/>
                     </a>
                 </li>
                 {% endfor %}
