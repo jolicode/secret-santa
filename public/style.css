@@ -714,6 +714,25 @@ textarea {
 }
 
 /**
+ * Rotate effect
+ */
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    from { transform:rotate(0deg); }
+    to { transform:rotate(360deg); }
+}
+
+.spin {
+    display: inline-block;
+    -webkit-animation: spin 10s infinite linear;
+    animation: spin 10s infinite linear;
+}
+
+/**
  * Hall of Fame
  */
 .hall-of-fame .they-use-it ul {
@@ -734,7 +753,7 @@ textarea {
     padding-top: 2em;
 }
 .hall-of-fame .they-use-it li img {
-    width: 100%;
+    max-height: 100%;
 }
 @media screen and (min-width: 800px) {
     .hall-of-fame .they-use-it li {

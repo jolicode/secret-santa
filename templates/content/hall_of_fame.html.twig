@@ -19,13 +19,13 @@
         </div>
 
         <div class="content they-use-it">
-            <h2 class="content-head is-center">They use Slack Secret Santa</h2>
+            <h2 class="content-head is-center"><i class="fa fa-star spin"></i> They use Slack Secret Santa <i class="fa fa-star spin"></i></h2>
 
             <ul>
                 {% for company in companies %}
                 <li>
                     <a href="{{ company.link }}">
-                        <img src="{{ asset('images/hall-of-fame/' ~ company.image) }}" alt="{{ company.label }}"/>
+                        <img src="{{ asset('images/hall-of-fame/' ~ company.image) }}" alt="{{ company.label }}" width="160" />
                     </a>
                 </li>
                 {% endfor %}
