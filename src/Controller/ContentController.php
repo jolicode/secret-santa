@@ -56,8 +56,13 @@ class ContentController extends AbstractController
             ],
             [
                 'label' => 'JoliCode',
-                'link' => 'https://jolicode.com',
+                'link' => 'https://jolicode.com/',
                 'image' => 'jolicode.svg',
+            ],
+            [
+                'label' => 'Les-Tilleuls.coop',
+                'link' => 'https://les-tilleuls.coop/',
+                'image' => 'les-tilleuls.png',
             ],
             [
                 'label' => 'Monsieur Biz',
