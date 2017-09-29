@@ -40,6 +40,11 @@ class ContentController extends AbstractController
                 'image' => '20minutes.png',
             ],
             [
+                'label' => 'BlaBlaCar',
+                'link' => 'https://www.blablacar.fr/',
+                'image' => 'blablacar.png',
+            ],
+            [
                 'label' => 'Cap Collectif',
                 'link' => 'https://cap-collectif.com/',
                 'image' => 'cap-collectif.png',
@@ -58,6 +63,11 @@ class ContentController extends AbstractController
                 'label' => 'Monsieur Biz',
                 'link' => 'https://monsieurbiz.com/',
                 'image' => 'monsieur-biz.png',
+            ],
+            [
+                'label' => 'SensioLabs',
+                'link' => 'https://sensiolabs.com/',
+                'image' => 'sensiolabs.png',
             ],
         ];
 
