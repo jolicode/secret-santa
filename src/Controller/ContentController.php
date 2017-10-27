@@ -70,6 +70,11 @@ class ContentController extends AbstractController
                 'image' => 'monsieur-biz.png',
             ],
             [
+                'label' => 'Perkbox',
+                'link' => 'https://www.perkbox.co.uk/',
+                'image' => 'perkbox-logo.png',
+            ],
+            [
                 'label' => 'SensioLabs',
                 'link' => 'https://sensiolabs.com/',
                 'image' => 'sensiolabs.png',
