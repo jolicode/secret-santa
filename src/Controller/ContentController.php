@@ -68,7 +68,7 @@ class ContentController extends AbstractController
                 'label' => 'Monsieur Biz',
                 'link' => 'https://monsieurbiz.com/',
                 'image' => 'monsieur-biz.png',
-            ],            
+            ],
             [
                 'label' => 'Perkbox',
                 'link' => 'https://www.perkbox.co.uk/',
