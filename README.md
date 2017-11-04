@@ -16,7 +16,7 @@ The app requires:
 - a Redis server
 - PHP 7.1+
 
-Run the following command to launch the app locally:
+Run the following command to install the app locally:
 
 `composer install`
 
