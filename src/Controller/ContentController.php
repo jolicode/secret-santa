@@ -40,6 +40,11 @@ class ContentController extends AbstractController
                 'image' => '20minutes.png',
             ],
             [
+                'label' => 'ACSEO',
+                'link' => 'https://www.acseo.fr',
+                'image' => 'acseo.jpg',
+            ],
+            [
                 'label' => 'BlaBlaCar',
                 'link' => 'https://www.blablacar.fr/',
                 'image' => 'blablacar.png',
