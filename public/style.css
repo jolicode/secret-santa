@@ -39,6 +39,7 @@ a {
 }
 .big-button.warning-btn {
     background-color: #FFC520;
+    color: #333333 !important;
 }
 .big-button.warning-btn:hover {
     background-color: #FFA500;
@@ -574,7 +575,12 @@ textarea {
     color: #E03A4D;
 }
 .result-block .result-error {
-    margin-bottom: 4em;
+    padding-bottom: 2em;
+    border-bottom: 1px solid #aaaaaa;
+    margin-bottom: 2em;
+}
+.result-block .result-error h3 {
+    margin-top: 2em;
 }
 .result-block .result-error a {
     color: #E03A4D;
@@ -600,6 +606,31 @@ textarea {
 .error-page .big-button {
     margin-top: 2em;
 }
+.error-code {
+    display: block;
+    padding: 1em;
+    border-radius: 10px;
+    line-height: 1.5em;
+    background-color: #FFF5F5;
+    border: 1px solid #E03A4D;
+}
+.remaining-associations .open {
+    display: block;
+    transition: .2s;
+}
+.remaining-associations .list {
+    display: none;
+    height: 0;
+    text-align: left;
+}
+.remaining-associations.opened .open {
+    display: none;
+}
+.remaining-associations.opened .list {
+    display: block;
+    height: auto;
+}
+
 /**
  * Spoil form
  */

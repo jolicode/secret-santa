@@ -4,23 +4,66 @@
     <div class="content result-block">
         {% if secretSanta.isDone %}
             <h2>Well done! All messages were sent</h2>
+
+            <p class="summary">
+                You have received a private message explaining how to retrieve the santa repartition. You should probably don't look at it, to avoid breaking the Secret Santa spirit.
+            </p>
         {% else %}
             <h2>A technical error occurred when sending messages to users</h2>
 
             <div class="result-error">
                 <p>
-                    "{{ secretSanta.errors|last }}"
+                    Sometimes, even Santa run into problems when doing its job. But keep reading, everything is not lost!
                 </p>
 
                 <p>
-                    Here is the list of users that were not informed:
+                    You will find below some <strong>important information</strong> and <strong>a way to safely retry</strong> the send.
+                </p>
+
+                <h3>The technical error</h3>
+
+                <p>
+                    Here is the evil error that caused this fail:
+                </p>
+
+                <div class="error-code">
+                    {% for error in secretSanta.uniqueErrors %}
+                        <span>{% if loop.length > 1 %}- {% endif %}{{ error }}</span><br />
+                    {% endfor %}
+                </div>
+
+                <p>Note that errors are often due to <strong>temporary network problems</strong> when contacting Slack or if your secret santa has <strong>lot of users</strong>.</p>
+
+                <h3>Impacted users</h3>
+
+                <p>
+                    Here is the list of users that were not informed (click <button id="reveal" class="">here</button> to reveal the receivers):
                 </p>
 
                 <ul>
                     {% for giver,receiver in secretSanta.remainingAssociations %}
-                        <li><strong>@{{ giver }}</strong> must offer a gift to <strong>@{{ receiver }}</strong></li>
+                        <li><strong>@{{ giver }}</strong> must offer a gift to <strong data-receiver="@{{ receiver }}">xxxxx</strong></li>
                     {% endfor %}
                 </ul>
+
+                <script type="text/javascript">
+                    var revealButton = document.getElementById('reveal');
+
+
+                    revealButton.addEventListener('click', function(e) {
+                        var receivers = document.querySelectorAll('*[data-receiver]');
+
+                        for (var i=0; i<receivers.length; i++) {
+                            receivers[i].innerHTML = receivers[i].getAttribute('data-receiver');
+                        }
+                    }, false);
+                </script>
+
+                <h3>The solution</h3>
+
+                <p>
+                    Good news! There is a solution to your problem. Click the retry button below to <strong>safely</strong> inform the remaining users as if nothing happened.
+                </p>
 
                 <div class="is-center">
                     <a href="{{ path('retry', {hash: secretSanta.hash}) }}" class="big-button warning-btn" id="retry-button">
@@ -53,10 +96,6 @@
                 </p>
             </div>
         {% endif %}
-
-        <p class="summary">
-            You have received a private message explaining how to retrieve the santa repartition. You should probably don't look at it, to avoid breaking the Secret Santa spirit.
-        </p>
 
         <div class="is-center">
             <a href="{{ path('run') }}" class="big-button">
