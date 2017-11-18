@@ -115,6 +115,7 @@ class SantaControllerTest extends KernelTestCase
             'toto1' => 'toto2',
             'toto2' => 'toto3',
         ], null, null);
+        $secretSanta->addError('Knock knock. Who\'s there? A santa error!');
 
         $client = static::createClient();
         $this->prepareSession($client, 'secret-santa-azerty', $secretSanta);
@@ -129,7 +130,11 @@ class SantaControllerTest extends KernelTestCase
         );
         $this->assertGreaterThan(
             0,
-            $crawler->filter('html:contains("@toto1 must offer a gift to @toto2")')->count()
+            $crawler->filter('html:contains("Knock knock. Who\'s there? A santa error!")')->count()
+        );
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("@toto1 must offer a gift to xxxxx")')->count()
         );
     }
 

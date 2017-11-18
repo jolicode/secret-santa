@@ -60,6 +60,11 @@ class SecretSanta
         return $this->errors;
     }
 
+    public function getUniqueErrors(): array
+    {
+        return array_unique($this->errors);
+    }
+
     public function getAdminUserId(): ?string
     {
         return $this->adminUserId;

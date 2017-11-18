@@ -49,7 +49,7 @@ class SecretDispatcher
         try {
             foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
                 if ((time() - $startTime) > 19) {
-                    throw new \RuntimeException('It takes too much time to contact Slack! Please press the Retry button.');
+                    throw new \RuntimeException('It takes too much time to contact Slack!');
                 }
 
                 $text = sprintf("Hi! You have been chosen to be part of a Secret Santa!\n
