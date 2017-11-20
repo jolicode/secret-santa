@@ -79,11 +79,13 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
                 $text = sprintf(
 'Dear santa admin,
 
-You want to be spoiled? Here is a way to retrieve the secret repartition:
+In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
 
 - Copy the following content:
 ```%s```
 - Paste the content on <%s|this page> then submit
+
+Remember, with great power comes great responsibility!
 
 Happy secret santa!',
                     $this->spoiler->encode($secretSanta),
