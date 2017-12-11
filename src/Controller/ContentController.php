@@ -65,6 +65,11 @@ class ContentController extends AbstractController
                 'image' => 'fabernovel-institute.png',
             ],
             [
+                'label' => 'IdeaFoster',
+                'link' => 'https://www.ideafoster.com',
+                'image' => 'ideafoster.png',
+            ],
+            [
                 'label' => 'JoliCode',
                 'link' => 'https://jolicode.com/',
                 'image' => 'jolicode.svg',
