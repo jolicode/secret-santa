@@ -60,6 +60,11 @@ class ContentController extends AbstractController
                 'image' => 'digital-ping-pong.jpg',
             ],
             [
+                'label' => 'Fabernovel Institute',
+                'link' => 'http://institute.fabernovel.com',
+                'image' => 'fabernovel-institute.png',
+            ],
+            [
                 'label' => 'JoliCode',
                 'link' => 'https://jolicode.com/',
                 'image' => 'jolicode.svg',
