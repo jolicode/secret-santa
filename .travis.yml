@@ -1,26 +1,26 @@
 language: php
 
+env:
+    global:
+        - SYMFONY_PHPUNIT_REMOVE="symfony/yaml"
+        - APP_ENV=test
+        - APP_DEBUG=0
+
+matrix:
+    include:
+        - php: 7.1
+
 sudo: false
 
 cache:
     directories:
         - $HOME/.composer/cache
 
-matrix:
-    include:
-        - php: 7.1
-
-env:
-    global:
-        - APP_ENV=test
-        - APP_DEBUG=0
-
-install:
-    - composer install --prefer-dist;
+install: composer update --prefer-dist --no-interaction
 
 script:
-    - vendor/bin/phpunit
-    - vendor/bin/php-cs-fixer fix --config=.php_cs --dry-run --diff
+    - make test
+    - make cs_dry_run
 
 branches:
     only:
