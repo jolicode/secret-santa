@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Slack Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Joli\SlackSecretSanta\Tests;
 
 use Joli\SlackSecretSanta\Rudolph;
@@ -31,7 +40,7 @@ class RudolphTest extends TestCase
     public function test_it_refuses_list_with_1_user()
     {
         $this->SUT->associateUsers([
-            'toto'
+            'toto',
         ]);
     }
 
@@ -76,9 +85,9 @@ class RudolphTest extends TestCase
         $this->assertCount(count($users), $associations);
 
         foreach ($users as $user) {
-            $this->assertTrue(array_key_exists($user, $associations));
-            $this->assertTrue(in_array($user, $associations, true));
-            $this->assertNotEquals($user, $associations[$user]);
+            self::assertArrayHasKey($user, $associations);
+            self::assertContains($user, $associations);
+            self::assertNotSame($user, $associations[$user]);
         }
     }
 
@@ -105,7 +114,7 @@ class RudolphTest extends TestCase
                 'toto8',
                 'toto9',
                 'toto10',
-            ]]
+            ]],
         ];
     }
 }

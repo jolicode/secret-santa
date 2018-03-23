@@ -33,6 +33,12 @@ services:
     Joli\SlackSecretSanta\Controller\SantaController:
         public: true
         arguments:
+            $applications:
+                - '@Joli\SlackSecretSanta\Application\SlackApplication'
+
+    Joli\SlackSecretSanta\Controller\SlackController:
+        public: true
+        arguments:
             $slackClientId: '%env(SLACK_CLIENT_ID)%'
             $slackClientSecret: '%env(SLACK_CLIENT_SECRET)%'
 

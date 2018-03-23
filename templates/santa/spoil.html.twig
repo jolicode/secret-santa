@@ -13,19 +13,19 @@
 
             <ul>
                 {% for giver,receiver in associations %}
-                    <li><strong>@{{ giver }}</strong> must offer a gift to <strong>@{{ receiver }}</strong></li>
+                    <li><strong>{{ giver }}</strong> must offer a gift to <strong>{{ receiver }}</strong></li>
                 {% endfor %}
             </ul>
 
             <div class="is-center">
-                <a href="{{ path('run') }}" class="big-button">
+                <a href="{{ path('homepage') }}" class="big-button">
                     <span class="fa fa-repeat" aria-hidden="true"></span>
                     Start another Secret Santa
                 </a>
             </div>
         {% else %}
             <p>
-                Paste below the code you received in Slack and submit the form to access the secret repartition.
+                Paste below the code you received and submit the form to access the secret repartition.
             </p>
 
             {% if invalidCode %}

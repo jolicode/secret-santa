@@ -7,7 +7,7 @@ hall_of_fame:
     defaults: { _controller: Joli\SlackSecretSanta\Controller\ContentController:hallOfFame }
 
 run:
-    path:     /run
+    path:     /run/{application}
     defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:run }
 
 finish:
@@ -18,10 +18,10 @@ retry:
     path:     /retry/{hash}
     defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:retry }
 
-authenticate:
-    path:     /auth
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:authenticate }
-
 spoil:
     path:     /spoil
     defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:spoil }
+
+slack_authenticate:
+    path:     /auth/slack
+    defaults: { _controller: Joli\SlackSecretSanta\Controller\SlackController:authenticate }

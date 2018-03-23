@@ -9,12 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Joli\SlackSecretSanta;
+namespace Joli\SlackSecretSanta\Slack;
 
 use CL\Slack\Payload\ChatPostMessagePayload;
 use CL\Slack\Payload\PayloadInterface;
 use CL\Slack\Payload\PayloadResponseInterface;
 use CL\Slack\Transport\ApiClient;
+use Joli\SlackSecretSanta\SecretSanta;
+use Joli\SlackSecretSanta\Spoiler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SecretDispatcher
@@ -59,8 +61,8 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
                     $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
                 }
 
-                if ($secretSanta->getAdminUserId()) {
-                    $text .= sprintf("\n\nMessage sent via <@%s>.", $secretSanta->getAdminUserId());
+                if ($secretSanta->getAdmin()) {
+                    $text .= sprintf("\n\nMessage sent via <@%s>.", $secretSanta->getAdmin()->getIdentifier());
                 }
 
                 $message = new ChatPostMessagePayload();
@@ -75,7 +77,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
             }
 
             // Send a summary to the santa admin
-            if ($secretSanta->getAdminUserId()) {
+            if ($secretSanta->getAdmin()) {
                 $text = sprintf(
 'Dear santa admin,
 
@@ -93,7 +95,7 @@ Happy secret santa!',
                 );
 
                 $message = new ChatPostMessagePayload();
-                $message->setChannel($secretSanta->getAdminUserId());
+                $message->setChannel($secretSanta->getAdmin()->getIdentifier());
                 $message->setText($text);
                 $message->setUsername('Secret Santa Bot Spoiler');
                 $message->setIconUrl('https://slack-secret-santa.herokuapp.com/images/logo-spoiler.png');

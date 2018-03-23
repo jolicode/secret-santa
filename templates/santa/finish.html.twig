@@ -32,7 +32,7 @@
                     {% endfor %}
                 </div>
 
-                <p>Note that errors are often due to <strong>temporary network problems</strong> when contacting Slack or if your secret santa has <strong>lot of users</strong>.</p>
+                <p>Note that errors are often due to <strong>temporary network problems</strong> when sending messages or if your secret santa has <strong>lot of users</strong>.</p>
 
                 <h3>Impacted users</h3>
 
@@ -42,7 +42,7 @@
 
                 <ul>
                     {% for giver,receiver in secretSanta.remainingAssociations %}
-                        <li><strong>@{{ giver }}</strong> must offer a gift to <strong data-receiver="@{{ receiver }}">xxxxx</strong></li>
+                        <li><strong>{{ secretSanta.user(giver).name|default(secretSanta.user(giver).identifier) }}</strong> must offer a gift to <strong data-receiver="{{ secretSanta.user(receiver).name|default(secretSanta.user(receiver).identifier) }}">xxxxx</strong></li>
                     {% endfor %}
                 </ul>
 
@@ -98,7 +98,7 @@
         {% endif %}
 
         <div class="is-center">
-            <a href="{{ path('run') }}" class="big-button">
+            <a href="{{ path('homepage') }}" class="big-button">
                 <span class="fa fa-repeat" aria-hidden="true"></span>
                 Start another Secret Santa
             </a>
