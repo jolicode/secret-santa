@@ -16,12 +16,12 @@ The app requires:
 - a Redis server
 - PHP 7.1+
 
-Run the following command to launch the app locally:
+Run the following command to install the app locally:
 
 `composer install`
 
 We rely on some env variables to communicate with Slack API and Redis.
-Check out the .env file and fill the correct values for the following variables:
+Check out the `.env` file and fill the correct values for the following variables:
 
 - `SLACK_CLIENT_ID`: Application id from Slack;
 - `SLACK_CLIENT_SECRET`: Application secret from Slack;
@@ -32,6 +32,10 @@ Then launch this command:
 `make serve`
 
 The application should now be running on http://127.0.0.1:8000.
+
+To run unit tests, launch this command:
+
+`make tests`
 
 ## Deploy to Heroku
 

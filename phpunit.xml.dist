@@ -9,20 +9,29 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <server name="KERNEL_CLASS" value="Joli\SlackSecretSanta\Kernel" />
+        <env name="KERNEL_CLASS" value="Joli\SlackSecretSanta\Kernel" />
+        <env name="APP_ENV" value="test" />
+        <env name="APP_DEBUG" value="1" />
+        <env name="APP_SECRET" value="s$cretf0rt3st" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+        <!-- define your env variables for the test env here -->
         <env name="SLACK_CLIENT_ID" value="DUMMY"/>
         <env name="SLACK_CLIENT_SECRET" value="DUMMY"/>
-
-        <!-- ###+ symfony/framework-bundle ### -->
-        <env name="APP_ENV" value="dev" />
-        <env name="APP_DEBUG" value="1" />
-        <env name="APP_SECRET" value="d79fd8874f7f115e50ec2009e7b6f0ac" />
-        <!-- ###- symfony/framework-bundle ### -->
     </php>
 
     <testsuites>
-        <testsuite name="Slack Secret Santa Test Suite">
+        <testsuite name="Project Test Suite">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src/</directory>
+        </whitelist>
+    </filter>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
 </phpunit>
