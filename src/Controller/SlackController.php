@@ -62,7 +62,7 @@ class SlackController extends AbstractController
             $session->set(SlackApplication::SESSION_KEY_STATE, $provider->getState());
 
             return new RedirectResponse($authUrl);
-            // Check given state against previously stored one to mitigate CSRF attack
+        // Check given state against previously stored one to mitigate CSRF attack
         } elseif (empty($request->query->get('state')) || ($request->query->get('state') !== $session->get(SlackApplication::SESSION_KEY_STATE))) {
             $session->remove(SlackApplication::SESSION_KEY_STATE);
 
