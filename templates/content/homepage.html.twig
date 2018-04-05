@@ -13,7 +13,7 @@
             <q><strong>Secret Santa</strong> is a Western Christmas tradition in which members of a group or
                 community are <strong>randomly</strong> assigned a person to whom they anonymously <strong>give a gift</strong>.</q>
 
-            <a class="action hvr-buzz" href="{{ path('run') }}">
+            <a class="action hvr-buzz" href="{{ path('run', { application: 'slack' }) }}">
                 <i class="fa fa-slack"></i> Add to Slack now
             </a>
         </div>
@@ -84,7 +84,7 @@
                 </p>
             </div>
             <div class="is-center pure-u-1 pure-u-md-1-1 pure-u-lg-3-5">
-                <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/sample.png') }}">
+                <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/slack-sample.png') }}">
             </div>
         </div>
     </div>

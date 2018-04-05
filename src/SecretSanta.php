@@ -14,7 +14,13 @@ namespace Joli\SlackSecretSanta;
 class SecretSanta
 {
     /** @var string */
+    private $application;
+
+    /** @var string */
     private $hash;
+
+    /** @var User[] */
+    private $users;
 
     /** @var array */
     private $associations;
@@ -22,8 +28,8 @@ class SecretSanta
     /** @var array */
     private $remainingAssociations;
 
-    /** @var string|null */
-    private $adminUserId;
+    /** @var User|null */
+    private $admin;
 
     /** @var string|null */
     private $adminMessage;
@@ -31,18 +37,44 @@ class SecretSanta
     /** @var string[] */
     private $errors = [];
 
-    public function __construct(string $hash, array $associations, ?string $adminUserId, ?string $adminMessage)
-    {
+    public function __construct(
+        string $application,
+        string $hash,
+        array $users,
+        array $associations,
+        ?User $admin,
+        ?string $adminMessage
+    ) {
+        $this->application = $application;
         $this->hash = $hash;
+        $this->users = $users;
         $this->associations = $associations;
         $this->remainingAssociations = $associations;
-        $this->adminUserId = $adminUserId;
+        $this->admin = $admin;
         $this->adminMessage = $adminMessage;
+    }
+
+    public function getApplication(): ?string
+    {
+        return $this->application;
     }
 
     public function getHash(): ?string
     {
         return $this->hash;
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getUsers(): array
+    {
+        return $this->users;
+    }
+
+    public function getUser(string $identifier): ?User
+    {
+        return $this->users[$identifier] ?? null;
     }
 
     public function getAssociations(): array
@@ -65,9 +97,9 @@ class SecretSanta
         return array_unique($this->errors);
     }
 
-    public function getAdminUserId(): ?string
+    public function getAdmin(): ?User
     {
-        return $this->adminUserId;
+        return $this->admin;
     }
 
     public function getAdminMessage(): ?string

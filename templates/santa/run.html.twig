@@ -1,14 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% import _self as current %}
-
-{% macro userSummary(user) %}
-    <span class="user-summary">
-        <img src="{{ user.profile.image32 }}" alt="" />
-        <span>{{ user.profile.realName }}</span>
-        <span data-uncheck-user="user-{{ user.id }}" class="fa fa-times" title="Unselect this user"></span>
-    </span>
-{% endmacro %}
+{% set hasRestrictedUser = hasRestrictedUser|default(false) %}
 
 {% block content %}
     <div class="run-block">
@@ -25,10 +17,12 @@
                             <span class="search-cleaner fa fa-times" id="search-cleaner" title="Empty the query"></span>
                         </div>
                         <div class="helper">
+                            {% if hasRestrictedUser %}
                             <label>
                                 <input type="checkbox" checked="checked" id="restrict-user-checkbox" value="" />
                                 <span>Show restricted user</span>
                             </label>
+                            {% endif %}
                             <span class="check-all" id="all-checker" title="Check all the visible users in the list below">Check all</span>
                             /
                             <span class="uncheck-all" id="all-unchecker" title="Uncheck all the visible users in the list below">Uncheck all</span>
@@ -37,21 +31,7 @@
                     {% spaceless %}
                         <div class="user-list" id="user-list">
                             {% for user in users %}
-                                <label
-                                    class="user-item {{ user.isRestricted ? 'restricted' : '' }}"
-                                    for="user-{{ user.id }}"
-                                    data-search-index="{{ user.name ~ ' ' ~ user.profile.realName }}"
-                                >
-                                    <input type="checkbox"
-                                       {{ user.name in selectedUsers ? 'checked="checked"' : '' }}
-                                       name="users[]"
-                                       value="{{ user.name }}"
-                                       id="user-{{ user.id }}"
-                                       data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
-                                    >
-                                    <img src="{{ user.profile.image32 }}" alt="{{ user.profile.realName }}" />
-                                    <span>{{ user.profile.realName }} ({{ user.name }})</span>
-                                </label>
+                                {% block user_item %}{% endblock %}
                             {% endfor %}
                         </div>
                     {% endspaceless %}
@@ -73,12 +53,9 @@
                 <div class="next">
                     <h2>What happens next?</h2>
                     <div>
-                        <p>
-                            We are going to shuffle selected users and send them a private message in Slack, looking like this:
-                        </p>
 
                         <div class="is-center">
-                            <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/sample.png') }}">
+                            <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/' ~ application ~ '-sample.png') }}">
                         </div>
 
                         <p>
@@ -86,10 +63,7 @@
                         </p>
 
                         <p class="big-santa-warning hidden" id="big-santa-warning">
-                            For Secret Santa with a lot of participants, the final step (send Slack private messages)
-                            can take some time (up to 20 sec).<br />
-                            Don't worry, in case something goes wrong, a "Retry" button will allow you to send remaining
-                            messages.
+                            {% block big_santa_warning %}{% endblock %}
                         </p>
                     </div>
                 </div>
@@ -114,7 +88,9 @@
 
                 var searchCleaner = document.getElementById('search-cleaner');
                 var userSearchInput = document.getElementById('user-search-input');
+                {% if hasRestrictedUser %}
                 var restrictUserCheckbox = document.getElementById('restrict-user-checkbox');
+                {% endif %}
                 var allChecker = document.getElementById('all-checker');
                 var allUnchecker = document.getElementById('all-unchecker');
                 var userList = document.getElementById('user-list');
@@ -388,7 +364,9 @@
 
                 userSearchInput.addEventListener('keyup', onUserSearch, false);
                 searchCleaner.addEventListener('click', cleanSearch, false);
+                {% if hasRestrictedUser %}
                 restrictUserCheckbox.addEventListener('change', onRestrictUserChange, false);
+                {% endif %}
                 allChecker.addEventListener('click', checkAllVisibleUsers, false);
                 allUnchecker.addEventListener('click', uncheckAllVisibleUsers, false);
                 userList.addEventListener('change', updateSummary);
@@ -397,11 +375,14 @@
                 initUserList();
                 updateSummary();
                 onUserSearch();
+
+                {% if hasRestrictedUser %}
                 onRestrictUserChange();
+                {% endif %}
             </script>
         {% else %}
             <div class="error" role="alert">
-                Ooops, we didn't find enough users in your Slack team. You need at least 2 users to start a Secret Santa.
+                Ooops, we didn't find enough users in your team. You need at least 2 users to start a Secret Santa.
             </div>
         {% endif %}
     </div>
