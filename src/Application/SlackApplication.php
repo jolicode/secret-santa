@@ -58,6 +58,11 @@ class SlackApplication implements ApplicationInterface
         return 'slack_authenticate';
     }
 
+    public function getOrganization(): string
+    {
+        return $this->getToken()->getValues()['team_name'] ?? '';
+    }
+
     public function getAdmin(): ?User
     {
         return $this->getSession()->get(self::SESSION_KEY_ADMIN);

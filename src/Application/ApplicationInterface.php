@@ -22,6 +22,8 @@ interface ApplicationInterface
 
     public function getAuthenticationRoute(): string;
 
+    public function getOrganization(): string;
+
     public function getAdmin(): ?User;
 
     /**

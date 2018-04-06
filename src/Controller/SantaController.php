@@ -66,6 +66,7 @@ class SantaController extends AbstractController
 
                 $secretSanta = new SecretSanta(
                     $application->getCode(),
+                    $application->getOrganization(),
                     $hash,
                     array_filter($allUsers, function (User $user) use ($selectedUsers) {
                         return in_array($user->getIdentifier(), $selectedUsers, true);

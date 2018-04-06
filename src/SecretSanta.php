@@ -17,6 +17,9 @@ class SecretSanta
     private $application;
 
     /** @var string */
+    private $organization;
+
+    /** @var string */
     private $hash;
 
     /** @var User[] */
@@ -39,6 +42,7 @@ class SecretSanta
 
     public function __construct(
         string $application,
+        string $organization,
         string $hash,
         array $users,
         array $associations,
@@ -46,6 +50,7 @@ class SecretSanta
         ?string $adminMessage
     ) {
         $this->application = $application;
+        $this->organization = $organization;
         $this->hash = $hash;
         $this->users = $users;
         $this->associations = $associations;
@@ -57,6 +62,11 @@ class SecretSanta
     public function getApplication(): ?string
     {
         return $this->application;
+    }
+
+    public function getOrganization(): ?string
+    {
+        return $this->organization;
     }
 
     public function getHash(): ?string
