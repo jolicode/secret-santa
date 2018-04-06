@@ -20,7 +20,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="Slack Secret Santa Test Suite">
             <directory>tests/</directory>
         </testsuite>
     </testsuites>

@@ -15,11 +15,12 @@ sudo: false
 cache:
     directories:
         - $HOME/.composer/cache
+        - bin/.phpunit
 
-install: composer update --prefer-dist --no-interaction
+install: composer install --prefer-dist --no-interaction
 
 script:
-    - make tests
+    - make test
     - make cs_dry_run
 
 branches:

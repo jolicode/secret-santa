@@ -35,7 +35,7 @@ The application should now be running on http://127.0.0.1:8000.
 
 To run unit tests, launch this command:
 
-`make tests`
+`make test`
 
 ## Deploy to Heroku
 
