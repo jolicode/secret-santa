@@ -25,3 +25,7 @@ spoil:
 slack_authenticate:
     path:     /auth/slack
     defaults: { _controller: Joli\SlackSecretSanta\Controller\SlackController:authenticate }
+
+discord_authenticate:
+    path:     /auth/discord
+    defaults: { _controller: Joli\SlackSecretSanta\Controller\DiscordController:authenticate }

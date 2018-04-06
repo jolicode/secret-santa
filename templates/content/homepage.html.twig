@@ -13,9 +13,16 @@
             <q><strong>Secret Santa</strong> is a Western Christmas tradition in which members of a group or
                 community are <strong>randomly</strong> assigned a person to whom they anonymously <strong>give a gift</strong>.</q>
 
-            <a class="action hvr-buzz" href="{{ path('run', { application: 'slack' }) }}">
-                <i class="fa fa-slack"></i> Add to Slack now
-            </a>
+            <div class="actions">
+                <a class="action hvr-buzz" href="{{ path('run', { application: 'slack' }) }}">
+                    <i class="fab fa-slack"></i> Add to Slack
+                </a>
+                {#
+                <a class="action hvr-buzz" href="{{ path('run', { application: 'discord' }) }}">
+                    <i class="fab fa-discord"></i> Add to Discord
+                </a>
+                #}
+            </div>
         </div>
     </div>
 
@@ -37,7 +44,7 @@
                 <img src="{{ asset('images/step-slack.png') }}">
             </div>
             <div class="step-feature-text">
-                <h3>1. Connect to Your Slack</h3>
+                <h3>1. Connect to Your Application</h3>
                 <p>Click on the "Add to Slack" button below then authorize the app to access your Slack team.</p>
             </div>
         </section>
@@ -48,7 +55,7 @@
             </div>
             <div class="step-feature-text">
                 <h3>2. Select Users</h3>
-                <p>We show you all your Slack users (excluding the bots, because they don't do nice gifts). Just select which users will take part to your secret santa.</p>
+                <p>We show you all your users (excluding the bots, because they don't do nice gifts). Just select which users will take part to your secret santa.</p>
             </div>
         </section>
 
