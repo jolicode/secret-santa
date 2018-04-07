@@ -52,7 +52,7 @@ class SantaControllerTest extends WebTestCase
 
     public function test_finish_page_works_with_valid_hash_for_successful_secret_santa()
     {
-        $secretSanta = new SecretSanta('my_application', 'azerty', [
+        $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => new User('toto1', 'Toto 1'),
             'toto2' => new User('toto2', 'Toto 2'),
             'toto3' => new User('toto3', 'Toto 3'),
@@ -75,7 +75,7 @@ class SantaControllerTest extends WebTestCase
 
     public function test_finish_page_works_with_valid_hash_for_failed_secret_santa()
     {
-        $secretSanta = new SecretSanta('my_application', 'azerty', [
+        $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => new User('toto1', 'Toto 1'),
             'toto2' => new User('toto2', ''),
             'toto3' => new User('toto3', 'Toto 3'),

@@ -28,7 +28,7 @@ class SpoilerTest extends TestCase
 
     public function test_it_encodes_secret_santa_in_current_version()
     {
-        $secretSanta = new SecretSanta('my_application', 'yolo', [
+        $secretSanta = new SecretSanta('my_application', 'toto', 'yolo', [
             'user1' => new User('user1', 'User 1'),
             'user2' => new User('user2', 'User 2'),
         ], [
