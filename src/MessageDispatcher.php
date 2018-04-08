@@ -42,7 +42,7 @@ class MessageDispatcher
         try {
             foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
                 if ((time() - $startTime) > 19) {
-                    throw new \RuntimeException('It takes too much time to contact Slack!');
+                    throw new \RuntimeException('It takes too much time to send messages!');
                 }
 
                 $application->sendSecretMessage($secretSanta, $giver, $receiver);
