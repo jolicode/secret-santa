@@ -9,12 +9,12 @@
                 <div class="user-field">
                     <h2>Select the participants of your Secret Santa</h2>
                     {% if errors and errors.users %}
-                        <span class="error"><i class="fa fa-warning"></i> {{ errors.users|join('<br />') }}</span>
+                        <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors.users|join('<br />') }}</span>
                     {% endif %}
                     <div class="user-search">
                         <div class="search-wrapper">
                             <input placeholder="Filter users by searching by real name or username" type="text" id="user-search-input" />
-                            <span class="search-cleaner fa fa-times" id="search-cleaner" title="Empty the query"></span>
+                            <span class="search-cleaner fas fa-times" id="search-cleaner" title="Empty the query"></span>
                         </div>
                         <div class="helper">
                             {% if hasRestrictedUser %}
@@ -53,6 +53,7 @@
                 <div class="next">
                     <h2>What happens next?</h2>
                     <div>
+                        {% block next_step_explanation %}{% endblock %}
 
                         <div class="is-center">
                             <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/' ~ application ~ '-sample.png') }}">
@@ -70,7 +71,7 @@
 
                 <div class="is-center">
                     <button type="submit" class="big-button" id="submit-button">
-                        <span class="fa fa-paper-plane" aria-hidden="true"></span>
+                        <span class="fas fa-paper-plane" aria-hidden="true"></span>
                         Finish and send Secret Santa messages!
                     </button>
                 </div>
@@ -108,7 +109,7 @@
                     } else {
                         secretSantaFormSubmitted = true;
                         submitButton.disabled = true;
-                        submitButton.children[0].className = 'fa fa-hourglass-start';
+                        submitButton.children[0].className = 'fas fa-hourglass-start';
                     }
                 }, false);
 

@@ -35,12 +35,24 @@ services:
         arguments:
             $applications:
                 - '@Joli\SlackSecretSanta\Application\SlackApplication'
+                - '@Joli\SlackSecretSanta\Application\DiscordApplication'
 
     Joli\SlackSecretSanta\Controller\SlackController:
         public: true
         arguments:
             $slackClientId: '%env(SLACK_CLIENT_ID)%'
             $slackClientSecret: '%env(SLACK_CLIENT_SECRET)%'
+
+    Joli\SlackSecretSanta\Controller\DiscordController:
+        public: true
+        arguments:
+            $discordClientId: '%env(DISCORD_CLIENT_ID)%'
+            $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
+
+    Joli\SlackSecretSanta\Discord\DiscordService:
+        public: true
+        arguments:
+            $discordBotToken: '%env(DISCORD_BOT_TOKEN)%'
 
     Predis\Client:
         arguments:

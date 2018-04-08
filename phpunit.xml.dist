@@ -17,6 +17,9 @@
         <!-- define your env variables for the test env here -->
         <env name="SLACK_CLIENT_ID" value="DUMMY"/>
         <env name="SLACK_CLIENT_SECRET" value="DUMMY"/>
+        <env name="DISCORD_CLIENT_ID" value="DUMMY"/>
+        <env name="DISCORD_CLIENT_SECRET" value="DUMMY"/>
+        <env name="DISCORD_BOT_TOKEN" value="DUMMY"/>
     </php>
 
     <testsuites>

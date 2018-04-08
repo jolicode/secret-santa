@@ -12,6 +12,7 @@
 namespace Joli\SlackSecretSanta\Controller;
 
 use Joli\SlackSecretSanta\Application\ApplicationInterface;
+use Joli\SlackSecretSanta\MessageDispatcher;
 use Joli\SlackSecretSanta\Rudolph;
 use Joli\SlackSecretSanta\SecretSanta;
 use Joli\SlackSecretSanta\Spoiler;
@@ -36,7 +37,7 @@ class SantaController extends AbstractController
         $this->applications = $applications;
     }
 
-    public function run(Request $request, Rudolph $rudolph, string $application): Response
+    public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -55,7 +56,7 @@ class SantaController extends AbstractController
         $errors = [];
 
         if ($request->isMethod('POST')) {
-            $selectedUsers = $request->request->get('users');
+            $selectedUsers = $request->request->get('users', []);
             $message = $request->request->get('message');
 
             $errors = $this->validate($selectedUsers, $message);
@@ -76,7 +77,11 @@ class SantaController extends AbstractController
                     str_replace('```', '', $message)
                 );
 
-                $application->sendRemainingMessages($secretSanta);
+                $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
+
+                if ($secretSanta->isDone()) {
+                    $application->finish($secretSanta);
+                }
 
                 $request->getSession()->set(
                     $this->getSecretSantaSessionKey(
@@ -133,7 +138,7 @@ class SantaController extends AbstractController
         return new Response($content);
     }
 
-    public function retry(Request $request, string $hash): Response
+    public function retry(MessageDispatcher $messageDispatcher, Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
         $application = $this->getApplication($secretSanta->getApplication());
@@ -142,7 +147,11 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
-        $application->sendRemainingMessages($secretSanta);
+        $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
+
+        if ($secretSanta->isDone()) {
+            $application->finish($secretSanta);
+        }
 
         $request->getSession()->set(
             $this->getSecretSantaSessionKey(

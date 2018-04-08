@@ -49,6 +49,10 @@ class SlackController extends AbstractController
             'redirectUri' => $this->router->generate('slack_authenticate', [], RouterInterface::ABSOLUTE_URL),
         ]);
 
+        if ($request->query->has('error')) {
+            return $this->redirectToRoute('homepage');
+        }
+
         if (!$request->query->has('code')) {
             // If we don't have an authorization code then get one
             $options = [

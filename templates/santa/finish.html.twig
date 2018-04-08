@@ -67,7 +67,7 @@
 
                 <div class="is-center">
                     <a href="{{ path('retry', {hash: secretSanta.hash}) }}" class="big-button warning-btn" id="retry-button">
-                        <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
+                        <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>
                         Try to send the remaining messages
                     </a>
                 </div>
@@ -85,7 +85,7 @@
                             e.preventDefault();
                         } else {
                             secretSantaRetried = true;
-                            retryButton.children[0].className = 'fa fa-hourglass-start';
+                            retryButton.children[0].className = 'fas fa-hourglass-start';
                         }
                     }, false);
                 </script>
@@ -99,14 +99,14 @@
 
         <div class="is-center">
             <a href="{{ path('homepage') }}" class="big-button">
-                <span class="fa fa-repeat" aria-hidden="true"></span>
+                <span class="fas fa-redo" aria-hidden="true"></span>
                 Start another Secret Santa
             </a>
         </div>
 
         <div class="is-center">
             <a href="{{ path('hall_of_fame') }}" class="big-button">
-                <span class="fa fa-star" aria-hidden="true"></span>
+                <span class="fas fa-star" aria-hidden="true"></span>
                 Add your company to the Hall of Fame!
             </a>
         </div>

@@ -33,5 +33,9 @@ interface ApplicationInterface
      */
     public function getUsers(): array;
 
-    public function sendRemainingMessages(SecretSanta $secretSanta): void;
+    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver): void;
+
+    public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void;
+
+    public function finish(SecretSanta $secretSanta);
 }
