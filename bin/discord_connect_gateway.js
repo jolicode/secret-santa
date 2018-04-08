@@ -6,6 +6,10 @@
  * See https://discordapp.com/developers/docs/resources/channel#create-message
  *
  * npm install ws dotenv
+ * node discord_connect_gateway.js
+ *
+ * Wait for a "READY" from Discord, kill the process and that's all, your bot
+ * is now allowed to send messages through the REST API.
  */
 
 var WebSocket = require('ws');
@@ -41,6 +45,7 @@ const sendMessage = (data, op) => {
 
 socket.on('message', function(message) {
     message = JSON.parse(message);
+    console.log(message);
 
     if (message.op === 10 && message.d.heartbeat_interval) {
         lastSequenceReceived = message.s;
