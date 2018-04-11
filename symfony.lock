@@ -35,6 +35,9 @@
     "doctrine/lexer": {
         "version": "v1.0.1"
     },
+    "firebase/php-jwt": {
+        "version": "v4.0.0"
+    },
     "friendsofphp/php-cs-fixer": {
         "version": "2.2",
         "recipe": {
@@ -277,6 +280,9 @@
     },
     "symfony/yaml": {
         "version": "v3.4.7"
+    },
+    "thenetworg/oauth2-azure": {
+        "version": "v1.3.1"
     },
     "twig/twig": {
         "version": "v2.4.8"

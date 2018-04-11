@@ -36,6 +36,7 @@ services:
             $applications:
                 - '@JoliCode\SecretSanta\Application\SlackApplication'
                 - '@JoliCode\SecretSanta\Application\DiscordApplication'
+                - '@JoliCode\SecretSanta\Application\TeamsApplication'
 
     JoliCode\SecretSanta\Controller\SlackController:
         public: true
@@ -48,6 +49,12 @@ services:
         arguments:
             $discordClientId: '%env(DISCORD_CLIENT_ID)%'
             $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
+
+    JoliCode\SecretSanta\Controller\TeamsController:
+        public: true
+        arguments:
+            $teamsClientId: '%env(TEAMS_CLIENT_ID)%'
+            $teamsClientSecret: '%env(TEAMS_CLIENT_SECRET)%'
 
     JoliCode\SecretSanta\Discord\ApiHelper:
         public: true
