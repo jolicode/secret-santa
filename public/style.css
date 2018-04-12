@@ -76,8 +76,14 @@ a {
     align-items: center;
     display: flex;
 }
-.home-menu .pure-menu-heading h1 {
+.home-menu .pure-menu-heading .site-brand {
+    font-weight: bold;
     font-size: 1.5em;
+}
+.home-menu .pure-menu-heading .site-headline {
+    font-weight: normal;
+    text-transform: none;
+    margin-top: 0.5em;
 }
 .home-menu .pure-menu-list a {
     color: white;
