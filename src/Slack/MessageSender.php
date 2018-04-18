@@ -46,7 +46,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         $message->setChannel(sprintf('@%s', $giver));
         $message->setText($text);
         $message->setUsername('Secret Santa Bot');
-        $message->setIconUrl('https://slack-secret-santa.herokuapp.com/images/logo.png');
+        $message->setIconUrl('https://secret-santa.team/images/logo.png');
 
         $this->sendPayload($message, $token);
     }
@@ -73,7 +73,7 @@ Happy Secret Santa!',
         $message->setChannel($secretSanta->getAdmin()->getIdentifier());
         $message->setText($text);
         $message->setUsername('Secret Santa Bot Spoiler');
-        $message->setIconUrl('https://slack-secret-santa.herokuapp.com/images/logo-spoiler.png');
+        $message->setIconUrl('https://secret-santa.team/images/logo-spoiler.png');
 
         $this->sendPayload($message, $token);
     }

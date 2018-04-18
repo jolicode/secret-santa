@@ -1,6 +1,6 @@
 # Slack Secret Santa app
 
-Just go to https://slack-secret-santa.herokuapp.com/ and have fun.
+Just go to https://secret-santa.team/ and have fun.
 
 Code source is under MIT License.
 

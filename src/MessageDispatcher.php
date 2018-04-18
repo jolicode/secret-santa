@@ -31,7 +31,7 @@ class MessageDispatcher
     /**
      * Send messages for remaining associations.
      *
-     * This method is limited to 20 seconds to be able to display nice error message instead of being timed out by Heroku.
+     * This method is limited to 20 seconds to be able to display nice error message instead of being timed out by hosting.
      *
      * @throws \RuntimeException
      */
