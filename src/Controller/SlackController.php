@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Joli\SlackSecretSanta\Controller;
+namespace JoliCode\SecretSanta\Controller;
 
 use AdamPaterson\OAuth2\Client\Provider\Slack;
 use CL\Slack\Payload\AuthTestPayload;
 use CL\Slack\Payload\AuthTestPayloadResponse;
 use CL\Slack\Transport\ApiClient;
-use Joli\SlackSecretSanta\Application\SlackApplication;
-use Joli\SlackSecretSanta\User;
+use JoliCode\SecretSanta\Application\SlackApplication;
+use JoliCode\SecretSanta\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

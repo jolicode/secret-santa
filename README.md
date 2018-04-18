@@ -1,4 +1,4 @@
-# Slack Secret Santa app
+# Secret Santa app
 
 Just go to https://secret-santa.team/ and have fun.
 

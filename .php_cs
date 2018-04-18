@@ -1,7 +1,7 @@
 <?php
 
 $header = <<<'EOF'
-This file is part of the Slack Secret Santa project.
+This file is part of the Secret Santa project.
 
 (c) JoliCode <coucou@jolicode.com>
 

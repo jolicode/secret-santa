@@ -2,7 +2,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -10,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-use Joli\SlackSecretSanta\Kernel;
+use JoliCode\SecretSanta\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;

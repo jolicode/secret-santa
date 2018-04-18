@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Joli\SlackSecretSanta\Application;
+namespace JoliCode\SecretSanta\Application;
 
-use Joli\SlackSecretSanta\SecretSanta;
-use Joli\SlackSecretSanta\Slack\MessageSender;
-use Joli\SlackSecretSanta\Slack\UserExtractor;
-use Joli\SlackSecretSanta\User;
+use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\SecretSanta\Slack\MessageSender;
+use JoliCode\SecretSanta\Slack\UserExtractor;
+use JoliCode\SecretSanta\User;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
