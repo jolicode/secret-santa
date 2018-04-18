@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Joli\SlackSecretSanta\Tests\Controller;
+namespace JoliCode\SecretSanta\Tests\Controller;
 
-use Joli\SlackSecretSanta\SecretSanta;
-use Joli\SlackSecretSanta\User;
+use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\SecretSanta\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SantaControllerTest extends WebTestCase

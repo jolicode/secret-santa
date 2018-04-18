@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Joli\SlackSecretSanta\Discord;
+namespace JoliCode\SecretSanta\Discord;
 
 use RestCord\DiscordClient;
 use RestCord\Model\Guild\Guild;

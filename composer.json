@@ -1,5 +1,5 @@
 {
-    "name": "jolicode/slack-secret-santa",
+    "name": "jolicode/secret-santa",
     "license": "MIT",
     "authors": [
         {
@@ -9,12 +9,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Joli\\SlackSecretSanta\\": "src/"
+            "JoliCode\\SecretSanta\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Joli\\SlackSecretSanta\\Tests\\": "tests/"
+            "JoliCode\\SecretSanta\\Tests\\": "tests/"
         }
     },
     "require": {

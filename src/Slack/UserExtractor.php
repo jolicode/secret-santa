@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Joli\SlackSecretSanta\Slack;
+namespace JoliCode\SecretSanta\Slack;
 
 use CL\Slack\Model\User as SlackUser;
 use CL\Slack\Payload\PayloadInterface;
@@ -17,7 +17,7 @@ use CL\Slack\Payload\PayloadResponseInterface;
 use CL\Slack\Payload\UsersListPayload;
 use CL\Slack\Payload\UsersListPayloadResponse;
 use CL\Slack\Transport\ApiClient;
-use Joli\SlackSecretSanta\User;
+use JoliCode\SecretSanta\User;
 
 class UserExtractor
 {

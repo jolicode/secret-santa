@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Joli\SlackSecretSanta\Tests;
+namespace JoliCode\SecretSanta\Tests;
 
-use Joli\SlackSecretSanta\Rudolph;
+use JoliCode\SecretSanta\Rudolph;
 use PHPUnit\Framework\TestCase;
 
 class RudolphTest extends TestCase

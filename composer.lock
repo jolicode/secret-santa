@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e99ae4363ec85e4b6b04ff709b9c390",
+    "content-hash": "30aa2ca1d4ea223ea7a117e8f6d6ee8b",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",

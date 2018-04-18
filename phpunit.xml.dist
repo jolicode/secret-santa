@@ -9,7 +9,7 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <env name="KERNEL_CLASS" value="Joli\SlackSecretSanta\Kernel" />
+        <env name="KERNEL_CLASS" value="JoliCode\SecretSanta\Kernel" />
         <env name="APP_ENV" value="test" />
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="s$cretf0rt3st" />

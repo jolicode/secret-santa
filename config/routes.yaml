@@ -1,31 +1,31 @@
 homepage:
     path:     /
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\ContentController:homepage }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController:homepage }
 
 hall_of_fame:
     path:     /hall-of-fame
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\ContentController:hallOfFame }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController:hallOfFame }
 
 run:
     path:     /run/{application}
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:run }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController:run }
 
 finish:
     path:     /finish/{hash}
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:finish }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController:finish }
 
 retry:
     path:     /retry/{hash}
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:retry }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController:retry }
 
 spoil:
     path:     /spoil
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SantaController:spoil }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController:spoil }
 
 slack_authenticate:
     path:     /auth/slack
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\SlackController:authenticate }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SlackController:authenticate }
 
 discord_authenticate:
     path:     /auth/discord
-    defaults: { _controller: Joli\SlackSecretSanta\Controller\DiscordController:authenticate }
+    defaults: { _controller: JoliCode\SecretSanta\Controller\DiscordController:authenticate }
