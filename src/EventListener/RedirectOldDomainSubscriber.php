@@ -30,7 +30,7 @@ class RedirectOldDomainSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->setResponse(new RedirectResponse('https://secret-santa.team' . $request->getRequestUri(), 302));
+        $event->setResponse(new RedirectResponse('https://secret-santa.team' . $request->getRequestUri(), 301));
     }
 
     public static function getSubscribedEvents()
