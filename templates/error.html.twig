@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="content error-page">
+        <div class="is-center">
+            <h2>Oops</h2>
+
+            <p>{{ exception.message }}</p>
+
+            <img class="is-center" alt="Error 500" src="/images/error-500.gif">
+        </div>
+        <div class="is-center">
+            <a href="{{ path('homepage') }}" class="big-button">
+                <span class="fas fa-angle-left" aria-hidden="true"></span>
+                Go back to home page
+            </a>
+
+            <a href="mailto:coucou+secretsanta@jolicode.com" class="big-button">
+                <span class="far fa-life-ring" aria-hidden="true"></span>
+                Contact support
+            </a>
+        </div>
+    </div>
+{% endblock content %}

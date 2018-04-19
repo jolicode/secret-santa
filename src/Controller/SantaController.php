@@ -12,28 +12,31 @@
 namespace JoliCode\SecretSanta\Controller;
 
 use JoliCode\SecretSanta\Application\ApplicationInterface;
+use JoliCode\SecretSanta\Exception\SecretSantaException;
 use JoliCode\SecretSanta\MessageDispatcher;
 use JoliCode\SecretSanta\Rudolph;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\Spoiler;
 use JoliCode\SecretSanta\User;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\RouterInterface;
 
 class SantaController extends AbstractController
 {
     private $router;
     private $twig;
+    private $logger;
     private $applications;
 
-    public function __construct(RouterInterface $router, \Twig_Environment $twig, array $applications)
+    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications)
     {
         $this->router = $router;
         $this->twig = $twig;
+        $this->logger = $logger;
         $this->applications = $applications;
     }
 
@@ -45,11 +48,7 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
-        try {
-            $allUsers = $application->getUsers();
-        } catch (\RuntimeException $e) {
-            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
-        }
+        $allUsers = $application->getUsers();
 
         $selectedUsers = [];
         $message = null;
@@ -77,7 +76,14 @@ class SantaController extends AbstractController
                     str_replace('```', '', $message)
                 );
 
-                $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
+                try {
+                    $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
+                } catch (SecretSantaException $e) {
+                    $this->logger->error($e->getMessage(), [
+                        'exception' => $e,
+                    ]);
+                    $secretSanta->addError($e->getMessage());
+                }
 
                 if ($secretSanta->isDone()) {
                     $application->finish($secretSanta);
@@ -147,7 +153,14 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
-        $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
+        try {
+            $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
+        } catch (SecretSantaException $e) {
+            $this->logger->error($e->getMessage(), [
+                'exception' => $e,
+            ]);
+            $secretSanta->addError($e->getMessage());
+        }
 
         if ($secretSanta->isDone()) {
             $application->finish($secretSanta);
@@ -187,7 +200,7 @@ class SantaController extends AbstractController
         );
 
         if (!$secretSanta) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException('No secret santa found in session');
         }
 
         return $secretSanta;

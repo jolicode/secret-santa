@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Discord;
 
+use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\User;
 use RestCord\Model\Guild\GuildMember;
 
@@ -29,8 +30,8 @@ class UserExtractor
         try {
             /** @var GuildMember[] $members */
             $members = $this->discordService->getMembersInGuild($guildId);
-        } catch (\Exception $e) {
-            throw new \RuntimeException('Could not fetch members in guild');
+        } catch (\Throwable $t) {
+            throw new UserExtractionFailedException('Could not fetch members in guild', 0, $t);
         }
 
         $members = array_filter($members, function (GuildMember $member) {

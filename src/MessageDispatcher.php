@@ -12,6 +12,8 @@
 namespace JoliCode\SecretSanta;
 
 use JoliCode\SecretSanta\Application\ApplicationInterface;
+use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
+use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageDispatcher
@@ -33,32 +35,29 @@ class MessageDispatcher
      *
      * This method is limited to 20 seconds to be able to display nice error message instead of being timed out by hosting.
      *
-     * @throws \RuntimeException
+     * @throws MessageDispatchTimeoutException
+     * @throws MessageSendFailedException
      */
     public function dispatchRemainingMessages(SecretSanta $secretSanta, ApplicationInterface $application): void
     {
         $startTime = time();
 
-        try {
-            foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
-                if ((time() - $startTime) > 19) {
-                    throw new \RuntimeException('It takes too much time to send messages!');
-                }
-
-                $application->sendSecretMessage($secretSanta, $giver, $receiver);
-
-                $secretSanta->markAssociationAsProceeded($giver);
+        foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
+            if ((time() - $startTime) > 19) {
+                throw new MessageDispatchTimeoutException($secretSanta);
             }
 
-            // Send a summary to the santa admin
-            if ($secretSanta->getAdmin()) {
-                $code = $this->spoiler->encode($secretSanta);
-                $spoilUrl = $this->urlGenerator->generate('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
+            $application->sendSecretMessage($secretSanta, $giver, $receiver);
 
-                $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
-            }
-        } catch (\Throwable $t) {
-            $secretSanta->addError($t->getMessage());
+            $secretSanta->markAssociationAsProceeded($giver);
+        }
+
+        // Send a summary to the santa admin
+        if ($secretSanta->getAdmin()) {
+            $code = $this->spoiler->encode($secretSanta);
+            $spoilUrl = $this->urlGenerator->generate('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+            $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
         }
     }
 }

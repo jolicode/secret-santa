@@ -12,29 +12,30 @@
 namespace JoliCode\SecretSanta\Slack;
 
 use CL\Slack\Model\User as SlackUser;
-use CL\Slack\Payload\PayloadInterface;
-use CL\Slack\Payload\PayloadResponseInterface;
 use CL\Slack\Payload\UsersListPayload;
 use CL\Slack\Payload\UsersListPayloadResponse;
-use CL\Slack\Transport\ApiClient;
+use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\User;
 
 class UserExtractor
 {
-    /** @var ApiClient */
-    private $apiClient;
+    private $slackService;
 
-    public function __construct(ApiClient $apiClient)
+    public function __construct(SlackService $slackService)
     {
-        $this->apiClient = $apiClient;
+        $this->slackService = $slackService;
     }
 
     public function extractAll(string $token): array
     {
         $payload = new UsersListPayload();
 
-        /** @var $response UsersListPayloadResponse */
-        $response = $this->sendPayload($payload, $token);
+        try {
+            /** @var $response UsersListPayloadResponse */
+            $response = $this->slackService->sendPayload($payload, $token);
+        } catch (\Throwable $t) {
+            throw new UserExtractionFailedException('Could not fetch members in team', 0, $t);
+        }
 
         /** @var SlackUser[] $slackUsers */
         $slackUsers = array_filter($response->getUsers(), function (SlackUser $user) {
@@ -66,18 +67,5 @@ class UserExtractor
         });
 
         return $users;
-    }
-
-    private function sendPayload(PayloadInterface $payload, string $token): PayloadResponseInterface
-    {
-        $response = $this->apiClient->send($payload, $token);
-
-        if (!$response->isOk()) {
-            throw new \RuntimeException(
-                sprintf('%s (%s)', $response->getErrorExplanation(), $response->getError())
-            );
-        }
-
-        return $response;
     }
 }
