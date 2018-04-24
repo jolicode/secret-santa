@@ -11,18 +11,22 @@
 
 namespace JoliCode\SecretSanta\Discord;
 
+use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\SecretSanta;
 
 class MessageSender
 {
-    /** @var DiscordService */
-    private $discordService;
+    /** @var ApiHelper */
+    private $apiHelper;
 
-    public function __construct(DiscordService $discordService)
+    public function __construct(ApiHelper $apiHelper)
     {
-        $this->discordService = $discordService;
+        $this->apiHelper = $apiHelper;
     }
 
+    /**
+     * @throws MessageSendFailedException
+     */
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver): void
     {
         $text = sprintf(
@@ -38,9 +42,16 @@ Someone has been chosen to get you a gift; and **you** have been chosen to gift 
             $text .= sprintf("\n\nYour Secret Santa admin, <@%s>.", $secretSanta->getAdmin()->getIdentifier());
         }
 
-        $this->discordService->sendMessage($giver, $text);
+        try {
+            $this->apiHelper->sendMessage($giver, $text);
+        } catch (\Throwable $t) {
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
+        }
     }
 
+    /**
+     * @throws MessageSendFailedException
+     */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
         $text = sprintf(
@@ -59,6 +70,10 @@ Happy Secret Santa!',
             $spoilUrl
         );
 
-        $this->discordService->sendMessage($secretSanta->getAdmin()->getIdentifier(), $text);
+        try {
+            $this->apiHelper->sendMessage($secretSanta->getAdmin()->getIdentifier(), $text);
+        } catch (\Throwable $t) {
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
+        }
     }
 }

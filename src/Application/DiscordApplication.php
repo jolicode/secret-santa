@@ -11,7 +11,7 @@
 
 namespace JoliCode\SecretSanta\Application;
 
-use JoliCode\SecretSanta\Discord\DiscordService;
+use JoliCode\SecretSanta\Discord\ApiHelper;
 use JoliCode\SecretSanta\Discord\MessageSender;
 use JoliCode\SecretSanta\Discord\UserExtractor;
 use JoliCode\SecretSanta\SecretSanta;
@@ -29,14 +29,14 @@ class DiscordApplication implements ApplicationInterface
     private const SESSION_KEY_GUILD_ID = 'santa.discord.guild_id';
 
     private $requestStack;
-    private $discordService;
+    private $apiHelper;
     private $userExtractor;
     private $messageSender;
 
-    public function __construct(RequestStack $requestStack, DiscordService $discordService, UserExtractor $userExtractor, MessageSender $messageSender)
+    public function __construct(RequestStack $requestStack, ApiHelper $apiHelper, UserExtractor $userExtractor, MessageSender $messageSender)
     {
         $this->requestStack = $requestStack;
-        $this->discordService = $discordService;
+        $this->apiHelper = $apiHelper;
         $this->userExtractor = $userExtractor;
         $this->messageSender = $messageSender;
     }
@@ -64,7 +64,7 @@ class DiscordApplication implements ApplicationInterface
 
     public function getOrganization(): string
     {
-        return $this->discordService->getGuild($this->getGuildId())->name;
+        return $this->apiHelper->getGuild($this->getGuildId())->name;
     }
 
     public function getAdmin(): ?User

@@ -14,7 +14,7 @@ namespace JoliCode\SecretSanta\Discord;
 use RestCord\DiscordClient;
 use RestCord\Model\Guild\Guild;
 
-class DiscordService
+class ApiHelper
 {
     const TOKEN_TYPE_BOT = 'Bot';
     const TOKEN_TYPE_OAUTH = 'OAuth';

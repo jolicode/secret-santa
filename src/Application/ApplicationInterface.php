@@ -11,6 +11,8 @@
 
 namespace JoliCode\SecretSanta\Application;
 
+use JoliCode\SecretSanta\Exception\MessageSendFailedException;
+use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\User;
 
@@ -29,12 +31,20 @@ interface ApplicationInterface
     /**
      * An array of User indexed by their identifier.
      *
+     * @throws UserExtractionFailedException
+     *
      * @return User[]
      */
     public function getUsers(): array;
 
+    /**
+     * @throws MessageSendFailedException
+     */
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver): void;
 
+    /**
+     * @throws MessageSendFailedException
+     */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void;
 
     public function finish(SecretSanta $secretSanta);

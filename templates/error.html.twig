@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="content error-page">
+        <div class="is-center">
+            <h2>An unexpected error happened!</h2>
+
+            <p>
+                Our application was not able to do what you asked for. That's unfortunate and we hope it didn't break Christmas.
+                Feel free to <a href="mailto:coucou+secretsanta@jolicode.com">contact us</a> if you need assistance!
+            </p>
+
+            <p>
+                Here is the evil error that caused this fail:
+            </p>
+
+            <div class="error-code">
+                <p>{{ exception.message }}</p>
+            </div>
+
+            <img class="is-center" alt="Error 500" src="/images/error-500.gif">
+        </div>
+        <div class="is-center">
+            <a href="{{ path('homepage') }}" class="big-button">
+                <span class="fas fa-angle-left" aria-hidden="true"></span>
+                Go back to home page
+            </a>
+
+            <a href="mailto:coucou+secretsanta@jolicode.com" class="big-button">
+                <span class="far fa-life-ring" aria-hidden="true"></span>
+                Contact support
+            </a>
+        </div>
+    </div>
+{% endblock content %}

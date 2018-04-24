@@ -12,21 +12,21 @@
 namespace JoliCode\SecretSanta\Slack;
 
 use CL\Slack\Payload\ChatPostMessagePayload;
-use CL\Slack\Payload\PayloadInterface;
-use CL\Slack\Payload\PayloadResponseInterface;
-use CL\Slack\Transport\ApiClient;
+use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\SecretSanta;
 
 class MessageSender
 {
-    /** @var ApiClient */
-    private $apiClient;
+    private $apiHelper;
 
-    public function __construct(ApiClient $apiClient)
+    public function __construct(ApiHelper $apiHelper)
     {
-        $this->apiClient = $apiClient;
+        $this->apiHelper = $apiHelper;
     }
 
+    /**
+     * @throws MessageSendFailedException
+     */
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, string $token): void
     {
         $text = sprintf(
@@ -48,9 +48,16 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         $message->setUsername('Secret Santa Bot');
         $message->setIconUrl('https://secret-santa.team/images/logo.png');
 
-        $this->sendPayload($message, $token);
+        try {
+            $this->apiHelper->sendPayload($message, $token);
+        } catch (\Throwable $t) {
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
+        }
     }
 
+    /**
+     * @throws MessageSendFailedException
+     */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl, string $token): void
     {
         $text = sprintf(
@@ -75,19 +82,10 @@ Happy Secret Santa!',
         $message->setUsername('Secret Santa Bot Spoiler');
         $message->setIconUrl('https://secret-santa.team/images/logo-spoiler.png');
 
-        $this->sendPayload($message, $token);
-    }
-
-    private function sendPayload(PayloadInterface $payload, string $token): PayloadResponseInterface
-    {
-        $response = $this->apiClient->send($payload, $token);
-
-        if (!$response->isOk()) {
-            throw new \RuntimeException(
-                sprintf('%s (%s)', $response->getErrorExplanation(), $response->getError())
-            );
+        try {
+            $this->apiHelper->sendPayload($message, $token);
+        } catch (\Throwable $t) {
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }
-
-        return $response;
     }
 }

@@ -11,26 +11,27 @@
 
 namespace JoliCode\SecretSanta\Discord;
 
+use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\User;
 use RestCord\Model\Guild\GuildMember;
 
 class UserExtractor
 {
-    /** @var DiscordService */
-    private $discordService;
+    /** @var ApiHelper */
+    private $apiHelper;
 
-    public function __construct(DiscordService $discordService)
+    public function __construct(ApiHelper $apiHelper)
     {
-        $this->discordService = $discordService;
+        $this->apiHelper = $apiHelper;
     }
 
     public function extractForGuild(int $guildId): array
     {
         try {
             /** @var GuildMember[] $members */
-            $members = $this->discordService->getMembersInGuild($guildId);
-        } catch (\Exception $e) {
-            throw new \RuntimeException('Could not fetch members in guild');
+            $members = $this->apiHelper->getMembersInGuild($guildId);
+        } catch (\Throwable $t) {
+            throw new UserExtractionFailedException('Could not fetch members in guild', 0, $t);
         }
 
         $members = array_filter($members, function (GuildMember $member) {

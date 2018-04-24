@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\Controller;
 
 use JoliCode\SecretSanta\Application\DiscordApplication;
+use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Wohali\OAuth2\Client\Provider\Discord;
+use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 
 class DiscordController extends AbstractController
 {
@@ -68,24 +70,24 @@ class DiscordController extends AbstractController
         } elseif (empty($request->query->get('state')) || ($request->query->get('state') !== $session->get(DiscordApplication::SESSION_KEY_STATE))) {
             $session->remove(DiscordApplication::SESSION_KEY_STATE);
 
-            return new Response('Invalid state', 401);
+            throw new AuthenticationException('Invalid OAuth state');
         }
-
-        // Try to get an access token (using the authorization code grant)
-        $token = $provider->getAccessToken('authorization_code', [
-            'code' => $request->query->get('code'),
-        ]);
 
         if (!$request->query->has('guild_id')) {
-            return new Response('No guild_id found', 401);
+            throw new AuthenticationException('No guild_id found');
         }
 
-        // Who Am I?
         try {
+            // Try to get an access token (using the authorization code grant)
+            $token = $provider->getAccessToken('authorization_code', [
+                'code' => $request->query->get('code'),
+            ]);
+
+            // Who Am I?
+            /** @var DiscordResourceOwner $user */
             $user = $provider->getResourceOwner($token);
         } catch (\Exception $e) {
-            // Failed to get user details
-            return new RedirectResponse($this->router->generate('homepage'));
+            throw new AuthenticationException('Failed to retrieve data from Discord', 0, $e);
         }
 
         $discordApplication->setToken($token);
