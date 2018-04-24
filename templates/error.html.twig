@@ -3,9 +3,20 @@
 {% block content %}
     <div class="content error-page">
         <div class="is-center">
-            <h2>Oops</h2>
+            <h2>An unexpected error happened!</h2>
 
-            <p>{{ exception.message }}</p>
+            <p>
+                Our application was not able to do what you asked for. That's unfortunate and we hope it didn't break Christmas.
+                Feel free to <a href="mailto:coucou+secretsanta@jolicode.com">contact us</a> if you need assistance!
+            </p>
+
+            <p>
+                Here is the evil error that caused this fail:
+            </p>
+
+            <div class="error-code">
+                <p>{{ exception.message }}</p>
+            </div>
 
             <img class="is-center" alt="Error 500" src="/images/error-500.gif">
         </div>

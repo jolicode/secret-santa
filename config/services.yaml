@@ -49,7 +49,7 @@ services:
             $discordClientId: '%env(DISCORD_CLIENT_ID)%'
             $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
 
-    JoliCode\SecretSanta\Discord\DiscordService:
+    JoliCode\SecretSanta\Discord\ApiHelper:
         public: true
         arguments:
             $discordBotToken: '%env(DISCORD_BOT_TOKEN)%'

@@ -16,12 +16,12 @@ use JoliCode\SecretSanta\SecretSanta;
 
 class MessageSender
 {
-    /** @var DiscordService */
-    private $discordService;
+    /** @var ApiHelper */
+    private $apiHelper;
 
-    public function __construct(DiscordService $discordService)
+    public function __construct(ApiHelper $apiHelper)
     {
-        $this->discordService = $discordService;
+        $this->apiHelper = $apiHelper;
     }
 
     /**
@@ -43,7 +43,7 @@ Someone has been chosen to get you a gift; and **you** have been chosen to gift 
         }
 
         try {
-            $this->discordService->sendMessage($giver, $text);
+            $this->apiHelper->sendMessage($giver, $text);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
         }
@@ -71,7 +71,7 @@ Happy Secret Santa!',
         );
 
         try {
-            $this->discordService->sendMessage($secretSanta->getAdmin()->getIdentifier(), $text);
+            $this->apiHelper->sendMessage($secretSanta->getAdmin()->getIdentifier(), $text);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }

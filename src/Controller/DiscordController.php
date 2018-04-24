@@ -77,18 +77,17 @@ class DiscordController extends AbstractController
             throw new AuthenticationException('No guild_id found');
         }
 
-        // Try to get an access token (using the authorization code grant)
-        $token = $provider->getAccessToken('authorization_code', [
-            'code' => $request->query->get('code'),
-        ]);
-
-        // Who Am I?
         try {
+            // Try to get an access token (using the authorization code grant)
+            $token = $provider->getAccessToken('authorization_code', [
+                'code' => $request->query->get('code'),
+            ]);
+
+            // Who Am I?
             /** @var DiscordResourceOwner $user */
             $user = $provider->getResourceOwner($token);
         } catch (\Exception $e) {
-            // Failed to get user details
-            throw new AuthenticationException('Failed to retrieve data from Discord');
+            throw new AuthenticationException('Failed to retrieve data from Discord', 0, $e);
         }
 
         $discordApplication->setToken($token);

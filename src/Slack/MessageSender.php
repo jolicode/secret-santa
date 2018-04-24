@@ -17,11 +17,11 @@ use JoliCode\SecretSanta\SecretSanta;
 
 class MessageSender
 {
-    private $slackService;
+    private $apiHelper;
 
-    public function __construct(SlackService $slackService)
+    public function __construct(ApiHelper $apiHelper)
     {
-        $this->slackService = $slackService;
+        $this->apiHelper = $apiHelper;
     }
 
     /**
@@ -49,7 +49,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         $message->setIconUrl('https://secret-santa.team/images/logo.png');
 
         try {
-            $this->slackService->sendPayload($message, $token);
+            $this->apiHelper->sendPayload($message, $token);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
         }
@@ -83,7 +83,7 @@ Happy Secret Santa!',
         $message->setIconUrl('https://secret-santa.team/images/logo-spoiler.png');
 
         try {
-            $this->slackService->sendPayload($message, $token);
+            $this->apiHelper->sendPayload($message, $token);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }

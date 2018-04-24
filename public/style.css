@@ -639,6 +639,9 @@ textarea {
     background-color: #FFF5F5;
     border: 1px solid #E03A4D;
 }
+.error-code + img {
+    margin-top: 1em;
+}
 .remaining-associations .open {
     display: block;
     transition: .2s;

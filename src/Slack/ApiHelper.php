@@ -15,7 +15,7 @@ use CL\Slack\Payload\PayloadInterface;
 use CL\Slack\Payload\PayloadResponseInterface;
 use CL\Slack\Transport\ApiClient;
 
-class SlackService
+class ApiHelper
 {
     /** @var ApiClient */
     private $apiClient;

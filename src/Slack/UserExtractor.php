@@ -19,11 +19,11 @@ use JoliCode\SecretSanta\User;
 
 class UserExtractor
 {
-    private $slackService;
+    private $apiHelper;
 
-    public function __construct(SlackService $slackService)
+    public function __construct(ApiHelper $apiHelper)
     {
-        $this->slackService = $slackService;
+        $this->apiHelper = $apiHelper;
     }
 
     public function extractAll(string $token): array
@@ -32,7 +32,7 @@ class UserExtractor
 
         try {
             /** @var $response UsersListPayloadResponse */
-            $response = $this->slackService->sendPayload($payload, $token);
+            $response = $this->apiHelper->sendPayload($payload, $token);
         } catch (\Throwable $t) {
             throw new UserExtractionFailedException('Could not fetch members in team', 0, $t);
         }

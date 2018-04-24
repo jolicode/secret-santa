@@ -72,18 +72,17 @@ class SlackController extends AbstractController
             throw new AuthenticationException('Invalid OAuth state');
         }
 
-        // Try to get an access token (using the authorization code grant)
-        $token = $provider->getAccessToken('authorization_code', [
-            'code' => $request->query->get('code'),
-        ]);
-
-        // Who Am I?
         try {
+            // Try to get an access token (using the authorization code grant)
+            $token = $provider->getAccessToken('authorization_code', [
+                'code' => $request->query->get('code'),
+            ]);
+
+            // Who Am I?
             /** @var SlackResourceOwner $user */
             $user = $provider->getResourceOwner($token);
         } catch (\Exception $e) {
-            // Failed to get user details
-            throw new AuthenticationException('Failed to retrieve data from Slack');
+            throw new AuthenticationException('Failed to retrieve data from Slack', 0, $e);
         }
 
         $slackApplication->setToken($token);
