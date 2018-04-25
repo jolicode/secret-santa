@@ -3,12 +3,12 @@ monolog:
         main:
             type: fingers_crossed
             action_level: error
-            handler: syslog
+            handler: error_log
             excluded_404s:
                 # regex: exclude all 404 errors from the logs
                 - ^/
-        syslog:
-            type: syslog
+        error_log:
+            type: error_log
             level: debug
         console:
             type:   console
