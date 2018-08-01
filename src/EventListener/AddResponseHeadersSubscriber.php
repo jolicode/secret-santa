@@ -23,7 +23,7 @@ class AddResponseHeadersSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->getResponse()->headers->set('Content-Security-Policy', 'default-src \'self\'');
+        $event->getResponse()->headers->set('Content-Security-Policy', 'default-src \'self\'; base-uri \'self\';');
         $event->getResponse()->headers->set('X-Content-Type-Options', 'nosniff');
         $event->getResponse()->headers->set('X-XSS-Protection', '1; mode=block');
         $event->getResponse()->headers->set('X-Frame-Options', 'DENY');
