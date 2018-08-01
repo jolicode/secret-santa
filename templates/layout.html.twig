@@ -2,23 +2,19 @@
 <html lang="en" xmlns:og="http://ogp.me/ns#">
     <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
 
         <meta name="slack-app-id" content="A0E7EFUB1">
 
         {% block seo %}
             {{ include('_seo.html.twig') }}
         {% endblock %}
+
+        <link rel="stylesheet" href="{{ asset('style.css') }}">
+        <link  rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
     </head>
     <body>
 
@@ -45,7 +41,7 @@
                         <a class="pure-menu-link" href="{{ path('hall_of_fame') }}"><i class="fas fa-star"></i> Hall of Fame</a>
                     </li>
                     <li class="pure-menu-item">
-                        <a target="_blank" class="pure-menu-link" href="https://github.com/jolicode/secret-santa/"><i class="fab fa-github"></i> Fork me on GitHub</a>
+                        <a target="_blank" rel="noreferrer" class="pure-menu-link" href="https://github.com/jolicode/secret-santa/"><i class="fab fa-github"></i> Fork me on GitHub</a>
                     </li>
                 </ul>
             </div>

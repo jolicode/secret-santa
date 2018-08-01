@@ -17,6 +17,13 @@ DirectoryIndex index.php
     Options -MultiViews
 </IfModule>
 
+<IfModule mod_headers.c>
+    Header set Content-Security-Policy "default-src 'self'"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set X-Frame-Options "DENY"
+</IfModule>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
