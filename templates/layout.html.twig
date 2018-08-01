@@ -8,17 +8,14 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
-
         <meta name="slack-app-id" content="A0E7EFUB1">
 
         {% block seo %}
             {{ include('_seo.html.twig') }}
         {% endblock %}
+
+        <link rel="stylesheet" href="{{ asset('style.css') }}">
+        <link  rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
     </head>
     <body>
 

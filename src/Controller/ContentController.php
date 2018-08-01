@@ -56,7 +56,7 @@ class ContentController extends AbstractController
             [
                 'label' => 'Digital Ping Pong',
                 'link' => 'https://digitalpingpong.com/',
-                'image' => 'digital-ping-pong.jpg',
+                'image' => 'digital-ping-pong.svg',
             ],
             [
                 'label' => 'Fabernovel Institute',
