@@ -34,7 +34,6 @@ teams_authenticate:
     path:     /auth/teams
     defaults: { _controller: JoliCode\SecretSanta\Controller\TeamsController:authenticate }
 
-# todo maybe not used
 teams_incoming_bot:
     path:     /teams/incoming_bot
     defaults: { _controller: JoliCode\SecretSanta\Controller\TeamsController:incomingBot }
