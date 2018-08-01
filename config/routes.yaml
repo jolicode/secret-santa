@@ -10,6 +10,14 @@ stats:
     path:     /stats
     defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController:stats }
 
+terms:
+    path:     /terms-of-service
+    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController:terms }
+
+privacy_policy:
+    path:     /privacy-policy
+    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController:privacyPolicy }
+
 run:
     path:     /run/{application}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController:run }

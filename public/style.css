@@ -250,6 +250,10 @@ footer a {
 /**
  * Content
  */
+.content-container {
+    max-width: 1080px;
+    margin: 0 auto;
+}
 .content {
     padding: 2em 2em;
 }

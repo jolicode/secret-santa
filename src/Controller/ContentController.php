@@ -33,6 +33,20 @@ class ContentController extends AbstractController
         return new Response($content);
     }
 
+    public function terms(): Response
+    {
+        $content = $this->twig->render('content/terms.html.twig');
+
+        return new Response($content);
+    }
+
+    public function privacyPolicy(): Response
+    {
+        $content = $this->twig->render('content/privacy_policy.html.twig');
+
+        return new Response($content);
+    }
+
     public function hallOfFame(): Response
     {
         $companies = [
