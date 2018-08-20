@@ -50,16 +50,16 @@ services:
             $discordClientId: '%env(DISCORD_CLIENT_ID)%'
             $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
 
-    JoliCode\SecretSanta\Controller\TeamsController:
-        public: true
-        arguments:
-            $teamsClientId: '%env(TEAMS_CLIENT_ID)%'
-            $teamsClientSecret: '%env(TEAMS_CLIENT_SECRET)%'
-
     JoliCode\SecretSanta\Discord\ApiHelper:
         public: true
         arguments:
             $discordBotToken: '%env(DISCORD_BOT_TOKEN)%'
+
+    JoliCode\SecretSanta\Microsoft\ApiHelper:
+        public: true
+        arguments:
+            $teamsClientId: '%env(TEAMS_CLIENT_ID)%'
+            $teamsClientSecret: '%env(TEAMS_CLIENT_SECRET)%'
 
     Predis\Client:
         arguments:

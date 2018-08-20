@@ -22,7 +22,7 @@ interface ApplicationInterface
 
     public function isAuthenticated(): bool;
 
-    public function getAuthenticationRoute(): string;
+    public function getStartRoute(): string;
 
     public function getOrganization(): string;
 

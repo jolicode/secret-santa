@@ -53,7 +53,7 @@ class SlackApplication implements ApplicationInterface
         }
     }
 
-    public function getAuthenticationRoute(): string
+    public function getStartRoute(): string
     {
         return 'slack_authenticate';
     }

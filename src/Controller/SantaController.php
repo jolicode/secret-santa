@@ -45,7 +45,7 @@ class SantaController extends AbstractController
         $application = $this->getApplication($application);
 
         if (!$application->isAuthenticated()) {
-            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+            return new RedirectResponse($this->router->generate($application->getStartRoute()));
         }
 
         $allUsers = $application->getUsers();
@@ -150,7 +150,7 @@ class SantaController extends AbstractController
         $application = $this->getApplication($secretSanta->getApplication());
 
         if (!$application->isAuthenticated()) {
-            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+            return new RedirectResponse($this->router->generate($application->getStartRoute()));
         }
 
         try {

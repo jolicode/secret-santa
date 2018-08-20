@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Slack Secret Santa project.
+ * This file is part of the Secret Santa project.
  *
  * (c) JoliCode <coucou@jolicode.com>
  *
@@ -11,28 +11,27 @@
 
 namespace JoliCode\SecretSanta\Application;
 
+use JoliCode\SecretSanta\Microsoft\Configuration;
+use JoliCode\SecretSanta\Microsoft\MessageSender;
+use JoliCode\SecretSanta\Microsoft\UserExtractor;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\User;
-use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class TeamsApplication implements ApplicationInterface
 {
-    const SESSION_KEY_STATE = 'santa.teams.state';
-
-    private const SESSION_KEY_TOKEN = 'santa.teams.token';
-    private const SESSION_KEY_ADMIN = 'santa.teams.admin';
-    private const SESSION_KEY_GUILD_ID = 'santa.teams.guild_id';
+    private const SESSION_KEY_CONFIGURATION = 'santa.teams.configuration';
 
     private $requestStack;
-    private $teamsService;
     private $userExtractor;
     private $messageSender;
 
-    public function __construct(RequestStack $requestStack )
+    public function __construct(RequestStack $requestStack, UserExtractor $userExtractor, MessageSender $messageSender)
     {
         $this->requestStack = $requestStack;
+        $this->userExtractor = $userExtractor;
+        $this->messageSender = $messageSender;
     }
 
     public function getCode(): string
@@ -42,87 +41,52 @@ class TeamsApplication implements ApplicationInterface
 
     public function isAuthenticated(): bool
     {
-        try {
-            $this->getToken();
-
-            return true;
-        } catch (\LogicException $e) {
-            return false;
-        }
+        return null !== $this->getConfiguration();
     }
 
-    public function getAuthenticationRoute(): string
+    public function getStartRoute(): string
     {
-        return 'teams_authenticate';
+        return 'teams_start';
     }
 
     public function getOrganization(): string
     {
-        return $this->teamsService->getGuild($this->getGuildId())->name;
+        return $this->getConfiguration()->getTeamName();
     }
 
     public function getAdmin(): ?User
     {
-        return $this->getSession()->get(self::SESSION_KEY_ADMIN);
+        return $this->getConfiguration()->getAdmin();
     }
 
-    public function setAdmin(User $admin): void
+    public function setConfiguration(Configuration $configuration)
     {
-        $this->getSession()->set(self::SESSION_KEY_ADMIN, $admin);
+        $this->getSession()->set(self::SESSION_KEY_CONFIGURATION, $configuration);
     }
 
-    public function getGuildId(): ?string
+    public function getConfiguration(): ?Configuration
     {
-        return $this->getSession()->get(self::SESSION_KEY_GUILD_ID);
-    }
-
-    public function setGuildId(string $guild): void
-    {
-        $this->getSession()->set(self::SESSION_KEY_GUILD_ID, $guild);
+        return $this->getSession()->get(self::SESSION_KEY_CONFIGURATION);
     }
 
     public function getUsers(): array
     {
-        $guildId = $this->getGuildId();
-
-        if (!$guildId) {
-            throw new \RuntimeException('No guild was selected');
-        }
-
-        return $this->userExtractor->extractForGuild($guildId);
+        return $this->userExtractor->extractAll($this->getConfiguration());
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver): void
     {
-        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver);
+        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $this->getConfiguration());
     }
 
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
-        $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl);
+        $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getConfiguration());
     }
 
     public function finish(SecretSanta $secretSanta)
     {
-        $this->getSession()->remove(self::SESSION_KEY_TOKEN);
-        $this->getSession()->remove(self::SESSION_KEY_ADMIN);
-        $this->getSession()->remove(self::SESSION_KEY_GUILD_ID);
-    }
-
-    public function setToken(AccessToken $token)
-    {
-        $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
-    }
-
-    public function getToken(): AccessToken
-    {
-        $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
-
-        if (!($token instanceof AccessToken)) {
-            throw new \LogicException('Invalid token');
-        }
-
-        return $token;
+        $this->getSession()->remove(self::SESSION_KEY_CONFIGURATION);
     }
 
     private function getSession(): SessionInterface

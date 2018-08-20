@@ -57,7 +57,7 @@ class DiscordApplication implements ApplicationInterface
         }
     }
 
-    public function getAuthenticationRoute(): string
+    public function getStartRoute(): string
     {
         return 'discord_authenticate';
     }

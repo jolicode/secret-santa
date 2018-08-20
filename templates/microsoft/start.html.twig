@@ -1,0 +1,29 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="content">
+        <div class="is-center">
+            <h2>Procedure to start a Secret Santa with Microsoft Teams</h2>
+
+            <p>
+                If not yet added you will be required to add our bot to your Team.
+            </p>
+
+            <p>todo screenshot</p>
+
+            <p>
+                Then, talk with the bot (just send him a message to init the workflow)
+            </p>
+
+            <p>
+                It will answer a message containg a link to start the secret santa. Click on it to start the Secret Santa with our application.
+            </p>
+
+            <p>todo screenshot</p>
+
+            <a class="big-button" href="{{ teams_url }}">
+                <i class="fab fa-microsoft"></i> Add the bot to my Team
+            </a>
+        </div>
+    </div>
+{% endblock %}
