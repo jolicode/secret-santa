@@ -80,6 +80,15 @@
     "monolog/monolog": {
         "version": "1.23.0"
     },
+    "nelmio/security-bundle": {
+        "version": "2.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.4",
+            "ref": "65726efb67ff51d89de38195bc0d230fa811f64d"
+        }
+    },
     "netresearch/jsonmapper": {
         "version": "v1.4.0"
     },
@@ -188,6 +197,9 @@
     "symfony/http-kernel": {
         "version": "v4.0.7"
     },
+    "symfony/inflector": {
+        "version": "v4.1.4"
+    },
     "symfony/monolog-bridge": {
         "version": "v4.0.7"
     },
@@ -215,6 +227,9 @@
     "symfony/polyfill-apcu": {
         "version": "v1.5.0"
     },
+    "symfony/polyfill-ctype": {
+        "version": "v1.9.0"
+    },
     "symfony/polyfill-mbstring": {
         "version": "v1.7.0"
     },
@@ -230,6 +245,9 @@
     "symfony/profiler-pack": {
         "version": "v1.0.3"
     },
+    "symfony/property-access": {
+        "version": "v4.1.4"
+    },
     "symfony/routing": {
         "version": "4.0",
         "recipe": {
@@ -238,6 +256,9 @@
             "version": "4.0",
             "ref": "cda8b550123383d25827705d05a42acf6819fe4e"
         }
+    },
+    "symfony/security": {
+        "version": "v4.1.4"
     },
     "symfony/stopwatch": {
         "version": "v4.0.7"
@@ -280,6 +301,9 @@
     },
     "twig/twig": {
         "version": "v2.4.8"
+    },
+    "ua-parser/uap-php": {
+        "version": "v3.5.0"
     },
     "wohali/oauth2-discord-new": {
         "version": "v1.0.0"

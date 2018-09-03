@@ -21,6 +21,7 @@
         "php": "^7.1.3",
         "adam-paterson/oauth2-slack": "^1.1.3",
         "cleentfaar/slack": "~0.20",
+        "nelmio/security-bundle": "^2.5",
         "predis/predis": "^1.1",
         "restcord/restcord": "^0.2.2",
         "symfony/asset": "^3.4",
