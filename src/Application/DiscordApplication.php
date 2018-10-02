@@ -15,6 +15,7 @@ use JoliCode\SecretSanta\Discord\ApiHelper;
 use JoliCode\SecretSanta\Discord\MessageSender;
 use JoliCode\SecretSanta\Discord\UserExtractor;
 use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\SecretSanta\Statistic;
 use JoliCode\SecretSanta\User;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -32,13 +33,18 @@ class DiscordApplication implements ApplicationInterface
     private $apiHelper;
     private $userExtractor;
     private $messageSender;
+    /**
+     * @var Statistic
+     */
+    private $statistic;
 
-    public function __construct(RequestStack $requestStack, ApiHelper $apiHelper, UserExtractor $userExtractor, MessageSender $messageSender)
+    public function __construct(RequestStack $requestStack, ApiHelper $apiHelper, UserExtractor $userExtractor, MessageSender $messageSender, Statistic $statistic)
     {
         $this->requestStack = $requestStack;
         $this->apiHelper = $apiHelper;
         $this->userExtractor = $userExtractor;
         $this->messageSender = $messageSender;
+        $this->statistic = $statistic;
     }
 
     public function getCode(): string
@@ -110,6 +116,8 @@ class DiscordApplication implements ApplicationInterface
 
     public function finish(SecretSanta $secretSanta)
     {
+        $this->statistic->incrementUsageCount();
+
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
         $this->getSession()->remove(self::SESSION_KEY_GUILD_ID);

@@ -82,7 +82,7 @@ class RudolphTest extends TestCase
     {
         $associations = $this->SUT->associateUsers($users);
 
-        $this->assertCount(count($users), $associations);
+        $this->assertCount(\count($users), $associations);
 
         foreach ($users as $user) {
             self::assertArrayHasKey($user, $associations);

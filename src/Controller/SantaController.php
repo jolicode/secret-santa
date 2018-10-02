@@ -60,7 +60,7 @@ class SantaController extends AbstractController
 
             $errors = $this->validate($selectedUsers, $message);
 
-            if (count($errors) < 1) {
+            if (\count($errors) < 1) {
                 $associatedUsers = $rudolph->associateUsers($selectedUsers);
                 $hash = md5(serialize($associatedUsers));
 
@@ -69,7 +69,7 @@ class SantaController extends AbstractController
                     $application->getOrganization(),
                     $hash,
                     array_filter($allUsers, function (User $user) use ($selectedUsers) {
-                        return in_array($user->getIdentifier(), $selectedUsers, true);
+                        return \in_array($user->getIdentifier(), $selectedUsers, true);
                     }),
                     $associatedUsers,
                     $application->getAdmin(),
@@ -210,7 +210,7 @@ class SantaController extends AbstractController
     {
         $errors = [];
 
-        if (count($selectedUsers) < 2) {
+        if (\count($selectedUsers) < 2) {
             $errors['users'][] = 'At least 2 users should be selected';
         }
 

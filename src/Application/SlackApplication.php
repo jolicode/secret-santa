@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Application;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\Slack\MessageSender;
 use JoliCode\SecretSanta\Slack\UserExtractor;
+use JoliCode\SecretSanta\Statistic;
 use JoliCode\SecretSanta\User;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,12 +30,14 @@ class SlackApplication implements ApplicationInterface
     private $requestStack;
     private $userExtractor;
     private $messageSender;
+    private $statistic;
 
-    public function __construct(RequestStack $requestStack, UserExtractor $userExtractor, MessageSender $messageSender)
+    public function __construct(RequestStack $requestStack, UserExtractor $userExtractor, MessageSender $messageSender, Statistic $statistic)
     {
         $this->requestStack = $requestStack;
         $this->userExtractor = $userExtractor;
         $this->messageSender = $messageSender;
+        $this->statistic = $statistic;
     }
 
     public function getCode(): string
@@ -90,6 +93,8 @@ class SlackApplication implements ApplicationInterface
 
     public function finish(SecretSanta $secretSanta)
     {
+        $this->statistic->incrementUsageCount();
+
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
     }
