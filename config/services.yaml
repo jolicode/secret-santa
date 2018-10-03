@@ -37,9 +37,6 @@ services:
                 - '@JoliCode\SecretSanta\Application\SlackApplication'
                 - '@JoliCode\SecretSanta\Application\DiscordApplication'
 
-    Jolicode\SecretSanta\Statistics:
-            public: true
-
     JoliCode\SecretSanta\Controller\SlackController:
         public: true
         arguments:

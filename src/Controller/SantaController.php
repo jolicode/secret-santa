@@ -17,6 +17,7 @@ use JoliCode\SecretSanta\MessageDispatcher;
 use JoliCode\SecretSanta\Rudolph;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\Spoiler;
+use JoliCode\SecretSanta\StatisticCollector;
 use JoliCode\SecretSanta\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,13 +32,15 @@ class SantaController extends AbstractController
     private $twig;
     private $logger;
     private $applications;
+    private $statistic;
 
-    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications)
+    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications, StatisticCollector $statistic)
     {
         $this->router = $router;
         $this->twig = $twig;
         $this->logger = $logger;
         $this->applications = $applications;
+        $this->statistic = $statistic;
     }
 
     public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
@@ -86,6 +89,7 @@ class SantaController extends AbstractController
                 }
 
                 if ($secretSanta->isDone()) {
+                    $this->statistic->incrementUsageCount();
                     $application->finish($secretSanta);
                 }
 

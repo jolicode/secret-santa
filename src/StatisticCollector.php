@@ -13,11 +13,8 @@ namespace JoliCode\SecretSanta;
 
 use Predis\Client;
 
-class Statistic
+class StatisticCollector
 {
-    /**
-     * @var Client
-     */
     private $client;
 
     public function __construct(Client $client)
@@ -27,7 +24,12 @@ class Statistic
 
     public function incrementUsageCount()
     {
+        $currentYear = date('Y');
+        $currentMonth = date('m');
+
         //If the key does not exist, it is set to 0 before performing the operation
-        $this->client->incr('usageCount');
+        $this->client->hincrby('date:' . $currentYear . '-' . $currentMonth, 'usageCount', 1);
+        $this->client->hincrby('date:' . $currentYear, 'usageCount', 1);
+        $this->client->hincrby('date:total', 'usageCount', 1);
     }
 }
