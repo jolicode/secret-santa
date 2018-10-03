@@ -46,7 +46,7 @@
                     {% endfor %}
                 </ul>
 
-                <script type="text/javascript" nonce="{{ csp_nonce() }}">
+                <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
                     var revealButton = document.getElementById('reveal');
 
 
@@ -72,7 +72,7 @@
                     </a>
                 </div>
 
-                <script type="text/javascript" nonce="{{ csp_nonce() }}">
+                <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
                     var secretSantaRetried = false;
 
                     var retryButton = document.getElementById('retry-button');
