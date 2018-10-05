@@ -42,6 +42,8 @@ class SantaController extends AbstractController
 
     public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
     {
+
+        $this->logger->error('hgfhgf');
         $application = $this->getApplication($application);
 
         if (!$application->isAuthenticated()) {
