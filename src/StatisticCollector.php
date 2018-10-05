@@ -28,20 +28,13 @@ class StatisticCollector
         $currentMonth = date('m');
 
         //If the key does not exist, it is set to 0 before performing the operation
-        $this->client->hincrby('date:$currentYear-$currentMonth', 'usageCount', 1);
-        $this->client->hincrby('date:$currentYear', 'usageCount', 1);
+        $this->client->hincrby("date:$currentYear-$currentMonth", 'usageCount', 1);
+        $this->client->hincrby("date:$currentYear", 'usageCount', 1);
         $this->client->hincrby('date:total', 'usageCount', 1);
-        $this->client->hincrby('date:total-$clientApplication', 'usageCount', 1);
+        $this->client->hincrby("date:total-$clientApplication", 'usageCount', 1);
     }
 
-    public function getCounterValues()
-    {
-        $counterByDate = $this->getCounter();
-
-        return $counterByDate;
-    }
-
-    public function getCounter()
+    public function getCounters()
     {
         $datesAndCounter = [];
         $megaHashes = [];

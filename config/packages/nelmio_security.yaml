@@ -43,7 +43,6 @@ nelmio_security:
             style-src:
                 - 'self'
                 - 'unsafe-inline'
-
             img-src:
                 - '*'
             base-uri:

@@ -7,24 +7,20 @@
     </div>
 
     <div class="container-charts">
-
         <h3 class="graph-title">Number of Secret Santa per month</h3>
         <div class="chart chart-month">
-
-                {% if statisticValues.hashesMonth is not empty %}
-                {% set values = statisticValues.hashesMonth %}
-                    {% for value, key in statisticValues.hashesMonth %}
-
-                            <div  class="graph-column" style="width: {{ (1 / values|length) * 750 }}px;padding: 0 10px;">
-                                <div class="graph-counterValue">{{ key }}</div>
-                                <div class="graph-bar" style="width: {{ (1 / values|length) * 750 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
-                                <div class="blue" style='{{ 'red' }}'>{{ key }}</div>
-                                <div class="graph-legend-x">{{ value|replace({'date:' : ''}) }}</div>
-                            </div>
-                    {% endfor %}
-                {% else  %}
-                    <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
-                {% endif %}
+            {% if statisticValues.hashesMonth is not empty %}
+            {% set values = statisticValues.hashesMonth %}
+                {% for value, key in statisticValues.hashesMonth %}
+                    <div  class="graph-column" style="width: {{ (1 / values|length) * 750 }}px;padding: 0 10px;">
+                        <div class="graph-counterValue">{{ key }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / values|length) * 750 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">{{ value|replace({'date:' : ''}) }}</div>
+                    </div>
+                {% endfor %}
+            {% else  %}
+                <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
+            {% endif %}
         </div>
 
         <h3 class="graph-title">Number of Secret Santa per year</h3>
