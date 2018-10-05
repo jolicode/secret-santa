@@ -4,6 +4,9 @@
 
     <div class="jumbotron">
         <h1>Ho, ho, ho, Here is the statistics of Secret Santa</h1>
+        <p>
+            <small>(Starting 10/2018)</small>
+        </p>
     </div>
 
     <div class="container-charts">
@@ -39,7 +42,7 @@
             {% endif %}
         </div>
 
-        <h3 class="graph-title">Number of Secret Santa since 10/2018</h3>
+        <h3 class="graph-title">Number of Secret Santa per provider</h3>
         <div class="chart chart-total">
             {% set stats = statisticsCounter.total %}
             {% if stats %}
@@ -49,9 +52,9 @@
                         <div class="graph-bar" style="width: {{ (1 / stats|length) * 300 }}px; height: {{ (counter / max(stats)) * 500 }}px;"></div>
                         <div class="graph-legend-x">
                             {% if dateName matches '/date:total$/' %}
-                                {{ dateName |replace({'date:' : ''}) }}
+                                {{ dateName |replace({'date:' : ''}) |capitalize }}
                             {% else %}
-                                {{ dateName |replace({'date:total-' : ''}) }}
+                                {{ dateName |replace({'date:total-' : ''}) |capitalize }}
                             {% endif %}
                         </div>
                     </div>

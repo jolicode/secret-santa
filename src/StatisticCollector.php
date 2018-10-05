@@ -22,16 +22,16 @@ class StatisticCollector
         $this->client = $client;
     }
 
-    public function incrementUsageCount(string $ApplicationCode)
+    public function incrementUsageCount(string $applicationCode)
     {
         $currentYear = date('Y');
         $currentMonth = date('m');
 
-        //If the key does not exist, it is set to 0 before performing the operation
+        // If the key does not exist, it is set to 0 before performing the operation
         $this->client->incr("date:$currentYear-$currentMonth");
         $this->client->incr("date:$currentYear");
         $this->client->incr('date:total');
-        $this->client->incr("date:total-$ApplicationCode");
+        $this->client->incr("date:total-$applicationCode");
     }
 
     public function getDateAndCounters(): array
