@@ -108,7 +108,7 @@ class ContentController extends AbstractController
     public function stats(): Response
     {
         $content = $this->twig->render('content/stats.html.twig', [
-            'statisticValues' => $this->statisticCollector->getCounters(),
+            'statisticsCounter' => $this->statisticCollector->getCounters(),
         ]);
 
         return new Response($content);
