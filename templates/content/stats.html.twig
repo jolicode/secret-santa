@@ -9,8 +9,8 @@
     <div class="container-charts">
         <h3 class="graph-title">Number of Secret Santa per month</h3>
         <div class="chart chart-month">
-            {% if statisticsCounter.hashesMonth %}
-                {% set values = statisticsCounter.hashesMonth %}
+            {% if statisticsCounter.month %}
+                {% set values = statisticsCounter.month %}
                 {% for value, key in values %}
                     <div  class="graph-column" style="width: {{ (1 / values|length) * 750 }}px;padding: 0 10px;">
                         <div class="graph-counterValue">{{ key }}</div>
@@ -25,8 +25,8 @@
 
         <h3 class="graph-title">Number of Secret Santa per year</h3>
         <div class="chart chart-year">
-            {% if statisticsCounter.hashesYear %}
-                {% set values = statisticsCounter.hashesYear %}
+            {% if statisticsCounter.year %}
+                {% set values = statisticsCounter.year %}
                 {% for value, key in values %}
                     {% if value matches '/date:\\d+$/'  %}
                         <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 7px;">
@@ -43,8 +43,8 @@
 
         <h3 class="graph-title">Number of Secret Santa since 10/2018</h3>
         <div class="chart chart-total">
-            {% if statisticsCounter.hashesTotal %}
-                {% set values = statisticsCounter.hashesTotal %}
+            {% if statisticsCounter.total %}
+                {% set values = statisticsCounter.total %}
                 {% for value, key in values %}
                     {% if value matches '/date:total/'  %}
                         <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 5px;">

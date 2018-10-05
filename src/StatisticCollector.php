@@ -22,7 +22,7 @@ class StatisticCollector
         $this->client = $client;
     }
 
-    public function incrementUsageCount($clientApplication)
+    public function incrementUsageCount(string $ApplicationCode)
     {
         $currentYear = date('Y');
         $currentMonth = date('m');
@@ -31,7 +31,7 @@ class StatisticCollector
         $this->client->hincrby("date:$currentYear-$currentMonth", 'usageCount', 1);
         $this->client->hincrby("date:$currentYear", 'usageCount', 1);
         $this->client->hincrby('date:total', 'usageCount', 1);
-        $this->client->hincrby("date:total-$clientApplication", 'usageCount', 1);
+        $this->client->hincrby("date:total-$ApplicationCode", 'usageCount', 1);
     }
 
     public function getCounters()
@@ -40,9 +40,9 @@ class StatisticCollector
         $megaHashes = [];
 
         $allHashes = [];
-        $allHashes['hashesTotal'] = $this->client->keys('date:total*');
-        $allHashes['hashesYear'] = $this->client->keys('date:????');
-        $allHashes['hashesMonth'] = $this->client->keys('date:????-??');
+        $allHashes['total'] = $this->client->keys('date:total*');
+        $allHashes['year'] = $this->client->keys('date:????');
+        $allHashes['month'] = $this->client->keys('date:????-??');
 
         foreach ($allHashes as $key => $hashes) {
             foreach ($hashes as $hash) {

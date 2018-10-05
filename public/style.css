@@ -930,6 +930,7 @@ textarea {
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
+    min-height: 1px;
 }
 
 .graph-bar:hover {
