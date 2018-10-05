@@ -884,3 +884,73 @@ textarea {
         width: 21%;
     }
 }
+
+
+/**
+ * Stats
+ */
+
+.container-charts {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.chart {
+    display: flex;
+    align-items: flex-end;
+    margin: 20px 0 40px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 90%;
+}
+
+.chart::-webkit-scrollbar {
+    display: none;
+}
+
+.graph-title {
+    display: flex;
+    justify-content: center;
+    color: #5e5e5e;
+    padding: 0 5px;
+}
+
+.graph-counterValue {
+    color: #E44357;
+}
+
+.graph-bar {
+    background-color: #E44357;
+    margin: 1px;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 1px;
+}
+
+.graph-bar:hover {
+    background-color: #c71d32;
+}
+
+.graph-legend-x {
+    transform: rotate(282deg) translateX(96px) translateY(-14px);
+    width: 150px;
+    margin-top: 85px;
+    color: #5e5e5e;
+}
+
+.graph-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.graph-noData {
+    font-weight: 900;
+    color: #e03a4d;
+}

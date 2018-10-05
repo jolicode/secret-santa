@@ -1,0 +1,68 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+
+    <div class="jumbotron">
+        <h1>Ho, ho, ho, Here is the statistics of Secret Santa</h1>
+        <p>
+            <small>(Starting 10/2018)</small>
+        </p>
+    </div>
+
+    <div class="container-charts">
+        <h3 class="graph-title">Number of Secret Santa per month</h3>
+        <div class="chart chart-month">
+            {% set stats = statisticsCounter.month %}
+            {% if stats %}
+                {% for dateName, counter in stats %}
+                    <div  class="graph-column" style="width: {{ (1 / stats|length) * 750 }}px;padding: 0 10px;">
+                        <div class="graph-counterValue">{{ counter }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / stats|length) * 750 }}px; height: {{ (counter / max(stats)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">{{ dateName|replace({'date:' : ''}) }}</div>
+                    </div>
+                {% endfor %}
+            {% else  %}
+                <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
+            {% endif %}
+        </div>
+
+        <h3 class="graph-title">Number of Secret Santa per year</h3>
+        <div class="chart chart-year">
+            {% set stats = statisticsCounter.year %}
+            {% if stats %}
+                {% for dateName, counter in stats %}
+                    <div class="graph-column" style="width: {{ (1 / stats|length) * 300 }}px;padding: 0 7px;">
+                        <div class="graph-counterValue">{{ counter }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / stats|length) * 300 }}px; height: {{ (counter / max(stats)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">{{ dateName |replace({'date:' : ''}) }}</div>
+                    </div>
+                {% endfor %}
+            {% else  %}
+                <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
+            {% endif %}
+        </div>
+
+        <h3 class="graph-title">Number of Secret Santa per provider</h3>
+        <div class="chart chart-total">
+            {% set stats = statisticsCounter.total %}
+            {% if stats %}
+                {% for dateName, counter in stats %}
+                    <div class="graph-column" style="width: {{ (1 / stats|length) * 300 }}px;padding: 0 5px;">
+                        <div class="graph-counterValue">{{ counter }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / stats|length) * 300 }}px; height: {{ (counter / max(stats)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">
+                            {% if dateName matches '/date:total$/' %}
+                                {{ dateName |replace({'date:' : ''}) |capitalize }}
+                            {% else %}
+                                {{ dateName |replace({'date:total-' : ''}) |capitalize }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}
