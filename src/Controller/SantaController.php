@@ -32,7 +32,7 @@ class SantaController extends AbstractController
     private $twig;
     private $logger;
     private $applications;
-    private $statistic;
+    private $statisticCollector;
 
     public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications, StatisticCollector $statistic)
     {
@@ -40,11 +40,13 @@ class SantaController extends AbstractController
         $this->twig = $twig;
         $this->logger = $logger;
         $this->applications = $applications;
-        $this->statistic = $statistic;
+        $this->statisticCollector = $statistic;
     }
 
     public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
     {
+        $clientApplication = $application;
+
         $application = $this->getApplication($application);
 
         if (!$application->isAuthenticated()) {
@@ -52,6 +54,8 @@ class SantaController extends AbstractController
         }
 
         $allUsers = $application->getUsers();
+
+        dump($clientApplication);
 
         $selectedUsers = [];
         $message = null;
@@ -89,7 +93,7 @@ class SantaController extends AbstractController
                 }
 
                 if ($secretSanta->isDone()) {
-                    $this->statistic->incrementUsageCount();
+                    $this->statisticCollector->incrementUsageCount($clientApplication);
                     $application->finish($secretSanta);
                 }
 

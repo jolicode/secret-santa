@@ -1,0 +1,73 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+
+    <div class="jumbotron">
+        <h1>Ho, ho, ho, Here is the statistics of Secret Santa</h1>
+    </div>
+
+    <div class="container-charts">
+
+        <h3 class="graph-title">Number of Secret Santa per month</h3>
+        <div class="chart chart-month">
+
+                {% if statisticValues.hashesMonth is not empty %}
+                {% set values = statisticValues.hashesMonth %}
+                    {% for value, key in statisticValues.hashesMonth %}
+
+                            <div  class="graph-column" style="width: {{ (1 / values|length) * 750 }}px;padding: 0 10px;">
+                                <div class="graph-counterValue">{{ key }}</div>
+                                <div class="graph-bar" style="width: {{ (1 / values|length) * 750 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
+                                <div class="blue" style='{{ 'red' }}'>{{ key }}</div>
+                                <div class="graph-legend-x">{{ value|replace({'date:' : ''}) }}</div>
+                            </div>
+                    {% endfor %}
+                {% else  %}
+                    <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
+                {% endif %}
+        </div>
+
+        <h3 class="graph-title">Number of Secret Santa per year</h3>
+        <div class="chart chart-year">
+            {% if statisticValues.hashesYear is not empty %}
+                {% set values = statisticValues.hashesYear %}
+                {% for value, key in values %}
+                    {% if value matches '/date:\\d+$/'  %}
+                        <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 7px;">
+                            <div class="graph-counterValue">{{ key }}</div>
+                            <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
+                            <div class="graph-legend-x">{{ value |replace({'date:' : ''}) }}</div>
+                        </div>
+                    {% endif%}
+                {% endfor %}
+            {% else  %}
+                <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
+            {% endif %}
+        </div>
+
+        <h3 class="graph-title">Number of Secret Santa since 10/2018</h3>
+        <div class="chart chart-total">
+                {% if statisticValues.hashesTotal is not empty %}
+                {% set values = statisticValues.hashesTotal %}
+                {% for value, key in values %}
+                    {% if value matches '/date:total/'  %}
+                        <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 5px;">
+                            <div class="graph-counterValue">{{ key }}</div>
+                            <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
+                            <div class="graph-legend-x">
+                                {% if value matches '/date:total$/' %}
+                                    {{ value |replace({'date:' : ''}) }}
+                                {% else %}
+                                    {{ value |replace({'date:total-' : ''}) }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif%}
+                {% endfor %}
+            {% else %}
+                <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock content %}

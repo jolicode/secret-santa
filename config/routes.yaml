@@ -6,6 +6,10 @@ hall_of_fame:
     path:     /hall-of-fame
     defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController:hallOfFame }
 
+stats:
+    path:     /stats
+    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController:stats }
+
 run:
     path:     /run/{application}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController:run }
