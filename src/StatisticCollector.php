@@ -28,32 +28,37 @@ class StatisticCollector
         $currentMonth = date('m');
 
         //If the key does not exist, it is set to 0 before performing the operation
-        $this->client->hincrby("date:$currentYear-$currentMonth", 'usageCount', 1);
-        $this->client->hincrby("date:$currentYear", 'usageCount', 1);
-        $this->client->hincrby('date:total', 'usageCount', 1);
-        $this->client->hincrby("date:total-$ApplicationCode", 'usageCount', 1);
+        $this->client->incr("date:$currentYear-$currentMonth");
+        $this->client->incr("date:$currentYear");
+        $this->client->incr('date:total');
+        $this->client->incr("date:total-$ApplicationCode");
     }
 
-    public function getCounters()
+    public function getDateAndCounters(): array
     {
-        $datesAndCounter = [];
-        $megaHashes = [];
+        $datesAndCounter = [
+            'month' => [],
+            'year' => [],
+            'total' => [],
+        ];
 
-        $allHashes = [];
-        $allHashes['total'] = $this->client->keys('date:total*');
-        $allHashes['year'] = $this->client->keys('date:????');
-        $allHashes['month'] = $this->client->keys('date:????-??');
+        $allKeys = $this->client->keys('date:*');
+        $allStatistics = $this->client->mget($allKeys);
 
-        foreach ($allHashes as $key => $hashes) {
-            foreach ($hashes as $hash) {
-                $datesAndCounter[$hash] = $this->client->hget($hash, 'usageCount');
+        foreach ($allKeys as $key => $date) {
+            if (preg_match('/date:\d\d\d\d-\d\d/', $date)) {
+                $datesAndCounter['month'][$date] = $allStatistics[$key];
+            } elseif (preg_match('/date:\d\d\d\d/', $date)) {
+                $datesAndCounter['year'][$date] = $allStatistics[$key];
+            } elseif (preg_match('/date:total/', $date)) {
+                $datesAndCounter['total'][$date] = $allStatistics[$key];
             }
-
-            ksort($datesAndCounter);
-            $megaHashes[$key] = $datesAndCounter;
-            $datesAndCounter = [];
         }
 
-        return $megaHashes;
+        ksort($datesAndCounter['month']);
+        ksort($datesAndCounter['year']);
+        ksort($datesAndCounter['total']);
+
+        return $datesAndCounter;
     }
 }

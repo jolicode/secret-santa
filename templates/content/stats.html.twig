@@ -9,13 +9,13 @@
     <div class="container-charts">
         <h3 class="graph-title">Number of Secret Santa per month</h3>
         <div class="chart chart-month">
-            {% if statisticsCounter.month %}
-                {% set values = statisticsCounter.month %}
-                {% for value, key in values %}
-                    <div  class="graph-column" style="width: {{ (1 / values|length) * 750 }}px;padding: 0 10px;">
-                        <div class="graph-counterValue">{{ key }}</div>
-                        <div class="graph-bar" style="width: {{ (1 / values|length) * 750 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
-                        <div class="graph-legend-x">{{ value|replace({'date:' : ''}) }}</div>
+            {% set stats = statisticsCounter.month %}
+            {% if stats %}
+                {% for dateName, counter in stats %}
+                    <div  class="graph-column" style="width: {{ (1 / stats|length) * 750 }}px;padding: 0 10px;">
+                        <div class="graph-counterValue">{{ counter }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / stats|length) * 750 }}px; height: {{ (counter / max(stats)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">{{ dateName|replace({'date:' : ''}) }}</div>
                     </div>
                 {% endfor %}
             {% else  %}
@@ -25,13 +25,13 @@
 
         <h3 class="graph-title">Number of Secret Santa per year</h3>
         <div class="chart chart-year">
-            {% if statisticsCounter.year %}
-                {% set values = statisticsCounter.year %}
-                {% for value, key in values %}
-                    <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 7px;">
-                        <div class="graph-counterValue">{{ key }}</div>
-                        <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
-                        <div class="graph-legend-x">{{ value |replace({'date:' : ''}) }}</div>
+            {% set stats = statisticsCounter.year %}
+            {% if stats %}
+                {% for dateName, counter in stats %}
+                    <div class="graph-column" style="width: {{ (1 / stats|length) * 300 }}px;padding: 0 7px;">
+                        <div class="graph-counterValue">{{ counter }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / stats|length) * 300 }}px; height: {{ (counter / max(stats)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">{{ dateName |replace({'date:' : ''}) }}</div>
                     </div>
                 {% endfor %}
             {% else  %}
@@ -41,17 +41,17 @@
 
         <h3 class="graph-title">Number of Secret Santa since 10/2018</h3>
         <div class="chart chart-total">
-            {% if statisticsCounter.total %}
-                {% set values = statisticsCounter.total %}
-                {% for value, key in values %}
-                    <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 5px;">
-                        <div class="graph-counterValue">{{ key }}</div>
-                        <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
+            {% set stats = statisticsCounter.total %}
+            {% if stats %}
+                {% for dateName, counter in stats %}
+                    <div class="graph-column" style="width: {{ (1 / stats|length) * 300 }}px;padding: 0 5px;">
+                        <div class="graph-counterValue">{{ counter }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / stats|length) * 300 }}px; height: {{ (counter / max(stats)) * 500 }}px;"></div>
                         <div class="graph-legend-x">
-                            {% if value matches '/date:total$/' %}
-                                {{ value |replace({'date:' : ''}) }}
+                            {% if dateName matches '/date:total$/' %}
+                                {{ dateName |replace({'date:' : ''}) }}
                             {% else %}
-                                {{ value |replace({'date:total-' : ''}) }}
+                                {{ dateName |replace({'date:total-' : ''}) }}
                             {% endif %}
                         </div>
                     </div>
