@@ -28,13 +28,11 @@
             {% if statisticsCounter.year %}
                 {% set values = statisticsCounter.year %}
                 {% for value, key in values %}
-                    {% if value matches '/date:\\d+$/'  %}
-                        <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 7px;">
-                            <div class="graph-counterValue">{{ key }}</div>
-                            <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
-                            <div class="graph-legend-x">{{ value |replace({'date:' : ''}) }}</div>
-                        </div>
-                    {% endif%}
+                    <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 7px;">
+                        <div class="graph-counterValue">{{ key }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">{{ value |replace({'date:' : ''}) }}</div>
+                    </div>
                 {% endfor %}
             {% else  %}
                 <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
@@ -46,19 +44,17 @@
             {% if statisticsCounter.total %}
                 {% set values = statisticsCounter.total %}
                 {% for value, key in values %}
-                    {% if value matches '/date:total/'  %}
-                        <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 5px;">
-                            <div class="graph-counterValue">{{ key }}</div>
-                            <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
-                            <div class="graph-legend-x">
-                                {% if value matches '/date:total$/' %}
-                                    {{ value |replace({'date:' : ''}) }}
-                                {% else %}
-                                    {{ value |replace({'date:total-' : ''}) }}
-                                {% endif %}
-                            </div>
+                    <div class="graph-column" style="width: {{ (1 / values|length) * 300 }}px;padding: 0 5px;">
+                        <div class="graph-counterValue">{{ key }}</div>
+                        <div class="graph-bar" style="width: {{ (1 / values|length) * 300 }}px; height: {{ (key / max(values)) * 500 }}px;"></div>
+                        <div class="graph-legend-x">
+                            {% if value matches '/date:total$/' %}
+                                {{ value |replace({'date:' : ''}) }}
+                            {% else %}
+                                {{ value |replace({'date:total-' : ''}) }}
+                            {% endif %}
                         </div>
-                    {% endif%}
+                    </div>
                 {% endfor %}
             {% else %}
                 <div class="graph-noData">Sorry, there is no statistic for this section 🙈</div>
