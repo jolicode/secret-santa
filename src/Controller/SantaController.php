@@ -45,8 +45,6 @@ class SantaController extends AbstractController
 
     public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
     {
-        $applicationName = $application;
-
         $application = $this->getApplication($application);
 
         if (!$application->isAuthenticated()) {
@@ -91,7 +89,7 @@ class SantaController extends AbstractController
                 }
 
                 if ($secretSanta->isDone()) {
-                    $this->statisticCollector->incrementUsageCount($applicationName);
+                    $this->statisticCollector->incrementUsageCount($application->getCode());
                     $application->finish($secretSanta);
                 }
 
