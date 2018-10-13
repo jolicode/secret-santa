@@ -29,7 +29,7 @@ class UserExtractor
         do {
             try {
                 $response = $client->usersList([
-                    'limit' => 50,
+                    'limit' => 200,
                     'cursor' => $cursor,
                 ]);
             } catch (\Throwable $t) {
