@@ -43,21 +43,24 @@ class StatisticCollector
         ];
 
         $allKeys = $this->client->keys('date:*');
-        $allStatistics = $this->client->mget($allKeys);
 
-        foreach ($allKeys as $key => $date) {
-            if (preg_match('/date:\d\d\d\d-\d\d/', $date)) {
-                $datesAndCounter['month'][$date] = $allStatistics[$key];
-            } elseif (preg_match('/date:\d\d\d\d/', $date)) {
-                $datesAndCounter['year'][$date] = $allStatistics[$key];
-            } elseif (preg_match('/date:total/', $date)) {
-                $datesAndCounter['total'][$date] = $allStatistics[$key];
+        if (\count($allKeys) > 0) {
+            $allStatistics = $this->client->mget($allKeys);
+
+            foreach ($allKeys as $key => $date) {
+                if (preg_match('/date:\d\d\d\d-\d\d/', $date)) {
+                    $datesAndCounter['month'][$date] = $allStatistics[$key];
+                } elseif (preg_match('/date:\d\d\d\d/', $date)) {
+                    $datesAndCounter['year'][$date] = $allStatistics[$key];
+                } elseif (preg_match('/date:total/', $date)) {
+                    $datesAndCounter['total'][$date] = $allStatistics[$key];
+                }
             }
-        }
 
-        ksort($datesAndCounter['month']);
-        ksort($datesAndCounter['year']);
-        ksort($datesAndCounter['total']);
+            ksort($datesAndCounter['month']);
+            ksort($datesAndCounter['year']);
+            ksort($datesAndCounter['total']);
+        }
 
         return $datesAndCounter;
     }
