@@ -275,11 +275,11 @@ footer a {
     position: relative;
     color: white;
     background-color: #E03A4D;
-    padding-bottom: 10em;
+    padding-bottom: 2em;
     text-align: center;
 }
-.hall-of-fame .jumbotron {
-    padding-bottom: 2em;
+.home .jumbotron {
+    padding-bottom: 10em;
 }
 .jumbotron-inner {
   max-width: 960px;
@@ -290,11 +290,11 @@ footer a {
     border-radius: 2px;
     text-align: center;
     font-size: 3em;
-    margin-top: 2em;
+    margin-top: 1em;
     margin-bottom: 0.5em;
 }
-.hall-of-fame .jumbotron h1 {
-    margin-top: 1em;
+.home .jumbotron h1 {
+    margin-top: 2em;
 }
 .jumbotron a {
     color: white;
@@ -895,7 +895,7 @@ textarea {
  */
 
 .container-charts {
-    padding: 0 10px;
+    padding: 10px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -914,15 +914,8 @@ textarea {
     display: none;
 }
 
-.graph-title {
-    display: flex;
-    justify-content: center;
-    color: #5e5e5e;
-    padding: 0 5px;
-}
-
 .graph-counterValue {
-    color: #E44357;
+    margin-bottom: 10px;
 }
 
 .graph-bar {
@@ -934,6 +927,7 @@ textarea {
     align-items: flex-start;
     justify-content: center;
     min-height: 1px;
+    width: 50px;
 }
 
 .graph-bar:hover {
@@ -944,7 +938,6 @@ textarea {
     transform: rotate(282deg) translateX(96px) translateY(-14px);
     width: 150px;
     margin-top: 85px;
-    color: #5e5e5e;
 }
 
 .graph-column {
@@ -952,9 +945,5 @@ textarea {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.graph-noData {
-    font-weight: 900;
-    color: #e03a4d;
+    overflow: hidden;
 }
