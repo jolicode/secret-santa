@@ -71,7 +71,3 @@ services:
 
     GuzzleHttp\ClientInterface:
         alias: GuzzleHttp\Client
-
-    CL\Slack\Transport\ApiClient:
-        arguments:
-            $token: ~
