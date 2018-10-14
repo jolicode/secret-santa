@@ -26,7 +26,12 @@ class UserExtractor
         $slackUsers = [];
         $cursor = '';
 
+        $startTime = time();
         do {
+            if ((time() - $startTime) > 19) {
+                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team');
+            }
+
             try {
                 $response = $client->usersList([
                     'limit' => 200,
