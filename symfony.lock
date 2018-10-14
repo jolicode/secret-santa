@@ -20,8 +20,29 @@
             "ref": "cb4152ebcadbe620ea2261da1a1c5a9b8cea7672"
         }
     },
+    "doctrine/cache": {
+        "version": "v1.8.0"
+    },
+    "doctrine/collections": {
+        "version": "v1.5.0"
+    },
+    "doctrine/common": {
+        "version": "v2.9.0"
+    },
+    "doctrine/event-manager": {
+        "version": "v1.0.0"
+    },
+    "doctrine/inflector": {
+        "version": "v1.3.0"
+    },
     "doctrine/lexer": {
         "version": "v1.0.1"
+    },
+    "doctrine/persistence": {
+        "version": "v1.0.1"
+    },
+    "doctrine/reflection": {
+        "version": "v1.0.0"
     },
     "friendsofphp/php-cs-fixer": {
         "version": "2.2",
@@ -137,6 +158,15 @@
     "restcord/restcord": {
         "version": "0.2.2"
     },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        }
+    },
     "symfony/asset": {
         "version": "v3.4.7"
     },
@@ -171,7 +201,7 @@
         "version": "v4.0.7"
     },
     "symfony/dotenv": {
-        "version": "v3.4.7"
+        "version": "v4.1.6"
     },
     "symfony/event-dispatcher": {
         "version": "v3.4.7"

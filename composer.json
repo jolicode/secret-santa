@@ -26,6 +26,7 @@
         "php-http/curl-client": "^1.7",
         "predis/predis": "^1.1",
         "restcord/restcord": "^0.3",
+        "sensio/framework-extra-bundle": "^5.2",
         "symfony/asset": "^4.1",
         "symfony/console": "^4.1",
         "symfony/flex": "^1.1",
