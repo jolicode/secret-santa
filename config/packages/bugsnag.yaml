@@ -1,7 +1,11 @@
 bugsnag:
-  api_key: '%env(BUGSNAG_KEY)%'
-  release_stage: '%env(BUGSNAG_STAGE)%'
-  user: false
-  notify_release_stages:
-    - development
-    - production
+    api_key: '%env(BUGSNAG_KEY)%'
+    release_stage: '%env(BUGSNAG_STAGE)%'
+    user: false
+    notify_release_stages:
+        - development
+        - production
+
+services:
+    Bugsnag\Client:
+        alias: bugsnag
