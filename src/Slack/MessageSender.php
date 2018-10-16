@@ -11,18 +11,14 @@
 
 namespace JoliCode\SecretSanta\Slack;
 
-use CL\Slack\Payload\ChatPostMessagePayload;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\Slack\Api\Client;
+use JoliCode\Slack\ClientFactory;
 
 class MessageSender
 {
-    private $apiHelper;
-
-    public function __construct(ApiHelper $apiHelper)
-    {
-        $this->apiHelper = $apiHelper;
-    }
+    private $clientsByToken = [];
 
     /**
      * @throws MessageSendFailedException
@@ -42,14 +38,13 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
             $text .= sprintf("\n\nYour Secret Santa admin, <@%s>.", $secretSanta->getAdmin()->getIdentifier());
         }
 
-        $message = new ChatPostMessagePayload();
-        $message->setChannel(sprintf('@%s', $giver));
-        $message->setText($text);
-        $message->setUsername('Secret Santa Bot');
-        $message->setIconUrl('https://secret-santa.team/images/logo.png');
-
         try {
-            $this->apiHelper->sendPayload($message, $token);
+            $this->getClientForToken($token)->chatPostMessage([
+                'channel' => sprintf('@%s', $giver),
+                'username' => 'Secret Santa Bot',
+                'icon_url' => 'https://secret-santa.team/images/logo.png',
+                'text' => $text,
+            ]);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
         }
@@ -76,16 +71,24 @@ Happy Secret Santa!',
             $spoilUrl
         );
 
-        $message = new ChatPostMessagePayload();
-        $message->setChannel($secretSanta->getAdmin()->getIdentifier());
-        $message->setText($text);
-        $message->setUsername('Secret Santa Bot Spoiler');
-        $message->setIconUrl('https://secret-santa.team/images/logo-spoiler.png');
-
         try {
-            $this->apiHelper->sendPayload($message, $token);
+            $this->getClientForToken($token)->chatPostMessage([
+                'channel' => $secretSanta->getAdmin()->getIdentifier(),
+                'username' => 'Secret Santa Bot Spoiler',
+                'icon_url' => 'https://secret-santa.team/images/logo-spoiler.png',
+                'text' => $text,
+            ]);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }
+    }
+
+    private function getClientForToken(string $token): Client
+    {
+        if (!isset($this->clientsByToken[$token])) {
+            $this->clientsByToken[$token] = ClientFactory::create($token);
+        }
+
+        return $this->clientsByToken[$token];
     }
 }

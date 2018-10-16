@@ -11,21 +11,38 @@
 
 namespace JoliCode\SecretSanta\Controller;
 
+use JoliCode\SecretSanta\StatisticCollector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 class ContentController extends AbstractController
 {
     private $twig;
+    private $statisticCollector;
 
-    public function __construct(\Twig_Environment $twig)
+    public function __construct(\Twig_Environment $twig, StatisticCollector $statisticCollector)
     {
         $this->twig = $twig;
+        $this->statisticCollector = $statisticCollector;
     }
 
     public function homepage(): Response
     {
         $content = $this->twig->render('content/homepage.html.twig');
+
+        return new Response($content);
+    }
+
+    public function terms(): Response
+    {
+        $content = $this->twig->render('content/terms.html.twig');
+
+        return new Response($content);
+    }
+
+    public function privacyPolicy(): Response
+    {
+        $content = $this->twig->render('content/privacy_policy.html.twig');
 
         return new Response($content);
     }
@@ -97,6 +114,15 @@ class ContentController extends AbstractController
 
         $content = $this->twig->render('content/hall_of_fame.html.twig', [
             'companies' => $companies,
+        ]);
+
+        return new Response($content);
+    }
+
+    public function stats(): Response
+    {
+        $content = $this->twig->render('content/stats.html.twig', [
+            'statisticsCounter' => $this->statisticCollector->getDateAndCounters(),
         ]);
 
         return new Response($content);

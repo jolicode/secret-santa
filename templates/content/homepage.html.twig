@@ -1,122 +1,124 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <div class="jumbotron">
-        <div class="snow foreground"></div>
-        <div class="snow foreground layered"></div>
-        <div class="snow middleground"></div>
-        <div class="snow middleground layered"></div>
+    <div class="home">
+        <div class="jumbotron">
+            <div class="snow foreground"></div>
+            <div class="snow foreground layered"></div>
+            <div class="snow middleground"></div>
+            <div class="snow middleground layered"></div>
 
-        <div class="jumbotron-inner">
-            <h1>Throw a Secret Santa with<br> your team!</h1>
+            <div class="jumbotron-inner">
+                <h1>Throw a Secret Santa with<br> your team!</h1>
 
-            <q><strong>Secret Santa</strong> is a Western Christmas tradition in which members of a group or
-                community are <strong>randomly</strong> assigned a person to whom they anonymously <strong>give a gift</strong>.</q>
+                <q><strong>Secret Santa</strong> is a Western Christmas tradition in which members of a group or
+                    community are <strong>randomly</strong> assigned a person to whom they anonymously <strong>give a gift</strong>.</q>
 
-            <div class="actions">
-                <a class="action hvr-buzz" href="{{ path('run', { application: 'slack' }) }}">
-                    <i class="fab fa-slack"></i> Add to Slack
-                </a>
-                <a class="action hvr-buzz" href="{{ path('run', { application: 'discord' }) }}">
-                    <i class="fab fa-discord"></i> Add to Discord
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-titan-white">
-        <div class="app-outer-container">
-            <div class="">
-                <div class="app-container">
-                    <img class="upper-app" src="{{ asset('images/app-home.png') }}" alt="User selection interface">
+                <div class="actions">
+                    <a class="action hvr-buzz" href="{{ path('run', { application: 'slack' }) }}">
+                        <i class="fab fa-slack"></i> Add to Slack
+                    </a>
+                    <a class="action hvr-buzz" href="{{ path('run', { application: 'discord' }) }}">
+                        <i class="fab fa-discord"></i> Add to Discord
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="content how-block">
-        <h2 class="content-head is-center">How does it works?</h2>
-
-        <section class="step-feature">
-            <div class="step-feature-image">
-                <img src="{{ asset('images/step-slack.png') }}" alt="Connect to Your Application">
-            </div>
-            <div class="step-feature-text">
-                <h3>1. Connect to Your Application</h3>
-                <p>Click on one of the "Add to Slack" or "Add to Discord" buttons above to authorize Secret Santa to access your account.</p>
-            </div>
-        </section>
-
-        <section class="step-feature reverse">
-            <div class="step-feature-image">
-                <img src="{{ asset('images/step-users.png') }}" alt="Select Users" >
-            </div>
-            <div class="step-feature-text">
-                <h3>2. Select Users</h3>
-                <p>We show you all the users in your team (excluding the bots, because they don't do nice gifts). Just select the ones which will take part to your secret santa.</p>
-            </div>
-        </section>
-
-        <section class="step-feature">
-            <div class="step-feature-image">
-                <img src="{{ asset('images/step-inform.png') }}" alt="Inform Users">
-            </div>
-            <div class="step-feature-text">
-                <h3>3. Inform Users</h3>
-                <p>After <a href="https://github.com/jolicode/secret-santa/blob/master/src/Rudolph.php">Rudolph</a> shuffled the users, we throw at each participant a private message with his peer name and an optional admin message.</p>
-            </div>
-        </section>
-
-        <section class="step-feature reverse">
-            <div class="step-feature-image">
-                <img src="{{ asset('images/step-buy.png') }}" alt="Buy a Gift">
-            </div>
-            <div class="step-feature-text">
-                <h3>4. Buy a Gift</h3>
-                <p>Everything is now setup. Just go buy a gift for your peer before your party. Merry Christmas!</p>
-            </div>
-        </section>
-    </div>
-
-    <div class="sample-message pure-g">
-        <div class="sample-message-inner">
-            <div class="pure-u-1 pure-u-md-1-1 pure-u-lg-2-5">
-                <h2 class="content-head">Private message sent to users</h2>
-
-                <p>
-                    Each user will receive a private message to inform them of their peer name.
-                    You can provide an optional message to inform your team about budget or deadline.
-                </p>
-            </div>
-            <div class="is-center pure-u-1 pure-u-md-1-1 pure-u-lg-3-5">
-                <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/slack-sample.png') }}">
+        <div class="bg-titan-white">
+            <div class="app-outer-container">
+                <div class="">
+                    <div class="app-container">
+                        <img class="upper-app" src="{{ asset('images/app-home.png') }}" alt="User selection interface">
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="content why-block">
-        <h2 class="content-head is-center">Why do I need this app?</h2>
+        <div class="content how-block">
+            <h2 class="content-head is-center">How does it works?</h2>
 
-        <p>
-            At <a href="https://jolicode.com/">JoliCode</a>, we do a Secret Santa every year. Before this application,
-            we had to ask someone from outside the company to be our "Secret Santa", running a script to dispatch users
-            and sending emails to everyone.
-        </p>
+            <section class="step-feature">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/step-slack.png') }}" alt="Connect to Your Application">
+                </div>
+                <div class="step-feature-text">
+                    <h3>1. Connect to Your Application</h3>
+                    <p>Click on one of the "Add to Slack" or "Add to Discord" buttons above to authorize Secret Santa to access your account.</p>
+                </div>
+            </section>
 
-        <p>
-            This time is gone! Because all our collaborators are on Slack, we can just select them from this interface
-            and the application does all the work to shuffle users and to informe them of their peer name.
-        </p>
-    </div>
+            <section class="step-feature reverse">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/step-users.png') }}" alt="Select Users" >
+                </div>
+                <div class="step-feature-text">
+                    <h3>2. Select Users</h3>
+                    <p>We show you all the users in your team (excluding the bots, because they don't do nice gifts). Just select the ones which will take part to your secret santa.</p>
+                </div>
+            </section>
 
-    <div class="content love-block pure-g">
-        <div class="pure-u-1">
-            <h2 class="content-head">Enjoy gifts, love and privacy</h2>
+            <section class="step-feature">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/step-inform.png') }}" alt="Inform Users">
+                </div>
+                <div class="step-feature-text">
+                    <h3>3. Inform Users</h3>
+                    <p>After <a href="https://github.com/jolicode/secret-santa/blob/master/src/Rudolph.php">Rudolph</a> shuffled the users, we throw at each participant a private message with his peer name and an optional admin message.</p>
+                </div>
+            </section>
+
+            <section class="step-feature reverse">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/step-buy.png') }}" alt="Buy a Gift">
+                </div>
+                <div class="step-feature-text">
+                    <h3>4. Buy a Gift</h3>
+                    <p>Everything is now setup. Just go buy a gift for your peer before your party. Merry Christmas!</p>
+                </div>
+            </section>
+        </div>
+
+        <div class="sample-message pure-g">
+            <div class="sample-message-inner">
+                <div class="pure-u-1 pure-u-md-1-1 pure-u-lg-2-5">
+                    <h2 class="content-head">Private message sent to users</h2>
+
+                    <p>
+                        Each user will receive a private message to inform them of their peer name.
+                        You can provide an optional message to inform your team about budget or deadline.
+                    </p>
+                </div>
+                <div class="is-center pure-u-1 pure-u-md-1-1 pure-u-lg-3-5">
+                    <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/slack-sample.png') }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="content why-block">
+            <h2 class="content-head is-center">Why do I need this app?</h2>
+
             <p>
-                Secret Santa is about sharing and having a good time! This application does not persist anything on disk,
-                does not use web analytics, does not need any registration, does not send spam, does not collect any kind
-                of personal information and is integrally <a href="https://github.com/jolicode/secret-santa/">open-source</a>.
+                At <a href="https://jolicode.com/">JoliCode</a>, we do a Secret Santa every year. Before this application,
+                we had to ask someone from outside the company to be our "Secret Santa", running a script to dispatch users
+                and sending emails to everyone.
             </p>
+
+            <p>
+                This time is gone! Because all our collaborators are on Slack, we can just select them from this interface
+                and the application does all the work to shuffle users and to informe them of their peer name.
+            </p>
+        </div>
+
+        <div class="content love-block pure-g">
+            <div class="pure-u-1">
+                <h2 class="content-head">Enjoy gifts, love and privacy</h2>
+                <p>
+                    Secret Santa is about sharing and having a good time! This application does not persist anything on disk,
+                    does not use web analytics, does not need any registration, does not send spam, does not collect any kind
+                    of personal information and is integrally <a href="https://github.com/jolicode/secret-santa/">open-source</a>.
+                </p>
+            </div>
         </div>
     </div>
 {% endblock content %}

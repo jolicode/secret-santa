@@ -11,37 +11,44 @@
 
 namespace JoliCode\SecretSanta\Slack;
 
-use CL\Slack\Model\User as SlackUser;
-use CL\Slack\Payload\UsersListPayload;
-use CL\Slack\Payload\UsersListPayloadResponse;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\User;
+use JoliCode\Slack\Api\Model\ObjsUser;
+use JoliCode\Slack\ClientFactory;
 
 class UserExtractor
 {
-    private $apiHelper;
-
-    public function __construct(ApiHelper $apiHelper)
-    {
-        $this->apiHelper = $apiHelper;
-    }
-
     public function extractAll(string $token): array
     {
-        $payload = new UsersListPayload();
+        $client = ClientFactory::create($token);
 
-        try {
-            /** @var $response UsersListPayloadResponse */
-            $response = $this->apiHelper->sendPayload($payload, $token);
-        } catch (\Throwable $t) {
-            throw new UserExtractionFailedException('Could not fetch members in team', 0, $t);
-        }
+        /** @var ObjsUser[] $slackUsers */
+        $slackUsers = [];
+        $cursor = '';
 
-        /** @var SlackUser[] $slackUsers */
-        $slackUsers = array_filter($response->getUsers(), function (SlackUser $user) {
+        $startTime = time();
+        do {
+            if ((time() - $startTime) > 19) {
+                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team');
+            }
+
+            try {
+                $response = $client->usersList([
+                    'limit' => 200,
+                    'cursor' => $cursor,
+                ]);
+            } catch (\Throwable $t) {
+                throw new UserExtractionFailedException('Could not fetch members in team', 0, $t);
+            }
+
+            $slackUsers = array_merge($slackUsers, $response->getMembers());
+            $cursor = $response->getResponseMetadata() ? $response->getResponseMetadata()->getNextCursor() : '';
+        } while (!empty($cursor));
+
+        $slackUsers = array_filter($slackUsers, function (ObjsUser $user) {
             return
-                !$user->isBot()
-                && !$user->isDeleted()
+                !$user->getIsBot()
+                && !$user->getDeleted()
                 && 'slackbot' !== $user->getName()
             ;
         });
@@ -55,7 +62,7 @@ class UserExtractor
                 [
                     'nickname' => $slackUser->getName(),
                     'image' => $slackUser->getProfile()->getImage32(),
-                    'restricted' => $slackUser->isRestricted(),
+                    'restricted' => $slackUser->getIsRestricted(),
                 ]
             );
 

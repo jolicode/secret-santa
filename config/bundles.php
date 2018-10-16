@@ -8,4 +8,5 @@ return [
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
     Nelmio\SecurityBundle\NelmioSecurityBundle::class => ['all' => true],
     Bugsnag\BugsnagBundle\BugsnagBundle::class => ['all' => true],
+    Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
 ];

@@ -67,11 +67,7 @@ services:
 
     GuzzleHttp\Client:
         arguments:
-            $config: {timeout: 2}
+            $config: {timeout: 5}
 
     GuzzleHttp\ClientInterface:
         alias: GuzzleHttp\Client
-
-    CL\Slack\Transport\ApiClient:
-        arguments:
-            $token: ~

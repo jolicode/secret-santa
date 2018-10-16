@@ -31,7 +31,7 @@ class Spoiler
         $string = trim($string);
 
         $version = substr($string, 0, strpos($string, '@'));
-        $encoded = substr($string, strlen($version) + 1);
+        $encoded = substr($string, \strlen($version) + 1);
 
         if ('v1' === $version) {
             return $this->decodeV1($encoded);

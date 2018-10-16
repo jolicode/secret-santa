@@ -17,6 +17,7 @@ use JoliCode\SecretSanta\MessageDispatcher;
 use JoliCode\SecretSanta\Rudolph;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\Spoiler;
+use JoliCode\SecretSanta\StatisticCollector;
 use JoliCode\SecretSanta\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,13 +32,15 @@ class SantaController extends AbstractController
     private $twig;
     private $logger;
     private $applications;
+    private $statisticCollector;
 
-    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications)
+    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications, StatisticCollector $statistic)
     {
         $this->router = $router;
         $this->twig = $twig;
         $this->logger = $logger;
         $this->applications = $applications;
+        $this->statisticCollector = $statistic;
     }
 
     public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
@@ -62,7 +65,7 @@ class SantaController extends AbstractController
 
             $errors = $this->validate($selectedUsers, $message);
 
-            if (count($errors) < 1) {
+            if (\count($errors) < 1) {
                 $associatedUsers = $rudolph->associateUsers($selectedUsers);
                 $hash = md5(serialize($associatedUsers));
 
@@ -71,7 +74,7 @@ class SantaController extends AbstractController
                     $application->getOrganization(),
                     $hash,
                     array_filter($allUsers, function (User $user) use ($selectedUsers) {
-                        return in_array($user->getIdentifier(), $selectedUsers, true);
+                        return \in_array($user->getIdentifier(), $selectedUsers, true);
                     }),
                     $associatedUsers,
                     $application->getAdmin(),
@@ -88,6 +91,7 @@ class SantaController extends AbstractController
                 }
 
                 if ($secretSanta->isDone()) {
+                    $this->statisticCollector->incrementUsageCount($application->getCode());
                     $application->finish($secretSanta);
                 }
 
@@ -212,7 +216,7 @@ class SantaController extends AbstractController
     {
         $errors = [];
 
-        if (count($selectedUsers) < 2) {
+        if (\count($selectedUsers) < 2) {
             $errors['users'][] = 'At least 2 users should be selected';
         }
 

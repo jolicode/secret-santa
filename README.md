@@ -28,6 +28,7 @@ Then launch this command:
 
 The application should now be running on http://127.0.0.1:8000.
 
+Tests are made with PHPUnit.  
 To run unit tests, launch this command:
 
 `make test`
