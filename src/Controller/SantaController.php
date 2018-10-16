@@ -88,10 +88,7 @@ class SantaController extends AbstractController
                     $secretSanta->addError($e->getMessage());
                 }
 
-                if ($secretSanta->isDone()) {
-                    $this->statisticCollector->incrementUsageCount($application->getCode());
-                    $application->finish($secretSanta);
-                }
+                $this->finishSantaIfDone($secretSanta, $application);
 
                 $request->getSession()->set(
                     $this->getSecretSantaSessionKey(
@@ -166,9 +163,7 @@ class SantaController extends AbstractController
             $secretSanta->addError($e->getMessage());
         }
 
-        if ($secretSanta->isDone()) {
-            $application->finish($secretSanta);
-        }
+        $this->finishSantaIfDone($secretSanta, $application);
 
         $request->getSession()->set(
             $this->getSecretSantaSessionKey(
@@ -219,5 +214,13 @@ class SantaController extends AbstractController
         }
 
         return $errors;
+    }
+
+    private function finishSantaIfDone(SecretSanta $secretSanta, ApplicationInterface $application)
+    {
+        if ($secretSanta->isDone()) {
+            $this->statisticCollector->incrementUsageCount($application->getCode());
+            $application->finish($secretSanta);
+        }
     }
 }
