@@ -1,5 +1,22 @@
 {% extends 'layout.html.twig' %}
 
+{% macro barGraph(title, stats) %}
+    <h2 class="content-head is-center">{{ title }}</h2>
+    <div class="chart chart-month">
+        {% for key, value in stats %}
+            <div class="graph-column">
+                <div class="graph-counterValue">{{ value }}</div>
+                <div class="graph-bar" style="height: {{ (value / max(stats)) * 300 }}px;"></div>
+                <div class="graph-legend-x">{{ key|capitalize }}</div>
+            </div>
+        {% else  %}
+            <p>Sorry, there is no statistic for this section yet 🙈</p>
+        {% endfor %}
+    </div>
+{% endmacro %}
+
+{% import _self as stats %}
+
 {% block content %}
     <div class="stats">
         <div class="jumbotron">
@@ -13,53 +30,9 @@
         </div>
 
         <div class="container-charts">
-            <h2 class="content-head is-center">Number of Secret Santa per month</h2>
-            <div class="chart chart-month">
-                {% set stats = statisticsCounter.month %}
-                {% if stats %}
-                    {% for dateName, counter in stats %}
-                        <div  class="graph-column">
-                            <div class="graph-counterValue">{{ counter }}</div>
-                            <div class="graph-bar" style="height: {{ (counter / max(stats)) * 300 }}px;"></div>
-                            <div class="graph-legend-x">{{ dateName|replace({'date:' : ''}) }}</div>
-                        </div>
-                    {% endfor %}
-                {% else  %}
-                    <p>Sorry, there is no statistic for this section yet 🙈</p>
-                {% endif %}
-            </div>
-
-            <h2 class="content-head is-center">Number of Secret Santa per year</h2>
-            <div class="chart chart-year">
-                {% set stats = statisticsCounter.year %}
-                {% if stats %}
-                    {% for dateName, counter in stats %}
-                        <div class="graph-column">
-                            <div class="graph-counterValue">{{ counter }}</div>
-                            <div class="graph-bar" style="height: {{ (counter / max(stats)) * 300 }}px;"></div>
-                            <div class="graph-legend-x">{{ dateName|replace({'date:' : ''}) }}</div>
-                        </div>
-                    {% endfor %}
-                {% else  %}
-                    <p>Sorry, there is no statistic for this section yet 🙈</p>
-                {% endif %}
-            </div>
-
-            <h2 class="content-head is-center">Number of Secret Santa per service</h2>
-            <div class="chart chart-total">
-                {% set stats = statisticsCounter.total %}
-                {% if stats %}
-                    {% for dateName, counter in stats %}
-                        <div class="graph-column">
-                            <div class="graph-counterValue">{{ counter }}</div>
-                            <div class="graph-bar" style="height: {{ (counter / max(stats)) * 300 }}px;"></div>
-                            <div class="graph-legend-x">{{ dateName|replace({'date:' : '', 'date:total-' : ''})|capitalize }}</div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p>Sorry, there is no statistic for this section yet 🙈</p>
-                {% endif %}
-            </div>
+            {{ stats.barGraph('Number of Secret Santa per month', counters.month) }}
+            {{ stats.barGraph('Number of Secret Santa per year', counters.year) }}
+            {{ stats.barGraph('Number of Secret Santa per application', counters.app) }}
         </div>
     </div>
 

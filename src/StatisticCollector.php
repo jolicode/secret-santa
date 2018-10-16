@@ -28,40 +28,38 @@ class StatisticCollector
         $currentMonth = date('m');
 
         // If the key does not exist, it is set to 0 before performing the operation
-        $this->client->incr("date:$currentYear-$currentMonth");
-        $this->client->incr("date:$currentYear");
-        $this->client->incr('date:total');
-        $this->client->incr("date:total-$applicationCode");
+        $this->client->incr("stats:month:$currentYear-$currentMonth");
+        $this->client->incr("stats:year:$currentYear");
+        $this->client->incr("stats:app:$applicationCode");
+        $this->client->incr('stats:total');
     }
 
-    public function getDateAndCounters(): array
+    public function getCounters(): array
     {
-        $datesAndCounter = [
+        $counters = [
             'month' => [],
             'year' => [],
-            'total' => [],
+            'app' => [],
+            'total' => 0,
         ];
 
-        $allKeys = $this->client->keys('date:*');
+        $keys = $this->client->keys('stats:*');
+        if (\count($keys) > 0) {
+            $stats = $this->client->mget($keys);
 
-        if (\count($allKeys) > 0) {
-            $allStatistics = $this->client->mget($allKeys);
-
-            foreach ($allKeys as $key => $date) {
-                if (preg_match('/date:\d\d\d\d-\d\d/', $date)) {
-                    $datesAndCounter['month'][$date] = $allStatistics[$key];
-                } elseif (preg_match('/date:\d\d\d\d/', $date)) {
-                    $datesAndCounter['year'][$date] = $allStatistics[$key];
-                } elseif (preg_match('/date:total/', $date)) {
-                    $datesAndCounter['total'][$date] = $allStatistics[$key];
+            foreach ($keys as $keyIndex => $key) {
+                if (preg_match('/^stats:(?<type>.*):(?<key>.*)$/', $key, $matches)) {
+                    $counters[$matches['type']][$matches['key']] = $stats[$keyIndex];
+                } else {
+                    // total
+                    $counters[$key] = $stats[$keyIndex];
                 }
             }
 
-            ksort($datesAndCounter['month']);
-            ksort($datesAndCounter['year']);
-            ksort($datesAndCounter['total']);
+            ksort($counters['month']);
+            ksort($counters['year']);
         }
 
-        return $datesAndCounter;
+        return $counters;
     }
 }
