@@ -3,8 +3,8 @@ bugsnag:
     release_stage: '%env(BUGSNAG_STAGE)%'
     user: false
     notify_release_stages:
-        - development
         - production
+        #- development
 
 services:
     Bugsnag\Client:
