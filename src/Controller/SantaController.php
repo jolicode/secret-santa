@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Controller;
 
+use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
 use JoliCode\SecretSanta\MessageDispatcher;
@@ -33,20 +34,22 @@ class SantaController extends AbstractController
     private $logger;
     private $applications;
     private $statisticCollector;
+    private $bugsnag;
 
-    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications, StatisticCollector $statistic)
+    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications,
+                                StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
         $this->twig = $twig;
         $this->logger = $logger;
         $this->applications = $applications;
         $this->statisticCollector = $statistic;
+        $this->bugsnag = $bugsnag;
     }
 
     public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
-
         if (!$application->isAuthenticated()) {
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
@@ -85,6 +88,11 @@ class SantaController extends AbstractController
                     $this->logger->error($e->getMessage(), [
                         'exception' => $e,
                     ]);
+
+                    $this->bugsnag->notifyException($e, function ($report) {
+                        $report->setSeverity('info');
+                    });
+
                     $secretSanta->addError($e->getMessage());
                 }
 
@@ -160,6 +168,11 @@ class SantaController extends AbstractController
             $this->logger->error($e->getMessage(), [
                 'exception' => $e,
             ]);
+
+            $this->bugsnag->notifyException($e, function ($report) {
+                $report->setSeverity('info');
+            });
+
             $secretSanta->addError($e->getMessage());
         }
 

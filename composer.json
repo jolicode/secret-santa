@@ -20,6 +20,7 @@
     "require": {
         "php": "^7.1.3",
         "adam-paterson/oauth2-slack": "^1.1.3",
+        "bugsnag/bugsnag-symfony": "^1.5",
         "guzzlehttp/psr7": "^1.4",
         "jolicode/slack-php-api": "dev-master",
         "nelmio/security-bundle": "^2.5",

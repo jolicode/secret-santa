@@ -20,6 +20,8 @@
         <env name="DISCORD_CLIENT_ID" value="DUMMY"/>
         <env name="DISCORD_CLIENT_SECRET" value="DUMMY"/>
         <env name="DISCORD_BOT_TOKEN" value="DUMMY"/>
+        <env name="BUGSNAG_KEY" value=""/>
+        <env name="BUGSNAG_STAGE" value="development"/>
     </php>
 
     <testsuites>

@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\EventListener;
 
+use Bugsnag\Client;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use Psr\Log\LoggerInterface;
@@ -23,11 +24,13 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
 {
     private $logger;
     private $twig;
+    private $bugsnag;
 
-    public function __construct(LoggerInterface $logger, \Twig_Environment $twig)
+    public function __construct(LoggerInterface $logger, \Twig_Environment $twig, Client $bugsnag)
     {
         $this->logger = $logger;
         $this->twig = $twig;
+        $this->bugsnag = $bugsnag;
     }
 
     public function handleException(GetResponseForExceptionEvent $event)
@@ -40,11 +43,19 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
                 'exception' => $exception,
             ]);
 
+            $this->bugsnag->notifyException($exception, function ($report) {
+                $report->setSeverity('info');
+            });
+
             $statusCode = 401;
         } elseif ($exception instanceof UserExtractionFailedException) {
             $this->logger->error('Could not retrieve users', [
                 'exception' => $exception,
             ]);
+
+            $this->bugsnag->notifyException($exception, function ($report) {
+                $report->setSeverity('error');
+            });
 
             $statusCode = 500;
         }
