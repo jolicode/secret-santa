@@ -92,7 +92,7 @@ class SantaControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertCount(1, $crawler->filter('html:contains("It takes too much time to send all the messages")'));
+        self::assertCount(1, $crawler->filter('html:contains("All the messages are not sent yet, please read carefully")'));
         self::assertCount(1, $crawler->filter('html:contains("Knock knock. Who\'s there? A santa error!")'));
         self::assertCount(1, $crawler->filter('html:contains("Toto 1 must offer a gift to xxxxx")'));
         self::assertCount(1, $crawler->filter('html:contains("toto2 must offer a gift to xxxxx")'));
