@@ -42,6 +42,9 @@ Someone has been chosen to get you a gift; and **you** have been chosen to gift 
             $text .= sprintf("\n\nYour Secret Santa admin, <@%s>.", $secretSanta->getAdmin()->getIdentifier());
         }
 
+        $text .= "\n\n";
+        $text .= "_If you see `@invalid-user` as the user you need to send a gift, please read the message from desktop. There is a known bug in Discord Mobile applications._";
+
         try {
             $this->apiHelper->sendMessage($giver, $text);
         } catch (\Throwable $t) {
