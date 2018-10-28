@@ -308,7 +308,6 @@ footer a {
 .jumbotron a {
     color: white;
 }
-.jumbotron q,
 .jumbotron p {
     display: block;
     margin: 0 auto;
@@ -463,6 +462,20 @@ footer a {
     .sample-message img {
         margin-top: 1em;
     }
+}
+
+/**
+ * What
+ */
+.what-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
+.what-block q,
+.what-block p {
+    font-size: 1.2em;
+    line-height: 1.5em;
 }
 
 /**
