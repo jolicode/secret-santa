@@ -128,6 +128,15 @@ a {
 .header {
   background-color: #E03A4D;
 }
+@media only screen and (max-width :480px) {
+    .header .pure-menu-list {
+        display: flex;
+        flex-direction: column;
+    }
+    .header .pure-menu-item {
+        margin-top: 0.5em;
+    }
+}
 
 .home-menu {
     position: relative;
@@ -310,14 +319,14 @@ footer a {
     padding: 1em;
 }
 .jumbotron .actions {
-    margin: 1em 0 2em;
+    margin: 0.5em 0 2em;
 }
 .jumbotron .action:hover {
   color: #56B68B;
 }
 .jumbotron .action {
     display: inline-block;
-    margin: 0 0.5em;
+    margin: 0.5em;
     font-size: 1.5em;
     text-decoration: none;
     background-color: white;
