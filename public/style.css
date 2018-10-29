@@ -86,6 +86,22 @@ a {
 .is-center {
     text-align: center;
 }
+.small-button {
+    display: inline-block;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    font-size: 1em;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #E03A4D;
+    color: #E03A4D;
+    border-radius: 10px;
+    padding: 0.5em;
+}
+.small-button:hover {
+    background-color: #E03A4D;
+    color: #fff;
+}
 .big-button {
     display: inline-block;
     margin-bottom: 1em;

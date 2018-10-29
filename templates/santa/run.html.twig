@@ -48,6 +48,20 @@
 
                     <textarea name="message" id="message" rows="3">{{ message }}</textarea>
                     <p class="help">Anything you want, but this is the right place to give a deadline and a price limit!</p>
+
+                    {% if admin %}
+                        <p class="help">
+                            Not sure how the private messages will render?
+                            Click the button below, so you (and only you) will receive a fake message almost identical
+                            to the ones send on the final step.
+                        </p>
+                        <div class="is-center">
+                            <button type="button" class="small-button" id="sample-message-button">
+                                <span class="fas fa-wrench" aria-hidden="true"></span>
+                                Send me a sample message
+                            </button>
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="next">
@@ -68,21 +82,6 @@
                         </p>
                     </div>
                 </div>
-
-                {% if admin %}
-                    <div class="is-center">
-                        <button type="button" class="big-button" id="sample-message-button">
-                            <span class="fas fa-wrench" aria-hidden="true"></span>
-                            Send me a sample message
-                        </button>
-                    </div>
-
-                    <div class="is-center">
-                        <p>
-                            or
-                        </p>
-                    </div>
-                {% endif %}
 
                 <div class="is-center">
                     <button type="submit" class="big-button" id="submit-button">
