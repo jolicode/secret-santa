@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Controller;
 
 use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
+use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
 use JoliCode\SecretSanta\MessageDispatcher;
 use JoliCode\SecretSanta\Rudolph;
@@ -22,6 +23,7 @@ use JoliCode\SecretSanta\StatisticCollector;
 use JoliCode\SecretSanta\User;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,12 +113,62 @@ class SantaController extends AbstractController
         $content = $this->twig->render('santa/application/run_' . $application->getCode() . '.html.twig', [
             'application' => $application->getCode(),
             'users' => $allUsers,
+            'admin' => $application->getAdmin(),
             'selectedUsers' => $selectedUsers,
             'message' => $message,
             'errors' => $errors,
         ]);
 
         return new Response($content);
+    }
+
+    public function sendSampleMessage(Request $request, string $application): Response
+    {
+        if (!$request->isMethod('POST') || !$request->isXmlHttpRequest()) {
+            throw $this->createNotFoundException();
+        }
+
+        $application = $this->getApplication($application);
+        // An admin is required to use the sample feature
+        if (!$application->isAuthenticated() || !$application->getAdmin()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $message = $request->request->get('message');
+
+        $errors = $this->validate([], $message, true);
+
+        if (\count($errors) < 1) {
+            $secretSanta = new SecretSanta(
+                $application->getCode(),
+                $application->getOrganization(),
+                'sample',
+                [],
+                [],
+                $application->getAdmin(),
+                str_replace('```', '', $message)
+            );
+
+            try {
+                $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $application->getAdmin()->getIdentifier(), true);
+            } catch (MessageSendFailedException $e) {
+                return new JsonResponse([
+                    'success' => false,
+                    'errors' => [
+                        'send' => 'Error when sending the sample message',
+                    ],
+                ]);
+            }
+
+            return new JsonResponse([
+                'success' => true,
+            ]);
+        }
+
+        return new JsonResponse([
+            'success' => false,
+            'errors' => $errors,
+        ]);
     }
 
     public function finish(Request $request, string $hash): Response
@@ -218,11 +270,11 @@ class SantaController extends AbstractController
         return $secretSanta;
     }
 
-    private function validate(array $selectedUsers, string $message): array
+    private function validate(array $selectedUsers, string $message, bool $isSample = false): array
     {
         $errors = [];
 
-        if (\count($selectedUsers) < 2) {
+        if (!$isSample && \count($selectedUsers) < 2) {
             $errors['users'][] = 'At least 2 users should be selected';
         }
 

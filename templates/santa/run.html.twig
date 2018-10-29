@@ -69,6 +69,21 @@
                     </div>
                 </div>
 
+                {% if admin %}
+                    <div class="is-center">
+                        <button type="button" class="big-button" id="sample-message-button">
+                            <span class="fas fa-wrench" aria-hidden="true"></span>
+                            Send me a sample message
+                        </button>
+                    </div>
+
+                    <div class="is-center">
+                        <p>
+                            or
+                        </p>
+                    </div>
+                {% endif %}
+
                 <div class="is-center">
                     <button type="submit" class="big-button" id="submit-button">
                         <span class="fas fa-paper-plane" aria-hidden="true"></span>
@@ -99,6 +114,35 @@
                 var checkedUsersSummary = document.getElementById('checked-users-summary');
                 var bigSantaWarning = document.getElementById('big-santa-warning');
                 var submitButton = document.getElementById('submit-button');
+
+                /**
+                 * Handle sample message send
+                 */
+                var sampleMessageButton = document.getElementById('sample-message-button');
+                if (sampleMessageButton) {
+                    sampleMessageButton.addEventListener('click', function(e) {
+                        var body = new FormData();
+                        body.append('message', document.getElementById('message').value);
+
+                        fetch('{{ url('send_sample_message', {application: application}) }}', {
+                            method: 'post',
+                            credentials: 'include',
+                            headers: {'X-Requested-With': 'XMLHttpRequest'},
+                            body: body,
+                        })
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(response) {
+                            if (response.success) {
+                                window.alert('The sample message have been sent successfully. Check it now before finishing the Secret Santa.');
+                                return;
+                            }
+
+                            window.alert('The sample message could not be sent. Please try again later.');
+                        })
+                    }, false);
+                }
 
                 /**
                  * Prevent the multi-submit of the form
