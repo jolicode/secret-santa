@@ -23,9 +23,15 @@ class MessageSender
     /**
      * @throws MessageSendFailedException
      */
-    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, string $token): void
+    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, string $token, bool $isSample): void
     {
-        $text = sprintf(
+        $text = '';
+
+        if ($isSample) {
+            $text .= "Find below a sample of the message that will be sent to each members of your Secret Santa.\n----\n\n";
+        }
+
+        $text .= sprintf(
 'Hi! You have been chosen to be part of a Secret Santa!
 
 Someone has been chosen to get you a gift; and *you* have been chosen to gift <@%s>!', $receiver);

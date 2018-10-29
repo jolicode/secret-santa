@@ -40,7 +40,7 @@ interface ApplicationInterface
     /**
      * @throws MessageSendFailedException
      */
-    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver): void;
+    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void;
 
     /**
      * @throws MessageSendFailedException

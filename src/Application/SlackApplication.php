@@ -78,9 +78,9 @@ class SlackApplication implements ApplicationInterface
         return $this->userExtractor->extractAll($this->getToken()->getToken());
     }
 
-    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver): void
+    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
     {
-        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $this->getToken()->getToken());
+        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $this->getToken()->getToken(), $isSample);
     }
 
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void

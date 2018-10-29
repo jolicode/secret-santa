@@ -22,6 +22,10 @@ run:
     path:     /run/{application}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::run }
 
+send_sample_message:
+    path:     /sample-message/{application}
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::sendSampleMessage }
+
 finish:
     path:     /finish/{hash}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::finish }

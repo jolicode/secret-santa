@@ -98,9 +98,9 @@ class DiscordApplication implements ApplicationInterface
         return $this->userExtractor->extractForGuild($guildId);
     }
 
-    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver): void
+    public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
     {
-        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver);
+        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $isSample);
     }
 
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
