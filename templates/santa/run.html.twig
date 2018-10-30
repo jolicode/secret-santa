@@ -35,6 +35,9 @@
                                     {% for user in users %}
                                         {% block user_item %}{% endblock %}
                                     {% endfor %}
+                                    <div class="no-result is-hidden" id="no-user-matching">
+                                        No user matching.
+                                    </div>
                                 </div>
                             {% endspaceless %}
                             <div class="checked-users-summary">
@@ -111,6 +114,7 @@
                 var allChecker = document.getElementById('all-checker');
                 var allUnchecker = document.getElementById('all-unchecker');
                 var userList = document.getElementById('user-list');
+                var noMatch = document.getElementById('no-user-matching');
                 var summaryCount = document.getElementById('summary-count');
                 var checkedUsersSummary = document.getElementById('checked-users-summary');
                 var bigSantaWarning = document.getElementById('big-santa-warning');
@@ -218,6 +222,8 @@
                 function onUserSearch() {
                     var query = analyzeName(userSearchInput.value);
 
+                    noMatch.classList.add('is-hidden');
+
                     if (!query) {
                         userList.classList.remove('hide-not-matching');
                         return;
@@ -228,16 +234,24 @@
                     userList.classList.add('hide-not-matching');
 
                     var users = userList.querySelectorAll('.user-item');
+                    var matchingCount = 0;
 
                     for(var i=0; i<users.length; i++) {
                         for(var j=0; j<terms.length; j++) {
                             if (users[i].dataset.searchIndex.includes(terms[j])) {
                                 users[i].classList.remove('not-matching');
+                                matchingCount++;
                                 break;
                             } else {
                                 users[i].classList.add('not-matching');
                             }
                         }
+                    }
+
+                    if (matchingCount > 0) {
+                        noMatch.classList.add('is-hidden');
+                    } else {
+                        noMatch.classList.remove('is-hidden');
                     }
                 }
 
