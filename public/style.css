@@ -63,7 +63,7 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 }
 
 /* Our css \o/ */
-body, html {
+body, html, .pure-g [class *= "pure-u"] {
   font-family: 'Montserrat', sans-serif;
 }
 html {
@@ -536,7 +536,7 @@ footer a {
  */
 .run-block {
     padding: 0 2em;
-    max-width: 960px;
+    max-width: 1300px;
     margin: 0 auto;
     margin-bottom: 4em;
     position: relative;
@@ -544,6 +544,10 @@ footer a {
 .run-block h2 {
     margin-top: 2em;
     color: #E03A4D;
+    text-align: center;
+}
+.run-column {
+    padding: 0 2em;
 }
 .error {
     background-color: #ffb6c0;
@@ -562,25 +566,19 @@ textarea {
     border-radius: 4px;
 }
 .message-field textarea {
-    max-height: 100px;
+    max-height: 150px;
 }
 .help {
     color: #7A7A7A;
-    font-style: italic;
+    font-size: 0.9em;
 }
-.next {
-    text-align: center;
-}
-.next .pure-img-responsive {
+.next img {
     box-shadow: 10px 10px 25px rgb(204, 204, 204);
 }
 .next p {
     margin-top: 2em;
 }
-.big-santa-warning {
-    font-size: 0.8em;
-    color: #7A7A7A;
-}
+
 /**
  * User list
  */
@@ -589,16 +587,7 @@ textarea {
     flex-direction: column;
     border: 1px solid #CCCCCC;
     border-radius: 4px 4px 0 0;
-    line-height: 3em;
-}
-@media screen and (max-width: 1024px) {
-    .user-search {
-        line-height: 1.2em;
-    }
-    .user-search .helper {
-        padding: 1em;
-        padding-top: 0;
-    }
+    line-height: 1.2em;
 }
 .user-search .search-wrapper {
     flex: 1;
@@ -617,6 +606,8 @@ textarea {
 .user-search .helper {
     display: flex;
     align-items: center;
+    padding: 1em;
+    padding-top: 0;
 }
 .user-search .helper label {
     cursor: pointer;
@@ -632,13 +623,13 @@ textarea {
     padding: 0 1em;
 }
 .user-list {
-    height: 300px;
+    max-height: 500px;
     overflow-y: scroll;
     border: 1px solid #CCCCCC;
     border-top: 0 none;
 }
 .user-list .user-item {
-    min-height: 3em;
+    min-height: 2.5em;
     vertical-align: middle;
     border-bottom: 1px solid #CCCCCC;
     display: flex;
@@ -681,18 +672,6 @@ textarea {
 }
 .checked-users-summary .user-summary span[data-uncheck-user] {
     cursor: pointer;
-}
-@media screen and (min-width: 1024px) {
-    .user-search {
-        flex-direction: row;
-        align-content: space-between;
-    }
-    .user-search .search-wrapper input {
-        width: 400px;
-    }
-    .user-search .helper {
-        margin-right: 1em;
-    }
 }
 
 /**

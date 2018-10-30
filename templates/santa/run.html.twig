@@ -6,90 +6,92 @@
     <div class="run-block">
         {% if users|length >= 2 %}
             <form method="post" id="run_form">
-                <div class="user-field">
-                    <h2>Select the participants of your Secret Santa</h2>
-                    {% if errors and errors.users %}
-                        <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors.users|join('<br />') }}</span>
-                    {% endif %}
-                    <div class="user-search">
-                        <div class="search-wrapper">
-                            <input placeholder="Filter users by searching by real name or username" type="text" id="user-search-input" />
-                            <span class="search-cleaner fas fa-times" id="search-cleaner" title="Empty the query"></span>
-                        </div>
-                        <div class="helper">
-                            {% if hasRestrictedUser %}
-                            <label>
-                                <input type="checkbox" checked="checked" id="restrict-user-checkbox" value="" />
-                                <span>Show restricted user</span>
-                            </label>
+                <div class="pure-g">
+                    <div class="pure-u-1 pure-u-lg-1-2 user-field run-step">
+                        <div class="run-column">
+                            <h2>Select the participants of your Secret Santa</h2>
+                            {% if errors and errors.users %}
+                                <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors.users|join('<br />') }}</span>
                             {% endif %}
-                            <span class="check-all" id="all-checker" title="Check all the visible users in the list below">Check all</span>
-                            /
-                            <span class="uncheck-all" id="all-unchecker" title="Uncheck all the visible users in the list below">Uncheck all</span>
+                            <div class="user-search">
+                                <div class="search-wrapper">
+                                    <input placeholder="Filter users by searching by real name or username" type="text" id="user-search-input" />
+                                    <span class="search-cleaner fas fa-times" id="search-cleaner" title="Empty the query"></span>
+                                </div>
+                                <div class="helper">
+                                    {% if hasRestrictedUser %}
+                                        <label>
+                                            <input type="checkbox" checked="checked" id="restrict-user-checkbox" value="" />
+                                            <span>Show restricted user</span>
+                                        </label>
+                                    {% endif %}
+                                    <span class="check-all" id="all-checker" title="Check all the visible users in the list below">Check all</span>
+                                    /
+                                    <span class="uncheck-all" id="all-unchecker" title="Uncheck all the visible users in the list below">Uncheck all</span>
+                                </div>
+                            </div>
+                            {% spaceless %}
+                                <div class="user-list" id="user-list">
+                                    {% for user in users %}
+                                        {% block user_item %}{% endblock %}
+                                    {% endfor %}
+                                </div>
+                            {% endspaceless %}
+                            <div class="checked-users-summary">
+                                <span>Selection summary <span id="summary-count"></span>:</span>
+                                <div id="checked-users-summary"></div>
+                            </div>
+                            <p class="help hidden" id="big-santa-warning">
+                                {% block big_santa_warning %}{% endblock %}
+                            </p>
                         </div>
                     </div>
-                    {% spaceless %}
-                        <div class="user-list" id="user-list">
-                            {% for user in users %}
-                                {% block user_item %}{% endblock %}
-                            {% endfor %}
+                    <div class="pure-u-1 pure-u-lg-1-2">
+                        <div class="run-column">
+                            <div class="message-field run-step">
+                                <h2>
+                                    <label class="control-label" for="message">Write an optional message</label>
+                                </h2>
+
+                                <textarea name="message" id="message" rows="5" placeholder="Anything you want, but this is the right place to give a deadline and a price limit!">{{ message }}</textarea>
+
+                                {% if admin %}
+                                    <p class="help">
+                                        Not sure how the private messages will render?
+                                        Click the button below, so you (and only you) will receive a fake message almost identical
+                                        to the ones send on the final step.
+                                    </p>
+                                    <div class="is-center">
+                                        <button type="button" class="small-button" id="sample-message-button">
+                                            <span class="fas fa-wrench" aria-hidden="true"></span>
+                                            Send me a sample message
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="next run-step">
+                                <h2>What happens next?</h2>
+                                {% block next_step_explanation %}{% endblock %}
+
+                                <div class="is-center">
+                                    <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/' ~ application ~ '-sample.png') }}">
+                                </div>
+                            </div>
+
+                            <div class="run-step">
+                                <h2>Ready?</h2>
+
+                                <div class="is-center">
+                                    <button type="submit" class="big-button" id="submit-button">
+                                        <span class="fas fa-paper-plane" aria-hidden="true"></span>
+                                        Finish and send Secret Santa messages!
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    {% endspaceless %}
-                    <div class="checked-users-summary">
-                        <span>Selection summary <span id="summary-count"></span>:</span>
-                        <div id="checked-users-summary"></div>
                     </div>
                 </div>
-
-                <div class="message-field">
-                    <h2>
-                        <label class="control-label" for="message">Write an optional message</label>
-                    </h2>
-
-                    <textarea name="message" id="message" rows="3">{{ message }}</textarea>
-                    <p class="help">Anything you want, but this is the right place to give a deadline and a price limit!</p>
-
-                    {% if admin %}
-                        <p class="help">
-                            Not sure how the private messages will render?
-                            Click the button below, so you (and only you) will receive a fake message almost identical
-                            to the ones send on the final step.
-                        </p>
-                        <div class="is-center">
-                            <button type="button" class="small-button" id="sample-message-button">
-                                <span class="fas fa-wrench" aria-hidden="true"></span>
-                                Send me a sample message
-                            </button>
-                        </div>
-                    {% endif %}
-                </div>
-
-                <div class="next">
-                    <h2>What happens next?</h2>
-                    <div>
-                        {% block next_step_explanation %}{% endblock %}
-
-                        <div class="is-center">
-                            <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/' ~ application ~ '-sample.png') }}">
-                        </div>
-
-                        <p>
-                            Anything else is up to you, have fun!
-                        </p>
-
-                        <p class="big-santa-warning hidden" id="big-santa-warning">
-                            {% block big_santa_warning %}{% endblock %}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="is-center">
-                    <button type="submit" class="big-button" id="submit-button">
-                        <span class="fas fa-paper-plane" aria-hidden="true"></span>
-                        Finish and send Secret Santa messages!
-                    </button>
-                </div>
-
             </form>
 
             <script type="text/javascript" nonce="{{ csp_nonce('script') }}">

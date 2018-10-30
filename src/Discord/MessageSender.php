@@ -32,7 +32,7 @@ class MessageSender
         $text = '';
 
         if ($isSample) {
-            $text .= "Find below a sample of the message that will be sent to each members of your Secret Santa.\n----\n\n";
+            $text .= "_Find below a sample of the message that will be sent to each members of your Secret Santa._\n----\n\n";
         }
 
         $text .= sprintf(

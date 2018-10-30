@@ -28,7 +28,7 @@ class MessageSender
         $text = '';
 
         if ($isSample) {
-            $text .= "Find below a sample of the message that will be sent to each members of your Secret Santa.\n----\n\n";
+            $text .= "_Find below a sample of the message that will be sent to each members of your Secret Santa._\n----\n\n";
         }
 
         $text .= sprintf(
@@ -47,7 +47,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         try {
             $this->getClientForToken($token)->chatPostMessage([
                 'channel' => sprintf('@%s', $giver),
-                'username' => 'Secret Santa Bot',
+                'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
                 'text' => $text,
             ]);
