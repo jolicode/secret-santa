@@ -549,6 +549,22 @@ footer a {
 .run-column {
     padding: 0 2em;
 }
+@media screen and (min-width: 1024px) {
+    .run-column-right {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+    }
+    .sticky-container {
+        flex: 1;
+        position: relative;
+    }
+    .sticky-container .sticky {
+        position: sticky;
+        top: 50px;
+    }
+}
 .error {
     background-color: #ffb6c0;
     display: block;

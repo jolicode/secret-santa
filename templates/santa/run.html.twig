@@ -44,52 +44,55 @@
                                 <span>Selection summary <span id="summary-count"></span>:</span>
                                 <div id="checked-users-summary"></div>
                             </div>
-                            <p class="help hidden" id="big-santa-warning">
-                                {% block big_santa_warning %}{% endblock %}
-                            </p>
                         </div>
                     </div>
                     <div class="pure-u-1 pure-u-lg-1-2">
-                        <div class="run-column">
-                            <div class="message-field run-step">
-                                <h2>
-                                    <label class="control-label" for="message">Write an optional message</label>
-                                </h2>
+                        <div class="run-column run-column-right">
+                            <div class="sticky-container">
+                                <div class="sticky">
+                                    <div class="message-field run-step">
+                                        <h2>
+                                            <label class="control-label" for="message">Write an optional message</label>
+                                        </h2>
 
-                                <textarea name="message" id="message" rows="5" placeholder="Anything you want, but this is the right place to give a deadline and a price limit!">{{ message }}</textarea>
+                                        <textarea name="message" id="message" rows="5" placeholder="Anything you want, but this is the right place to give a deadline and a price limit!">{{ message }}</textarea>
 
-                                {% if admin %}
-                                    <p class="help">
-                                        Not sure how the private messages will render?
-                                        Click the button below, so you (and only you) will receive a fake message almost identical
-                                        to the ones send on the final step.
-                                    </p>
-                                    <div class="is-center">
-                                        <button type="button" class="small-button" id="sample-message-button">
-                                            <span class="fas fa-wrench" aria-hidden="true"></span>
-                                            Send me a sample message
-                                        </button>
+                                        {% if admin %}
+                                            <p class="help">
+                                                Not sure how the private messages will render?
+                                                Click the button below, so you (and only you) will receive a fake message almost identical
+                                                to the ones send on the final step.
+                                            </p>
+                                            <div class="is-center">
+                                                <button type="button" class="small-button" id="sample-message-button">
+                                                    <span class="fas fa-wrench" aria-hidden="true"></span>
+                                                    Send me a sample message
+                                                </button>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                {% endif %}
-                            </div>
+                                    <div class="run-step">
+                                        <h2>Ready?</h2>
 
-                            <div class="next run-step">
-                                <h2>What happens next?</h2>
-                                {% block next_step_explanation %}{% endblock %}
+                                        <p>
+                                            We are going to shuffle selected users and send them a private message to inform them
+                                            of their peer name.
+                                        </p>
 
-                                <div class="is-center">
-                                    <img class="pure-img-responsive" alt="Sample message received by users" src="{{ asset('images/' ~ application ~ '-sample.png') }}">
-                                </div>
-                            </div>
+                                        <div class="is-center">
+                                            <button type="submit" class="big-button" id="submit-button">
+                                                <span class="fas fa-paper-plane" aria-hidden="true"></span>
+                                                Finish and send Secret Santa messages!
+                                            </button>
+                                        </div>
 
-                            <div class="run-step">
-                                <h2>Ready?</h2>
-
-                                <div class="is-center">
-                                    <button type="submit" class="big-button" id="submit-button">
-                                        <span class="fas fa-paper-plane" aria-hidden="true"></span>
-                                        Finish and send Secret Santa messages!
-                                    </button>
+                                        <p class="help hidden" id="big-santa-warning">
+                                            When selecting a lot of participants, the final step (sending private messages)
+                                            can take some time (up to 20 secondes).<br />
+                                            Don't worry, in case something goes wrong, a "Retry" button will allow you to
+                                            send remaining messages not yet sent.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

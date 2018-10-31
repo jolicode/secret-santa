@@ -29,16 +29,3 @@
         <span>{{ user.name }} ({{ user.extra.nickname }})</span>
     </label>
 {% endblock %}
-
-{% block next_step_explanation %}
-    <p>
-        We are going to shuffle selected users and send them a private message in Slack, looking like this:
-    </p>
-{% endblock %}
-
-{% block big_santa_warning %}
-    For Secret Santa with a lot of participants, the final step (send Slack private messages)
-    can take some time (up to 20 secondes).<br />
-    Don't worry, in case something goes wrong, a "Retry" button will allow you to send remaining
-    messages.
-{% endblock %}
