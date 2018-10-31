@@ -24,6 +24,7 @@ run:
 
 send_sample_message:
     path:     /sample-message/{application}
+    methods:  POST
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::sendSampleMessage }
 
 finish:
