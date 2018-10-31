@@ -124,10 +124,6 @@ class SantaController extends AbstractController
 
     public function sendSampleMessage(Request $request, string $application): Response
     {
-        if (!$request->isMethod('POST') || !$request->isXmlHttpRequest()) {
-            throw $this->createNotFoundException();
-        }
-
         $application = $this->getApplication($application);
         // An admin is required to use the sample feature
         if (!$application->isAuthenticated() || !$application->getAdmin()) {
@@ -152,21 +148,12 @@ class SantaController extends AbstractController
             try {
                 $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $application->getAdmin()->getIdentifier(), true);
             } catch (MessageSendFailedException $e) {
-                return new JsonResponse([
-                    'success' => false,
-                    'errors' => [
-                        'send' => 'Error when sending the sample message',
-                    ],
-                ]);
+                $errors['send'] = 'Error when sending the sample message';
             }
-
-            return new JsonResponse([
-                'success' => true,
-            ]);
         }
 
         return new JsonResponse([
-            'success' => false,
+            'success' => empty($errors),
             'errors' => $errors,
         ]);
     }
