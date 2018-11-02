@@ -14,10 +14,6 @@
                                 <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors.users|join('<br />') }}</span>
                             {% endif %}
                             <div class="user-search">
-                                <div class="search-wrapper">
-                                    <input placeholder="Filter users by searching by real name or username" type="text" id="user-search-input" />
-                                    <span class="search-cleaner fas fa-times" id="search-cleaner" title="Empty the query"></span>
-                                </div>
                                 <div class="helper">
                                     {% if hasRestrictedUser %}
                                         <label>
@@ -28,6 +24,10 @@
                                     <span class="check-all" id="all-checker" title="Check all the visible users in the list below">Check all</span>
                                     /
                                     <span class="uncheck-all" id="all-unchecker" title="Uncheck all the visible users in the list below">Uncheck all</span>
+                                </div>
+                                <div class="search-wrapper">
+                                    <input placeholder="Filter users by searching by real name or username" type="text" id="user-search-input" autocomplete="off" />
+                                    <span class="search-cleaner fas fa-times is-hidden" id="search-cleaner" title="Empty the query"></span>
                                 </div>
                             </div>
                             {% spaceless %}
@@ -228,12 +228,14 @@
                     noMatch.classList.add('is-hidden');
 
                     if (!query) {
+                        searchCleaner.classList.add('is-hidden');
                         userList.classList.remove('hide-not-matching');
                         return;
                     }
 
                     var terms = query.split(' ');
 
+                    searchCleaner.classList.remove('is-hidden');
                     userList.classList.add('hide-not-matching');
 
                     var users = userList.querySelectorAll('.user-item');
