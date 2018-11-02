@@ -13,4 +13,4 @@ framework:
     php_errors:
         log: true
     assets:
-        version: 'v7'
+        version: 'v8'
