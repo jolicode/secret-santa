@@ -12,8 +12,10 @@
 namespace JoliCode\SecretSanta\Discord;
 
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
+use JoliCode\SecretSanta\Group;
 use JoliCode\SecretSanta\User;
 use RestCord\Model\Guild\GuildMember;
+use RestCord\Model\Guild\Role;
 
 class UserExtractor
 {
@@ -25,6 +27,9 @@ class UserExtractor
         $this->apiHelper = $apiHelper;
     }
 
+    /**
+     * @return User[]
+     */
     public function extractForGuild(int $guildId): array
     {
         try {
@@ -47,6 +52,7 @@ class UserExtractor
                 [
                     'nickname' => $member->nick ?? null,
                     'image' => $member->user->avatar ? sprintf('https://cdn.discordapp.com/avatars/%s/%s.png', $member->user->id, $member->user->avatar) : null,
+                    'groups' => $member->roles,
                 ]
             );
 
@@ -58,5 +64,35 @@ class UserExtractor
         });
 
         return $users;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function extractGroupsForGuild(int $guildId): array
+    {
+        /** @var Role[] $roles */
+        $roles = $this->apiHelper->getRolesInGuild($guildId);
+
+        $groups = [];
+
+        foreach ($roles as $role) {
+            if ($role->name === '@everyone') {
+                continue;
+            }
+
+            $group = new Group(
+                $role->id,
+                $role->name
+            );
+
+            $groups[$group->getIdentifier()] = $group;
+        }
+
+        uasort($groups, function (Group $a, Group $b) {
+            return strnatcasecmp($a->getName(), $b->getName());
+        });
+
+        return $groups;
     }
 }

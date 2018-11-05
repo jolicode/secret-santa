@@ -12,16 +12,26 @@
 namespace JoliCode\SecretSanta\Slack;
 
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
+use JoliCode\SecretSanta\Group;
 use JoliCode\SecretSanta\User;
+use JoliCode\Slack\Api\Client;
 use JoliCode\Slack\Api\Model\ObjsUser;
 use JoliCode\Slack\ClientFactory;
 
 class UserExtractor
 {
+    private $apiHelper;
+
+    public function __construct(ApiHelper $apiHelper)
+    {
+        $this->apiHelper = $apiHelper;
+    }
+
+    /**
+     * @return User[]
+     */
     public function extractAll(string $token): array
     {
-        $client = ClientFactory::create($token);
-
         /** @var ObjsUser[] $slackUsers */
         $slackUsers = [];
         $cursor = '';
@@ -33,8 +43,8 @@ class UserExtractor
             }
 
             try {
-                $response = $client->usersList([
-                    'limit' => 200,
+                $response = $this->apiHelper->getClientForToken($token)->usersList([
+                    'limit' => 1000,
                     'cursor' => $cursor,
                 ]);
             } catch (\Throwable $t) {
@@ -74,5 +84,34 @@ class UserExtractor
         });
 
         return $users;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function extractGroups(string $token): array
+    {
+        $groups = [];
+
+        $userGroupsResponse = $this->apiHelper->getClientForToken($token)->usergroupsList([
+            'include_users' => true,
+        ]);
+
+        // Slack OpenAPI spec does not contains definition yet for usergroups.list response
+        // So lets retrieve data from internal data
+        foreach ($userGroupsResponse['usergroups'] as $userGroup) {
+            $group = new Group(
+                $userGroup->id,
+                $userGroup->name
+            );
+
+            foreach ($userGroup->users as $userId) {
+                $group->addUser($userId);
+            }
+
+            $groups[$group->getIdentifier()] = $group;
+        }
+
+        return $groups;
     }
 }

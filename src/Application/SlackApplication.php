@@ -73,6 +73,11 @@ class SlackApplication implements ApplicationInterface
         $this->getSession()->set(self::SESSION_KEY_ADMIN, $admin);
     }
 
+    public function getGroups(): array
+    {
+        return $this->userExtractor->extractGroups($this->getToken()->getToken());
+    }
+
     public function getUsers(): array
     {
         return $this->userExtractor->extractAll($this->getToken()->getToken());

@@ -539,7 +539,7 @@ footer a {
  */
 .run-block {
     padding: 0 2em;
-    max-width: 1300px;
+    max-width: 1400px;
     margin: 0 auto;
     margin-bottom: 4em;
     position: relative;
@@ -599,6 +599,27 @@ textarea {
 }
 
 /**
+ * Group selection
+ */
+.group-selection {
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+.group-selection .group-list {
+    margin-top: 1em
+}
+.group-selection .group-button {
+    margin-right: 1em;
+}
+.group-selection .group-button:hover {
+    background-color: #7A7A7A;
+    color: white;
+    cursor: pointer;
+}
+
+/**
  * User list
  */
 .user-search {
@@ -645,10 +666,11 @@ textarea {
     padding: 0 1em;
 }
 .user-list {
-    max-height: 500px;
+    max-height: 410px;
     overflow-y: scroll;
     border: 1px solid #CCCCCC;
     border-top: 0 none;
+    border-radius: 0 0 4px 4px;
 }
 .user-list .user-item {
     min-height: 3em;
@@ -675,16 +697,26 @@ textarea {
 }
 .user-list .user-item * {
     margin: 0 0 0 1em;
+    display: flex;
 }
 .user-list .user-item img {
     width: 32px;
     height: 32px;
 }
+.user-list .user-item .user-groups {
+    flex: 1;
+    overflow: hidden;
+}
+.group-selection .group-button,
+.user-list .user-item .user-group {
+    background-color: #EEEEEE;
+    border-radius: 2px;
+    font-size: 0.8em;
+    padding: 0.5em;
+    display: inline-block;
+}
 .checked-users-summary {
-    border: 1px solid #CCCCCC;
-    border-top: 0 none;
-    border-radius: 0 0 4px 4px;
-    padding: 1em;
+    margin-top: 3em;
 }
 .checked-users-summary .user-summary {
     background-color: #EEEEEE;

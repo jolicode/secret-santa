@@ -44,6 +44,14 @@ class ApiHelper
         ]);
     }
 
+    public function getRolesInGuild(int $guildId): array
+    {
+        return $this->getClient($this->botToken, self::TOKEN_TYPE_BOT)->guild->getGuildRoles([
+            'guild.id' => $guildId,
+            'limit' => 100,
+        ]);
+    }
+
     public function sendMessage(int $userId, string $message): void
     {
         $client = $this->getClient($this->botToken, self::TOKEN_TYPE_BOT);

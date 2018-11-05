@@ -15,6 +15,7 @@ use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Group;
 
 interface ApplicationInterface
 {
@@ -27,6 +28,13 @@ interface ApplicationInterface
     public function getOrganization(): string;
 
     public function getAdmin(): ?User;
+
+    /**
+     * An array of Group indexed by their identifier.
+     *
+     * @return Group[]
+     */
+    public function getGroups(): array;
 
     /**
      * An array of User indexed by their identifier.
