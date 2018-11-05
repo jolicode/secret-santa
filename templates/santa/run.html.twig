@@ -13,6 +13,18 @@
                             {% if errors and errors.users %}
                                 <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors.users|join('<br />') }}</span>
                             {% endif %}
+
+                            {% if groups %}
+                                <div class="group-selection">
+                                    <label>Select all persons in a group</label>
+                                    <div class="group-list" id="group-list">
+                                        {% for group in groups %}
+                                            <span class="group-button" data-user-ids="{{ group.userIds|join('|') }}" title="Select {{ group.userIds|length }} person{{ group.userIds|length > 1 ? 's' : '' }} in this group">{{ group.name }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             <div class="user-search">
                                 <div class="helper">
                                     {% if hasRestrictedUser %}
@@ -26,7 +38,7 @@
                                     <span class="uncheck-all" id="all-unchecker" title="Uncheck all the visible users in the list below">Uncheck all</span>
                                 </div>
                                 <div class="search-wrapper">
-                                    <input placeholder="Filter users by searching by real name or username" type="text" id="user-search-input" autocomplete="off" />
+                                    <input autofocus placeholder="Search user by real name or username" type="text" id="user-search-input" autocomplete="off" />
                                     <span class="search-cleaner fas fa-times is-hidden" id="search-cleaner" title="Empty the query"></span>
                                 </div>
                             </div>
@@ -40,8 +52,9 @@
                                     </div>
                                 </div>
                             {% endspaceless %}
+
                             <div class="checked-users-summary">
-                                <span>Selection summary <span id="summary-count"></span>:</span>
+                                <h2>Summary of your selection: <span id="summary-count"></span></h2>
                                 <div id="checked-users-summary"></div>
                             </div>
                         </div>
@@ -116,6 +129,7 @@
                 {% endif %}
                 var allChecker = document.getElementById('all-checker');
                 var allUnchecker = document.getElementById('all-unchecker');
+                var groupList = document.getElementById('group-list');
                 var userList = document.getElementById('user-list');
                 var noMatch = document.getElementById('no-user-matching');
                 var summaryCount = document.getElementById('summary-count');
@@ -180,7 +194,7 @@
                         html = 'No user selected';
                     }
 
-                    summaryCount.innerHTML = '(' + users.length + ')';
+                    summaryCount.innerHTML = users.length + ' ' + (users.length > 1 ? 'persons' : 'person');
                     checkedUsersSummary.innerHTML = html;
 
                     if (users.length >= 30) {
@@ -329,6 +343,23 @@
                 }
 
                 /**
+                 * Check all user in a group
+                 */
+                function checkAllUserInAGroup(e) {
+                  const userIds = e.target.getAttribute('data-user-ids').split('|');
+
+                  for(var i=0; i<userIds.length; i++) {
+                    var userInput = document.getElementById('user-' + userIds[i]);
+
+                    if (userInput) {
+                      userInput.checked = true;
+                    }
+                  }
+
+                  updateSummary();
+                }
+
+                /**
                  * Here lives Damien's Kingdom
                  */
                 function removeDiacritics (str) {
@@ -436,6 +467,13 @@
                 allUnchecker.addEventListener('click', uncheckAllVisibleUsers, false);
                 userList.addEventListener('change', updateSummary);
                 checkedUsersSummary.addEventListener('click', uncheckUser);
+
+                if (groupList) {
+                  var groupButtons = groupList.querySelectorAll('.group-button');
+                  for(var i=0; i<groupButtons.length; i++) {
+                    groupButtons[i].addEventListener('click', checkAllUserInAGroup);
+                  }
+                }
 
                 initUserList();
                 updateSummary();

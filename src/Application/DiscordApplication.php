@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Application;
 use JoliCode\SecretSanta\Discord\ApiHelper;
 use JoliCode\SecretSanta\Discord\MessageSender;
 use JoliCode\SecretSanta\Discord\UserExtractor;
+use JoliCode\SecretSanta\Group;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\User;
 use League\OAuth2\Client\Token\AccessToken;
@@ -32,6 +33,9 @@ class DiscordApplication implements ApplicationInterface
     private $apiHelper;
     private $userExtractor;
     private $messageSender;
+
+    /** @var Group[]|null */
+    private $groups = null;
 
     public function __construct(RequestStack $requestStack, ApiHelper $apiHelper, UserExtractor $userExtractor, MessageSender $messageSender)
     {
@@ -87,6 +91,21 @@ class DiscordApplication implements ApplicationInterface
         $this->getSession()->set(self::SESSION_KEY_GUILD_ID, $guild);
     }
 
+    public function getGroups(): array
+    {
+        if ($this->groups === null) {
+            $guildId = $this->getGuildId();
+
+            if (!$guildId) {
+                throw new \RuntimeException('No guild was selected');
+            }
+
+            $this->groups = $this->userExtractor->extractGroupsForGuild($guildId);
+        }
+
+        return $this->groups;
+    }
+
     public function getUsers(): array
     {
         $guildId = $this->getGuildId();
@@ -95,7 +114,24 @@ class DiscordApplication implements ApplicationInterface
             throw new \RuntimeException('No guild was selected');
         }
 
-        return $this->userExtractor->extractForGuild($guildId);
+        $users = $this->userExtractor->extractForGuild($guildId);
+
+        if ($this->groups) {
+            // Store relation User <-> Group in Group model
+            foreach ($users as $user) {
+                $userGroupIds = $user->getExtra()['groups'] ?? [];
+
+                if ($userGroupIds) {
+                    foreach ($userGroupIds as $userGroupId) {
+                        if (isset($this->groups[$userGroupId])) {
+                            $this->groups[$userGroupId]->addUser($user->getIdentifier());
+                        }
+                    }
+                }
+            }
+        }
+
+        return $users;
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void

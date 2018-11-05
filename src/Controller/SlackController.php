@@ -58,6 +58,7 @@ class SlackController extends AbstractController
                 'scope' => [
                     'chat:write:bot',
                     'users:read',
+                    'usergroups:read',
                 ], // array or string
             ];
             $authUrl = $provider->getAuthorizationUrl($options);

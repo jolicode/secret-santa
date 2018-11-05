@@ -56,6 +56,7 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
+        $groups = $application->getGroups();
         $allUsers = $application->getUsers();
 
         $selectedUsers = [];
@@ -113,6 +114,7 @@ class SantaController extends AbstractController
         $content = $this->twig->render('santa/application/run_' . $application->getCode() . '.html.twig', [
             'application' => $application->getCode(),
             'users' => $allUsers,
+            'groups' => $groups,
             'admin' => $application->getAdmin(),
             'selectedUsers' => $selectedUsers,
             'message' => $message,

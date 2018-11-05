@@ -13,12 +13,15 @@ namespace JoliCode\SecretSanta\Slack;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\SecretSanta;
-use JoliCode\Slack\Api\Client;
-use JoliCode\Slack\ClientFactory;
 
 class MessageSender
 {
-    private $clientsByToken = [];
+    private $apiHelper;
+
+    public function __construct(ApiHelper $apiHelper)
+    {
+        $this->apiHelper = $apiHelper;
+    }
 
     /**
      * @throws MessageSendFailedException
@@ -45,7 +48,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         }
 
         try {
-            $this->getClientForToken($token)->chatPostMessage([
+            $this->apiHelper->getClientForToken($token)->chatPostMessage([
                 'channel' => sprintf('@%s', $giver),
                 'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
@@ -78,7 +81,7 @@ Happy Secret Santa!',
         );
 
         try {
-            $this->getClientForToken($token)->chatPostMessage([
+            $this->apiHelper->getClientForToken($token)->chatPostMessage([
                 'channel' => $secretSanta->getAdmin()->getIdentifier(),
                 'username' => 'Secret Santa Bot Spoiler',
                 'icon_url' => 'https://secret-santa.team/images/logo-spoiler.png',
@@ -87,14 +90,5 @@ Happy Secret Santa!',
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }
-    }
-
-    private function getClientForToken(string $token): Client
-    {
-        if (!isset($this->clientsByToken[$token])) {
-            $this->clientsByToken[$token] = ClientFactory::create($token);
-        }
-
-        return $this->clientsByToken[$token];
     }
 }
