@@ -12,11 +12,10 @@
 namespace JoliCode\SecretSanta\Discord;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
-use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\SecretSanta\Model\SecretSanta;
 
 class MessageSender
 {
-    /** @var ApiHelper */
     private $apiHelper;
 
     public function __construct(ApiHelper $apiHelper)

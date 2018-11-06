@@ -11,7 +11,7 @@
 
 namespace JoliCode\SecretSanta\Exception;
 
-use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\SecretSanta\Model\SecretSanta;
 
 interface SecretSantaException
 {

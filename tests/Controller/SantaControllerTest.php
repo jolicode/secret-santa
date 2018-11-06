@@ -11,8 +11,8 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
-use JoliCode\SecretSanta\SecretSanta;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\SecretSanta;
+use JoliCode\SecretSanta\Model\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class SantaControllerTest extends WebTestCase

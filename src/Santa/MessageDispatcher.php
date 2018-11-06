@@ -9,19 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta;
+namespace JoliCode\SecretSanta\Santa;
 
 use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
+use JoliCode\SecretSanta\Model\SecretSanta;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageDispatcher
 {
-    /** @var Spoiler */
     private $spoiler;
-
-    /** @var UrlGeneratorInterface */
     private $urlGenerator;
 
     public function __construct(UrlGeneratorInterface $urlGenerator, Spoiler $spoiler)

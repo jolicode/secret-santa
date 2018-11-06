@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta;
+namespace JoliCode\SecretSanta\Statistic;
 
+use JoliCode\SecretSanta\Model\SecretSanta;
 use Predis\Client;
 
 class StatisticCollector
@@ -22,8 +23,9 @@ class StatisticCollector
         $this->client = $client;
     }
 
-    public function incrementUsageCount(string $applicationCode)
+    public function incrementUsageCount(SecretSanta $secretSanta)
     {
+        $applicationCode = $secretSanta->getApplication();
         $currentYear = date('Y');
         $currentMonth = date('m');
 

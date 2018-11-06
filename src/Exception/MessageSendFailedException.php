@@ -11,8 +11,8 @@
 
 namespace JoliCode\SecretSanta\Exception;
 
-use JoliCode\SecretSanta\SecretSanta;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\SecretSanta;
+use JoliCode\SecretSanta\Model\User;
 
 class MessageSendFailedException extends \RuntimeException implements SecretSantaException
 {

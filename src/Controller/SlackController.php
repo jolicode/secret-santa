@@ -15,7 +15,7 @@ use AdamPaterson\OAuth2\Client\Provider\Slack;
 use AdamPaterson\OAuth2\Client\Provider\SlackResourceOwner;
 use JoliCode\SecretSanta\Application\SlackApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta\Tests;
+namespace JoliCode\SecretSanta\Tests\Santa;
 
-use JoliCode\SecretSanta\SecretSanta;
-use JoliCode\SecretSanta\Spoiler;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\SecretSanta;
+use JoliCode\SecretSanta\Model\User;
+use JoliCode\SecretSanta\Santa\Spoiler;
 use PHPUnit\Framework\TestCase;
 
 class SpoilerTest extends TestCase

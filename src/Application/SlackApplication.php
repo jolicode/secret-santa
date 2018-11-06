@@ -11,10 +11,10 @@
 
 namespace JoliCode\SecretSanta\Application;
 
-use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\SecretSanta\Model\SecretSanta;
+use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Slack\MessageSender;
 use JoliCode\SecretSanta\Slack\UserExtractor;
-use JoliCode\SecretSanta\User;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

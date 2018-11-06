@@ -15,12 +15,12 @@ use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
-use JoliCode\SecretSanta\MessageDispatcher;
-use JoliCode\SecretSanta\Rudolph;
-use JoliCode\SecretSanta\SecretSanta;
-use JoliCode\SecretSanta\Spoiler;
-use JoliCode\SecretSanta\StatisticCollector;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\SecretSanta;
+use JoliCode\SecretSanta\Model\User;
+use JoliCode\SecretSanta\Santa\MessageDispatcher;
+use JoliCode\SecretSanta\Santa\Rudolph;
+use JoliCode\SecretSanta\Santa\Spoiler;
+use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -272,7 +272,7 @@ class SantaController extends AbstractController
     private function finishSantaIfDone(SecretSanta $secretSanta, ApplicationInterface $application)
     {
         if ($secretSanta->isDone()) {
-            $this->statisticCollector->incrementUsageCount($application->getCode());
+            $this->statisticCollector->incrementUsageCount($secretSanta);
             $application->finish($secretSanta);
         }
     }
