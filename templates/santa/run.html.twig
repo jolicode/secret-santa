@@ -120,30 +120,30 @@
                  *
                  * @type {boolean}
                  */
-                var secretSantaFormSubmitted = false;
+                let secretSantaFormSubmitted = false;
 
-                var searchCleaner = document.getElementById('search-cleaner');
-                var userSearchInput = document.getElementById('user-search-input');
+                const searchCleaner = document.getElementById('search-cleaner');
+                const userSearchInput = document.getElementById('user-search-input');
                 {% if hasRestrictedUser %}
-                var restrictUserCheckbox = document.getElementById('restrict-user-checkbox');
+                const restrictUserCheckbox = document.getElementById('restrict-user-checkbox');
                 {% endif %}
-                var allChecker = document.getElementById('all-checker');
-                var allUnchecker = document.getElementById('all-unchecker');
-                var groupList = document.getElementById('group-list');
-                var userList = document.getElementById('user-list');
-                var noMatch = document.getElementById('no-user-matching');
-                var summaryCount = document.getElementById('summary-count');
-                var checkedUsersSummary = document.getElementById('checked-users-summary');
-                var bigSantaWarning = document.getElementById('big-santa-warning');
-                var submitButton = document.getElementById('submit-button');
+                const allChecker = document.getElementById('all-checker');
+                const allUnchecker = document.getElementById('all-unchecker');
+                const groupList = document.getElementById('group-list');
+                const userList = document.getElementById('user-list');
+                const noMatch = document.getElementById('no-user-matching');
+                const summaryCount = document.getElementById('summary-count');
+                const checkedUsersSummary = document.getElementById('checked-users-summary');
+                const bigSantaWarning = document.getElementById('big-santa-warning');
+                const submitButton = document.getElementById('submit-button');
 
                 /**
                  * Handle sample message send
                  */
-                var sampleMessageButton = document.getElementById('sample-message-button');
+                const sampleMessageButton = document.getElementById('sample-message-button');
                 if (sampleMessageButton) {
                     sampleMessageButton.addEventListener('click', function(e) {
-                        var body = new FormData();
+                        const body = new FormData();
                         body.append('message', document.getElementById('message').value);
 
                         fetch('{{ url('send_sample_message', {application: application}) }}', {
@@ -183,11 +183,11 @@
                  * Render the summary of already checked users
                  */
                 function updateSummary() {
-                    var users = userList.querySelectorAll('.user-item input:checked');
-                    var html = '';
+                    const users = userList.querySelectorAll('.user-item input:checked');
+                    let html = '';
 
                     if (users.length > 0) {
-                        for(var i=0; i<users.length; i++) {
+                        for(let i=0; i<users.length; i++) {
                             html += users[i].dataset.summary;
                         }
                     } else {
@@ -212,7 +212,7 @@
                         return;
                     }
 
-                    var input = document.getElementById(e.target.dataset.uncheckUser);
+                    const input = document.getElementById(e.target.dataset.uncheckUser);
 
                     if (!input) {
                         return;
@@ -226,9 +226,9 @@
                  * Init user list by indexing their name for search purposes
                  */
                 function initUserList() {
-                    var users = userList.querySelectorAll('.user-item');
+                    const users = userList.querySelectorAll('.user-item');
 
-                    for(var i=0; i<users.length; i++) {
+                    for(let i=0; i<users.length; i++) {
                         users[i].dataset.searchIndex = analyzeName(users[i].dataset.searchIndex);
                     }
                 }
@@ -237,7 +237,7 @@
                  * Enable user search behavior
                  */
                 function onUserSearch() {
-                    var query = analyzeName(userSearchInput.value);
+                    const query = analyzeName(userSearchInput.value);
 
                     noMatch.classList.add('is-hidden');
 
@@ -247,16 +247,16 @@
                         return;
                     }
 
-                    var terms = query.split(' ');
+                    const terms = query.split(' ');
 
                     searchCleaner.classList.remove('is-hidden');
                     userList.classList.add('hide-not-matching');
 
-                    var users = userList.querySelectorAll('.user-item');
-                    var matchingCount = 0;
+                    const users = userList.querySelectorAll('.user-item');
+                    let matchingCount = 0;
 
-                    for(var i=0; i<users.length; i++) {
-                        for(var j=0; j<terms.length; j++) {
+                    for(let i=0; i<users.length; i++) {
+                        for(let j=0; j<terms.length; j++) {
                             if (users[i].dataset.searchIndex.includes(terms[j])) {
                                 users[i].classList.remove('not-matching');
                                 matchingCount++;
@@ -304,9 +304,9 @@
                  * Check all visibled items
                  */
                 function checkAllVisibleUsers() {
-                    var checkboxes = getVisibleUsersCheckboxes();
+                    const checkboxes = getVisibleUsersCheckboxes();
 
-                    for(var i=0; i<checkboxes.length; i++) {
+                    for(let i=0; i<checkboxes.length; i++) {
                         checkboxes[i].checked = true;
                     }
 
@@ -317,9 +317,9 @@
                  * Unheck all visibled items
                  */
                 function uncheckAllVisibleUsers() {
-                    var checkboxes = getVisibleUsersCheckboxes();
+                    const checkboxes = getVisibleUsersCheckboxes();
 
-                    for(var i=0; i<checkboxes.length; i++) {
+                    for(let i=0; i<checkboxes.length; i++) {
                         checkboxes[i].checked = false;
                     }
 
@@ -330,7 +330,7 @@
                  * Return all the users currently visible in the list
                  */
                 function getVisibleUsersCheckboxes() {
-                    var selector = '.user-item';
+                    let selector = '.user-item';
 
                     if (userList.classList.contains('hide-not-matching')) {
                         selector += ':not(.not-matching)';
@@ -346,24 +346,24 @@
                  * Handle the click on a group to check all users in a it
                  */
                 function checkAllUserInAGroup(e) {
-                  var userIds = e.target.getAttribute('data-user-ids').split('|');
+                    const userIds = e.target.getAttribute('data-user-ids').split('|');
 
-                  for(var i=0; i<userIds.length; i++) {
-                    var userInput = document.getElementById('user-' + userIds[i]);
+                    for(let i=0; i<userIds.length; i++) {
+                        const userInput = document.getElementById('user-' + userIds[i]);
 
-                    if (userInput) {
-                      userInput.checked = true;
+                        if (userInput) {
+                            userInput.checked = true;
+                        }
                     }
-                  }
 
-                  updateSummary();
+                    updateSummary();
                 }
 
                 /**
                  * Here lives Damien's Kingdom
                  */
                 function removeDiacritics (str) {
-                    var defaultDiacriticsRemovalMap = [
+                    const defaultDiacriticsRemovalMap = [
                         {'base':'A', 'letters':/[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g},
                         {'base':'AA','letters':/[\uA732]/g},
                         {'base':'AE','letters':/[\u00C6\u01FC\u01E2]/g},
@@ -450,7 +450,7 @@
                         {'base':'z','letters':/[\u007A\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u2C6C\uA763]/g}
                     ];
 
-                    for(var i=0; i<defaultDiacriticsRemovalMap.length; i++) {
+                    for(let i=0; i<defaultDiacriticsRemovalMap.length; i++) {
                         str = str.replace(defaultDiacriticsRemovalMap[i].letters, defaultDiacriticsRemovalMap[i].base);
                     }
 
@@ -469,10 +469,10 @@
                 checkedUsersSummary.addEventListener('click', uncheckUser);
 
                 if (groupList) {
-                  var groupButtons = groupList.querySelectorAll('.group-button');
-                  for(var i=0; i<groupButtons.length; i++) {
-                    groupButtons[i].addEventListener('click', checkAllUserInAGroup);
-                  }
+                    const groupButtons = groupList.querySelectorAll('.group-button');
+                    for(let i=0; i<groupButtons.length; i++) {
+                        groupButtons[i].addEventListener('click', checkAllUserInAGroup);
+                    }
                 }
 
                 initUserList();
