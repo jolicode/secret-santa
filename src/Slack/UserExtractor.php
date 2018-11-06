@@ -12,8 +12,8 @@
 namespace JoliCode\SecretSanta\Slack;
 
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
-use JoliCode\SecretSanta\Group;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\Group;
+use JoliCode\SecretSanta\Model\User;
 use JoliCode\Slack\Api\Model\ObjsUser;
 
 class UserExtractor

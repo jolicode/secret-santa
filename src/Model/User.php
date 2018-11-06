@@ -9,18 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta;
+namespace JoliCode\SecretSanta\Model;
 
-class Group
+class User
 {
     private $identifier;
     private $name;
-    private $userIds = [];
+    private $extra;
 
-    public function __construct(string $identifier, string $name)
+    public function __construct(string $identifier, string $name, array $extra = [])
     {
         $this->identifier = $identifier;
         $this->name = $name;
+        $this->extra = $extra;
     }
 
     public function getIdentifier(): string
@@ -33,13 +34,8 @@ class Group
         return $this->name;
     }
 
-    public function addUser(string $userId)
+    public function getExtra(): array
     {
-        $this->userIds[] = $userId;
-    }
-
-    public function getUserIds(): array
-    {
-        return $this->userIds;
+        return $this->extra;
     }
 }

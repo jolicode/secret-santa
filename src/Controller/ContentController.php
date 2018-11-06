@@ -11,7 +11,7 @@
 
 namespace JoliCode\SecretSanta\Controller;
 
-use JoliCode\SecretSanta\StatisticCollector;
+use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 

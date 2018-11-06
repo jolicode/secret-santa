@@ -9,37 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta;
+namespace JoliCode\SecretSanta\Model;
 
 class SecretSanta
 {
-    /** @var string */
     private $application;
-
-    /** @var string */
     private $organization;
-
-    /** @var string */
     private $hash;
-
-    /** @var User[] */
     private $users;
-
-    /** @var array */
     private $associations;
-
-    /** @var array */
     private $remainingAssociations;
-
-    /** @var User|null */
     private $admin;
-
-    /** @var string|null */
     private $adminMessage;
 
     /** @var string[] */
     private $errors = [];
 
+    /**
+     * @param User[] $users
+     */
     public function __construct(
         string $application,
         string $organization,

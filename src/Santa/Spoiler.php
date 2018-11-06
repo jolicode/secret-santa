@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta;
+namespace JoliCode\SecretSanta\Santa;
+
+use JoliCode\SecretSanta\Model\SecretSanta;
 
 class Spoiler
 {

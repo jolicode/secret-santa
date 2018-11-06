@@ -12,14 +12,13 @@
 namespace JoliCode\SecretSanta\Discord;
 
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
-use JoliCode\SecretSanta\Group;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\Group;
+use JoliCode\SecretSanta\Model\User;
 use RestCord\Model\Guild\GuildMember;
 use RestCord\Model\Guild\Role;
 
 class UserExtractor
 {
-    /** @var ApiHelper */
     private $apiHelper;
 
     public function __construct(ApiHelper $apiHelper)

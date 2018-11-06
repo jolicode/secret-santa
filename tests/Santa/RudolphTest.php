@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta\Tests;
+namespace JoliCode\SecretSanta\Tests\Santa;
 
-use JoliCode\SecretSanta\Rudolph;
+use JoliCode\SecretSanta\Santa\Rudolph;
 use PHPUnit\Framework\TestCase;
 
 class RudolphTest extends TestCase

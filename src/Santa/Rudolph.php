@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta;
+namespace JoliCode\SecretSanta\Santa;
 
 /**
  * Rudolph is the Reindeer guiding Santa.

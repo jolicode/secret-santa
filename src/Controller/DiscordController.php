@@ -13,7 +13,7 @@ namespace JoliCode\SecretSanta\Controller;
 
 use JoliCode\SecretSanta\Application\DiscordApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
-use JoliCode\SecretSanta\User;
+use JoliCode\SecretSanta\Model\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

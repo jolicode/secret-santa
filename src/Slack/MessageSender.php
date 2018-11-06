@@ -12,7 +12,7 @@
 namespace JoliCode\SecretSanta\Slack;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
-use JoliCode\SecretSanta\SecretSanta;
+use JoliCode\SecretSanta\Model\SecretSanta;
 
 class MessageSender
 {
