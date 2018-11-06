@@ -6,7 +6,7 @@
             <h2>Well done! All messages were sent, happy gifting!</h2>
 
             <p class="summary">
-                You have received a private message explaining how to retrieve the santa repartition. 
+                You have received a private message explaining how to retrieve the santa repartition.
                 You should probably not look at it, to avoid breaking the Secret Santa magic.
             </p>
         {% else %}
@@ -30,12 +30,12 @@
                 </ul>
 
                 <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-                    var revealButton = document.getElementById('reveal');
+                    const revealButton = document.getElementById('reveal');
 
                     revealButton.addEventListener('click', function(e) {
-                        var receivers = document.querySelectorAll('*[data-receiver]');
+                        const receivers = document.querySelectorAll('*[data-receiver]');
 
-                        for (var i=0; i<receivers.length; i++) {
+                        for (let i=0; i<receivers.length; i++) {
                             receivers[i].innerHTML = receivers[i].getAttribute('data-receiver');
                         }
                     }, false);
@@ -53,7 +53,7 @@
                         Continue - Send the remaining messages
                     </a>
                 </div>
-                
+
                 <p>
                     For information, here is the evil error that caused this failure:
                 </p>
@@ -63,13 +63,13 @@
                         <span>{% if loop.length > 1 %}- {% endif %}{{ error }}</span><br />
                     {% endfor %}
                 </div>
-                
+
                 <p>Note that errors are often due to <strong>temporary network problems</strong> when sending messages or if your secret santa has <strong>lot of users</strong>.</p>
 
                 <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-                    var secretSantaRetried = false;
+                    let secretSantaRetried = false;
 
-                    var retryButton = document.getElementById('retry-button');
+                    const retryButton = document.getElementById('retry-button');
 
                     /**
                      * Prevent the multi-click of the button
