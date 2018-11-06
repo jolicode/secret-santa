@@ -15,17 +15,20 @@ use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
+use JoliCode\SecretSanta\Utils\LongTaskManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageDispatcher
 {
     private $spoiler;
     private $urlGenerator;
+    private $longTaskManager;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, Spoiler $spoiler)
+    public function __construct(UrlGeneratorInterface $urlGenerator, Spoiler $spoiler, LongTaskManager $longTaskManager)
     {
         $this->spoiler = $spoiler;
         $this->urlGenerator = $urlGenerator;
+        $this->longTaskManager = $longTaskManager;
     }
 
     /**
@@ -38,17 +41,25 @@ class MessageDispatcher
      */
     public function dispatchRemainingMessages(SecretSanta $secretSanta, ApplicationInterface $application): void
     {
-        $startTime = time();
+        $this->longTaskManager->process(function () use ($secretSanta, $application) {
+            $associations = $secretSanta->getRemainingAssociations();
 
-        foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
-            if ((time() - $startTime) > 19) {
-                throw new MessageDispatchTimeoutException($secretSanta);
+            if (!$associations) {
+                return;
             }
+
+            reset($associations);
+            $giver = key($associations);
+            $receiver = current($associations);
 
             $application->sendSecretMessage($secretSanta, $giver, $receiver);
 
             $secretSanta->markAssociationAsProceeded($giver);
-        }
+        }, function () use ($secretSanta) {
+            return \count($secretSanta->getRemainingAssociations()) > 0;
+        }, function () use ($secretSanta) {
+            throw new MessageDispatchTimeoutException($secretSanta);
+        });
 
         // Send a summary to the santa admin
         if ($secretSanta->getAdmin()) {

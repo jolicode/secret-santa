@@ -32,15 +32,15 @@ class ApiHelper
 
         return $client->guild->getGuild([
             'guild.id' => $guildId,
-            'limit' => 100,
         ]);
     }
 
-    public function getMembersInGuild(int $guildId): array
+    public function getMembersInGuild(int $guildId, int $after = null): array
     {
         return $this->getClient($this->botToken, self::TOKEN_TYPE_BOT)->guild->listGuildMembers([
             'guild.id' => $guildId,
-            'limit' => 100,
+            'limit' => 200,
+            'after' => $after,
         ]);
     }
 

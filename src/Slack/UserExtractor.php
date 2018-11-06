@@ -14,15 +14,18 @@ namespace JoliCode\SecretSanta\Slack;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
+use JoliCode\SecretSanta\Utils\LongTaskManager;
 use JoliCode\Slack\Api\Model\ObjsUser;
 
 class UserExtractor
 {
     private $clientFactory;
+    private $longTaskManager;
 
-    public function __construct(ClientFactory $clientFactory)
+    public function __construct(ClientFactory $clientFactory, LongTaskManager $longTaskManager)
     {
         $this->clientFactory = $clientFactory;
+        $this->longTaskManager = $longTaskManager;
     }
 
     /**
@@ -32,14 +35,8 @@ class UserExtractor
     {
         /** @var ObjsUser[] $slackUsers */
         $slackUsers = [];
-        $cursor = '';
 
-        $startTime = time();
-        do {
-            if ((time() - $startTime) > 19) {
-                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team.');
-            }
-
+        $this->longTaskManager->process(function ($cursor) use ($token, &$slackUsers) {
             try {
                 $response = $this->clientFactory->getClientForToken($token)->usersList([
                     'limit' => 200,
@@ -54,8 +51,13 @@ class UserExtractor
             }
 
             $slackUsers = array_merge($slackUsers, $response->getMembers());
-            $cursor = $response->getResponseMetadata() ? $response->getResponseMetadata()->getNextCursor() : '';
-        } while (!empty($cursor));
+
+            return $response->getResponseMetadata() ? $response->getResponseMetadata()->getNextCursor() : '';
+        }, function ($cursor) {
+            return !empty($cursor);
+        }, function () {
+            throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team.');
+        }, '');
 
         $slackUsers = array_filter($slackUsers, function (ObjsUser $user) {
             return
