@@ -26,7 +26,7 @@ class RudolphTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedException "Expected at least 2 users in the list, 0 given"
+     * @expectedException "Expected at least 2 users in the list, 0 given."
      */
     public function test_it_refuses_empty_list()
     {
@@ -35,7 +35,7 @@ class RudolphTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedException "Expected at least 2 users in the list, 1 given"
+     * @expectedException "Expected at least 2 users in the list, 1 given."
      */
     public function test_it_refuses_list_with_1_user()
     {
@@ -46,7 +46,7 @@ class RudolphTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedException "This user was more than one time in the list: toto2"
+     * @expectedException "This user was more than one time in the list: toto2."
      */
     public function test_it_refuses_list_with_one_duplicate()
     {
@@ -60,7 +60,7 @@ class RudolphTest extends TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedException "These users were more than one time in the list: toto2, toto1"
+     * @expectedException "These users were more than one time in the list: toto2, toto1."
      */
     public function test_it_refuses_list_with_several_duplicates()
     {

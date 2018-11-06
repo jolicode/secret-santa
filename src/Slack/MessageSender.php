@@ -16,11 +16,11 @@ use JoliCode\SecretSanta\SecretSanta;
 
 class MessageSender
 {
-    private $apiHelper;
+    private $clientFactory;
 
-    public function __construct(ApiHelper $apiHelper)
+    public function __construct(ClientFactory $clientFactory)
     {
-        $this->apiHelper = $apiHelper;
+        $this->clientFactory = $clientFactory;
     }
 
     /**
@@ -48,7 +48,7 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         }
 
         try {
-            $this->apiHelper->getClientForToken($token)->chatPostMessage([
+            $this->clientFactory->getClientForToken($token)->chatPostMessage([
                 'channel' => sprintf('@%s', $giver),
                 'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
@@ -81,7 +81,7 @@ Happy Secret Santa!',
         );
 
         try {
-            $this->apiHelper->getClientForToken($token)->chatPostMessage([
+            $this->clientFactory->getClientForToken($token)->chatPostMessage([
                 'channel' => $secretSanta->getAdmin()->getIdentifier(),
                 'username' => 'Secret Santa Bot Spoiler',
                 'icon_url' => 'https://secret-santa.team/images/logo-spoiler.png',

@@ -13,9 +13,9 @@ namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
+use JoliCode\SecretSanta\Group;
 use JoliCode\SecretSanta\SecretSanta;
 use JoliCode\SecretSanta\User;
-use JoliCode\SecretSanta\Group;
 
 interface ApplicationInterface
 {

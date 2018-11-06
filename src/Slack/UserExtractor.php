@@ -14,17 +14,15 @@ namespace JoliCode\SecretSanta\Slack;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Group;
 use JoliCode\SecretSanta\User;
-use JoliCode\Slack\Api\Client;
 use JoliCode\Slack\Api\Model\ObjsUser;
-use JoliCode\Slack\ClientFactory;
 
 class UserExtractor
 {
-    private $apiHelper;
+    private $clientFactory;
 
-    public function __construct(ApiHelper $apiHelper)
+    public function __construct(ClientFactory $clientFactory)
     {
-        $this->apiHelper = $apiHelper;
+        $this->clientFactory = $clientFactory;
     }
 
     /**
@@ -39,16 +37,16 @@ class UserExtractor
         $startTime = time();
         do {
             if ((time() - $startTime) > 19) {
-                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team');
+                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team.');
             }
 
             try {
-                $response = $this->apiHelper->getClientForToken($token)->usersList([
-                    'limit' => 1000,
+                $response = $this->clientFactory->getClientForToken($token)->usersList([
+                    'limit' => 200,
                     'cursor' => $cursor,
                 ]);
             } catch (\Throwable $t) {
-                throw new UserExtractionFailedException('Could not fetch members in team', 0, $t);
+                throw new UserExtractionFailedException('Could not fetch members in team.', 0, $t);
             }
 
             $slackUsers = array_merge($slackUsers, $response->getMembers());
@@ -93,11 +91,11 @@ class UserExtractor
     {
         $groups = [];
 
-        $userGroupsResponse = $this->apiHelper->getClientForToken($token)->usergroupsList([
+        $userGroupsResponse = $this->clientFactory->getClientForToken($token)->usergroupsList([
             'include_users' => true,
         ]);
 
-        // Slack OpenAPI spec does not contains definition yet for usergroups.list response
+        // Slack OpenAPI spec does not contain definition yet for usergroups.list response
         // So lets retrieve data from internal data
         foreach ($userGroupsResponse['usergroups'] as $userGroup) {
             $group = new Group(

@@ -12,16 +12,16 @@
 namespace JoliCode\SecretSanta\Slack;
 
 use JoliCode\Slack\Api\Client;
-use JoliCode\Slack\ClientFactory;
+use JoliCode\Slack\ClientFactory as DefaultClientFactory;
 
-class ApiHelper
+class ClientFactory
 {
     private $clientsByToken = [];
 
     public function getClientForToken(string $token): Client
     {
         if (!isset($this->clientsByToken[$token])) {
-            $this->clientsByToken[$token] = ClientFactory::create($token);
+            $this->clientsByToken[$token] = DefaultClientFactory::create($token);
         }
 
         return $this->clientsByToken[$token];
