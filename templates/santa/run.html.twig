@@ -16,10 +16,10 @@
 
                             {% if groups %}
                                 <div class="group-selection">
-                                    <label>Select all persons in a group</label>
+                                    <label>Select all people in a group</label>
                                     <div class="group-list" id="group-list">
                                         {% for group in groups %}
-                                            <span class="group-button" data-user-ids="{{ group.userIds|join('|') }}" title="Select {{ group.userIds|length }} person{{ group.userIds|length > 1 ? 's' : '' }} in this group">{{ group.name }}</span>
+                                            <span class="group-button" data-user-ids="{{ group.userIds|join('|') }}" title="Select {{ group.userIds|length }} people in this group">{{ group.name }}</span>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@
                         html = 'No user selected';
                     }
 
-                    summaryCount.innerHTML = users.length + ' ' + (users.length > 1 ? 'persons' : 'person');
+                    summaryCount.innerHTML = users.length + ' people';
                     checkedUsersSummary.innerHTML = html;
 
                     if (users.length >= 30) {
@@ -223,7 +223,7 @@
                 }
 
                 /**
-                 * Enable user search behavior
+                 * Init user list by indexing their name for search purposes
                  */
                 function initUserList() {
                     var users = userList.querySelectorAll('.user-item');
@@ -343,10 +343,10 @@
                 }
 
                 /**
-                 * Check all user in a group
+                 * Handle the click on a group to check all users in a it
                  */
                 function checkAllUserInAGroup(e) {
-                  const userIds = e.target.getAttribute('data-user-ids').split('|');
+                  var userIds = e.target.getAttribute('data-user-ids').split('|');
 
                   for(var i=0; i<userIds.length; i++) {
                     var userInput = document.getElementById('user-' + userIds[i]);

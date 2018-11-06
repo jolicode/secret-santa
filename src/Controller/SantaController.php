@@ -56,7 +56,6 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
-        $groups = $application->getGroups();
         $allUsers = $application->getUsers();
 
         $selectedUsers = [];
@@ -114,7 +113,7 @@ class SantaController extends AbstractController
         $content = $this->twig->render('santa/application/run_' . $application->getCode() . '.html.twig', [
             'application' => $application->getCode(),
             'users' => $allUsers,
-            'groups' => $groups,
+            'groups' => $application->getGroups(),
             'admin' => $application->getAdmin(),
             'selectedUsers' => $selectedUsers,
             'message' => $message,
@@ -150,7 +149,7 @@ class SantaController extends AbstractController
             try {
                 $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $application->getAdmin()->getIdentifier(), true);
             } catch (MessageSendFailedException $e) {
-                $errors['send'] = 'Error when sending the sample message';
+                $errors['send'] = 'Error when sending the sample message.';
             }
         }
 
@@ -236,7 +235,7 @@ class SantaController extends AbstractController
             }
         }
 
-        throw $this->createNotFoundException(sprintf('Unknown application %s', $code));
+        throw $this->createNotFoundException(sprintf('Unknown application %s.', $code));
     }
 
     private function getSecretSantaSessionKey(string $hash): string
@@ -253,7 +252,7 @@ class SantaController extends AbstractController
         );
 
         if (!$secretSanta) {
-            throw $this->createNotFoundException('No secret santa found in session');
+            throw $this->createNotFoundException('No secret santa found in session.');
         }
 
         return $secretSanta;
@@ -264,7 +263,7 @@ class SantaController extends AbstractController
         $errors = [];
 
         if (!$isSample && \count($selectedUsers) < 2) {
-            $errors['users'][] = 'At least 2 users should be selected';
+            $errors['users'][] = 'At least 2 users should be selected.';
         }
 
         return $errors;

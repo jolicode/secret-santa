@@ -109,7 +109,7 @@ class SlackApplication implements ApplicationInterface
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
         if (!($token instanceof AccessToken)) {
-            throw new \LogicException('Invalid token');
+            throw new \LogicException('Invalid token.');
         }
 
         return $token;

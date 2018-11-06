@@ -36,7 +36,7 @@ class UserExtractor
             /** @var GuildMember[] $members */
             $members = $this->apiHelper->getMembersInGuild($guildId);
         } catch (\Throwable $t) {
-            throw new UserExtractionFailedException('Could not fetch members in guild', 0, $t);
+            throw new UserExtractionFailedException('Could not fetch members in guild.', 0, $t);
         }
 
         $members = array_filter($members, function (GuildMember $member) {
@@ -52,7 +52,7 @@ class UserExtractor
                 [
                     'nickname' => $member->nick ?? null,
                     'image' => $member->user->avatar ? sprintf('https://cdn.discordapp.com/avatars/%s/%s.png', $member->user->id, $member->user->avatar) : null,
-                    'groups' => $member->roles,
+                    'groups' => (array) $member->roles,
                 ]
             );
 
@@ -77,7 +77,7 @@ class UserExtractor
         $groups = [];
 
         foreach ($roles as $role) {
-            if ($role->name === '@everyone') {
+            if ('@everyone' === $role->name) {
                 continue;
             }
 

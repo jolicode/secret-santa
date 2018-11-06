@@ -93,15 +93,7 @@ class DiscordApplication implements ApplicationInterface
 
     public function getGroups(): array
     {
-        if ($this->groups === null) {
-            $guildId = $this->getGuildId();
-
-            if (!$guildId) {
-                throw new \RuntimeException('No guild was selected');
-            }
-
-            $this->groups = $this->userExtractor->extractGroupsForGuild($guildId);
-        }
+        $this->loadGroups();
 
         return $this->groups;
     }
@@ -111,21 +103,21 @@ class DiscordApplication implements ApplicationInterface
         $guildId = $this->getGuildId();
 
         if (!$guildId) {
-            throw new \RuntimeException('No guild was selected');
+            throw new \RuntimeException('No guild was selected.');
         }
 
         $users = $this->userExtractor->extractForGuild($guildId);
+
+        $this->loadGroups();
 
         if ($this->groups) {
             // Store relation User <-> Group in Group model
             foreach ($users as $user) {
                 $userGroupIds = $user->getExtra()['groups'] ?? [];
 
-                if ($userGroupIds) {
-                    foreach ($userGroupIds as $userGroupId) {
-                        if (isset($this->groups[$userGroupId])) {
-                            $this->groups[$userGroupId]->addUser($user->getIdentifier());
-                        }
+                foreach ($userGroupIds as $userGroupId) {
+                    if (isset($this->groups[$userGroupId])) {
+                        $this->groups[$userGroupId]->addUser($user->getIdentifier());
                     }
                 }
             }
@@ -161,10 +153,24 @@ class DiscordApplication implements ApplicationInterface
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
         if (!($token instanceof AccessToken)) {
-            throw new \LogicException('Invalid token');
+            throw new \LogicException('Invalid token.');
         }
 
         return $token;
+    }
+
+    private function loadGroups()
+    {
+        // Store groups in memory because we need it in multiple places.
+        if (null === $this->groups) {
+            $guildId = $this->getGuildId();
+
+            if (!$guildId) {
+                throw new \RuntimeException('No guild was selected.');
+            }
+
+            $this->groups = $this->userExtractor->extractGroupsForGuild($guildId);
+        }
     }
 
     private function getSession(): SessionInterface
