@@ -76,6 +76,11 @@ class ContentController extends AbstractController
                 'image' => 'digital-ping-pong.svg',
             ],
             [
+                'label' => 'EvaluAgent',
+                'link' => 'https://www.evaluagent.com/',
+                'image' => 'evaluagent.png',
+            ],
+            [
                 'label' => 'Fabernovel Institute',
                 'link' => 'http://institute.fabernovel.com',
                 'image' => 'fabernovel-institute.png',
