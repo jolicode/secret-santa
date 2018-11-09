@@ -11,22 +11,20 @@
 
 namespace JoliCode\SecretSanta\Discord;
 
-use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
-use JoliCode\SecretSanta\Utils\LongTaskManager;
 use RestCord\Model\Guild\GuildMember;
 use RestCord\Model\Guild\Role;
 
 class UserExtractor
 {
     private $apiHelper;
-    private $longTaskManager;
+    private $memberFetchTask;
 
-    public function __construct(ApiHelper $apiHelper, LongTaskManager $longTaskManager)
+    public function __construct(ApiHelper $apiHelper, MemberFetchTask $memberFetchTask)
     {
         $this->apiHelper = $apiHelper;
-        $this->longTaskManager = $longTaskManager;
+        $this->memberFetchTask = $memberFetchTask;
     }
 
     /**
@@ -34,26 +32,10 @@ class UserExtractor
      */
     public function extractForGuild(int $guildId): array
     {
+        $this->memberFetchTask->setGuildId($guildId);
+
         /** @var GuildMember[] $members */
-        $members = [];
-
-        $this->longTaskManager->process(function ($lastMembers) use ($guildId, &$members) {
-            $lastMember = $lastMembers ? end($lastMembers) : null;
-
-            try {
-                $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember ? $lastMember->user->id : null);
-            } catch (\Throwable $t) {
-                throw new UserExtractionFailedException('Could not fetch members in guild.', 0, $t);
-            }
-
-            $members = array_merge($members, $lastMembers);
-
-            return $lastMembers;
-        }, function ($lastMembers) {
-            return !empty($lastMembers);
-        }, function () {
-            throw new UserExtractionFailedException('Took too much time to retrieve all the users on your guild.');
-        }, []);
+        $members = $this->memberFetchTask->run();
 
         $members = array_filter($members, function (GuildMember $member) {
             return !$member->user->bot;

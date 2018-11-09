@@ -11,21 +11,19 @@
 
 namespace JoliCode\SecretSanta\Slack;
 
-use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
-use JoliCode\SecretSanta\Utils\LongTaskManager;
 use JoliCode\Slack\Api\Model\ObjsUser;
 
 class UserExtractor
 {
     private $clientFactory;
-    private $longTaskManager;
+    private $userFetchTask;
 
-    public function __construct(ClientFactory $clientFactory, LongTaskManager $longTaskManager)
+    public function __construct(ClientFactory $clientFactory, UserFetchTask $userFetchTask)
     {
         $this->clientFactory = $clientFactory;
-        $this->longTaskManager = $longTaskManager;
+        $this->userFetchTask = $userFetchTask;
     }
 
     /**
@@ -33,31 +31,10 @@ class UserExtractor
      */
     public function extractAll(string $token): array
     {
+        $this->userFetchTask->setToken($token);
+
         /** @var ObjsUser[] $slackUsers */
-        $slackUsers = [];
-
-        $this->longTaskManager->process(function ($cursor) use ($token, &$slackUsers) {
-            try {
-                $response = $this->clientFactory->getClientForToken($token)->usersList([
-                    'limit' => 200,
-                    'cursor' => $cursor,
-                ]);
-
-                if (!$response->getOk()) {
-                    throw new UserExtractionFailedException('Could not fetch members in team.');
-                }
-            } catch (\Throwable $t) {
-                throw new UserExtractionFailedException('Could not fetch members in team.', 0, $t);
-            }
-
-            $slackUsers = array_merge($slackUsers, $response->getMembers());
-
-            return $response->getResponseMetadata() ? $response->getResponseMetadata()->getNextCursor() : '';
-        }, function ($cursor) {
-            return !empty($cursor);
-        }, function () {
-            throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team.');
-        }, '');
+        $slackUsers = $this->userFetchTask->run();
 
         $slackUsers = array_filter($slackUsers, function (ObjsUser $user) {
             return

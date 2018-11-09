@@ -11,19 +11,19 @@
 
 namespace JoliCode\SecretSanta\Tests\Utils;
 
-use JoliCode\SecretSanta\Utils\LongTaskManager;
+use JoliCode\SecretSanta\Utils\LongTask;
 use PHPUnit\Framework\TestCase;
 
 class LongTaskManagerTest extends TestCase
 {
     const TIMEOUT = 2;
 
-    /** @var LongTaskManager */
+    /** @var LongTask */
     private $SUT;
 
     protected function setUp()
     {
-        $this->SUT = new LongTaskManager();
+        $this->SUT = new LongTask();
     }
 
     public function test_it_does_not_timeout_and_iterates_correctly()

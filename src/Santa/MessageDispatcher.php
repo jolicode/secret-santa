@@ -15,7 +15,6 @@ use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
-use JoliCode\SecretSanta\Utils\LongTaskManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageDispatcher
@@ -24,18 +23,15 @@ class MessageDispatcher
     private $urlGenerator;
     private $longTaskManager;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, Spoiler $spoiler, LongTaskManager $longTaskManager)
+    public function __construct(UrlGeneratorInterface $urlGenerator, Spoiler $spoiler)
     {
         $this->spoiler = $spoiler;
         $this->urlGenerator = $urlGenerator;
-        $this->longTaskManager = $longTaskManager;
     }
 
     /**
      * Send messages for remaining associations.
-     *
-     * This method is limited to 20 seconds to be able to display nice error message instead of being timed out by hosting.
-     *
+     **
      * @throws MessageDispatchTimeoutException
      * @throws MessageSendFailedException
      */
