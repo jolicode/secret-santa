@@ -116,6 +116,11 @@ class ContentController extends AbstractController
                 'image' => 'perkbox-logo.png',
             ],
             [
+                'label' => 'Redirection.io',
+                'link' => 'https://redirection.io/',
+                'image' => 'redirectionio.svg',
+            ],
+            [
                 'label' => 'SensioLabs',
                 'link' => 'https://sensiolabs.com/',
                 'image' => 'sensiolabs.png',
