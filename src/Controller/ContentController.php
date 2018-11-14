@@ -96,6 +96,11 @@ class ContentController extends AbstractController
                 'image' => 'jolicode.svg',
             ],
             [
+                'label' => 'KvikyMart',
+                'link' => 'https://kvikymart.com',
+                'image' => 'kvikymart.svg',
+            ],
+            [
                 'label' => 'Les-Tilleuls.coop',
                 'link' => 'https://les-tilleuls.coop/',
                 'image' => 'les-tilleuls.png',
