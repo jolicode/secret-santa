@@ -45,6 +45,10 @@ class UserExtractor
                     'limit' => 200,
                     'cursor' => $cursor,
                 ]);
+
+                if (!$response->getOk()) {
+                    throw new UserExtractionFailedException('Could not fetch members in team.');
+                }
             } catch (\Throwable $t) {
                 throw new UserExtractionFailedException('Could not fetch members in team.', 0, $t);
             }

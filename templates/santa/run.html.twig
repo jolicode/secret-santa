@@ -161,7 +161,14 @@
                                 return;
                             }
 
-                            window.alert('The sample message could not be sent. Please try again later.');
+                            const keys = Object.keys(response.errors);
+                            let message = 'Error when sending the sample message:\n';
+
+                            for (let i=0; i<keys.length; i++) {
+                                message += response.errors[keys[i]] + "\n";
+                            }
+
+                            window.alert(message);
                         })
                     }, false);
                 }
