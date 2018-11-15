@@ -48,12 +48,16 @@ Someone has been chosen to get you a gift; and *you* have been chosen to gift <@
         }
 
         try {
-            $this->clientFactory->getClientForToken($token)->chatPostMessage([
+            $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
                 'channel' => sprintf('@%s', $giver),
                 'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
                 'text' => $text,
             ]);
+
+            if (!$response->getOk()) {
+                throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver));
+            }
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
         }
@@ -81,12 +85,16 @@ Happy Secret Santa!',
         );
 
         try {
-            $this->clientFactory->getClientForToken($token)->chatPostMessage([
+            $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
                 'channel' => $secretSanta->getAdmin()->getIdentifier(),
                 'username' => 'Secret Santa Bot Spoiler',
                 'icon_url' => 'https://secret-santa.team/images/logo-spoiler.png',
                 'text' => $text,
             ]);
+
+            if (!$response->getOk()) {
+                throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin());
+            }
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }

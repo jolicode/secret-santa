@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Discord;
 
+use GuzzleHttp\Command\Exception\CommandClientException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
 
@@ -52,6 +53,14 @@ Someone has been chosen to get you a gift; and **you** have been chosen to gift 
 
         try {
             $this->apiHelper->sendMessage($giver, $text);
+        } catch (CommandClientException $e) {
+            $precision = null;
+
+            if (($response = $e->getResponse()) && 403 === $response->getStatusCode()) {
+                $precision = 'The user does not allow to receive DM on this server. Please ask them to change their server settings.';
+            }
+
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $e, $precision);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
         }
@@ -80,6 +89,14 @@ Happy Secret Santa!',
 
         try {
             $this->apiHelper->sendMessage($secretSanta->getAdmin()->getIdentifier(), $text);
+        } catch (CommandClientException $e) {
+            $precision = null;
+
+            if (($response = $e->getResponse()) && 403 === $response->getStatusCode()) {
+                $precision = 'You do not allow to receive DM on this server. Please change your server settings.';
+            }
+
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $e, $precision);
         } catch (\Throwable $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }

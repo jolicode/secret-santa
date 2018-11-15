@@ -140,7 +140,7 @@ class SantaController extends AbstractController
                 $application->getCode(),
                 $application->getOrganization(),
                 'sample',
-                [],
+                [$application->getAdmin()->getIdentifier() => $application->getAdmin()],
                 [],
                 $application->getAdmin(),
                 str_replace('```', '', $message)
@@ -149,7 +149,7 @@ class SantaController extends AbstractController
             try {
                 $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $application->getAdmin()->getIdentifier(), true);
             } catch (MessageSendFailedException $e) {
-                $errors['send'] = 'Error when sending the sample message.';
+                $errors['send'] = $e->getMessage();
             }
         }
 
