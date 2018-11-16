@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2742be0a50a2ff996cecd162e70b5f3a",
+    "content-hash": "77c4338e4bcd4f7a5d25dd12fb4bd7b3",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",
@@ -1389,16 +1389,16 @@
         },
         {
             "name": "jolicode/slack-php-api",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jolicode/slack-php-api.git",
-                "reference": "0a2ee132cdc7cec87e0f236399ead452a6c7b357"
+                "reference": "c212c91ead97a5ae4dadc14218b07200565e12c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jolicode/slack-php-api/zipball/0a2ee132cdc7cec87e0f236399ead452a6c7b357",
-                "reference": "0a2ee132cdc7cec87e0f236399ead452a6c7b357",
+                "url": "https://api.github.com/repos/jolicode/slack-php-api/zipball/c212c91ead97a5ae4dadc14218b07200565e12c8",
+                "reference": "c212c91ead97a5ae4dadc14218b07200565e12c8",
                 "shasum": ""
             },
             "require": {
@@ -1412,7 +1412,8 @@
                 "friendsofphp/php-cs-fixer": "^2.13",
                 "guzzlehttp/psr7": "^1.4",
                 "jane-php/jane-php": "^4.0",
-                "php-http/curl-client": "^1.7"
+                "php-http/curl-client": "^1.7",
+                "symfony/phpunit-bridge": "^4.1"
             },
             "type": "library",
             "autoload": {
@@ -1432,7 +1433,16 @@
                 }
             ],
             "description": "An up to date PHP client for Slack's API",
-            "time": "2018-10-13T14:49:01+00:00"
+            "keywords": [
+                "api",
+                "client",
+                "openapi",
+                "sdk",
+                "slack",
+                "slackapi",
+                "swagger"
+            ],
+            "time": "2018-11-15T20:37:51+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -5595,9 +5605,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "jolicode/slack-php-api": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
