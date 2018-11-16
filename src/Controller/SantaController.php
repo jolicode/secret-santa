@@ -126,14 +126,26 @@ class SantaController extends AbstractController
     public function sendSampleMessage(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
-        // An admin is required to use the sample feature
-        if (!$application->isAuthenticated() || !$application->getAdmin()) {
-            throw $this->createAccessDeniedException();
+
+        $errors = [];
+
+        if (!$application->isAuthenticated()) {
+            $errors['login'] = 'Your session has expired. Please refresh the page.';
+        } elseif (!$application->getAdmin()) {
+            // An admin is required to use the sample feature
+            // Should not happen has the Admin should always be defined
+            $errors['no_admin'] = 'You are not allowed to use this feature.';
+
+            $this->bugsnag->notifyError('sample_no_admin', 'Tries to send a sample message without an admin.', function ($report) {
+                $report->setSeverity('info');
+            });
         }
 
-        $message = $request->request->get('message');
+        if (\count($errors) < 1) {
+            $message = $request->request->get('message');
 
-        $errors = $this->validate([], $message, true);
+            $errors = $this->validate([], $message, true);
+        }
 
         if (\count($errors) < 1) {
             $secretSanta = new SecretSanta(
