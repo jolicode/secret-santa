@@ -31,12 +31,29 @@ class UserExtractor
      */
     public function extractForGuild(int $guildId): array
     {
-        try {
-            /** @var GuildMember[] $members */
-            $members = $this->apiHelper->getMembersInGuild($guildId);
-        } catch (\Throwable $t) {
-            throw new UserExtractionFailedException('Could not fetch members in guild.', 0, $t);
-        }
+        /** @var GuildMember[] $members */
+        $members = [];
+
+        /** @var GuildMember[] $lastMembers */
+        $lastMembers = [];
+
+        $startTime = time();
+        do {
+            if ((time() - $startTime) > 19) {
+                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team.');
+            }
+
+            $lastMember = $lastMembers ? end($lastMembers) : null;
+
+            try {
+                /** @var GuildMember[] $members */
+                $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember ? $lastMember->user->id : null);
+            } catch (\Throwable $t) {
+                throw new UserExtractionFailedException('Could not fetch members in guild.', 0, $t);
+            }
+
+            $members = array_merge($members, $lastMembers);
+        } while (!empty($lastMembers));
 
         $members = array_filter($members, function (GuildMember $member) {
             return !$member->user->bot;
