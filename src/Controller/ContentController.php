@@ -106,6 +106,11 @@ class ContentController extends AbstractController
                 'image' => 'les-tilleuls.png',
             ],
             [
+                'label' => 'M6web',
+                'link' => 'https://tech.m6web.fr/',
+                'image' => 'm6web.png',
+            ],
+            [
                 'label' => 'Monsieur Biz',
                 'link' => 'https://monsieurbiz.com/',
                 'image' => 'monsieur-biz.png',
