@@ -91,6 +91,11 @@ class ContentController extends AbstractController
                 'image' => 'ideafoster.png',
             ],
             [
+                'label' => 'Idra',
+                'link' => 'https://www.idracompany.com/',
+                'image' => 'IDRA.png',
+            ],
+            [
                 'label' => 'JoliCode',
                 'link' => 'https://jolicode.com/',
                 'image' => 'jolicode.svg',
