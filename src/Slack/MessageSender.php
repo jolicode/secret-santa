@@ -40,7 +40,7 @@ class MessageSender
 You have been chosen to be part of a Secret Santa!
 Someone has been chosen to get you a gift.
 
-> *You have been chosen to gift:
+> *You have been chosen to gift:*
 > :gift: *<@%s>*', $receiver);
 
         if (!empty($secretSanta->getAdminMessage())) {
