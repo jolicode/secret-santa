@@ -36,16 +36,22 @@ class MessageSender
         }
 
         $text .= sprintf(
-'Hi! You have been chosen to be part of a Secret Santa!
+'Hi!
 
-Someone has been chosen to get you a gift; and **you** have been chosen to gift <@%s>!', $receiver);
+You have been chosen to be part of a Secret Santa :santa:!
+
+**You have been chosen to gift:**
+:gift: **<@%s>** :gift:
+**That\'s a secret we only shared with you!**
+
+Someone has also been chosen to get you a gift.', $receiver);
 
         if (!empty($secretSanta->getAdminMessage())) {
             $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
         }
 
         if ($secretSanta->getAdmin()) {
-            $text .= sprintf("\n\nYour Secret Santa admin, <@%s>.", $secretSanta->getAdmin()->getIdentifier());
+            $text .= sprintf("\n\n_Your Secret Santa admin, <@%s>._", $secretSanta->getAdmin()->getIdentifier());
         }
 
         $text .= "\n\n";
