@@ -35,13 +35,15 @@ class MessageSender
         }
 
         $text .= sprintf(
-'Hi!
+            'Hi!
 
-You have been chosen to be part of a Secret Santa!
-Someone has been chosen to get you a gift.
+You have been chosen to be part of a Secret Santa :santa:!
 
 > *You have been chosen to gift:*
-> :gift: *<@%s>*', $receiver);
+> :gift: *<@%s>* :gift:
+> *That\'s a secret we only shared with you!*
+
+Someone has also been chosen to get you a gift.', $receiver);
 
         if (!empty($secretSanta->getAdminMessage())) {
             $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
@@ -73,7 +75,7 @@ Someone has been chosen to get you a gift.
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl, string $token): void
     {
         $text = sprintf(
-'Dear Secret Santa admin,
+            'Dear Secret Santa admin,
 
 In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
 
