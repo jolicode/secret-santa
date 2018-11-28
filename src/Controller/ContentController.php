@@ -111,6 +111,11 @@ class ContentController extends AbstractController
                 'image' => 'les-tilleuls.png',
             ],
             [
+                'label' => 'Living Actor',
+                'link' => 'https://www.livingactor.com',
+                'image' => 'livingactor.png',
+            ],
+            [
                 'label' => 'M6web',
                 'link' => 'https://tech.m6web.fr/',
                 'image' => 'm6web.png',
