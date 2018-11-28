@@ -18,6 +18,10 @@ privacy_policy:
     path:     /privacy-policy
     defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::privacyPolicy }
 
+faq:
+    path:     /faq
+    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::faq }
+
 run:
     path:     /run/{application}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::run }
