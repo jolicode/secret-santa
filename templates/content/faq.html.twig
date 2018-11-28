@@ -1,0 +1,88 @@
+{% extends 'layout.html.twig' %}
+
+{% block seo %}
+    {{ include('_seo.html.twig', {
+        title: 'Secret Santa - Frequently asked questions',
+        description: 'Frequently asked questions when using Secret Santa',
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="hall-of-fame">
+        <div class="content-container">
+            <div class="content faq">
+                <h1 class="content-head is-center">Frequently asked questions</h1>
+
+                <ul>
+                    <li id="data-collect">
+                        <h2>
+                            <a href="#data-collect">What do you do with the data you collect?</a>
+                        </h2>
+                        <p>
+                            <em>Short answer:</em>
+                            Nothing :)
+                        </p>
+                        <p>
+                            <em>Detailled answer:</em>
+                            We receive only the data mandatory to start the Secret Santa:
+                            the list of users and usergroups in your organization. Once the private messages have been sent,
+                            we forget everything! In fact, we do not even have a database ;)
+                        </p>
+                    </li>
+                    <li id="avoid-association">
+                        <h2>
+                            <a href="#avoid-association">Can I avoid someone to receive a gift from someone else?</a>
+                        </h2>
+                        <p>
+                            No, the association is purely random so you cannot do that with our application.
+                            An alternative could be to launch 2 Secret Santa with two groups of people.
+                        </p>
+                    </li>
+                    <li id="hall-of-fame">
+                        <h2>
+                            <a href="#hall-of-fame">How can I add my company / organization to your Hall of Fame?</a>
+                        </h2>
+                        <p>
+                            Simply drop us an email at <a href="mailto:hello@secret-santa.team">hello@secret-santa.team</a>
+                            with the name, url and logo of the entity you want to add.
+                        </p>
+                    </li>
+                    <li id="big-team">
+                        <h2>
+                            <a href="#big-team">Will you app work with team with more than 500+ people?</a>
+                        </h2>
+                        <p>
+                            There is a 2 things to understand here. The first step in our application is to retrieve
+                            all the users on your Slack workspace / Discord server - yes we retrieve all the users to allow
+                            you to select the ones that will participate to your Secret Santa.
+                        </p>
+                        <p>
+                            When your team is really big, Slack or Discord APIs can fail to send us all the users in a
+                            reasonable duration. That means you will no be able to start a Secret Santa at the moment. A
+                            possible workaround would be to create a new Slack workspace / Discord server with only the
+                            participants.
+                        </p>
+                        <p>
+                            The second step is to dispatch a private message to all the selected users. Even if you started
+                            a Secret Santa with a lot of participants, we will safely handle that. If the operation times out
+                            we will propose you to continue the sending as if nothing happened.
+                        </p>
+                    </li>
+                    <li id="invalid-user">
+                        <h2>
+                            <a href="#invalid-user">Why did someone receive <code>@invalid-user</code> as the person to gift?</a>
+                        </h2>
+                        <p>
+                            This is due to a known bug of the Discord Android application. The workaround is to open the
+                            conversation on the Discord desktop app (for Windows, MacOS or Linux) or on the website.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block contact %}
+    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="fas fa-question"></i> Did not find an answer to your question? Contact us!</a>
+{% endblock contact %}
