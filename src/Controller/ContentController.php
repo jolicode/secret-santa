@@ -139,13 +139,6 @@ class ContentController extends AbstractController
         return new Response($content);
     }
 
-    public function faq(): Response
-    {
-        $content = $this->twig->render('content/faq.html.twig');
-
-        return new Response($content);
-    }
-
     public function stats(): Response
     {
         $content = $this->twig->render('content/stats.html.twig', [

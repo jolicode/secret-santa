@@ -20,7 +20,9 @@ privacy_policy:
 
 faq:
     path:     /faq
-    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::faq }
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+        template: content/faq.html.twig
 
 run:
     path:     /run/{application}
