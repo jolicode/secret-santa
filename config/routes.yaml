@@ -33,13 +33,13 @@ send_sample_message:
     methods:  POST
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::sendSampleMessage }
 
+send_messages:
+    path:     /send-messages/{hash}
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::sendMessages }
+
 finish:
     path:     /finish/{hash}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::finish }
-
-retry:
-    path:     /retry/{hash}
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::retry }
 
 spoil:
     path:     /spoil
