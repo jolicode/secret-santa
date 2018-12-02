@@ -48,7 +48,7 @@
                 </p>
 
                 <div class="is-center">
-                    <a href="{{ path('retry', {hash: secretSanta.hash}) }}" class="big-button warning-btn" id="retry-button">
+                    <a href="{{ path('send_messages', {hash: secretSanta.hash}) }}" class="big-button warning-btn" id="retry-button">
                         <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>
                         Continue - Send the remaining messages
                     </a>
@@ -64,7 +64,7 @@
                     {% endfor %}
                 </div>
 
-                <p>Note that errors are often due to <strong>temporary network problems</strong> when sending messages or if your secret santa has <strong>lot of users</strong>.</p>
+                <p>Note that errors are often due to <strong>temporary network problems</strong> when sending messages.</p>
 
                 <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
                     let secretSantaRetried = false;

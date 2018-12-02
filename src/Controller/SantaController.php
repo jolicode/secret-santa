@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Controller;
 
 use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
+use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
 use JoliCode\SecretSanta\Model\SecretSanta;
@@ -49,7 +50,7 @@ class SantaController extends AbstractController
         $this->bugsnag = $bugsnag;
     }
 
-    public function run(MessageDispatcher $messageDispatcher, Rudolph $rudolph, Request $request, string $application): Response
+    public function run(Rudolph $rudolph, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
         if (!$application->isAuthenticated()) {
@@ -84,29 +85,13 @@ class SantaController extends AbstractController
                     str_replace('```', '', $message)
                 );
 
-                try {
-                    $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
-                } catch (SecretSantaException $e) {
-                    $this->logger->error($e->getMessage(), [
-                        'exception' => $e,
-                    ]);
-
-                    $this->bugsnag->notifyException($e, function ($report) {
-                        $report->setSeverity('info');
-                    });
-
-                    $secretSanta->addError($e->getMessage());
-                }
-
-                $this->finishSantaIfDone($secretSanta, $application);
-
                 $request->getSession()->set(
                     $this->getSecretSantaSessionKey(
                         $secretSanta->getHash()
                     ), $secretSanta
                 );
 
-                return new RedirectResponse($this->router->generate('finish', ['hash' => $secretSanta->getHash()]));
+                return new RedirectResponse($this->router->generate('send_messages', ['hash' => $secretSanta->getHash()]));
             }
         }
 
@@ -171,6 +156,66 @@ class SantaController extends AbstractController
         ]);
     }
 
+    public function sendMessages(MessageDispatcher $messageDispatcher, Request $request, string $hash): Response
+    {
+        $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
+        $application = $this->getApplication($secretSanta->getApplication());
+
+        if (!$request->isXmlHttpRequest()) {
+            if ($secretSanta->isDone()) {
+                return new RedirectResponse($this->router->generate('finish', [
+                    'hash' => $secretSanta->getHash(),
+                ]));
+            }
+
+            if (!$application->isAuthenticated()) {
+                return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+            }
+
+            $content = $this->twig->render('santa/send_messages.html.twig', [
+                'application' => $application->getCode(),
+                'secretSanta' => $secretSanta,
+            ]);
+
+            return new Response($content);
+        }
+
+        $timeout = false;
+        $error = false;
+
+        try {
+            $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
+        } catch (MessageDispatchTimeoutException $e) {
+            $timeout = true;
+        } catch (SecretSantaException $e) {
+            $this->logger->error($e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            $this->bugsnag->notifyException($e, function ($report) {
+                $report->setSeverity('info');
+            });
+
+            $secretSanta->addError($e->getMessage());
+
+            $error = true;
+        }
+
+        $this->finishSantaIfDone($secretSanta, $application);
+
+        $request->getSession()->set(
+            $this->getSecretSantaSessionKey(
+                $secretSanta->getHash()
+            ), $secretSanta
+        );
+
+        return new JsonResponse([
+            'count' => \count($secretSanta->getAssociations()) - \count($secretSanta->getRemainingAssociations()),
+            'timeout' => $timeout,
+            'finished' => $error || $secretSanta->isDone(),
+        ]);
+    }
+
     public function finish(Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
@@ -203,40 +248,6 @@ class SantaController extends AbstractController
         ]);
 
         return new Response($content);
-    }
-
-    public function retry(MessageDispatcher $messageDispatcher, Request $request, string $hash): Response
-    {
-        $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
-        $application = $this->getApplication($secretSanta->getApplication());
-
-        if (!$application->isAuthenticated()) {
-            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
-        }
-
-        try {
-            $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
-        } catch (SecretSantaException $e) {
-            $this->logger->error($e->getMessage(), [
-                'exception' => $e,
-            ]);
-
-            $this->bugsnag->notifyException($e, function ($report) {
-                $report->setSeverity('info');
-            });
-
-            $secretSanta->addError($e->getMessage());
-        }
-
-        $this->finishSantaIfDone($secretSanta, $application);
-
-        $request->getSession()->set(
-            $this->getSecretSantaSessionKey(
-                $secretSanta->getHash()
-            ), $secretSanta
-        );
-
-        return new RedirectResponse($this->router->generate('finish', ['hash' => $secretSanta->getHash()]));
     }
 
     private function getApplication(string $code): ApplicationInterface

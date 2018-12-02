@@ -484,6 +484,40 @@ footer a {
 }
 
 /**
+ * Send messages
+ */
+.send-messages {
+    padding: 0 2em;
+    max-width: 1080px;
+    margin: 0 auto;
+    margin-bottom: 4em;
+}
+.send-messages h2 {
+    margin-top: 2em;
+    color: #E03A4D;
+    text-align: center;
+}
+.send-messages p {
+    margin-top: 2em;
+}
+.send-messages progress {
+    margin-top: 5em;
+    max-width: 400px;
+    width: 80%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    color: #E03A4D;
+}
+.send-messages progress::-webkit-progress-value {
+    background-color: #E03A4D;
+}
+.send-messages progress::-moz-progress-bar {
+    background-color: #E03A4D;
+}
+
+/**
  * What
  */
 .what-block {
@@ -935,8 +969,8 @@ textarea {
 
 .spin {
     display: inline-block;
-    -webkit-animation: spin 10s infinite linear;
-    animation: spin 10s infinite linear;
+    -webkit-animation: spin 5s infinite linear;
+    animation: spin 5s infinite linear;
 }
 
 /**

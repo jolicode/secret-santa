@@ -1,0 +1,67 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <div class="content send-messages is-center">
+        <h2>
+            <span class="fas fa-spinner spin"></span>
+            &nbsp;
+            We are sending private messages!
+        </h2>
+
+        <p>
+            <strong>Do not close the window!</strong><br />
+            You will be redirected to the finish page automatically once all the messages were sent.
+        </p>
+
+        <progress id="count-progress" value="0" max="{{ secretSanta.associations|length }}">
+            <span class="js-count-value">0</span> / {{ secretSanta.associations|length }} messages sent.
+        </progress>
+
+        <p>
+            <span class="js-count-value">0</span> / {{ secretSanta.associations|length }} messages sent so far.
+            <br />
+            <small>Note: the progress is refreshed every 5 seconds.</small>
+        </p>
+    </div>
+
+    <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
+        const countProgress = document.getElementById('count-progress');
+        const countValues = document.querySelectorAll('.js-count-value');
+
+        function sendRemainingMessages() {
+            fetch('{{ url('send_messages', {hash: secretSanta.hash}) }}', {
+              method: 'post',
+              credentials: 'include',
+              headers: {'X-Requested-With': 'XMLHttpRequest'},
+            })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(response) {
+                    updateProgress(response.count);
+
+                    if (response.finished) {
+                        window.location.href = '{{ url('finish', {hash: secretSanta.hash}) }}';
+
+                        return;
+                    }
+
+                    // Use setTimeout to not stack all the call
+                    setTimeout(sendRemainingMessages, 0);
+                })
+        }
+
+        function updateProgress(count) {
+            countProgress.value = count;
+
+            for(let i=0; i<countValues.length; i++) {
+                countValues[i].innerHTML = count;
+            }
+        }
+
+        (function() {
+            updateProgress({{ secretSanta.associations|length - secretSanta.remainingAssociations|length }});
+            sendRemainingMessages();
+        })();
+    </script>
+{% endblock content %}

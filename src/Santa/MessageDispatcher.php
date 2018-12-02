@@ -31,7 +31,7 @@ class MessageDispatcher
     /**
      * Send messages for remaining associations.
      *
-     * This method is limited to 20 seconds to be able to display nice error message instead of being timed out by hosting.
+     * This method is limited to 5 seconds to avoid being timed out by hosting.
      *
      * @throws MessageDispatchTimeoutException
      * @throws MessageSendFailedException
@@ -41,7 +41,7 @@ class MessageDispatcher
         $startTime = time();
 
         foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
-            if ((time() - $startTime) > 19) {
+            if ((time() - $startTime) > 5) {
                 throw new MessageDispatchTimeoutException($secretSanta);
             }
 
