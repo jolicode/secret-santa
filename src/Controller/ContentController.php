@@ -126,6 +126,11 @@ class ContentController extends AbstractController
                 'image' => 'm6web.png',
             ],
             [
+                'label' => 'Melvin & Hamilton',
+                'link' => 'https:///www.melvin-hamilton.com',
+                'image' => 'melvin-hamilton.png',
+            ],
+            [
                 'label' => 'Monsieur Biz',
                 'link' => 'https://monsieurbiz.com/',
                 'image' => 'monsieur-biz.png',
