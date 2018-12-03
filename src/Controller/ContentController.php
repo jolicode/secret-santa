@@ -86,6 +86,11 @@ class ContentController extends AbstractController
                 'image' => 'fabernovel-institute.png',
             ],
             [
+                'label' => 'Ferdio',
+                'link' => 'https://ferdio.com',
+                'image' => 'ferdio.svg',
+            ],
+            [
                 'label' => 'IdeaFoster',
                 'link' => 'https://www.ideafoster.com',
                 'image' => 'ideafoster.png',
