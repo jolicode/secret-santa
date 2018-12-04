@@ -150,6 +150,11 @@ class ContentController extends AbstractController
                 'link' => 'https://sensiolabs.com/',
                 'image' => 'sensiolabs.png',
             ],
+            [
+                'label' => 'Uppler',
+                'link' => 'https://uppler.com/',
+                'image' => 'uppler.png',
+            ],
         ];
 
         $content = $this->twig->render('content/hall_of_fame.html.twig', [
