@@ -1,5 +1,8 @@
 language: php
 
+services:
+    - redis-server
+
 env:
     global:
         - SYMFONY_PHPUNIT_REMOVE="symfony/yaml"

@@ -48,6 +48,17 @@ class ContentControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Frequently asked questions")'));
     }
 
+    public function test_stats_works()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/stats');
+        $response = $client->getResponse();
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertCount(1, $crawler->filter('h1:contains("Secret Santa Statistics")'));
+    }
+
     public function test_terms_works()
     {
         $client = static::createClient();
