@@ -36,4 +36,48 @@ class ContentControllerTest extends WebTestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertCount(1, $crawler->filter('img[alt="Monsieur Biz"]'));
     }
+
+    public function test_faq_works()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/faq');
+        $response = $client->getResponse();
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertCount(1, $crawler->filter('h1:contains("Frequently asked questions")'));
+    }
+
+    public function test_terms_works()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/terms-of-service');
+        $response = $client->getResponse();
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertCount(1, $crawler->filter('h1:contains("Secret Santa Terms of Service")'));
+    }
+
+    public function test_privacy_policy_works()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/privacy-policy');
+        $response = $client->getResponse();
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertCount(1, $crawler->filter('h1:contains("Privacy Policy")'));
+    }
+
+    public function test_sitemap_works()
+    {
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/sitemap.xml');
+        $response = $client->getResponse();
+
+        self::assertSame(200, $response->getStatusCode());
+        self::assertCount(1, $crawler->filter('loc:contains("/faq")'));
+    }
 }
