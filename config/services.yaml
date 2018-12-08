@@ -64,10 +64,3 @@ services:
     session.handler.predis:
         class: Predis\Session\Handler
         autowire: true
-
-    GuzzleHttp\Client:
-        arguments:
-            $config: {timeout: 5}
-
-    GuzzleHttp\ClientInterface:
-        alias: GuzzleHttp\Client
