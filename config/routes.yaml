@@ -24,6 +24,12 @@ faq:
         _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
         template: content/faq.html.twig
 
+sitemap:
+    path:     /sitemap.xml
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+        template: content/sitemap.xml.twig
+
 run:
     path:     /run/{application}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::run }
