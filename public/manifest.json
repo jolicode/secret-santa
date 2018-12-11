@@ -1,0 +1,29 @@
+{
+ "name": "Secret Santa",
+ "icons": [
+  {
+   "src": "\/favicon-32x32.png",
+   "sizes": "32x32",
+   "type": "image\/png",
+   "density": "0.75"
+  },
+  {
+   "src": "\/favicon-96x96.png",
+   "sizes": "96x96",
+   "type": "image\/png",
+   "density": "2.0"
+  },
+  {
+   "src": "\/favicon-128x128.png",
+   "sizes": "128x128",
+   "type": "image\/png",
+   "density": "3.0"
+  },
+  {
+   "src": "\/favicon-196x196.png",
+   "sizes": "196x196",
+   "type": "image\/png",
+   "density": "4.0"
+  }
+ ]
+}
