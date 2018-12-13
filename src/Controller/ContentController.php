@@ -91,6 +91,11 @@ class ContentController extends AbstractController
                 'image' => 'ferdio.svg',
             ],
             [
+                'label' => 'Get A Copywriter',
+                'link' => 'https://getacopywriter.com',
+                'image' => 'getacopywriter.png',
+            ],
+            [
                 'label' => 'IdeaFoster',
                 'link' => 'https://www.ideafoster.com',
                 'image' => 'ideafoster.png',
