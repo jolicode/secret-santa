@@ -1081,8 +1081,8 @@ textarea {
     top: 2px;
 }
 .custom-fa-slack:before {
-    background-image: url("images/slack-logo.svg");
+    background-image: url("images/slack-logo.svg?v2");
 }
 .custom-fa-discord:before {
-    background-image: url("images/discord-logo.svg");
+    background-image: url("images/discord-logo.svg?v2");
 }

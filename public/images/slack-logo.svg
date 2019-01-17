@@ -1,84 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   height="122.8"
-   width="122.8"
-   xml:space="preserve"
-   viewBox="0 0 122.8 122.8"
-   y="0px"
-   x="0px"
-   id="Layer_1"
-   version="1.1"><metadata
-   id="metadata35"><rdf:RDF><cc:Work
-       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-   id="defs33" />
-<style
-   id="style2"
-   type="text/css">
-	.st0{fill:#E01E5A;}
-	.st1{fill:#36C5F0;}
-	.st2{fill:#2EB67D;}
-	.st3{fill:#ECB22E;}
-</style>
-<g
-   transform="translate(-73.6,-73.6)"
-   id="g28">
-	<g
-   id="g8">
-		<path
-   style="fill:#e01e5a"
-   id="path4"
-   d="m 99.4,151.2 c 0,7.1 -5.8,12.9 -12.9,12.9 -7.1,0 -12.9,-5.8 -12.9,-12.9 0,-7.1 5.8,-12.9 12.9,-12.9 h 12.9 z"
-   class="st0" />
-		<path
-   style="fill:#e01e5a"
-   id="path6"
-   d="m 105.9,151.2 c 0,-7.1 5.8,-12.9 12.9,-12.9 7.1,0 12.9,5.8 12.9,12.9 v 32.3 c 0,7.1 -5.8,12.9 -12.9,12.9 -7.1,0 -12.9,-5.8 -12.9,-12.9 z"
-   class="st0" />
+<svg xmlns="http://www.w3.org/2000/svg" id="Layer_1" width="122.8" height="122.8">
+	<g id="g28" transform="translate(-73.6 -73.6)">
+		<g id="g8">
+			<path id="path4" fill="#e01e5a" d="M99.4 151.2c0 7.1-5.8 12.9-12.9 12.9-7.1 0-12.9-5.8-12.9-12.9 0-7.1 5.8-12.9 12.9-12.9h12.9z" class="st0"/>
+			<path id="path6" fill="#e01e5a" d="M105.9 151.2c0-7.1 5.8-12.9 12.9-12.9 7.1 0 12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9-7.1 0-12.9-5.8-12.9-12.9z" class="st0"/>
+		</g>
+		<g id="g14">
+			<path id="path10" fill="#36c5f0" d="M118.8 99.4c-7.1 0-12.9-5.8-12.9-12.9 0-7.1 5.8-12.9 12.9-12.9 7.1 0 12.9 5.8 12.9 12.9v12.9z" class="st1"/>
+			<path id="path12" fill="#36c5f0" d="M118.8 105.9c7.1 0 12.9 5.8 12.9 12.9 0 7.1-5.8 12.9-12.9 12.9H86.5c-7.1 0-12.9-5.8-12.9-12.9 0-7.1 5.8-12.9 12.9-12.9z" class="st1"/>
+		</g>
+		<g id="g20">
+			<path id="path16" fill="#2eb67d" d="M170.6 118.8c0-7.1 5.8-12.9 12.9-12.9 7.1 0 12.9 5.8 12.9 12.9 0 7.1-5.8 12.9-12.9 12.9h-12.9z" class="st2"/>
+			<path id="path18" fill="#2eb67d" d="M164.1 118.8c0 7.1-5.8 12.9-12.9 12.9-7.1 0-12.9-5.8-12.9-12.9V86.5c0-7.1 5.8-12.9 12.9-12.9 7.1 0 12.9 5.8 12.9 12.9z" class="st2"/>
+		</g>
+		<g id="g26">
+			<path id="path22" fill="#ecb22e" d="M151.2 170.6c7.1 0 12.9 5.8 12.9 12.9 0 7.1-5.8 12.9-12.9 12.9-7.1 0-12.9-5.8-12.9-12.9v-12.9z" class="st3"/>
+			<path id="path24" fill="#ecb22e" d="M151.2 164.1c-7.1 0-12.9-5.8-12.9-12.9 0-7.1 5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9 0 7.1-5.8 12.9-12.9 12.9z" class="st3"/>
+		</g>
 	</g>
-	<g
-   id="g14">
-		<path
-   style="fill:#36c5f0"
-   id="path10"
-   d="m 118.8,99.4 c -7.1,0 -12.9,-5.8 -12.9,-12.9 0,-7.1 5.8,-12.9 12.9,-12.9 7.1,0 12.9,5.8 12.9,12.9 v 12.9 z"
-   class="st1" />
-		<path
-   style="fill:#36c5f0"
-   id="path12"
-   d="m 118.8,105.9 c 7.1,0 12.9,5.8 12.9,12.9 0,7.1 -5.8,12.9 -12.9,12.9 H 86.5 c -7.1,0 -12.9,-5.8 -12.9,-12.9 0,-7.1 5.8,-12.9 12.9,-12.9 z"
-   class="st1" />
-	</g>
-	<g
-   id="g20">
-		<path
-   style="fill:#2eb67d"
-   id="path16"
-   d="m 170.6,118.8 c 0,-7.1 5.8,-12.9 12.9,-12.9 7.1,0 12.9,5.8 12.9,12.9 0,7.1 -5.8,12.9 -12.9,12.9 h -12.9 z"
-   class="st2" />
-		<path
-   style="fill:#2eb67d"
-   id="path18"
-   d="m 164.1,118.8 c 0,7.1 -5.8,12.9 -12.9,12.9 -7.1,0 -12.9,-5.8 -12.9,-12.9 V 86.5 c 0,-7.1 5.8,-12.9 12.9,-12.9 7.1,0 12.9,5.8 12.9,12.9 z"
-   class="st2" />
-	</g>
-	<g
-   id="g26">
-		<path
-   style="fill:#ecb22e"
-   id="path22"
-   d="m 151.2,170.6 c 7.1,0 12.9,5.8 12.9,12.9 0,7.1 -5.8,12.9 -12.9,12.9 -7.1,0 -12.9,-5.8 -12.9,-12.9 v -12.9 z"
-   class="st3" />
-		<path
-   style="fill:#ecb22e"
-   id="path24"
-   d="m 151.2,164.1 c -7.1,0 -12.9,-5.8 -12.9,-12.9 0,-7.1 5.8,-12.9 12.9,-12.9 h 32.3 c 7.1,0 12.9,5.8 12.9,12.9 0,7.1 -5.8,12.9 -12.9,12.9 z"
-   class="st3" />
-	</g>
-</g>
 </svg>
