@@ -1060,3 +1060,29 @@ textarea {
     justify-content: center;
     overflow: hidden;
 }
+
+/** Override Font Awesome because the Slack logo is not up to date **/
+.custom-fa-slack, .custom-fa-discord {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+.custom-fa-slack:before, .custom-fa-discord:before {
+    content: ' ';
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: bottom;
+    width: 24px;
+    height: 25px;
+    display: block;
+    position: relative;
+    top: 2px;
+}
+.custom-fa-slack:before {
+    background-image: url("images/slack-logo.svg");
+}
+.custom-fa-discord:before {
+    background-image: url("images/discord-logo.svg");
+}
