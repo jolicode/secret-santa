@@ -53,7 +53,7 @@ class MessageSender
             $receiverBlock['accessory'] = [
                 'type' => 'image',
                 'image_url' => $receiverUser->getExtra()['image'],
-                'alt_text' => 'None',
+                'alt_text' => $receiverUser->getName(),
             ];
         }
 
