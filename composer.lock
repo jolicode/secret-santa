@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77c4338e4bcd4f7a5d25dd12fb4bd7b3",
+    "content-hash": "89eb5a8ead9c9a64aa227b8a72c616d4",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",
@@ -1389,16 +1389,16 @@
         },
         {
             "name": "jolicode/slack-php-api",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jolicode/slack-php-api.git",
-                "reference": "c212c91ead97a5ae4dadc14218b07200565e12c8"
+                "reference": "1399dd069f59810f5a24fc1aad79202a1c9580d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jolicode/slack-php-api/zipball/c212c91ead97a5ae4dadc14218b07200565e12c8",
-                "reference": "c212c91ead97a5ae4dadc14218b07200565e12c8",
+                "url": "https://api.github.com/repos/jolicode/slack-php-api/zipball/1399dd069f59810f5a24fc1aad79202a1c9580d0",
+                "reference": "1399dd069f59810f5a24fc1aad79202a1c9580d0",
                 "shasum": ""
             },
             "require": {
@@ -1442,7 +1442,7 @@
                 "slackapi",
                 "swagger"
             ],
-            "time": "2018-11-15T20:37:51+00:00"
+            "time": "2019-02-21T21:16:08+00:00"
         },
         {
             "name": "league/oauth2-client",

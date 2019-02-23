@@ -87,7 +87,10 @@ class SlackController extends AbstractController
         }
 
         $slackApplication->setToken($token);
-        $slackApplication->setAdmin(new User($user->getId(), $user->getRealName()));
+        $slackApplication->setAdmin(new User($user->getId(), $user->getRealName(), [
+            'nickname' => $user->getName(),
+            'image' => $user->getImage192(),
+        ]));
 
         return new RedirectResponse($this->router->generate('run', [
             'application' => $slackApplication->getCode(),

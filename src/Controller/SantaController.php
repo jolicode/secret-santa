@@ -82,7 +82,7 @@ class SantaController extends AbstractController
                     }),
                     $associatedUsers,
                     $application->getAdmin(),
-                    str_replace('```', '', $message)
+                    $message
                 );
 
                 $request->getSession()->set(

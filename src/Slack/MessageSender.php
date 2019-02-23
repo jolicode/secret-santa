@@ -35,28 +35,31 @@ class MessageSender
             $blocks[] = [
                 'type' => 'context',
                 'elements' => [
-                    ['type' => 'mrkdwn', 'text' => '_Find below a sample of the message that will be sent to each members of your Secret Santa._']
-                ]
+                    ['type' => 'mrkdwn', 'text' => '_Find below a sample of the message that will be sent to each members of your Secret Santa._'],
+                ],
             ];
         }
 
-        $blocks[] = [
+        $receiverUser = $secretSanta->getUser($receiver);
+        $receiverBlock = [
             'type' => 'section',
             'text' => [
                 'type' => 'mrkdwn',
-                'text' => sprintf('Hi!\nYou have been chosen to be part of a Secret Santa :santa:!\n\n*You have been chosen to gift:*\n\n :point_down: :point_down: :point_down: :point_down: :point_down: :point_down:\n:gift: *<@%s>* :gift:\n:point_up_2: :point_up_2: :point_up_2: :point_up_2: :point_up_2: :point_up_2:', $receiver)
+                'text' => sprintf("Hi!\nYou have been chosen to be part of a Secret Santa :santa:!\n\n*You have been chosen to gift:*\n\n :point_down: :point_down: :point_down: :point_down: :point_down: :point_down:\n:gift: *<@%s>* :gift:\n:point_up_2: :point_up_2: :point_up_2: :point_up_2: :point_up_2: :point_up_2:", $receiver),
             ],
-            'accessory' => [
-                'type' => 'image',
-
-                // @todo real data from $secretSanta->getUser() ?
-                'image_url' => 'TODO',
-                'alt_text' => 'TODO'
-            ]
         ];
 
+        if ($receiverUser->getExtra() && array_key_exists('image', $receiverUser->getExtra())) {
+            $receiverBlock['accessory'] = [
+                'type' => 'image',
+                'image_url' => $receiverUser->getExtra()['image'],
+                'alt_text' => 'None',
+            ];
+        }
+
+        $blocks[] = $receiverBlock;
         $blocks[] = [
-            'type' => 'divider'
+            'type' => 'divider',
         ];
 
         $fallbackText .= sprintf('You have been chosen to be part of a Secret Santa :santa:!
@@ -67,7 +70,7 @@ class MessageSender
                 'type' => 'section',
                 'text' => [
                     'type' => 'mrkdwn',
-                    'text' => '_Here is a message from the Secret Santa admin:_'
+                    'text' => '_Here is a message from the Secret Santa admin:_',
                 ],
             ];
 
@@ -75,7 +78,7 @@ class MessageSender
                 'type' => 'section',
                 'text' => [
                     'type' => 'mrkdwn',
-                    'text' => $secretSanta->getAdminMessage()
+                    'text' => $secretSanta->getAdminMessage(),
                 ],
             ];
 
@@ -87,8 +90,8 @@ class MessageSender
                 'type' => 'section',
                 'text' => [
                     'type' => 'mrkdwn',
-                    'text' => sprintf('_Your Secret Santa admin, <@%s>._', $secretSanta->getAdmin()->getIdentifier())
-                ]
+                    'text' => sprintf('_Your Secret Santa admin, <@%s>._', $secretSanta->getAdmin()->getIdentifier()),
+                ],
             ];
 
             $fallbackText .= sprintf("\n\n_Your Secret Santa admin, <@%s>._", $secretSanta->getAdmin()->getIdentifier());
@@ -98,8 +101,8 @@ class MessageSender
             'type' => 'context',
             'elements' => [
                 ['type' => 'plain_text', 'text' => 'That\'s a secret only shared with you! Someone has also been chosen to get you a gift.'],
-                ['type' => 'mrkdwn', 'text' => 'Powered by <https://secret-santa.team/|Secret-Santa.team>']
-            ]
+                ['type' => 'mrkdwn', 'text' => 'Powered by <https://secret-santa.team/|Secret-Santa.team>'],
+            ],
         ];
 
         try {
@@ -108,7 +111,7 @@ class MessageSender
                 'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
                 'text' => $fallbackText,
-                'blocks' => $blocks,
+                'blocks' => \json_encode($blocks),
             ]);
 
             if (!$response->getOk()) {
