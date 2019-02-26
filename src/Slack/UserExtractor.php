@@ -73,7 +73,7 @@ class UserExtractor
                 $slackUser->getProfile()->getRealName(),
                 [
                     'nickname' => $slackUser->getName(),
-                    'image' => $slackUser->getProfile()->getImage32(),
+                    'image' => $slackUser->getProfile()->getImage192(),
                     'restricted' => $slackUser->getIsRestricted(),
                 ]
             );

@@ -28,37 +28,95 @@ class MessageSender
      */
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, string $token, bool $isSample): void
     {
-        $text = '';
+        $fallbackText = '';
+        $blocks = [];
 
         if ($isSample) {
-            $text .= "_Find below a sample of the message that will be sent to each members of your Secret Santa._\n----\n\n";
+            $blocks[] = [
+                'type' => 'context',
+                'elements' => [
+                    ['type' => 'mrkdwn', 'text' => '_Find below a sample of the message that will be sent to each members of your Secret Santa._'],
+                ],
+            ];
         }
 
-        $text .= sprintf(
-            'Hi!
+        $blocks[] = [
+            'type' => 'section',
+            'text' => [
+                'type' => 'mrkdwn',
+                'text' => sprintf("Hi!\nYou have been chosen to be part of a Secret Santa :santa:!\n\n"),
+            ],
+        ];
 
-You have been chosen to be part of a Secret Santa :santa:!
+        $receiverUser = $secretSanta->getUser($receiver);
+        $receiverBlock = [
+            'type' => 'section',
+            'text' => [
+                'type' => 'mrkdwn',
+                'text' => sprintf("*You have been chosen to gift:*\n\n:gift: *<@%s>* :gift:\n\n", $receiver),
+            ],
+        ];
 
-> *You have been chosen to gift:*
-> :gift: *<@%s>* :gift:
-> *That\'s a secret we only shared with you!*
+        if ($receiverUser->getExtra() && array_key_exists('image', $receiverUser->getExtra())) {
+            $receiverBlock['accessory'] = [
+                'type' => 'image',
+                'image_url' => $receiverUser->getExtra()['image'],
+                'alt_text' => $receiverUser->getName(),
+            ];
+        }
 
-Someone has also been chosen to get you a gift.', $receiver);
+        $blocks[] = $receiverBlock;
+
+        $fallbackText .= sprintf('You have been chosen to be part of a Secret Santa :santa:!
+*You have been chosen to gift:* :gift: *<@%s>* :gift:', $receiver);
 
         if (!empty($secretSanta->getAdminMessage())) {
-            $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
+            $blocks[] = [
+                'type' => 'section',
+                'text' => [
+                    'type' => 'mrkdwn',
+                    'text' => sprintf('*Here is a message from the Secret Santa admin _(<@%s>)_:*', $secretSanta->getAdmin()->getIdentifier()),
+                ],
+            ];
+
+            $blocks[] = [
+                'type' => 'section',
+                'text' => [
+                    'type' => 'mrkdwn',
+                    'text' => $secretSanta->getAdminMessage(),
+                ],
+            ];
+
+            $fallbackText .= sprintf("\n\nHere is a message from the Secret Santa admin _(<@%s>)_:\n\n```%s```", $secretSanta->getAdmin()->getIdentifier(), $secretSanta->getAdminMessage());
+        } else {
+            $blocks[] = [
+                'type' => 'section',
+                'text' => [
+                    'type' => 'mrkdwn',
+                    'text' => sprintf('_If you have any question please ask your Secret Santa Admin: <@%s>_', $secretSanta->getAdmin()->getIdentifier()),
+                ],
+            ];
         }
 
-        if ($secretSanta->getAdmin()) {
-            $text .= sprintf("\n\n_Your Secret Santa admin, <@%s>._", $secretSanta->getAdmin()->getIdentifier());
-        }
+        $blocks[] = [
+            'type' => 'divider',
+        ];
+
+        $blocks[] = [
+            'type' => 'context',
+            'elements' => [
+                ['type' => 'plain_text', 'text' => 'That\'s a secret only shared with you! Someone has also been chosen to get you a gift.'],
+                ['type' => 'mrkdwn', 'text' => 'Powered by <https://secret-santa.team/|Secret-Santa.team>'],
+            ],
+        ];
 
         try {
             $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
                 'channel' => sprintf('@%s', $giver),
                 'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
-                'text' => $text,
+                'text' => $fallbackText,
+                'blocks' => \json_encode($blocks),
             ]);
 
             if (!$response->getOk()) {
