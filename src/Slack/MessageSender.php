@@ -40,12 +40,20 @@ class MessageSender
             ];
         }
 
+        $blocks[] = [
+            'type' => 'section',
+            'text' => [
+                'type' => 'mrkdwn',
+                'text' => sprintf("Hi!\nYou have been chosen to be part of a Secret Santa :santa:!\n\n"),
+            ],
+        ];
+
         $receiverUser = $secretSanta->getUser($receiver);
         $receiverBlock = [
             'type' => 'section',
             'text' => [
                 'type' => 'mrkdwn',
-                'text' => sprintf("Hi!\nYou have been chosen to be part of a Secret Santa :santa:!\n\n*You have been chosen to gift:*\n\n :point_down: :point_down: :point_down: :point_down: :point_down: :point_down:\n:gift: *<@%s>* :gift:\n:point_up_2: :point_up_2: :point_up_2: :point_up_2: :point_up_2: :point_up_2:", $receiver),
+                'text' => sprintf("*You have been chosen to gift:*\n\n:gift: *<@%s>* :gift:\n\n", $receiver),
             ],
         ];
 
@@ -58,9 +66,6 @@ class MessageSender
         }
 
         $blocks[] = $receiverBlock;
-        $blocks[] = [
-            'type' => 'divider',
-        ];
 
         $fallbackText .= sprintf('You have been chosen to be part of a Secret Santa :santa:!
 *You have been chosen to gift:* :gift: *<@%s>* :gift:', $receiver);
@@ -70,7 +75,7 @@ class MessageSender
                 'type' => 'section',
                 'text' => [
                     'type' => 'mrkdwn',
-                    'text' => '_Here is a message from the Secret Santa admin:_',
+                    'text' => sprintf('*Here is a message from the Secret Santa admin _(<@%s>)_:*', $secretSanta->getAdmin()->getIdentifier()),
                 ],
             ];
 
@@ -82,20 +87,20 @@ class MessageSender
                 ],
             ];
 
-            $fallbackText .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
-        }
-
-        if ($secretSanta->getAdmin()) {
+            $fallbackText .= sprintf("\n\nHere is a message from the Secret Santa admin _(<@%s>)_:\n\n```%s```", $secretSanta->getAdmin()->getIdentifier(), $secretSanta->getAdminMessage());
+        } else {
             $blocks[] = [
                 'type' => 'section',
                 'text' => [
                     'type' => 'mrkdwn',
-                    'text' => sprintf('_Your Secret Santa admin, <@%s>._', $secretSanta->getAdmin()->getIdentifier()),
+                    'text' => sprintf('_If you have any question please ask your Secret Santa Admin: <@%s>_', $secretSanta->getAdmin()->getIdentifier()),
                 ],
             ];
-
-            $fallbackText .= sprintf("\n\n_Your Secret Santa admin, <@%s>._", $secretSanta->getAdmin()->getIdentifier());
         }
+
+        $blocks[] = [
+            'type' => 'divider',
+        ];
 
         $blocks[] = [
             'type' => 'context',
