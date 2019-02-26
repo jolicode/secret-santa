@@ -86,9 +86,6 @@
     "jane-php/open-api-runtime": {
         "version": "v4.0.1"
     },
-    "jeremykendall/php-domain-parser": {
-        "version": "3.0.0"
-    },
     "jolicode/slack-php-api": {
         "version": "dev-master"
     },
@@ -97,6 +94,24 @@
     },
     "league/uri": {
         "version": "4.2.2"
+    },
+    "league/uri-components": {
+        "version": "1.8.2"
+    },
+    "league/uri-hostname-parser": {
+        "version": "1.1.1"
+    },
+    "league/uri-interfaces": {
+        "version": "1.1.1"
+    },
+    "league/uri-manipulations": {
+        "version": "1.5.0"
+    },
+    "league/uri-parser": {
+        "version": "1.4.1"
+    },
+    "league/uri-schemes": {
+        "version": "1.2.1"
     },
     "monolog/monolog": {
         "version": "1.23.0"
@@ -164,6 +179,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "ralouphie/getallheaders": {
+        "version": "2.0.5"
+    },
     "restcord/restcord": {
         "version": "0.2.2"
     },
@@ -196,6 +214,9 @@
             "version": "3.3",
             "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
+    },
+    "symfony/contracts": {
+        "version": "v1.0.2"
     },
     "symfony/css-selector": {
         "version": "v3.4.7"
@@ -328,6 +349,9 @@
     },
     "symfony/var-dumper": {
         "version": "v4.0.7"
+    },
+    "symfony/var-exporter": {
+        "version": "v4.2.3"
     },
     "symfony/web-profiler-bundle": {
         "version": "3.3",
