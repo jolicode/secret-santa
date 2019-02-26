@@ -23,7 +23,7 @@
         "bugsnag/bugsnag-symfony": "^1.5",
         "guzzlehttp/psr7": "^1.4",
         "jolicode/slack-php-api": "^1.0",
-        "nelmio/security-bundle": "^2.5",
+        "nelmio/security-bundle": "dev-master#4795a994dc27181a6c8ba6fa24c39688517f25fc",
         "php-http/curl-client": "^1.7",
         "predis/predis": "^1.1",
         "restcord/restcord": "^0.3",
