@@ -54,8 +54,8 @@ class MessageSender
                 'type' => 'mrkdwn',
                 'text' => implode("\n:gift:\n:gift:\t\t\t", [
                     '',
-                    "*You have been chosen to gift:*",
-                    sprintf(":point_right:\t*<@%s>%s*\t:point_left:\t", $receiver, str_repeat('  ', strlen('@' . $receiver) % 2)),
+                    '*You have been chosen to gift:*',
+                    sprintf(":point_right:\t*<@%s>%s*\t:point_left:\t", $receiver, str_repeat('  ', \strlen('@' . $receiver) % 2)),
                     '',
                 ]),
             ],
