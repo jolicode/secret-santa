@@ -27,6 +27,7 @@ class Rudolph
         $userCount = \count($users);
         $associations = [];
 
+        mt_srand();
         shuffle($users);
 
         for ($i = 1; $i < $userCount; ++$i) {
