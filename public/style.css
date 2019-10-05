@@ -1028,6 +1028,7 @@ textarea {
     content: '';
     padding: 10px;
     margin: 10px;
+    border-radius: 3px;
 }
 
 .legend .legend-item.total::before {
@@ -1040,6 +1041,38 @@ textarea {
 
 .legend .legend-item.discord::before {
     background-color: #7289da;
+}
+
+.single-values {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.single-value {
+    background-color: #E44357;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    color: white;
+    width: 250px;
+}
+
+.single-value .title {
+    font-size: 20px;
+}
+
+.single-value .value {
+    margin-top: 10px;
+}
+
+.single-value .number {
+    font-weight: bold;
+    font-size: 40px;
 }
 
 .container-charts {
@@ -1069,6 +1102,9 @@ textarea {
 .column-multiple {
     display: flex;
     align-items: flex-end;
+}
+.column-multiple .graph-bar {
+    margin: 0 5px;
 }
 
 .graph-bar {

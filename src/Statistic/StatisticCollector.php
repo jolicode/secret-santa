@@ -36,6 +36,22 @@ class StatisticCollector
         $this->client->incr("stats:year-app:$currentYear-$applicationCode");
         $this->client->incr("stats:app:$applicationCode");
         $this->client->incr('stats:total');
+        $this->client->incrby('stats:users', \count($secretSanta->getUsers()));
+
+        $usersMax = (int) $this->client->get('stats:users-max');
+        if (\count($secretSanta->getUsers()) > $usersMax) {
+            $this->client->set('stats:users-max', \count($secretSanta->getUsers()));
+        }
+    }
+
+    public function incrementSampleCount(SecretSanta $secretSanta)
+    {
+        $this->client->incr('stats:sample');
+    }
+
+    public function incrementSpoilCount()
+    {
+        $this->client->incr('stats:spoil');
     }
 
     public function getCounters(): array
@@ -47,6 +63,10 @@ class StatisticCollector
             'year-app' => [],
             'app' => [],
             'total' => 0,
+            'users' => 0,
+            'users-max' => 0,
+            'sample' => 0,
+            'spoil' => 0,
         ];
 
         $keys = $this->client->keys('stats:*');
@@ -57,8 +77,8 @@ class StatisticCollector
                 if (preg_match('/^stats:(?<type>.*):(?<key>.*)$/', $key, $matches)) {
                     $counters[$matches['type']][$matches['key']] = $stats[$keyIndex];
                 } else {
-                    // total
-                    $counters[$key] = $stats[$keyIndex];
+                    // simple counter
+                    $counters[str_replace('stats:', '', $key)] = $stats[$keyIndex];
                 }
             }
 
@@ -74,16 +94,25 @@ class StatisticCollector
                     'applications' => [],
                 ];
                 foreach ($counters['app'] as $applicationCode => $applicationTotal) {
-                    $counter[$key]['applications'][$applicationCode] =
-                        !empty($counters["$stat-app"])
-                        && !empty($counters["$stat-app"]["$key-$applicationCode"])
-                            ? $counters["$stat-app"]["$key-$applicationCode"]
-                            : 0;
+                    if ('year' === $stat && 2019 === $key) {
+                        $counter[$key]['applications'][$applicationCode] = 0;
+                    } else {
+                        $counter[$key]['applications'][$applicationCode] =
+                            !empty($counters["$stat-app"])
+                            && !empty($counters["$stat-app"]["$key-$applicationCode"])
+                                ? $counters["$stat-app"]["$key-$applicationCode"]
+                                : 0;
+                    }
                 }
             }
-            $counters[$stat] = $counter;
-            $counters["$stat-max"] = max(array_column($counter, 'total'));
+
             unset($counters["$stat-app"]);
+
+            $counters[$stat] = $counter;
+
+            if (\count($counter) > 0) {
+                $counters["$stat-max"] = max(array_column($counter, 'total'));
+            }
         }
 
         return $counters;
