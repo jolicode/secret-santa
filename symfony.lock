@@ -113,6 +113,15 @@
     "netresearch/jsonmapper": {
         "version": "v1.4.0"
     },
+    "nyholm/psr7": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "0cd4d2d0e7f646fda75f9944f747a56e6ed13d4c"
+        }
+    },
     "paragonie/random_compat": {
         "version": "v2.0.12"
     },
@@ -166,6 +175,9 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "ralouphie/getallheaders": {
+        "version": "3.0.3"
     },
     "restcord/restcord": {
         "version": "0.2.2"
