@@ -18,11 +18,13 @@
             {% if value.applications is defined and max(value.applications) > 0 %}
                 <div class="graph-column">
                     <div class="column-multiple">
-                        {% for application, applicationValue in value.applications if applicationValue > 0 %}
-                            <div class="graph-column application-{{ application }}">
-                                <div class="graph-counterValue">{{ applicationValue|number_format }}</div>
-                                <div class="graph-bar" style="height: {{ (applicationValue / max) * 300 }}px;"></div>
-                            </div>
+                        {% for application, applicationValue in value.applications %}
+                            {% if applicationValue > 0 %}
+                                <div class="graph-column application-{{ application }}">
+                                    <div class="graph-counterValue">{{ applicationValue|number_format }}</div>
+                                    <div class="graph-bar" style="height: {{ (applicationValue / max) * 300 }}px;"></div>
+                                </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                     <div class="graph-legend-x">{{ key|capitalize }}</div>

@@ -42,7 +42,7 @@
                                     <span class="search-cleaner fas fa-times is-hidden" id="search-cleaner" title="Empty the query"></span>
                                 </div>
                             </div>
-                            {% spaceless %}
+                            {% apply spaceless %}
                                 <div class="user-list" id="user-list">
                                     {% for user in users %}
                                         {% block user_item %}{% endblock %}
@@ -51,7 +51,7 @@
                                         No user matching.
                                     </div>
                                 </div>
-                            {% endspaceless %}
+                            {% endapply %}
 
                             <div class="checked-users-summary">
                                 <h2>Summary of your selection: <span id="summary-count"></span></h2>
