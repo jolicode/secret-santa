@@ -99,15 +99,13 @@ class UserExtractor
             'include_users' => true,
         ]);
 
-        // Slack OpenAPI spec does not contain definition yet for usergroups.list response
-        // So lets retrieve data from internal data
-        foreach ($userGroupsResponse['usergroups'] as $userGroup) {
+        foreach ($userGroupsResponse->getUsergroups() as $userGroup) {
             $group = new Group(
-                $userGroup->id,
-                $userGroup->name
+                $userGroup->getId(),
+                $userGroup->getName()
             );
 
-            foreach ($userGroup->users as $userId) {
+            foreach ($userGroup->getUsers() as $userId) {
                 $group->addUser($userId);
             }
 
