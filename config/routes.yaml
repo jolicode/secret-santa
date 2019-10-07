@@ -47,6 +47,10 @@ finish:
     path:     /finish/{hash}
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::finish }
 
+cancel:
+    path:     /cancel/{application}
+    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::cancel }
+
 spoil:
     path:     /spoil
     defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::spoil }
