@@ -1,14 +1,45 @@
 {% extends 'layout.html.twig' %}
 
-{% macro barGraph(title, stats) %}
+{% macro singleValue(title, value, unit) %}
+    <div class="single-value">
+        <div class="title">
+            {{ title }}
+        </div>
+        <div class="value">
+            <span class="number">{{ value|number_format }}</span> {{ unit ?? '' }}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro barGraph(title, stats, max, isApplication) %}
     <h2 class="content-head is-center">{{ title }}</h2>
     <div class="chart chart-month">
         {% for key, value in stats %}
-            <div class="graph-column">
-                <div class="graph-counterValue">{{ value }}</div>
-                <div class="graph-bar" style="height: {{ (value / max(stats)) * 300 }}px;"></div>
-                <div class="graph-legend-x">{{ key|capitalize }}</div>
-            </div>
+            {% if value.applications is defined and max(value.applications) > 0 %}
+                <div class="graph-column">
+                    <div class="column-multiple">
+                        {% for application, applicationValue in value.applications if applicationValue > 0 %}
+                            <div class="graph-column application-{{ application }}">
+                                <div class="graph-counterValue">{{ applicationValue|number_format }}</div>
+                                <div class="graph-bar" style="height: {{ (applicationValue / max) * 300 }}px;"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="graph-legend-x">{{ key|capitalize }}</div>
+                </div>
+            {% elseif value.total is defined and value.total is not empty %}
+                <div class="graph-column">
+                    <div class="graph-counterValue">{{ value.total|number_format }}</div>
+                    <div class="graph-bar" style="height: {{ (value.total / max) * 300 }}px;"></div>
+                    <div class="graph-legend-x">{{ key|capitalize }}</div>
+                </div>
+            {% else %}
+                <div class="graph-column {{ isApplication ? 'application-'~key }}">
+                    <div class="graph-counterValue">{{ value|number_format }}</div>
+                    <div class="graph-bar" style="height: {{ (value / max(stats)) * 300 }}px;"></div>
+                    <div class="graph-legend-x">{{ key|capitalize }}</div>
+                </div>
+            {% endif %}
         {% else  %}
             <p>Sorry, there is no statistic for this section yet 🙈</p>
         {% endfor %}
@@ -29,10 +60,35 @@
             </div>
         </div>
 
+        <div>
+            <h2 class="content-head is-center">Legend</h2>
+
+            <div class="legend">
+                <div class="legend-item total">All apps combined</div>
+                {% for application, applicationTotal in counters.app %}
+                    <div class="legend-item {{ application }}">{{ application|title }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <h2 class="content-head is-center">Some numbers</h2>
+
+        <div class="single-values">
+            {{ stats.singleValue('Secret Santa thrown', counters['total']) }}
+            {{ stats.singleValue('Participants involved *', counters['users']) }}
+            {{ stats.singleValue('Biggest Secret Santa', counters['users-max'], 'participants') }}
+            {{ stats.singleValue('Message samples sent *', counters['sample']) }}
+            {{ stats.singleValue('Spoils asked *', counters['spoil']) }}
+        </div>
+
+        <p class="is-center">
+            * Since 10/2019
+        </p>
+
         <div class="container-charts">
-            {{ stats.barGraph('Number of Secret Santa per month', counters.month) }}
-            {{ stats.barGraph('Number of Secret Santa per year', counters.year) }}
-            {{ stats.barGraph('Number of Secret Santa per application', counters.app) }}
+            {{ stats.barGraph('Number of Secret Santa per month', counters['month'], counters['month-max'] ?? 0) }}
+            {{ stats.barGraph('Number of Secret Santa per year', counters['year'], counters['year-max'] ?? 0) }}
+            {{ stats.barGraph('Number of Secret Santa per application', counters['app'], null, true) }}
         </div>
     </div>
 

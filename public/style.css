@@ -1007,6 +1007,74 @@ textarea {
  * Stats
  */
 
+.legend {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 40px;
+}
+
+.legend .legend-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 40px;
+}
+
+.legend .legend-item::before {
+    display: inline-block;
+    content: '';
+    padding: 10px;
+    margin: 10px;
+    border-radius: 3px;
+}
+
+.legend .legend-item.total::before {
+    background-color: #E44357;
+}
+
+.legend .legend-item.slack::before {
+    background-color: #ecb22e;
+}
+
+.legend .legend-item.discord::before {
+    background-color: #7289da;
+}
+
+.single-values {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.single-value {
+    background-color: #E44357;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    color: white;
+    width: 250px;
+}
+
+.single-value .title {
+    font-size: 20px;
+}
+
+.single-value .value {
+    margin-top: 10px;
+}
+
+.single-value .number {
+    font-weight: bold;
+    font-size: 40px;
+}
+
 .container-charts {
     padding: 10px;
     display: flex;
@@ -1031,6 +1099,14 @@ textarea {
     margin-bottom: 10px;
 }
 
+.column-multiple {
+    display: flex;
+    align-items: flex-end;
+}
+.column-multiple .graph-bar {
+    margin: 0 5px;
+}
+
 .graph-bar {
     background-color: #E44357;
     margin: 1px;
@@ -1043,8 +1119,12 @@ textarea {
     width: 50px;
 }
 
-.graph-bar:hover {
-    background-color: #c71d32;
+.application-slack .graph-bar {
+    background-color: #ecb22e;
+}
+
+.application-discord .graph-bar {
+    background-color: #7289da;
 }
 
 .graph-legend-x {
@@ -1059,6 +1139,11 @@ textarea {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    min-width: 100px;
+}
+
+.column-multiple .graph-column {
+    min-width: auto;
 }
 
 /** Override Font Awesome because the Slack logo is not up to date **/

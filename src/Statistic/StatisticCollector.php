@@ -31,18 +31,42 @@ class StatisticCollector
 
         // If the key does not exist, it is set to 0 before performing the operation
         $this->client->incr("stats:month:$currentYear-$currentMonth");
+        $this->client->incr("stats:month-app:$currentYear-$currentMonth-$applicationCode");
         $this->client->incr("stats:year:$currentYear");
+        $this->client->incr("stats:year-app:$currentYear-$applicationCode");
         $this->client->incr("stats:app:$applicationCode");
         $this->client->incr('stats:total');
+        $this->client->incrby('stats:users', \count($secretSanta->getUsers()));
+
+        $usersMax = (int) $this->client->get('stats:users-max');
+        if (\count($secretSanta->getUsers()) > $usersMax) {
+            $this->client->set('stats:users-max', \count($secretSanta->getUsers()));
+        }
+    }
+
+    public function incrementSampleCount(SecretSanta $secretSanta)
+    {
+        $this->client->incr('stats:sample');
+    }
+
+    public function incrementSpoilCount()
+    {
+        $this->client->incr('stats:spoil');
     }
 
     public function getCounters(): array
     {
         $counters = [
             'month' => [],
+            'month-app' => [],
             'year' => [],
+            'year-app' => [],
             'app' => [],
             'total' => 0,
+            'users' => 0,
+            'users-max' => 0,
+            'sample' => 0,
+            'spoil' => 0,
         ];
 
         $keys = $this->client->keys('stats:*');
@@ -53,13 +77,42 @@ class StatisticCollector
                 if (preg_match('/^stats:(?<type>.*):(?<key>.*)$/', $key, $matches)) {
                     $counters[$matches['type']][$matches['key']] = $stats[$keyIndex];
                 } else {
-                    // total
-                    $counters[$key] = $stats[$keyIndex];
+                    // simple counter
+                    $counters[str_replace('stats:', '', $key)] = $stats[$keyIndex];
                 }
             }
 
             ksort($counters['month']);
             ksort($counters['year']);
+        }
+
+        foreach (['year', 'month'] as $stat) {
+            $counter = [];
+            foreach ($counters[$stat] as $key => $value) {
+                $counter[$key] = [
+                    'total' => $value,
+                    'applications' => [],
+                ];
+                foreach ($counters['app'] as $applicationCode => $applicationTotal) {
+                    if ('year' === $stat && 2019 === $key) {
+                        $counter[$key]['applications'][$applicationCode] = 0;
+                    } else {
+                        $counter[$key]['applications'][$applicationCode] =
+                            !empty($counters["$stat-app"])
+                            && !empty($counters["$stat-app"]["$key-$applicationCode"])
+                                ? $counters["$stat-app"]["$key-$applicationCode"]
+                                : 0;
+                    }
+                }
+            }
+
+            unset($counters["$stat-app"]);
+
+            $counters[$stat] = $counter;
+
+            if (\count($counter) > 0) {
+                $counters["$stat-max"] = max(array_column($counter, 'total'));
+            }
         }
 
         return $counters;

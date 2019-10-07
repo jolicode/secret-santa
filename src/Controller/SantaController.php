@@ -145,6 +145,8 @@ class SantaController extends AbstractController
 
             try {
                 $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $application->getAdmin()->getIdentifier(), true);
+
+                $this->statisticCollector->incrementSampleCount($secretSanta);
             } catch (MessageSendFailedException $e) {
                 $errors['send'] = $e->getMessage();
             }
@@ -238,6 +240,8 @@ class SantaController extends AbstractController
 
             if (null === $associations) {
                 $invalidCode = true;
+            } else {
+                $this->statisticCollector->incrementSpoilCount();
             }
         }
 
