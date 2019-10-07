@@ -136,7 +136,7 @@ class DiscordApplication implements ApplicationInterface
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl);
     }
 
-    public function finish(SecretSanta $secretSanta)
+    public function reset()
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);

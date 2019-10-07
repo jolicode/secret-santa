@@ -93,7 +93,7 @@ class SlackApplication implements ApplicationInterface
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getToken()->getToken());
     }
 
-    public function finish(SecretSanta $secretSanta)
+    public function reset()
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);

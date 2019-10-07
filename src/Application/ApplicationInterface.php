@@ -55,5 +55,5 @@ interface ApplicationInterface
      */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void;
 
-    public function finish(SecretSanta $secretSanta);
+    public function reset();
 }

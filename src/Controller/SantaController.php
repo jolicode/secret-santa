@@ -53,6 +53,7 @@ class SantaController extends AbstractController
     public function run(Rudolph $rudolph, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
+
         if (!$application->isAuthenticated()) {
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
@@ -229,6 +230,19 @@ class SantaController extends AbstractController
         return new Response($content);
     }
 
+    public function cancel(string $application): Response
+    {
+        $application = $this->getApplication($application);
+
+        if (!$application->isAuthenticated()) {
+            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+        }
+
+        $application->reset();
+
+        return $this->redirectToRoute('homepage');
+    }
+
     public function spoil(Request $request, Spoiler $spoiler): Response
     {
         $code = $request->request->get('code');
@@ -300,7 +314,7 @@ class SantaController extends AbstractController
     {
         if ($secretSanta->isDone()) {
             $this->statisticCollector->incrementUsageCount($secretSanta);
-            $application->finish($secretSanta);
+            $application->reset();
         }
     }
 }
