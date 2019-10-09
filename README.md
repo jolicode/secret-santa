@@ -13,7 +13,7 @@ Code source is under MIT License.
 The app requires:
 
 - a Redis server
-- PHP 7.1+
+- PHP 7.2+
 
 Run the following command to install the app locally:
 
