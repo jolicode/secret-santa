@@ -29,8 +29,10 @@
         <span>{{ user.name }} ({{ user.extra.nickname }})</span>
         {% if groups %}
             <span class="user-groups">
-                {% for group in groups if user.identifier in group.userIds %}
-                    <span class="user-group">{{ group.name }}</span>
+                {% for group in groups %}
+                    {% if user.identifier in group.userIds %}
+                        <span class="user-group">{{ group.name }}</span>
+                    {% endif %}
                 {% endfor %}
             </span>
         {% endif %}

@@ -57,7 +57,7 @@ class MessageSender
             ],
         ];
 
-        if ($receiverUser->getExtra() && array_key_exists('image', $receiverUser->getExtra())) {
+        if ($receiverUser->getExtra() && \array_key_exists('image', $receiverUser->getExtra())) {
             $receiverBlock['accessory'] = [
                 'type' => 'image',
                 'image_url' => $receiverUser->getExtra()['image'],
@@ -116,7 +116,7 @@ class MessageSender
                 'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
                 'text' => $fallbackText,
-                'blocks' => \json_encode($blocks),
+                'blocks' => json_encode($blocks),
             ]);
 
             if (!$response->getOk()) {
