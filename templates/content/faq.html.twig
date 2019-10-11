@@ -13,54 +13,51 @@
             <div class="content faq">
                 <h1 class="content-head is-center">Frequently asked questions</h1>
 
+                <h2>Privacy</h2>
+
                 <ul>
                     <li id="data-collect">
-                        <h2>
+                        <h3>
                             <a href="#data-collect">What do you do with the data you collect?</a>
-                        </h2>
+                        </h3>
                         <p>
-                            <em>Short answer:</em>
+                            <strong>Short answer</strong>:
                             Nothing 😚
                         </p>
                         <p>
-                            <em>Detailled answer:</em>
+                            <strong>Detailled answer</strong>:
                             We receive only the data mandatory to start the Secret Santa:
                             the list of users and usergroups in your organization. Once the private messages have been sent,
                             we forget everything! In fact, we do not even have a database 😮
                         </p>
                     </li>
+                </ul>
+
+                <h2>Using the app</h2>
+
+                <ul>
                     <li id="avoid-association">
-                        <h2>
+                        <h3>
                             <a href="#avoid-association">Can I make sure someone will be matched or not matched with someone else?</a>
-                        </h2>
+                        </h3>
                         <p>
                             No, the association is purely random so you cannot do that with our application.
                             An alternative could be to launch 2 Secret Santa with two groups of people.
                         </p>
                     </li>
                     <li id="new-participant">
-                        <h2>
+                        <h3>
                             <a href="#new-participant">Can I add a new participant once messages have been sent?</a>
-                        </h2>
+                        </h3>
                         <p>
                             No, you can't. However, you can still start a new Secret Santa. We advice you to add a note in the
                             message mentioning that this new draw cancel and replace the old one.
                         </p>
                     </li>
-                    <li id="hall-of-fame">
-                        <h2>
-                            <a href="#hall-of-fame">How can I add my company / organization to your Hall of Fame?</a>
-                        </h2>
-                        <p>
-                            Simply drop us an email at <a href="mailto:hello@secret-santa.team">hello@secret-santa.team</a>
-                            with the name, url and logo of the entity you want to add. It's free but if you want to tweet
-                            or share our app to the world, you are more than welcome.
-                        </p>
-                    </li>
                     <li id="big-team">
-                        <h2>
+                        <h3>
                             <a href="#big-team">Will the app work with team larger than 500 people?</a>
-                        </h2>
+                        </h3>
                         <p>
                             There is a 2 things to understand here. The first step in our application is to retrieve
                             all the users on your Slack workspace / Discord server - yes we retrieve all the users to allow
@@ -78,13 +75,54 @@
                             So there should not be any problem here.
                         </p>
                     </li>
+                </ul>
+
+                <h2>Discord</h2>
+
+                <ul>
+                    <li id="discord-server-dm">
+                        <h3>
+                            <a href="#discord-server-dm">What to do when a user does not allow to receive private message on a Discord server?</a>
+                        </h3>
+                        <p>
+                            Discord has an option to allow someone to not receive private message on a their server they
+                            belongs to.
+                        </p>
+                        <p>
+                            If you throw a Secret Santa in a server where a user does not allow to receive private message,
+                            Discord will prevent us to send them a message. So if you hit this error, you need to ask them
+                            to <strong>change their privacy settings</strong> on this server. See the example below:
+                        </p>
+                        <div class="is-center">
+                            <img src="{{ asset('images/discord-privacy-settings.gif') }}" alt="How to change the privacy settings on Discord" />
+                        </div>
+                        <p>
+                            Once they made the change, you can safely retry to send the messages. When the draw is finished,
+                            they can of course re-disable this setting as they wish.
+                        </p>
+                    </li>
                     <li id="invalid-user">
-                        <h2>
+                        <h3>
                             <a href="#invalid-user">Why did someone receive <code>@invalid-user</code> as the person to gift?</a>
-                        </h2>
+                        </h3>
                         <p>
                             This is due to a known bug of the Discord Android application. The workaround is to open the
                             conversation on the Discord desktop app (for Windows, MacOS or Linux) or on the website.
+                        </p>
+                    </li>
+                </ul>
+
+                <h2>Miscellaneous</h2>
+
+                <ul>
+                    <li id="hall-of-fame">
+                        <h3>
+                            <a href="#hall-of-fame">How can I add my company / organization to your Hall of Fame?</a>
+                        </h3>
+                        <p>
+                            Simply drop us an email at <a href="mailto:hello@secret-santa.team">hello@secret-santa.team</a>
+                            with the name, url and logo of the entity you want to add. It's free but if you want to tweet
+                            or share our app to the world, you are more than welcome.
                         </p>
                     </li>
                 </ul>

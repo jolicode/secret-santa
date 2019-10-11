@@ -793,6 +793,10 @@ textarea {
     color: #E03A4D;
     text-decoration: none;
 }
+.result-block .result-error p {
+    margin-top: 2em;
+    line-height: 1.5em;
+}
 .result-block .summary a {
     color: #E03A4D;
     text-decoration: none;
@@ -1002,11 +1006,9 @@ textarea {
     }
 }
 
-
 /**
  * Stats
  */
-
 .legend {
     display: flex;
     flex-direction: row;
@@ -1144,6 +1146,20 @@ textarea {
 
 .column-multiple .graph-column {
     min-width: auto;
+}
+
+/**
+ * FAQ
+ */
+.faq h2 {
+    margin-top: 100px;
+}
+.faq h3 {
+    margin-top: 50px;
+}
+.faq ul {
+    list-style: none;
+    padding-left: 0;
 }
 
 /** Override Font Awesome because the Slack logo is not up to date **/
