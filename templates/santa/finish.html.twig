@@ -41,7 +41,33 @@
                     }, false);
                 </script>
 
-                <h3>The solution</h3>
+                <h3>Explanation</h3>
+
+                <p>
+                    For information, here is the evil error{{ secretSanta.uniqueErrors|length > 1 ? 's' }} that caused this failure:
+                </p>
+
+                <div class="error-code">
+                    {% for error in secretSanta.uniqueErrors %}
+                        <span>{% if loop.length > 1 %}- {% endif %}{{ error|raw }}</span><br />
+                    {% endfor %}
+                </div>
+
+                {% if secretSanta.application == 'discord' %}
+                    <p>
+                        If a user <strong>does not allow to receive private message on a server</strong>, Discord will prevent us to send
+                        them a message. You need to ask them to <strong>change their privacy settings</strong> on this server.
+                        See <a href="{{ url('faq', {_fragment: 'discord-server-dm'}) }}" target="_blank">our FAQ</a> for more details.
+                        Once they made the change, you can safely retry to send the messages.
+                    </p>
+                {% endif %}
+
+                <p>
+                    Note that errors can also be due to <strong>temporary network problems</strong> when sending messages.
+                    So simply <strong>retrying to send messages</strong> could fix the problem. See below.
+                </p>
+
+                <h3>Retry to send the message</h3>
 
                 <p>
                     Please <strong>click the Continue</strong> button below to <strong>safely</strong> inform the remaining users as if nothing happened.
@@ -53,18 +79,6 @@
                         Continue - Send the remaining messages
                     </a>
                 </div>
-
-                <p>
-                    For information, here is the evil error that caused this failure:
-                </p>
-
-                <div class="error-code">
-                    {% for error in secretSanta.uniqueErrors %}
-                        <span>{% if loop.length > 1 %}- {% endif %}{{ error }}</span><br />
-                    {% endfor %}
-                </div>
-
-                <p>Note that errors are often due to <strong>temporary network problems</strong> when sending messages.</p>
 
                 <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
                     let secretSantaRetried = false;
