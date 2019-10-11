@@ -54,7 +54,6 @@
         "sort-packages": true
     },
     "scripts": {
-        "update:version:framework": "JoliCode\\SecretSanta\\Composer\\UpdateVersion::frameworkYaml",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
