@@ -106,6 +106,11 @@ class ContentController extends AbstractController
                 'image' => 'IDRA.png',
             ],
             [
+                'label' => 'Ingot Portal',
+                'link' => 'https://ingotportal.com',
+                'image' => 'ingot.jpg',
+            ],
+            [
                 'label' => 'JoliCode',
                 'link' => 'https://jolicode.com/',
                 'image' => 'jolicode.svg',
