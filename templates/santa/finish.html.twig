@@ -47,11 +47,11 @@
                     For information, here is the evil error{{ secretSanta.uniqueErrors|length > 1 ? 's' }} that caused this failure:
                 </p>
 
-                <div class="error-code">
-                    {% for error in secretSanta.uniqueErrors %}
-                        <span>{% if loop.length > 1 %}- {% endif %}{{ error|raw }}</span><br />
-                    {% endfor %}
-                </div>
+                {% for error in secretSanta.uniqueErrors %}
+                    <div class="error-code">
+                        {% if loop.length > 1 %}- {% endif %}{{ error|raw }}
+                    </div>
+                {% endfor %}
 
                 {% if secretSanta.application == 'discord' %}
                     <p>
