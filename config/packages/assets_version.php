@@ -15,7 +15,7 @@
 	$finder = new Symfony\Component\Finder\Finder();
 	$files = $finder->in($assetsDirectory)->files();
 
-	$hashes = hash_init();
+	$hashes = hash_init('crc32b');
 
 	foreach($files as $file) {
 		hash_update_file($hashes, $file);
