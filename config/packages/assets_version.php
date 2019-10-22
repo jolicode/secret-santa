@@ -9,24 +9,22 @@
     * file that was distributed with this source code.
     */
 
+	$rootDirectory = sprintf("%s/../../", __DIR__);
+	$assetsDirectory = realpath(sprintf("%s/public", $rootDirectory));
+
+	$finder = new Symfony\Component\Finder\Finder();
+	$files = $finder->in($assetsDirectory)->files();
+
+	$hashes = hash_init();
+
+	foreach($files as $file) {
+		hash_update_file($hashes, $file);
+	}
+
+	$hash = hash_final($hashes);
+
 	$container->loadFromExtension('framework', [
 		'assets' => [
-			'version' => function() {
-				$rootDirectory = sprintf("%s/../../", __DIR__);
-				$assetsDirectory = realpath(sprintf("%s/public", $rootDirectory));
-
-				$rdi = new \RecursiveDirectoryIterator($assetsDirectory);
-				$rii = new \RecursiveIteratorIterator($rdi);
-
-				$rawHash = '';
-
-				foreach($rii as $file) {
-					if (substr($file, -1) === '.' || substr($file, -1) === '..') continue;
-
-					$rawHash .= hash_file('sha256', $file);
-				}
-
-				return hash('crc32', $rawHash);
-			}
+			'version' => $hash
 		]
 	]);
