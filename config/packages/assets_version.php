@@ -11,11 +11,12 @@
 
 use Symfony\Component\Finder\Finder;
 
-$rootDirectory = sprintf('%s/../../', __DIR__);
-$assetsDirectory = realpath(sprintf('%s/public', $rootDirectory));
-
-$finder = new Finder();
-$files = $finder->in($assetsDirectory)->files();
+$files = (new Finder())
+    ->in(__DIR__ . '/../../public')
+    ->notName('*.php')
+    ->sortByName()
+    ->files()
+;
 
 $hashes = hash_init('crc32b');
 
