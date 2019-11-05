@@ -1,30 +1,32 @@
 <?php
 
-    /*
-    * This file is part of the Secret Santa project.
-    *
-    * (c) JoliCode <coucou@jolicode.com>
-    *
-    * For the full copyright and license information, please view the LICENSE
-    * file that was distributed with this source code.
-    */
+/*
+ * This file is part of the Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-	$rootDirectory = sprintf("%s/../../", __DIR__);
-	$assetsDirectory = realpath(sprintf("%s/public", $rootDirectory));
+use Symfony\Component\Finder\Finder;
 
-	$finder = new Symfony\Component\Finder\Finder();
-	$files = $finder->in($assetsDirectory)->files();
+$rootDirectory = sprintf('%s/../../', __DIR__);
+$assetsDirectory = realpath(sprintf('%s/public', $rootDirectory));
 
-	$hashes = hash_init('crc32b');
+$finder = new Finder();
+$files = $finder->in($assetsDirectory)->files();
 
-	foreach($files as $file) {
-		hash_update_file($hashes, $file);
-	}
+$hashes = hash_init('crc32b');
 
-	$hash = hash_final($hashes);
+foreach ($files as $file) {
+    hash_update_file($hashes, $file);
+}
 
-	$container->loadFromExtension('framework', [
-		'assets' => [
-			'version' => $hash
-		]
-	]);
+$hash = hash_final($hashes);
+
+$container->loadFromExtension('framework', [
+    'assets' => [
+        'version' => $hash,
+    ],
+]);
