@@ -156,6 +156,12 @@ class ContentController extends AbstractController
                 'image' => 'redirectionio.svg',
             ],
             [
+                'label' => 'Sencrop',
+                'link' => 'https://sencrop.com/',
+                'image' => 'sencrop.png',
+            ],
+
+            [
                 'label' => 'SensioLabs',
                 'link' => 'https://sensiolabs.com/',
                 'image' => 'sensiolabs.png',
