@@ -235,7 +235,7 @@ class SantaController extends AbstractController
         $application = $this->getApplication($application);
 
         if (!$application->isAuthenticated()) {
-            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+            return $this->redirectToRoute('homepage');
         }
 
         $application->reset();
