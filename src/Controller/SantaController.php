@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+use Twig\Environment;
 
 class SantaController extends AbstractController
 {
@@ -39,7 +40,7 @@ class SantaController extends AbstractController
     private $statisticCollector;
     private $bugsnag;
 
-    public function __construct(RouterInterface $router, \Twig_Environment $twig, LoggerInterface $logger, array $applications,
+    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, array $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
