@@ -96,6 +96,11 @@ class ContentController extends AbstractController
                 'image' => 'getacopywriter.png',
             ],
             [
+                'label' => 'Happy Team',
+                'link' => 'https://happyteam.io',
+                'image' => 'happyteam.png',
+            ],
+            [
                 'label' => 'IdeaFoster',
                 'link' => 'https://www.ideafoster.com',
                 'image' => 'ideafoster.png',
