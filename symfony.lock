@@ -161,9 +161,6 @@
     "php-jsonpointer/php-jsonpointer": {
         "version": "v3.0.2"
     },
-    "phpoption/phpoption": {
-        "version": "1.5.0"
-    },
     "predis/predis": {
         "version": "v1.1.1"
     },
@@ -412,9 +409,6 @@
     },
     "ua-parser/uap-php": {
         "version": "v3.5.0"
-    },
-    "vlucas/phpdotenv": {
-        "version": "v3.6.0"
     },
     "wohali/oauth2-discord-new": {
         "version": "v1.0.0"
