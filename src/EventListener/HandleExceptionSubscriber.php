@@ -17,8 +17,9 @@ use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Twig\Environment;
 
 class HandleExceptionSubscriber implements EventSubscriberInterface
 {
@@ -26,16 +27,16 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
     private $twig;
     private $bugsnag;
 
-    public function __construct(LoggerInterface $logger, \Twig_Environment $twig, Client $bugsnag)
+    public function __construct(LoggerInterface $logger, Environment $twig, Client $bugsnag)
     {
         $this->logger = $logger;
         $this->twig = $twig;
         $this->bugsnag = $bugsnag;
     }
 
-    public function handleException(GetResponseForExceptionEvent $event)
+    public function handleException(ExceptionEvent $event)
     {
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
         $statusCode = null;
 
         if ($exception instanceof AuthenticationException) {

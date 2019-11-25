@@ -14,13 +14,14 @@ namespace JoliCode\SecretSanta\Controller;
 use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class ContentController extends AbstractController
 {
     private $twig;
     private $statisticCollector;
 
-    public function __construct(\Twig_Environment $twig, StatisticCollector $statisticCollector)
+    public function __construct(Environment $twig, StatisticCollector $statisticCollector)
     {
         $this->twig = $twig;
         $this->statisticCollector = $statisticCollector;

@@ -45,19 +45,11 @@ class Rudolph
 
         if (\count($filteredUsers) !== \count($users)) {
             $duplicated = array_unique(array_diff_key($users, $filteredUsers));
-            throw new \LogicException(
-                sprintf(
-                    '%s more than one time in the list: %s.',
-                    \count($duplicated) > 1 ? 'These users were' : 'This user was',
-                    implode(', ', $duplicated)
-                )
-            );
+            throw new \LogicException(sprintf('%s more than one time in the list: %s.', \count($duplicated) > 1 ? 'These users were' : 'This user was', implode(', ', $duplicated)));
         }
 
         if (\count($filteredUsers) < 2) {
-            throw new \LogicException(
-                sprintf('Expected at least 2 users in the list, %s given.', \count($filteredUsers))
-            );
+            throw new \LogicException(sprintf('Expected at least 2 users in the list, %s given.', \count($filteredUsers)));
         }
     }
 }
