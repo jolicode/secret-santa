@@ -11,11 +11,11 @@
 
 namespace JoliCode\SecretSanta\tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 trait SessionPrepareTrait
 {
-    public function prepareSession(Client $client, string $key, $value)
+    public function prepareSession(KernelBrowser $client, string $key, $value)
     {
         $session = self::$kernel->getContainer()->get('session');
         $session->start();
