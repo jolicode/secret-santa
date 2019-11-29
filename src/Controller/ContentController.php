@@ -77,6 +77,12 @@ class ContentController extends AbstractController
                 'image' => 'digital-ping-pong.svg',
             ],
             [
+                'label' => 'Elao',
+                'link' => 'https://www.elao.com',
+                'image' => 'elao.jpg',
+            ],
+
+            [
                 'label' => 'EvaluAgent',
                 'link' => 'https://www.evaluagent.com/',
                 'image' => 'evaluagent.png',
