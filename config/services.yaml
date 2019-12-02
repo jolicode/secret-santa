@@ -13,6 +13,12 @@ services:
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
         public: false
+        bind:
+            iterable $applications: !tagged_iterator secret_santa.application
+
+    _instanceof:
+        JoliCode\SecretSanta\Application\ApplicationInterface:
+            tags: ['secret_santa.application']
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -32,10 +38,6 @@ services:
     # add more services, or override services that need manual wiring
     JoliCode\SecretSanta\Controller\SantaController:
         public: true
-        arguments:
-            $applications:
-                - '@JoliCode\SecretSanta\Application\SlackApplication'
-                - '@JoliCode\SecretSanta\Application\DiscordApplication'
 
     JoliCode\SecretSanta\Controller\SlackController:
         public: true

@@ -70,7 +70,7 @@ class SlackController extends AbstractController
         } elseif (empty($request->query->get('state')) || ($request->query->get('state') !== $session->get(SlackApplication::SESSION_KEY_STATE))) {
             $session->remove(SlackApplication::SESSION_KEY_STATE);
 
-            throw new AuthenticationException('Invalid OAuth state.');
+            throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Invalid OAuth state.');
         }
 
         try {
@@ -83,7 +83,7 @@ class SlackController extends AbstractController
             /** @var SlackResourceOwner $user */
             $user = $provider->getResourceOwner($token);
         } catch (\Exception $e) {
-            throw new AuthenticationException('Failed to retrieve data from Slack.', 0, $e);
+            throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Failed to retrieve data from Slack.', $e);
         }
 
         $slackApplication->setToken($token);

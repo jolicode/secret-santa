@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Slack;
 
+use JoliCode\SecretSanta\Application\SlackApplication;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
@@ -37,7 +38,7 @@ class UserExtractor
         $startTime = time();
         do {
             if ((time() - $startTime) > 19) {
-                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team.');
+                throw new UserExtractionFailedException(SlackApplication::APPLICATION_CODE, 'Took too much time to retrieve all the users on your team.');
             }
 
             try {
@@ -47,10 +48,10 @@ class UserExtractor
                 ]);
 
                 if (!$response->getOk()) {
-                    throw new UserExtractionFailedException('Could not fetch members in team.');
+                    throw new UserExtractionFailedException(SlackApplication::APPLICATION_CODE, 'Could not fetch members in team.');
                 }
             } catch (\Throwable $t) {
-                throw new UserExtractionFailedException('Could not fetch members in team.', 0, $t);
+                throw new UserExtractionFailedException(SlackApplication::APPLICATION_CODE, 'Could not fetch members in team.', $t);
             }
 
             $slackUsers = array_merge($slackUsers, $response->getMembers());

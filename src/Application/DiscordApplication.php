@@ -23,6 +23,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DiscordApplication implements ApplicationInterface
 {
+    const APPLICATION_CODE = 'discord';
+
     const SESSION_KEY_STATE = 'santa.discord.state';
 
     private const SESSION_KEY_TOKEN = 'santa.discord.token';
@@ -47,7 +49,7 @@ class DiscordApplication implements ApplicationInterface
 
     public function getCode(): string
     {
-        return 'discord';
+        return self::APPLICATION_CODE;
     }
 
     public function isAuthenticated(): bool

@@ -11,6 +11,19 @@
 
 namespace JoliCode\SecretSanta\Exception;
 
-class AuthenticationException extends \RuntimeException
+class AuthenticationException extends \RuntimeException implements ApplicationRelatedException
 {
+    private $applicationCode;
+
+    public function __construct(string $applicationCode, $message = '', \Throwable $previous = null)
+    {
+        $this->applicationCode = $applicationCode;
+
+        parent::__construct($message, 0, $previous);
+    }
+
+    public function getApplicationCode(): string
+    {
+        return $this->applicationCode;
+    }
 }
