@@ -63,7 +63,11 @@ Someone has also been chosen to get you a gift.', $receiver);
             $precision = null;
 
             if (($response = $e->getResponse()) && 403 === $response->getStatusCode()) {
-                $precision = 'The user does not allow to receive DM on this server. Please ask them to change their server settings.';
+                $precision = sprintf(
+                    '@%s does not allow to receive DM on the server "%s". Please ask them to change their server privacy settings as explained in our faq.',
+                    $secretSanta->getUser($giver)->getName(),
+                    $secretSanta->getOrganization()
+                );
             }
 
             throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $e, $precision);

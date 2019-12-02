@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\EventListener;
 
 use Bugsnag\Client;
+use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use Psr\Log\LoggerInterface;
@@ -26,18 +27,21 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
     private $logger;
     private $twig;
     private $bugsnag;
+    private $applications;
 
-    public function __construct(LoggerInterface $logger, Environment $twig, Client $bugsnag)
+    public function __construct(LoggerInterface $logger, Environment $twig, Client $bugsnag, iterable $applications)
     {
         $this->logger = $logger;
         $this->twig = $twig;
         $this->bugsnag = $bugsnag;
+        $this->applications = $applications;
     }
 
     public function handleException(ExceptionEvent $event)
     {
         $exception = $event->getThrowable();
         $statusCode = null;
+        $applicationCode = null;
 
         if ($exception instanceof AuthenticationException) {
             $this->logger->error(sprintf('Authentication error: %s', $exception->getMessage()), [
@@ -49,6 +53,8 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
             });
 
             $statusCode = 401;
+
+            $applicationCode = $exception->getApplicationCode();
         } elseif ($exception instanceof UserExtractionFailedException) {
             $this->logger->error('Could not retrieve users', [
                 'exception' => $exception,
@@ -58,11 +64,21 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
                 $report->setSeverity('error');
             });
 
+            $applicationCode = $exception->getApplicationCode();
+
             $statusCode = 500;
         }
 
         if (!$statusCode) {
             return;
+        }
+
+        if ($applicationCode) {
+            $application = $this->getApplication($applicationCode);
+
+            if ($application) {
+                $application->reset();
+            }
         }
 
         $response = new Response($this->twig->render('error.html.twig', [
@@ -78,5 +94,16 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
         return [
             KernelEvents::EXCEPTION => ['handleException', 255],
         ];
+    }
+
+    private function getApplication(string $code): ?ApplicationInterface
+    {
+        foreach ($this->applications as $application) {
+            if ($application->getCode() === $code) {
+                return $application;
+            }
+        }
+
+        return null;
     }
 }

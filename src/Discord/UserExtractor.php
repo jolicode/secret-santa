@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Discord;
 
+use JoliCode\SecretSanta\Application\DiscordApplication;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
@@ -40,7 +41,7 @@ class UserExtractor
         $startTime = time();
         do {
             if ((time() - $startTime) > 19) {
-                throw new UserExtractionFailedException('Took too much time to retrieve all the users on your team.');
+                throw new UserExtractionFailedException(DiscordApplication::APPLICATION_CODE, 'Took too much time to retrieve all the users on your team.');
             }
 
             $lastMember = $lastMembers ? end($lastMembers) : null;
@@ -49,7 +50,7 @@ class UserExtractor
                 /** @var GuildMember[] $members */
                 $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember ? $lastMember->user->id : null);
             } catch (\Throwable $t) {
-                throw new UserExtractionFailedException('Could not fetch members in guild.', 0, $t);
+                throw new UserExtractionFailedException(DiscordApplication::APPLICATION_CODE, 'Could not fetch members in guild.', $t);
             }
 
             $members = array_merge($members, $lastMembers);

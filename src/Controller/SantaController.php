@@ -40,7 +40,7 @@ class SantaController extends AbstractController
     private $statisticCollector;
     private $bugsnag;
 
-    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, array $applications,
+    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;

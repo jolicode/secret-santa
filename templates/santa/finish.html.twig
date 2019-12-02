@@ -58,16 +58,16 @@
                         If a user <strong>does not allow to receive private message on a server</strong>, Discord will prevent us to send
                         them a message. You need to ask them to <strong>change their privacy settings</strong> on this server.
                         See <a href="{{ url('faq', {_fragment: 'discord-server-dm'}) }}" target="_blank">our FAQ</a> for more details.
-                        Once they made the change, you can safely retry to send the messages.
+                        Once they made the change, you can safely retry to send the remaining messages. See below.
                     </p>
                 {% endif %}
 
                 <p>
                     Note that errors can also be due to <strong>temporary network problems</strong> when sending messages.
-                    So simply <strong>retrying to send messages</strong> could fix the problem. See below.
+                    So simply <strong>retrying to send the remaining messages</strong> could fix the problem. See below.
                 </p>
 
-                <h3>Retry to send the message</h3>
+                <h3>Retry to send the remaining message</h3>
 
                 <p>
                     Please <strong>click the Continue</strong> button below to <strong>safely</strong> inform the remaining users as if nothing happened.
@@ -75,7 +75,7 @@
 
                 <div class="is-center">
                     <a href="{{ path('send_messages', {hash: secretSanta.hash}) }}" class="big-button warning-btn" id="retry-button">
-                        <span class="fas fa-exclamation-triangle" aria-hidden="true"></span>
+                        <span class="fas fa-redo" aria-hidden="true"></span>
                         Continue - Send the remaining messages
                     </a>
                 </div>
@@ -107,7 +107,7 @@
 
         <div class="is-center">
             <a href="{{ path('homepage') }}" class="big-button">
-                <span class="fas fa-redo" aria-hidden="true"></span>
+                <span class="fas fa-plus" aria-hidden="true"></span>
                 Start another Secret Santa
             </a>
         </div>

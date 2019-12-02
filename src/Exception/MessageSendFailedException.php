@@ -24,7 +24,7 @@ class MessageSendFailedException extends \RuntimeException implements SecretSant
         $this->secretSanta = $secretSanta;
         $this->recipient = $recipient;
 
-        parent::__construct(sprintf('Fail to send message to %s.%s', $recipient->getName(), $precision ? ' ' . $precision : ''), 0, $previous);
+        parent::__construct(sprintf('Fail to send message to @%s.%s', $recipient->getName(), $precision ? ' ' . $precision : ''), 0, $previous);
     }
 
     public function getSecretSanta(): SecretSanta
