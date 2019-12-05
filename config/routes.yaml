@@ -62,3 +62,7 @@ slack_authenticate:
 discord_authenticate:
     path:     /auth/discord
     defaults: { _controller: JoliCode\SecretSanta\Controller\DiscordController::authenticate }
+
+zoom_authenticate:
+    path:     /auth/zoom
+    defaults: { _controller: JoliCode\SecretSanta\Controller\ZoomController::authenticate }

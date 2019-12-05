@@ -21,6 +21,7 @@
         "php": "^7.2",
         "adam-paterson/oauth2-slack": "^1.1.3",
         "bugsnag/bugsnag-symfony": "dev-symfony-5",
+        "iflorespaz/oauth2-zoom": "dev-master",
         "jolicode/slack-php-api": "^2.0",
         "nelmio/security-bundle": "dev-symfony5-simple",
         "nyholm/psr7": "^1.2",
@@ -34,8 +35,8 @@
         "symfony/http-client": "^5.0",
         "symfony/monolog-bundle": "^3.3",
         "symfony/twig-bundle": "^5.0",
-        "twig/twig": "^2.12",
         "symfony/yaml": "5.0 as 4.4",
+        "twig/twig": "^2.12",
         "wohali/oauth2-discord-new": "^1.0"
     },
     "require-dev": {
@@ -56,6 +57,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/damienalexandre/NelmioSecurityBundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jiminny/oauth2-zoom"
         }
     ],
     "config": {

@@ -1,0 +1,40 @@
+{% extends 'santa/run.html.twig' %}
+
+{% set hasRestrictedUser = true %}
+
+{% import _self as current %}
+
+{% macro userSummary(user) %}
+    <span class="user-summary">
+        <img src="{{ user.extra.image }}" alt="" />
+        <span>{{ user.extra.nickname }}</span>
+        <span data-uncheck-user="user-{{ user.identifier }}" class="fas fa-times" title="Unselect this user"></span>
+    </span>
+{% endmacro %}
+
+{% block user_item %}
+    <label
+            class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
+            for="user-{{ user.identifier }}"
+            data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
+    >
+        <input type="checkbox"
+               {{ user.identifier in selectedUsers ? 'checked="checked"' : '' }}
+               name="users[]"
+               value="{{ user.identifier }}"
+               id="user-{{ user.identifier }}"
+               data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
+        >
+        <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+        <span>{{ user.name }} ({{ user.extra.nickname }})</span>
+        {% if groups %}
+            <span class="user-groups">
+                {% for group in groups %}
+                    {% if user.identifier in group.userIds %}
+                        <span class="user-group">{{ group.name }}</span>
+                    {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
+    </label>
+{% endblock %}

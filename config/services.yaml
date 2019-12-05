@@ -51,6 +51,12 @@ services:
             $discordClientId: '%env(DISCORD_CLIENT_ID)%'
             $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
 
+    JoliCode\SecretSanta\Controller\ZoomController:
+        public: true
+        arguments:
+            $zoomClientId: '%env(ZOOM_CLIENT_ID)%'
+            $zoomClientSecret: '%env(ZOOM_CLIENT_SECRET)%'
+
     JoliCode\SecretSanta\Discord\ApiHelper:
         public: true
         arguments:
