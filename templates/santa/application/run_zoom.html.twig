@@ -6,8 +6,7 @@
 
 {% macro userSummary(user) %}
     <span class="user-summary">
-        <img src="{{ user.extra.image }}" alt="" />
-        <span>{{ user.extra.nickname }}</span>
+        <span>{{ user.name }}</span>
         <span data-uncheck-user="user-{{ user.identifier }}" class="fas fa-times" title="Unselect this user"></span>
     </span>
 {% endmacro %}
@@ -16,7 +15,7 @@
     <label
             class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
             for="user-{{ user.identifier }}"
-            data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
+            data-search-index="{{ user.name }}"
     >
         <input type="checkbox"
                {{ user.identifier in selectedUsers ? 'checked="checked"' : '' }}
@@ -25,8 +24,7 @@
                id="user-{{ user.identifier }}"
                data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
         >
-        <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
-        <span>{{ user.name }} ({{ user.extra.nickname }})</span>
+        <span>{{ user.name }}</span>
         {% if groups %}
             <span class="user-groups">
                 {% for group in groups %}

@@ -11,9 +11,10 @@
 
 namespace JoliCode\SecretSanta\Application;
 
-use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
+use JoliCode\SecretSanta\Zoom\MessageSender;
+use JoliCode\SecretSanta\Zoom\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -25,20 +26,19 @@ class ZoomApplication implements ApplicationInterface
     const SESSION_KEY_STATE = 'santa.zoom.state';
 
     private const SESSION_KEY_TOKEN = 'santa.zoom.token';
+    private const SESSION_KEY_BOT_TOKEN = 'santa.zoom.bot_token';
     private const SESSION_KEY_ADMIN = 'santa.zoom.admin';
-    //private const SESSION_KEY_GUILD_ID = 'santa.zoom.guild_id';
+    private const SESSION_KEY_ACCOUNT_ID = 'santa.zoom.account_id';
 
     private $requestStack;
-    private $apiHelper;
     private $userExtractor;
     private $messageSender;
 
-    /** @var Group[]|null */
-    private $groups = null;
-
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, UserExtractor $userExtractor, MessageSender $messageSender)
     {
         $this->requestStack = $requestStack;
+        $this->userExtractor = $userExtractor;
+        $this->messageSender = $messageSender;
     }
 
     public function getCode(): string
@@ -64,7 +64,7 @@ class ZoomApplication implements ApplicationInterface
 
     public function getOrganization(): string
     {
-        return 'todo zoom name';
+        return $this->getAccountId(); // todo: there is no team name :/
     }
 
     public function getAdmin(): ?User
@@ -84,25 +84,35 @@ class ZoomApplication implements ApplicationInterface
 
     public function getUsers(): array
     {
-
-
-        return [];
+        return $this->userExtractor->extractAll($this->getToken()->getToken());
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
     {
-        //$this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $isSample);
+        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $this->getBotToken()->getToken(), $this->getAccountId(), $isSample);
     }
 
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
-        //$this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl);
+        $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getBotToken()->getToken(), $this->getAccountId());
     }
 
     public function reset()
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
+        $this->getSession()->remove(self::SESSION_KEY_BOT_TOKEN);
+        $this->getSession()->remove(self::SESSION_KEY_ACCOUNT_ID);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
+    }
+
+    public function setAccountId(string $accountId)
+    {
+        $this->getSession()->set(self::SESSION_KEY_ACCOUNT_ID, $accountId);
+    }
+
+    public function getAccountId()
+    {
+        return $this->getSession()->get(self::SESSION_KEY_ACCOUNT_ID);
     }
 
     public function setToken(AccessToken $token)
@@ -110,9 +120,25 @@ class ZoomApplication implements ApplicationInterface
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
+    public function setBotToken(AccessToken $token)
+    {
+        $this->getSession()->set(self::SESSION_KEY_BOT_TOKEN, $token);
+    }
+
     public function getToken(): AccessToken
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
+
+        if (!($token instanceof AccessToken)) {
+            throw new \LogicException('Invalid token.');
+        }
+
+        return $token;
+    }
+
+    public function getBotToken(): AccessToken
+    {
+        $token = $this->getSession()->get(self::SESSION_KEY_BOT_TOKEN);
 
         if (!($token instanceof AccessToken)) {
             throw new \LogicException('Invalid token.');

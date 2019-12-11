@@ -15,6 +15,7 @@ services:
         public: false
         bind:
             iterable $applications: !tagged_iterator secret_santa.application
+            $zoomBotJid: '%env(ZOOM_BOT_JID)%'
 
     _instanceof:
         JoliCode\SecretSanta\Application\ApplicationInterface:

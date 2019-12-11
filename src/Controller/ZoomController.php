@@ -11,18 +11,18 @@
 
 namespace JoliCode\SecretSanta\Controller;
 
-use JoliCode\SecretSanta\Application\DiscordApplication;
 use JoliCode\SecretSanta\Application\ZoomApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Model\User;
 use League\OAuth2\Client\Provider\Zoom;
+use League\OAuth2\Client\Provider\ZoomResourceOwner;
+use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-use Wohali\OAuth2\Client\Provider\Discord;
-use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 
 class ZoomController extends AbstractController
 {
@@ -40,7 +40,7 @@ class ZoomController extends AbstractController
     /**
      * Ask for Zoom authentication and store the AccessToken in Session.
      */
-    public function authenticate(Request $request, ZoomApplication $discordApplication): Response
+    public function authenticate(Request $request, ZoomApplication $zoomApplication): Response
     {
         $session = $request->getSession();
 
@@ -56,7 +56,13 @@ class ZoomController extends AbstractController
 
         if (!$request->query->has('code')) {
             $options = [
-                'scope' => ['']
+                'scope' => [
+                    'imchat:bot', // from https://marketplace.zoom.us/docs/guides/chatbots/sending-messages
+                    'imchat:write:admin',
+                    'user:read:admin', // needed for getResourceOwner
+                    'contact:read:admin',
+                    //'chat_message:write', For "user" api only, we are "account" level app
+                ],
             ];
 
             $authUrl = $provider->getAuthorizationUrl($options);
@@ -72,26 +78,29 @@ class ZoomController extends AbstractController
         }
 
         try {
-            // Try to get an access token (using the authorization code grant)
+            /** @var AccessTokenInterface|AccessToken $botToken */
+            $botToken = $provider->getAccessToken('client_credentials');
+
+            /** @var AccessTokenInterface|AccessToken $token */
             $token = $provider->getAccessToken('authorization_code', [
                 'code' => $request->query->get('code'),
             ]);
 
-            dump($token);
-            die();
-
-            // Who Am I?
-            /** @var DiscordResourceOwner $user */
+            /** @var ZoomResourceOwner $user */
             $user = $provider->getResourceOwner($token);
         } catch (\Exception $e) {
-            throw new AuthenticationException(ZoomApplication::APPLICATION_CODE, 'Failed to retrieve data from Discord.', $e);
+            throw new AuthenticationException(ZoomApplication::APPLICATION_CODE, 'Failed to retrieve data from Zoom.', $e);
         }
 
-        $discordApplication->setToken($token);
-        $discordApplication->setAdmin(new User($user->getId(), $user->getUsername()));
+        $zoomApplication->setToken($token);
+        $zoomApplication->setBotToken($botToken);
+        $userData = $user->toArray();
+
+        $zoomApplication->setAdmin(new User($userData['id'], $userData['first_name'] . ' ' . $userData['last_name']));
+        $zoomApplication->setAccountId($userData['account_id']);
 
         return new RedirectResponse($this->router->generate('run', [
-            'application' => $discordApplication->getCode(),
+            'application' => $zoomApplication->getCode(),
         ]));
     }
 }
