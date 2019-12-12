@@ -32,7 +32,8 @@ class UserExtractor
     {
         /** @var array $zoomUsers */
         $zoomUsers = [];
-        $cursor = '';
+        $page = 1;
+        $numberOfPages = null;
         $startTime = time();
 
         do {
@@ -41,21 +42,27 @@ class UserExtractor
             }
 
             try {
-                $contacts = $this->httpClient->request('GET', 'https://api.zoom.us/v2/contacts', [
+                $users = $this->httpClient->request('GET', 'https://api.zoom.us/v2/users', [
                     'query' => [
-                        'page_size' => 25,
+                        'page_size' => 100,
+                        'page_number' => $page,
                     ],
                     'auth_bearer' => $token,
                 ]);
 
-                $contacts = $contacts->toArray();
+                $users = $users->toArray();
             } catch (\Throwable $t) {
                 throw new UserExtractionFailedException(ZoomApplication::APPLICATION_CODE, 'Could not fetch members in team.', $t);
             }
 
-            $zoomUsers = array_merge($zoomUsers, $contacts['contacts']);
-            $cursor = $contacts['next_page_token'];
-        } while (!empty($cursor));
+            $zoomUsers = array_merge($zoomUsers, $users['users']);
+
+            if (null === $numberOfPages) {
+                $numberOfPages = ceil($users['total_records'] / $users['page_size']);
+            }
+
+            ++$page;
+        } while ($numberOfPages >= $page);
 
         $users = [];
 
@@ -64,8 +71,7 @@ class UserExtractor
                 $zoomUser['id'],
                 $zoomUser['first_name'] . ' ' . $zoomUser['last_name'],
                 [
-                    // @todo would be nice to have them...
-                    //'image' => $zoomUser->getProfile()->getImage192(),
+                    'image' => isset($zoomUser['pic_url']) ? $zoomUser['pic_url'] : null,
                     'restricted' => false,
                 ]
             );
