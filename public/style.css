@@ -75,6 +75,7 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     --color-error-background: #ffeaea;
     --color-slack: #ecb22e;
     --color-discord: #7289da;
+    --color-zoom: #0E71EB; /* cf. https://zoom.us/brandguidelines */
 }
 
 /* Our css \o/ */
@@ -358,7 +359,10 @@ footer a {
     color: var(--color-slack);
 }
 .jumbotron .action-discord:hover {
-  color: var(--color-discord);
+    color: var(--color-discord);
+}
+.jumbotron .action-zoom:hover {
+    color: var(--color-zoom);
 }
 .jumbotron .action {
     display: inline-block;
@@ -1064,6 +1068,10 @@ textarea {
     background-color: var(--color-discord);
 }
 
+.legend .legend-item.zoom::before {
+    background-color: var(--color-zoom);
+}
+
 .single-values {
     padding: 10px;
     display: flex;
@@ -1148,6 +1156,10 @@ textarea {
     background-color: var(--color-discord);
 }
 
+.application-zoom .graph-bar {
+    background-color: var(--color-zoom);
+}
+
 .graph-legend-x {
     transform: rotate(282deg) translateX(96px) translateY(-14px);
     width: 150px;
@@ -1181,15 +1193,15 @@ textarea {
     padding-left: 0;
 }
 
-/** Override Font Awesome because the Slack logo is not up to date **/
-.custom-fa-slack, .custom-fa-discord {
+/** Override Font Awesome because the logo are not up to date **/
+.custom-fa-slack, .custom-fa-discord, .custom-fa-zoom {
     display: inline-block;
     font-style: normal;
     font-variant: normal;
     text-rendering: auto;
     line-height: 1;
 }
-.custom-fa-slack:before, .custom-fa-discord:before {
+.custom-fa-slack:before, .custom-fa-discord:before, .custom-fa-zoom:before {
     content: ' ';
     background-size: contain;
     background-repeat: no-repeat;
@@ -1205,4 +1217,7 @@ textarea {
 }
 .custom-fa-discord:before {
     background-image: url("images/discord-logo.svg?v2");
+}
+.custom-fa-zoom:before {
+    background-image: url("images/zoom-logo.svg");
 }
