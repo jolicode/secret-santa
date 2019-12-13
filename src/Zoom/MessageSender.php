@@ -17,6 +17,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MessageSender
 {
+    const SANTA_EMOJI = "\xF0\x9F\x8E\x85";
+    const GIFT_EMOJI = "\xF0\x9F\x8E\x81";
+
     private $httpClient;
     private $zoomBotJid;
 
@@ -36,7 +39,7 @@ class MessageSender
         $body['to_jid'] = self::transformUserIdToJID($giver);
         $body['account_id'] = $accountId;
 
-        // todo: Does not work as expected
+        // Does not work on linux!
         $body['is_markdown_support'] = true;
 
         // Doc: https://marketplace.zoom.us/docs/guides/chatbots/customizing-messages/message-with-markdown
@@ -44,7 +47,7 @@ class MessageSender
             'body' => [
                 [
                     'type' => 'message',
-                    'text' => "Hi!\nYou have been *chosen* to be part of a Secret Santa &#127877;!\n\n",
+                    'text' => 'Hi! You have been *chosen* to be part of a Secret Santa ' . self::SANTA_EMOJI . '!',
                 ],
             ],
         ];
@@ -56,16 +59,22 @@ class MessageSender
             ];
         }
 
-        //$receiverUser = $secretSanta->getUser($receiver);
+        $receiverUser = $secretSanta->getUser($receiver);
         $body['content']['body'][] = [
             'type' => 'message',
-            'text' => sprintf("*You have been chosen to gift:*\n\n:gift: <!%s|Name Here> :gift:\n\n", $receiver),
+            'text' => sprintf("*You have been chosen to gift:*\n\n" . self::GIFT_EMOJI . ' <!%s|%s> ' . self::GIFT_EMOJI . "\n\n",
+                $receiver,
+                $receiverUser->getName()
+            ),
         ];
 
         if (!empty($secretSanta->getAdminMessage())) {
             $body['content']['body'][] = [
                 'type' => 'message',
-                'text' => sprintf('*Here is a message from the Secret Santa admin (<!%s>):*', $secretSanta->getAdmin()->getIdentifier()),
+                'text' => sprintf('*Here is a message from the Secret Santa admin (<!%s|%s>):*',
+                    $secretSanta->getAdmin()->getIdentifier(),
+                    $secretSanta->getAdmin()->getName()
+                ),
             ];
 
             $body['content']['body'][] = [
@@ -75,7 +84,10 @@ class MessageSender
         } else {
             $body['content']['body'][] = [
                 'type' => 'message',
-                'text' => sprintf('_If you have any question please ask your Secret Santa Admin: <!%s>_', $secretSanta->getAdmin()->getIdentifier()),
+                'text' => sprintf('_If you have any question please ask your Secret Santa Admin: <!%s|%s>_',
+                    $secretSanta->getAdmin()->getIdentifier(),
+                    $secretSanta->getAdmin()->getName()
+                ),
             ];
         }
 
@@ -107,7 +119,9 @@ class MessageSender
 In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
 
 - Copy the following content:
-```%s```
+
+`%s`
+
 - Paste the content on <%s> then submit
 
 Remember, with great power comes great responsibility!
