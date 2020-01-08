@@ -23,6 +23,7 @@ cache:
 install: composer install --prefer-dist --no-interaction
 
 script:
+    - composer validate
     - make test
     - make cs_dry_run
 

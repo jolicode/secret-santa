@@ -1,5 +1,6 @@
 {
     "name": "jolicode/secret-santa",
+    "description": "Throw a Secret Santa with your team!",
     "license": "MIT",
     "authors": [
         {
