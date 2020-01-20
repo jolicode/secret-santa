@@ -93,10 +93,19 @@ class MessageSender
 
         $body['content']['body'][] = [
             'type' => 'message',
-            'text' => 'That\'s a secret only shared with you! Someone has also been chosen to get you a gift.',
-            'italic' => true,
-            //'link' => 'https://secret-santa.team/', // todo: thats broken.
+            'text' => 'That\'s a secret only shared with you! Someone has also been chosen to get you a gift.'
+                . "\n" . 'https://secret-santa.team/',
+            'italic' => true, // Not working on android
         ];
+
+        // Add color sidebar
+        // Message appears empty on Android, no sidebar possible at the moment.
+        /*$oldBody = $body['content']['body'];
+        $body['content']['body'] = [
+            'type' => 'section',
+            'sidebar_color' => '#FFCC33',
+            'sections' => $oldBody
+        ];*/
 
         try {
             $this->httpClient->request('POST', 'https://api.zoom.us/v2/im/chat/messages', [
@@ -136,7 +145,7 @@ Happy Secret Santa!',
         $body['to_jid'] = self::transformUserIdToJID($secretSanta->getAdmin()->getIdentifier());
         $body['account_id'] = $accountId;
 
-        // todo: Does not work as expected
+        // todo: Does not work as expected on Linux
         $body['is_markdown_support'] = true;
 
         $body['content']['body'][] = [
@@ -155,7 +164,7 @@ Happy Secret Santa!',
     }
 
     /**
-     * @todo I have no idea why I should do this or if this is secure. The "contacts" API does not return JID, and JID are mandatory to send messages.
+     * @todo Hack to build the JID. Had a confirmation "I can do it like this".
      */
     private static function transformUserIdToJID(string $userId)
     {

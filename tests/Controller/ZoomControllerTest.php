@@ -13,18 +13,18 @@ namespace JoliCode\SecretSanta\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DiscordControllerTest extends WebTestCase
+class ZoomControllerTest extends WebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_auth_page_redirects_to_discord()
+    public function test_auth_page_redirects_to_zoom()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/auth/discord');
+        $crawler = $client->request('GET', '/auth/zoom');
         $response = $client->getResponse();
 
         self::assertSame(302, $response->getStatusCode());
-        self::assertContains('https://discordapp.com/api/', $response->getTargetUrl());
+        self::assertContains('https://zoom.us/oauth/authorize', $response->getTargetUrl());
     }
 }
