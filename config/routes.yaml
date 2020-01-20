@@ -1,68 +1,68 @@
 homepage:
     path:     /
-    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::homepage }
+    controller: JoliCode\SecretSanta\Controller\ContentController::homepage
 
 hall_of_fame:
     path:     /hall-of-fame
-    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::hallOfFame }
+    controller: JoliCode\SecretSanta\Controller\ContentController::hallOfFame
 
 stats:
     path:     /stats
-    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::stats }
+    controller: JoliCode\SecretSanta\Controller\ContentController::stats
 
 terms:
     path:     /terms-of-service
-    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::terms }
+    controller: JoliCode\SecretSanta\Controller\ContentController::terms
 
 privacy_policy:
     path:     /privacy-policy
-    defaults: { _controller: JoliCode\SecretSanta\Controller\ContentController::privacyPolicy }
+    controller: JoliCode\SecretSanta\Controller\ContentController::privacyPolicy
 
 faq:
     path:     /faq
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
-        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
         template: content/faq.html.twig
 
 sitemap:
     path:     /sitemap.xml
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
-        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
         template: content/sitemap.xml.twig
 
 run:
     path:     /run/{application}
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::run }
+    controller: JoliCode\SecretSanta\Controller\SantaController::run
 
 send_sample_message:
     path:     /sample-message/{application}
     methods:  POST
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::sendSampleMessage }
+    controller: JoliCode\SecretSanta\Controller\SantaController::sendSampleMessage
 
 send_messages:
     path:     /send-messages/{hash}
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::sendMessages }
+    controller: JoliCode\SecretSanta\Controller\SantaController::sendMessages
 
 finish:
     path:     /finish/{hash}
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::finish }
+    controller: JoliCode\SecretSanta\Controller\SantaController::finish
 
 cancel:
     path:     /cancel/{application}
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::cancel }
+    controller: JoliCode\SecretSanta\Controller\SantaController::cancel
 
 spoil:
     path:     /spoil
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SantaController::spoil }
+    controller: JoliCode\SecretSanta\Controller\SantaController::spoil
 
 slack_authenticate:
     path:     /auth/slack
-    defaults: { _controller: JoliCode\SecretSanta\Controller\SlackController::authenticate }
+    controller: JoliCode\SecretSanta\Controller\SlackController::authenticate
 
 discord_authenticate:
     path:     /auth/discord
-    defaults: { _controller: JoliCode\SecretSanta\Controller\DiscordController::authenticate }
+    controller: JoliCode\SecretSanta\Controller\DiscordController::authenticate
 
 zoom_authenticate:
     path:     /auth/zoom
-    defaults: { _controller: JoliCode\SecretSanta\Controller\ZoomController::authenticate }
+    controller: JoliCode\SecretSanta\Controller\ZoomController::authenticate
