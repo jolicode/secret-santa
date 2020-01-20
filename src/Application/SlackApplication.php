@@ -21,9 +21,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SlackApplication implements ApplicationInterface
 {
-    const APPLICATION_CODE = 'slack';
-
-    const SESSION_KEY_STATE = 'santa.slack.state';
+    public const APPLICATION_CODE = 'slack';
+    public const SESSION_KEY_STATE = 'santa.slack.state';
 
     private const SESSION_KEY_TOKEN = 'santa.slack.token';
     private const SESSION_KEY_ADMIN = 'santa.slack.admin';
@@ -110,7 +109,7 @@ class SlackApplication implements ApplicationInterface
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!($token instanceof AccessToken)) {
+        if (!$token instanceof AccessToken) {
             throw new \LogicException('Invalid token.');
         }
 

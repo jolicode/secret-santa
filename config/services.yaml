@@ -15,7 +15,7 @@ services:
         public: false
         bind:
             iterable $applications: !tagged_iterator secret_santa.application
-            $zoomBotJid: '%env(ZOOM_BOT_JID)%'
+            string $zoomBotJid: '%env(ZOOM_BOT_JID)%'
 
     _instanceof:
         JoliCode\SecretSanta\Application\ApplicationInterface:
@@ -41,19 +41,16 @@ services:
         public: true
 
     JoliCode\SecretSanta\Controller\SlackController:
-        public: true
         arguments:
             $slackClientId: '%env(SLACK_CLIENT_ID)%'
             $slackClientSecret: '%env(SLACK_CLIENT_SECRET)%'
 
     JoliCode\SecretSanta\Controller\DiscordController:
-        public: true
         arguments:
             $discordClientId: '%env(DISCORD_CLIENT_ID)%'
             $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
 
     JoliCode\SecretSanta\Controller\ZoomController:
-        public: true
         arguments:
             $zoomClientId: '%env(ZOOM_CLIENT_ID)%'
             $zoomClientSecret: '%env(ZOOM_CLIENT_SECRET)%'

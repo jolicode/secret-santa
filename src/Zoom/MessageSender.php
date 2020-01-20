@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Zoom;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MessageSender
@@ -112,7 +113,7 @@ class MessageSender
                 'json' => $body,
                 'auth_bearer' => $token,
             ]);
-        } catch (\Throwable $t) {
+        } catch (ExceptionInterface $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver), $t);
         }
     }
@@ -158,7 +159,7 @@ Happy Secret Santa!',
                 'json' => $body,
                 'auth_bearer' => $token,
             ]);
-        } catch (\Throwable $t) {
+        } catch (ExceptionInterface $t) {
             throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
         }
     }

@@ -42,17 +42,16 @@ class ZoomController extends AbstractController
      */
     public function authenticate(Request $request, ZoomApplication $zoomApplication): Response
     {
-        $session = $request->getSession();
+        if ($request->query->has('error')) {
+            return $this->redirectToRoute('homepage');
+        }
 
         $provider = new Zoom([
             'clientId' => $this->zoomClientId,
             'clientSecret' => $this->zoomClientSecret,
             'redirectUri' => $this->router->generate('zoom_authenticate', [], RouterInterface::ABSOLUTE_URL),
         ]);
-
-        if ($request->query->has('error')) {
-            return $this->redirectToRoute('homepage');
-        }
+        $session = $request->getSession();
 
         if (!$request->query->has('code')) {
             $options = [
@@ -66,12 +65,11 @@ class ZoomController extends AbstractController
             ];
 
             $authUrl = $provider->getAuthorizationUrl($options);
-
             $session->set(ZoomApplication::SESSION_KEY_STATE, $provider->getState());
 
             return new RedirectResponse($authUrl);
         // Check given state against previously stored one to mitigate CSRF attack
-        } elseif (empty($request->query->get('state')) || ($request->query->get('state') !== $session->get(ZoomApplication::SESSION_KEY_STATE))) {
+        } elseif (empty($request->query->get('state')) || $request->query->get('state') !== $session->get(ZoomApplication::SESSION_KEY_STATE)) {
             $session->remove(ZoomApplication::SESSION_KEY_STATE);
 
             throw new AuthenticationException(ZoomApplication::APPLICATION_CODE, 'Invalid OAuth state.');

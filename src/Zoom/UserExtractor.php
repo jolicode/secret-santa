@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Zoom;
 use JoliCode\SecretSanta\Application\ZoomApplication;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\User;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UserExtractor
@@ -51,7 +52,7 @@ class UserExtractor
                 ]);
 
                 $users = $users->toArray();
-            } catch (\Throwable $t) {
+            } catch (ExceptionInterface $t) {
                 throw new UserExtractionFailedException(ZoomApplication::APPLICATION_CODE, 'Could not fetch members in team.', $t);
             }
 

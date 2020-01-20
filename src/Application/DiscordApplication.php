@@ -23,9 +23,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class DiscordApplication implements ApplicationInterface
 {
-    const APPLICATION_CODE = 'discord';
-
-    const SESSION_KEY_STATE = 'santa.discord.state';
+    public const APPLICATION_CODE = 'discord';
+    public const SESSION_KEY_STATE = 'santa.discord.state';
 
     private const SESSION_KEY_TOKEN = 'santa.discord.token';
     private const SESSION_KEY_ADMIN = 'santa.discord.admin';
@@ -154,7 +153,7 @@ class DiscordApplication implements ApplicationInterface
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!($token instanceof AccessToken)) {
+        if (!$token instanceof AccessToken) {
             throw new \LogicException('Invalid token.');
         }
 

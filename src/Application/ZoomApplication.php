@@ -21,9 +21,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class ZoomApplication implements ApplicationInterface
 {
-    const APPLICATION_CODE = 'zoom';
-
-    const SESSION_KEY_STATE = 'santa.zoom.state';
+    public const APPLICATION_CODE = 'zoom';
+    public const SESSION_KEY_STATE = 'santa.zoom.state';
 
     private const SESSION_KEY_TOKEN = 'santa.zoom.token';
     private const SESSION_KEY_BOT_TOKEN = 'santa.zoom.bot_token';
@@ -129,7 +128,7 @@ class ZoomApplication implements ApplicationInterface
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!($token instanceof AccessToken)) {
+        if (!$token instanceof AccessToken) {
             throw new \LogicException('Invalid token.');
         }
 
@@ -139,8 +138,7 @@ class ZoomApplication implements ApplicationInterface
     public function getBotToken(): AccessToken
     {
         $token = $this->getSession()->get(self::SESSION_KEY_BOT_TOKEN);
-
-        if (!($token instanceof AccessToken)) {
+        if (!$token instanceof AccessToken) {
             throw new \LogicException('Invalid token.');
         }
 
