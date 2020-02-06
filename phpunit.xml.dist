@@ -20,6 +20,9 @@
         <env name="DISCORD_CLIENT_ID" value="DUMMY"/>
         <env name="DISCORD_CLIENT_SECRET" value="DUMMY"/>
         <env name="DISCORD_BOT_TOKEN" value="DUMMY"/>
+        <env name="ZOOM_CLIENT_ID" value="DUMMY"/>
+        <env name="ZOOM_CLIENT_SECRET" value="DUMMY"/>
+        <env name="ZOOM_BOT_JID" value="DUMMY"/>
         <env name="BUGSNAG_KEY" value=""/>
         <env name="BUGSNAG_STAGE" value="development"/>
     </php>

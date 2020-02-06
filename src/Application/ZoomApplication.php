@@ -13,19 +13,21 @@ namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
-use JoliCode\SecretSanta\Slack\MessageSender;
-use JoliCode\SecretSanta\Slack\UserExtractor;
+use JoliCode\SecretSanta\Zoom\MessageSender;
+use JoliCode\SecretSanta\Zoom\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class SlackApplication implements ApplicationInterface
+class ZoomApplication implements ApplicationInterface
 {
-    public const APPLICATION_CODE = 'slack';
-    public const SESSION_KEY_STATE = 'santa.slack.state';
+    public const APPLICATION_CODE = 'zoom';
+    public const SESSION_KEY_STATE = 'santa.zoom.state';
 
-    private const SESSION_KEY_TOKEN = 'santa.slack.token';
-    private const SESSION_KEY_ADMIN = 'santa.slack.admin';
+    private const SESSION_KEY_TOKEN = 'santa.zoom.token';
+    private const SESSION_KEY_BOT_TOKEN = 'santa.zoom.bot_token';
+    private const SESSION_KEY_ADMIN = 'santa.zoom.admin';
+    private const SESSION_KEY_ACCOUNT_ID = 'santa.zoom.account_id';
 
     private $requestStack;
     private $userExtractor;
@@ -56,12 +58,12 @@ class SlackApplication implements ApplicationInterface
 
     public function getAuthenticationRoute(): string
     {
-        return 'slack_authenticate';
+        return 'zoom_authenticate';
     }
 
     public function getOrganization(): string
     {
-        return $this->getToken()->getValues()['team_name'] ?? '';
+        return $this->getAccountId(); // todo: there is no team name :/
     }
 
     public function getAdmin(): ?User
@@ -76,7 +78,7 @@ class SlackApplication implements ApplicationInterface
 
     public function getGroups(): array
     {
-        return $this->userExtractor->extractGroups($this->getToken()->getToken());
+        return [];
     }
 
     public function getUsers(): array
@@ -86,18 +88,30 @@ class SlackApplication implements ApplicationInterface
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
     {
-        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $this->getToken()->getToken(), $isSample);
+        $this->messageSender->sendSecretMessage($secretSanta, $giver, $receiver, $this->getBotToken()->getToken(), $this->getAccountId(), $isSample);
     }
 
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
-        $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getToken()->getToken());
+        $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getBotToken()->getToken(), $this->getAccountId());
     }
 
     public function reset()
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
+        $this->getSession()->remove(self::SESSION_KEY_BOT_TOKEN);
+        $this->getSession()->remove(self::SESSION_KEY_ACCOUNT_ID);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
+    }
+
+    public function setAccountId(string $accountId)
+    {
+        $this->getSession()->set(self::SESSION_KEY_ACCOUNT_ID, $accountId);
+    }
+
+    public function getAccountId()
+    {
+        return $this->getSession()->get(self::SESSION_KEY_ACCOUNT_ID);
     }
 
     public function setToken(AccessToken $token)
@@ -105,10 +119,25 @@ class SlackApplication implements ApplicationInterface
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
-    private function getToken(): AccessToken
+    public function setBotToken(AccessToken $token)
+    {
+        $this->getSession()->set(self::SESSION_KEY_BOT_TOKEN, $token);
+    }
+
+    public function getToken(): AccessToken
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
+        if (!$token instanceof AccessToken) {
+            throw new \LogicException('Invalid token.');
+        }
+
+        return $token;
+    }
+
+    public function getBotToken(): AccessToken
+    {
+        $token = $this->getSession()->get(self::SESSION_KEY_BOT_TOKEN);
         if (!$token instanceof AccessToken) {
             throw new \LogicException('Invalid token.');
         }

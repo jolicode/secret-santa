@@ -74,6 +74,12 @@
     "guzzlehttp/psr7": {
         "version": "1.4.2"
     },
+    "iflorespaz/oauth2-zoom": {
+        "version": "1.0.1"
+    },
+    "jakeasmith/http_build_url": {
+        "version": "1.0.1"
+    },
     "jane-php/json-schema-runtime": {
         "version": "v4.0.1"
     },
@@ -133,6 +139,9 @@
     },
     "paragonie/random_compat": {
         "version": "v2.0.12"
+    },
+    "php": {
+        "version": "7.2"
     },
     "php-cs-fixer/diff": {
         "version": "v1.3.0"
