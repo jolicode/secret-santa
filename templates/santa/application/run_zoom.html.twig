@@ -15,6 +15,11 @@
     </div>
 
     {{ parent() }}
+
+    <div class="run-block is-center">
+        <p><em>Secret Santa can be removed from your account by following
+                <a href="{{ path('faq', { _fragment: 'zoom-uninstall' }) }}">those instructions</a>.</em></p>
+    </div>
 {% endblock content %}
 
 {% macro userSummary(user) %}
