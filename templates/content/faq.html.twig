@@ -11,7 +11,7 @@
     <div class="hall-of-fame">
         <div class="content-container">
             <div class="content faq">
-                <h1 class="content-head is-center">Frequently asked questions</h1>
+                <h1 class="content-head is-center">Help and Frequently Asked Questions</h1>
 
                 <h2>Privacy</h2>
 
@@ -36,6 +36,54 @@
                 <h2>Using the app</h2>
 
                 <ul>
+                    <li id="howto">
+                        <h3>
+                            <a href="#howto">How does it work?</a>
+                        </h3>
+                        <p>
+                            Once authenticated with your favorite Chat tool, you will be prompted with the User Selection screen.<br/>
+                            We show you all the Users in your team. Just select the ones which will take part to your Secret Santa by clicking on their names.<br/>
+                        </p>
+
+                        <div class="is-center">
+                            <img class="img-border" src="{{ asset('images/running-app.png') }}" style="max-width: 80%" alt="The main form" />
+                        </div>
+
+                        <p>
+                            Optionally, you can add a custom message that will be sent along the Secret Santa draw.
+                        </p>
+
+                        <p>
+                            You can always preview the private message that will be sent with the following button, that
+                            will send you and only you a custom message:
+                        </p>
+                        <p class="is-center">
+                            <button type="button" class="small-button">
+                                <span class="fas fa-wrench" aria-hidden="true"></span>
+                                Send me a sample message
+                            </button>
+                        </p>
+
+                        <p>
+                            Once you are ready, you can submit the Secret Santa by clicking this big red button:
+                        </p>
+                        <div class="is-center">
+                            <button type="submit" class="big-button">
+                                <span class="fas fa-paper-plane" aria-hidden="true"></span>
+                                Finish and send Secret Santa messages!
+                            </button>
+                        </div>
+                        <p>
+                            This will trigger the following operations:
+                        </p>
+                        <ol>
+                            <li>Shuffle all the Users;</li>
+                            <li>Assign a random User to each User, without collision;</li>
+                            <li><strong>Send a private message to each User</strong> with the User they must gift and your admin message;</li>
+                            <li>Send a private message to the Admin (you) with details.</li>
+                        </ol>
+                        <p>And that's it, you are done!</p>
+                    </li>
                     <li id="avoid-association">
                         <h3>
                             <a href="#avoid-association">Can I make sure someone will be matched or not matched with someone else?</a>
@@ -109,6 +157,39 @@
                             This is due to a known bug of the Discord Android application. The workaround is to open the
                             conversation on the Discord desktop app (for Windows, MacOS or Linux) or on the website.
                         </p>
+                    </li>
+                </ul>
+
+                <h2>Zoom.us</h2>
+
+                <ul>
+                    <li id="zoom-install">
+                        <h3>
+                            <a href="#zoom-install">How to install the app on Zoom.us?</a>
+                        </h3>
+                        <p>
+                            Go to <a href="{{ path('homepage') }}">Secret-Santa homepage</a> and click "Run on Zoom".
+                            You will be asked for permissions to use your Zoom Account:
+                        </p>
+                        <div class="is-center">
+                            <img class="img-border" src="{{ asset('images/zoom-install.png') }}" width="473px" alt="Install on Zoom" />
+                        </div>
+                        <p>Those permissions are <strong>mandatory</strong> to use Secret Santa.</p>
+                        <p>You will be then redirected to the Secret Santa screen, please refer to
+                            <a href="#howto">the main How-To</a> to learn how to use it.</p>
+                    </li>
+                    <li id="zoom-uninstall">
+                        <h3>
+                            <a href="#zoom-uninstall">Uninstalling from your Zoom Account</a>
+                        </h3>
+                        <p>
+                            All you need to do is revoke the App from your Zoom.us account here: <a
+                                    href="https://marketplace.zoom.us/user/installed">https://marketplace.zoom.us/user/installed</a>.
+                        </p>
+                        <div class="is-center">
+                            <img class="img-border" src="{{ asset('images/zoom-uninstall.png') }}" width="436px" alt="Uninstall Zoom" />
+                        </div>
+                        <p>There is no other required actions, <strong>we do not store any data</strong> about your organisation.</p>
                     </li>
                 </ul>
 

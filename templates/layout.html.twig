@@ -49,7 +49,7 @@
                         <a class="pure-menu-link" href="{{ path('hall_of_fame') }}"><i class="fas fa-star"></i> Hall of Fame</a>
                     </li>
                     <li class="pure-menu-item">
-                        <a class="pure-menu-link" href="{{ path('faq') }}"><i class="fas fa-question"></i> FAQ</a>
+                        <a class="pure-menu-link" href="{{ path('faq') }}"><i class="fas fa-question"></i> Help</a>
                     </li>
                     <li class="pure-menu-item">
                         <a target="_blank" rel="noreferrer" class="pure-menu-link" href="https://github.com/jolicode/secret-santa/"><i class="fab fa-github"></i> Star us on GitHub</a>
@@ -64,7 +64,8 @@
 
             <footer class="footer is-center {% block footerClass %}{% endblock %}">
                 {% block contact %}
-                    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="far fa-life-ring"></i> Need help? Contact us!</a>
+                    <a href="{{ path('faq') }}" class="support-link"><i class="fas fa-question"></i> Help</a>
+                    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="far fa-life-ring"></i> Contact us!</a>
                 {% endblock contact %}
                 <p>
                     This free service to share the santa spirit is made with ♥ by <a href="https://jolicode.com">JoliCode</a>.
