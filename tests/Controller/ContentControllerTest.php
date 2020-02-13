@@ -45,7 +45,7 @@ class ContentControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertCount(1, $crawler->filter('h1:contains("Frequently asked questions")'));
+        self::assertCount(1, $crawler->filter('h1:contains("Help and Frequently Asked Questions")'));
     }
 
     public function test_stats_works()
