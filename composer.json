@@ -23,7 +23,7 @@
         "adam-paterson/oauth2-slack": "^1.1.3",
         "bugsnag/bugsnag-symfony": "dev-symfony-5",
         "iflorespaz/oauth2-zoom": "dev-master",
-        "jolicode/slack-php-api": "^2.0",
+        "jolicode/slack-php-api": "^3.0",
         "nelmio/security-bundle": "dev-symfony5-simple",
         "nyholm/psr7": "^1.2",
         "predis/predis": "^1.1",
