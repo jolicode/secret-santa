@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "133080ed4b968e3180486675f9089a4c",
+    "content-hash": "c8a6bbfb9c616f613b8962ce6892e71d",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",
@@ -122,37 +122,37 @@
         },
         {
             "name": "bugsnag/bugsnag-symfony",
-            "version": "dev-symfony-5",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bugsnag/bugsnag-symfony.git",
-                "reference": "7eb2191bfc7e8d8314db49180779b6840f62cbd6"
+                "reference": "b6760f4d52ef956659eb1c4dc030ce589618223e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bugsnag/bugsnag-symfony/zipball/7eb2191bfc7e8d8314db49180779b6840f62cbd6",
-                "reference": "7eb2191bfc7e8d8314db49180779b6840f62cbd6",
+                "url": "https://api.github.com/repos/bugsnag/bugsnag-symfony/zipball/b6760f4d52ef956659eb1c4dc030ce589618223e",
+                "reference": "b6760f4d52ef956659eb1c4dc030ce589618223e",
                 "shasum": ""
             },
             "require": {
-                "bugsnag/bugsnag": "^3.15.0",
+                "bugsnag/bugsnag": "^3.20",
                 "php": ">=5.5",
-                "symfony/config": "^2.7|^3.0|^4.0|^5.0",
-                "symfony/console": "^2.7|^3.0|^4.0|^5.0",
-                "symfony/dependency-injection": "^2.7|^3.0|^4.0|^5.0",
-                "symfony/http-foundation": "^2.7|^3.0|^4.0|^5.0",
-                "symfony/http-kernel": "^2.7|^3.0|^4.0|^5.0",
-                "symfony/security-core": "^2.7|^3.0|^4.0|^5.0"
+                "symfony/config": "^2.7|^3|^4|^5",
+                "symfony/console": "^2.7|^3|^4|^5",
+                "symfony/dependency-injection": "^2.7|^3|^4|^5",
+                "symfony/http-foundation": "^2.7|^3|^4|^5",
+                "symfony/http-kernel": "^2.7|^3|^4|^5",
+                "symfony/security-core": "^2.7|^3|^4|^5"
             },
             "require-dev": {
                 "graham-campbell/testbench-core": "^1.1",
-                "mockery/mockery": "^0.9.4",
-                "phpunit/phpunit": "^4.8|^5.0"
+                "mockery/mockery": "^0.9.4|^1.3.1",
+                "phpunit/phpunit": "^4.8.36|^5.6.3"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.6-dev"
                 }
             },
             "autoload": {
@@ -180,7 +180,7 @@
                 "symfony",
                 "tracking"
             ],
-            "time": "2019-11-29T11:01:11+00:00"
+            "time": "2020-06-01T10:24:04+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -1288,16 +1288,16 @@
         },
         {
             "name": "nelmio/security-bundle",
-            "version": "dev-symfony5-simple",
+            "version": "v2.10.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/damienalexandre/NelmioSecurityBundle.git",
-                "reference": "145d85769b0a0afcd9cc495583f38f80d4664afe"
+                "url": "https://github.com/nelmio/NelmioSecurityBundle.git",
+                "reference": "80d6e1091aadf55eab6a79be97a91c06d55e8223"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/damienalexandre/NelmioSecurityBundle/zipball/145d85769b0a0afcd9cc495583f38f80d4664afe",
-                "reference": "145d85769b0a0afcd9cc495583f38f80d4664afe",
+                "url": "https://api.github.com/repos/nelmio/NelmioSecurityBundle/zipball/80d6e1091aadf55eab6a79be97a91c06d55e8223",
+                "reference": "80d6e1091aadf55eab6a79be97a91c06d55e8223",
                 "shasum": ""
             },
             "require": {
@@ -1312,7 +1312,7 @@
             "require-dev": {
                 "doctrine/cache": "^1.0",
                 "psr/cache": "^1.0",
-                "symfony/phpunit-bridge": "~5.0",
+                "symfony/phpunit-bridge": "^5.0.5",
                 "symfony/yaml": "~2.3|~3.0|~4.0|~5.0",
                 "twig/twig": "^1.38|^2.10|^3.0"
             },
@@ -1322,7 +1322,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8.x-dev"
+                    "dev-master": "2.9.x-dev"
                 }
             },
             "autoload": {
@@ -1333,6 +1333,7 @@
                     "/Tests/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1350,10 +1351,7 @@
             "keywords": [
                 "security"
             ],
-            "support": {
-                "source": "https://github.com/damienalexandre/NelmioSecurityBundle/tree/symfony5-simple"
-            },
-            "time": "2020-03-02T13:40:13+00:00"
+            "time": "2020-06-18T12:49:09+00:00"
         },
         {
             "name": "netresearch/jsonmapper",
@@ -6595,9 +6593,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "bugsnag/bugsnag-symfony": 20,
-        "iflorespaz/oauth2-zoom": 20,
-        "nelmio/security-bundle": 20
+        "iflorespaz/oauth2-zoom": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
