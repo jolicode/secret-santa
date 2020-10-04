@@ -25,6 +25,6 @@ class DiscordControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         self::assertSame(302, $response->getStatusCode());
-        self::assertContains('https://discordapp.com/api/', $response->getTargetUrl());
+        self::assertContains('https://discord.com/api/', $response->getTargetUrl());
     }
 }
