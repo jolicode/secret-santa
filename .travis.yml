@@ -7,11 +7,10 @@ env:
     global:
         - SYMFONY_PHPUNIT_REMOVE="symfony/yaml"
         - APP_ENV=test
-        - APP_DEBUG=0
 
 matrix:
     include:
-        - php: 7.2
+        - php: 7.4
 
 sudo: false
 
