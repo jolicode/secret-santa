@@ -9,22 +9,10 @@
 >
     <php>
         <ini name="error_reporting" value="-1" />
-        <env name="KERNEL_CLASS" value="JoliCode\SecretSanta\Kernel" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
         <server name="SYMFONY_PHPUNIT_VERSION" value="7.5" />
-        <!-- define your env variables for the test env here -->
-        <env name="SLACK_CLIENT_ID" value="DUMMY"/>
-        <env name="SLACK_CLIENT_SECRET" value="DUMMY"/>
-        <env name="DISCORD_CLIENT_ID" value="DUMMY"/>
-        <env name="DISCORD_CLIENT_SECRET" value="DUMMY"/>
-        <env name="DISCORD_BOT_TOKEN" value="DUMMY"/>
-        <env name="ZOOM_CLIENT_ID" value="DUMMY"/>
-        <env name="ZOOM_CLIENT_SECRET" value="DUMMY"/>
-        <env name="ZOOM_BOT_JID" value="DUMMY"/>
-        <env name="BUGSNAG_KEY" value=""/>
-        <env name="BUGSNAG_STAGE" value="development"/>
     </php>
 
     <testsuites>
