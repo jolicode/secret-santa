@@ -15,8 +15,8 @@ set_time_limit(0);
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
-if (!class_exists(Application::class) || !class_exists(Dotenv::class)) {
-    throw new LogicException('You need to add "symfony/framework-bundle" and "symfony/dotenv" as Composer dependencies.');
+if (!class_exists(Application::class)) {
+    throw new LogicException('You need to add "symfony/framework-bundle" as Composer dependencies.');
 }
 
 $input = new ArgvInput();
@@ -28,7 +28,9 @@ if ($input->hasParameterOption('--no-debug', true)) {
     putenv('APP_DEBUG='.$_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = '0');
 }
 
-(new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+if (class_exists(Dotenv::class)) {
+    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+}
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
