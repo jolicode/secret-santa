@@ -1,16 +1,7 @@
 language: php
 
 services:
-    - redis-server
-
-env:
-    global:
-        - SYMFONY_PHPUNIT_REMOVE="symfony/yaml"
-        - APP_ENV=test
-
-matrix:
-    include:
-        - php: 7.4
+    - docker
 
 sudo: false
 
@@ -19,12 +10,15 @@ cache:
         - $HOME/.composer/cache
         - bin/.phpunit
 
-install: composer install --prefer-dist --no-interaction
+before_install:
+    - pip install --upgrade pip
+    - pip install --user pipenv
+    - ~/.local/bin/pipenv install
+    - ~/.local/bin/pipenv run inv start && sleep 5
 
 script:
-    - composer validate
-    - make test
-    - make cs_dry_run
+    - ~/.local/bin/pipenv run inv tests
+    - ~/.local/bin/pipenv run inv cs
 
 branches:
     only:
