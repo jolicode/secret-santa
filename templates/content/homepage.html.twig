@@ -20,8 +20,9 @@
                     <a class="action hvr-buzz action-slack" href="{{ path('run', { application: 'slack' }) }}">
                         <i class="custom-fa-slack"></i> Run on Slack
                     </a>
-                    <a class="action hvr-buzz action-discord" href="{{ path('run', { application: 'discord' }) }}">
+                    <a class="action hvr-buzz action-discord" title="We currently have an issue with Discord integration :'(" href="{{ path('run', { application: 'discord' }) }}">
                         <i class="custom-fa-discord"></i> Run on Discord
+                        <sup style="position:absolute;top:8px;right:4px;font-size: 0.6em;">back soon</sup>
                     </a>
                     <a class="action hvr-buzz action-zoom" href="{{ path('run', { application: 'zoom' }) }}">
                         <i class="custom-fa-zoom"></i> Run on Zoom
