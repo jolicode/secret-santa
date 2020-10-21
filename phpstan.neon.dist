@@ -3,7 +3,7 @@ parameters:
     paths:
         - src
         - tests
-
+    tmpDir: var/phpstan-tmp
     inferPrivatePropertyTypeFromConstructor: true
 
     symfony:
