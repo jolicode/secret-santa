@@ -94,7 +94,7 @@ class DiscordController extends AbstractController
 
         $discordApplication->setToken($token);
         $discordApplication->setAdmin(new User($user->getId(), $user->getUsername()));
-        $discordApplication->setGuildId((int) $request->query->get('guild_id'));
+        $discordApplication->setGuildId($request->query->getInt('guild_id'));
 
         return new RedirectResponse($this->router->generate('run', [
             'application' => $discordApplication->getCode(),
