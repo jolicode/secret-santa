@@ -23,6 +23,22 @@
 
         <link rel="stylesheet" href="{{ asset('style.css') }}">
         <link  rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
+
+        {% if 'production' == bugsnag_release_stage and bugsnag_api_key is not empty %}
+            <script src="{{ asset('js/bugsnag.min.js') }}"></script>
+            <script>
+                Bugsnag.start({
+                    apiKey: '{{ bugsnag_api_key }}',
+                    autoTrackSessions: false,
+                    collectUserIp: false,
+                    redactedKeys: [
+                        /^password$/i,
+                        /^token$/i,
+                        /^state$/i,
+                    ]
+                });
+            </script>
+        {% endif %}
     </head>
     <body>
 

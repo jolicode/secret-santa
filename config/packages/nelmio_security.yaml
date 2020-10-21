@@ -45,6 +45,9 @@ nelmio_security:
                 - 'unsafe-inline'
             img-src:
                 - '*'
+            connect-src:
+                - 'self'
+                - 'notify.bugsnag.com'
             base-uri:
                 - 'self'
             block-all-mixed-content: true # defaults to false, blocks HTTP content over HTTPS transport
