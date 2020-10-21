@@ -28,6 +28,9 @@ class Spoiler
         return 'v2@' . base64_encode(json_encode($associations));
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     public function decode(string $string): ?array
     {
         $string = trim($string);
@@ -46,6 +49,9 @@ class Spoiler
         return null;
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     private function decodeV1(string $encoded): ?array
     {
         $v2Decoded = $this->decodeV2($encoded);
@@ -63,6 +69,9 @@ class Spoiler
         return $associations;
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     private function decodeV2(string $encoded): ?array
     {
         $base64Decoded = base64_decode($encoded, true);

@@ -161,6 +161,18 @@
     "php-jsonpointer/php-jsonpointer": {
         "version": "v3.0.2"
     },
+    "phpstan/extension-installer": {
+        "version": "1.0.5"
+    },
+    "phpstan/phpstan": {
+        "version": "0.12.50"
+    },
+    "phpstan/phpstan-phpunit": {
+        "version": "0.12.16"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "0.12.8"
+    },
     "predis/predis": {
         "version": "v1.1.6"
     },

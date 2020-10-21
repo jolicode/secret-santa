@@ -15,7 +15,7 @@ use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Slack\MessageSender;
 use JoliCode\SecretSanta\Slack\UserExtractor;
-use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -94,22 +94,22 @@ class SlackApplication implements ApplicationInterface
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getToken()->getToken());
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
     }
 
-    public function setToken(AccessToken $token)
+    public function setToken(AccessTokenInterface $token): void
     {
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
-    private function getToken(): AccessToken
+    private function getToken(): AccessTokenInterface
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!$token instanceof AccessToken) {
+        if (!$token instanceof AccessTokenInterface) {
             throw new \LogicException('Invalid token.');
         }
 

@@ -58,7 +58,7 @@ Someone has also been chosen to get you a gift.', $receiver);
         $text .= '_If you see `@invalid-user` as the user you need to send a gift, please read the message from desktop. There is a known bug in Discord Mobile applications._';
 
         try {
-            $this->apiHelper->sendMessage($giver, $text);
+            $this->apiHelper->sendMessage((int) $giver, $text);
         } catch (CommandClientException $e) {
             $precision = null;
 
@@ -98,7 +98,7 @@ Happy Secret Santa!',
         );
 
         try {
-            $this->apiHelper->sendMessage($secretSanta->getAdmin()->getIdentifier(), $text);
+            $this->apiHelper->sendMessage((int) $secretSanta->getAdmin()->getIdentifier(), $text);
         } catch (CommandClientException $e) {
             $precision = null;
 

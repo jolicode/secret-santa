@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Controller;
 use JoliCode\SecretSanta\Application\DiscordApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Model\User;
+use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,6 +80,7 @@ class DiscordController extends AbstractController
 
         try {
             // Try to get an access token (using the authorization code grant)
+            /** @var AccessToken $token */
             $token = $provider->getAccessToken('authorization_code', [
                 'code' => $request->query->get('code'),
             ]);
@@ -92,7 +94,7 @@ class DiscordController extends AbstractController
 
         $discordApplication->setToken($token);
         $discordApplication->setAdmin(new User($user->getId(), $user->getUsername()));
-        $discordApplication->setGuildId($request->query->get('guild_id'));
+        $discordApplication->setGuildId($request->query->getInt('guild_id'));
 
         return new RedirectResponse($this->router->generate('run', [
             'application' => $discordApplication->getCode(),

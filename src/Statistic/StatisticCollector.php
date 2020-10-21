@@ -18,12 +18,15 @@ class StatisticCollector
 {
     private $client;
 
+    /**
+     * @param Client<string, Client> $client
+     */
     public function __construct(Client $client)
     {
         $this->client = $client;
     }
 
-    public function incrementUsageCount(SecretSanta $secretSanta)
+    public function incrementUsageCount(SecretSanta $secretSanta): void
     {
         $applicationCode = $secretSanta->getApplication();
         $currentYear = date('Y');
@@ -44,16 +47,19 @@ class StatisticCollector
         }
     }
 
-    public function incrementSampleCount(SecretSanta $secretSanta)
+    public function incrementSampleCount(SecretSanta $secretSanta): void
     {
         $this->client->incr('stats:sample');
     }
 
-    public function incrementSpoilCount()
+    public function incrementSpoilCount(): void
     {
         $this->client->incr('stats:spoil');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCounters(): array
     {
         $counters = [

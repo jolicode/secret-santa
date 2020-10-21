@@ -17,6 +17,9 @@ class User
     private $name;
     private $extra;
 
+    /**
+     * @param array<string, mixed> $extra
+     */
     public function __construct(string $identifier, string $name, array $extra = [])
     {
         $this->identifier = $identifier;
@@ -34,6 +37,9 @@ class User
         return $this->name;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getExtra(): array
     {
         return $this->extra;

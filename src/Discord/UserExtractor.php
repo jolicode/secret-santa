@@ -64,7 +64,7 @@ class UserExtractor
 
         foreach ($members as $member) {
             $user = new User(
-                $member->user->id,
+                (string) $member->user->id,
                 $member->user->username,
                 [
                     'nickname' => $member->nick ?? null,
@@ -99,7 +99,7 @@ class UserExtractor
             }
 
             $group = new Group(
-                $role->id,
+                (string) $role->id,
                 $role->name
             );
 

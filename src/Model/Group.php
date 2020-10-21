@@ -15,6 +15,7 @@ class Group
 {
     private $identifier;
     private $name;
+    /** @var string[] */
     private $userIds = [];
 
     public function __construct(string $identifier, string $name)
@@ -33,11 +34,14 @@ class Group
         return $this->name;
     }
 
-    public function addUser(string $userId)
+    public function addUser(string $userId): void
     {
         $this->userIds[] = $userId;
     }
 
+    /**
+     * @return string[]
+     */
     public function getUserIds(): array
     {
         return $this->userIds;

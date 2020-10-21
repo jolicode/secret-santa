@@ -31,7 +31,7 @@ class UserExtractor
      */
     public function extractAll(string $token): array
     {
-        /** @var array $zoomUsers */
+        /** @var array[] $zoomUsers */
         $zoomUsers = [];
         $page = 1;
         $numberOfPages = null;

@@ -13,6 +13,8 @@ namespace JoliCode\SecretSanta\Discord;
 
 use RestCord\DiscordClient;
 use RestCord\Model\Guild\Guild;
+use RestCord\Model\Guild\GuildMember;
+use RestCord\Model\Permissions\Role;
 
 class ApiHelper
 {
@@ -35,6 +37,9 @@ class ApiHelper
         ]);
     }
 
+    /**
+     * @return GuildMember[]
+     */
     public function getMembersInGuild(int $guildId, int $after = null): array
     {
         return $this->getClient($this->botToken, self::TOKEN_TYPE_BOT)->guild->listGuildMembers([
@@ -44,6 +49,9 @@ class ApiHelper
         ]);
     }
 
+    /**
+     * @return Role[]
+     */
     public function getRolesInGuild(int $guildId): array
     {
         return $this->getClient($this->botToken, self::TOKEN_TYPE_BOT)->guild->getGuildRoles([
@@ -66,7 +74,7 @@ class ApiHelper
         ]);
     }
 
-    private function getClient(string $token, string $tokenType)
+    private function getClient(string $token, string $tokenType): DiscordClient
     {
         return new DiscordClient([
             'token' => $token,

@@ -41,6 +41,10 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.15",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^0.12.50",
+        "phpstan/phpstan-phpunit": "^0.12.16",
+        "phpstan/phpstan-symfony": "^0.12.8",
         "symfony/browser-kit": "*",
         "symfony/css-selector": "*",
         "symfony/dotenv": "*",

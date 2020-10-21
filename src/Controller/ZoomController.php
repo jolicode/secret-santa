@@ -17,7 +17,6 @@ use JoliCode\SecretSanta\Model\User;
 use League\OAuth2\Client\Provider\Zoom;
 use League\OAuth2\Client\Provider\ZoomResourceOwner;
 use League\OAuth2\Client\Token\AccessToken;
-use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,10 +75,10 @@ class ZoomController extends AbstractController
         }
 
         try {
-            /** @var AccessTokenInterface|AccessToken $botToken */
+            /** @var AccessToken $botToken */
             $botToken = $provider->getAccessToken('client_credentials');
 
-            /** @var AccessTokenInterface|AccessToken $token */
+            /** @var AccessToken $token */
             $token = $provider->getAccessToken('authorization_code', [
                 'code' => $request->query->get('code'),
             ]);

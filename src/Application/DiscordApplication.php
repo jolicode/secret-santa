@@ -17,7 +17,7 @@ use JoliCode\SecretSanta\Discord\UserExtractor;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
-use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -82,12 +82,12 @@ class DiscordApplication implements ApplicationInterface
         $this->getSession()->set(self::SESSION_KEY_ADMIN, $admin);
     }
 
-    public function getGuildId(): ?string
+    public function getGuildId(): ?int
     {
         return $this->getSession()->get(self::SESSION_KEY_GUILD_ID);
     }
 
-    public function setGuildId(string $guild): void
+    public function setGuildId(int $guild): void
     {
         $this->getSession()->set(self::SESSION_KEY_GUILD_ID, $guild);
     }
@@ -137,30 +137,30 @@ class DiscordApplication implements ApplicationInterface
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl);
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
         $this->getSession()->remove(self::SESSION_KEY_GUILD_ID);
     }
 
-    public function setToken(AccessToken $token)
+    public function setToken(AccessTokenInterface $token): void
     {
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
-    public function getToken(): AccessToken
+    public function getToken(): AccessTokenInterface
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!$token instanceof AccessToken) {
+        if (!$token instanceof AccessTokenInterface) {
             throw new \LogicException('Invalid token.');
         }
 
         return $token;
     }
 
-    private function loadGroups()
+    private function loadGroups(): void
     {
         // Store groups in memory because we need it in multiple places.
         if (null === $this->groups) {
