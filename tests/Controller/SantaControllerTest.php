@@ -13,10 +13,9 @@ namespace JoliCode\SecretSanta\Tests\Controller;
 
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class SantaControllerTest extends WebTestCase
+class SantaControllerTest extends BaseWebTestCase
 {
     use SessionPrepareTrait;
 

@@ -11,9 +11,7 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class ContentControllerTest extends WebTestCase
+class ContentControllerTest extends BaseWebTestCase
 {
     public function test_homepage_works(): void
     {
