@@ -40,6 +40,9 @@ class SantaController extends AbstractController
     private $statisticCollector;
     private $bugsnag;
 
+    /**
+     * @param \Iterator<ApplicationInterface> $applications
+     */
     public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
@@ -115,6 +118,7 @@ class SantaController extends AbstractController
         $application = $this->getApplication($application);
 
         $errors = [];
+        $message = '';
 
         if (!$application->isAuthenticated()) {
             $errors['login'] = 'Your session has expired. Please refresh the page.';
@@ -129,7 +133,7 @@ class SantaController extends AbstractController
         }
 
         if (\count($errors) < 1) {
-            $message = $request->request->get('message');
+            $message = $request->request->get('message', '');
 
             $errors = $this->validate([], $message, true);
         }
@@ -300,6 +304,11 @@ class SantaController extends AbstractController
         return $secretSanta;
     }
 
+    /**
+     * @param string[] $selectedUsers
+     *
+     * @return array<string, string[]>
+     */
     private function validate(array $selectedUsers, string $message, bool $isSample = false): array
     {
         $errors = [];
@@ -311,7 +320,7 @@ class SantaController extends AbstractController
         return $errors;
     }
 
-    private function finishSantaIfDone(SecretSanta $secretSanta, ApplicationInterface $application)
+    private function finishSantaIfDone(SecretSanta $secretSanta, ApplicationInterface $application): void
     {
         if ($secretSanta->isDone()) {
             $this->statisticCollector->incrementUsageCount($secretSanta);

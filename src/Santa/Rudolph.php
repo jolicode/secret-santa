@@ -20,6 +20,11 @@ namespace JoliCode\SecretSanta\Santa;
  */
 class Rudolph
 {
+    /**
+     * @param string[] $users
+     *
+     * @return array<string, string>
+     */
     public function associateUsers(array $users): array
     {
         $this->assertUserListCorrect($users);
@@ -39,6 +44,9 @@ class Rudolph
         return $associations;
     }
 
+    /**
+     * @param string[] $users
+     */
     private function assertUserListCorrect(array $users): void
     {
         $filteredUsers = array_unique($users);

@@ -16,6 +16,7 @@ use AdamPaterson\OAuth2\Client\Provider\SlackResourceOwner;
 use JoliCode\SecretSanta\Application\SlackApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Model\User;
+use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -75,6 +76,7 @@ class SlackController extends AbstractController
 
         try {
             // Try to get an access token (using the authorization code grant)
+            /** @var AccessToken $token */
             $token = $provider->getAccessToken('authorization_code', [
                 'code' => $request->query->get('code'),
             ]);

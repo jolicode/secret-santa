@@ -19,37 +19,34 @@ class RudolphTest extends TestCase
     /** @var Rudolph */
     private $SUT;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->SUT = new Rudolph();
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedException "Expected at least 2 users in the list, 0 given."
-     */
-    public function test_it_refuses_empty_list()
+    public function test_it_refuses_empty_list(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected at least 2 users in the list, 0 given.');
+
         $this->SUT->associateUsers([]);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedException "Expected at least 2 users in the list, 1 given."
-     */
-    public function test_it_refuses_list_with_1_user()
+    public function test_it_refuses_list_with_1_user(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Expected at least 2 users in the list, 1 given.');
+
         $this->SUT->associateUsers([
             'toto',
         ]);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedException "This user was more than one time in the list: toto2."
-     */
-    public function test_it_refuses_list_with_one_duplicate()
+    public function test_it_refuses_list_with_one_duplicate(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('This user was more than one time in the list: toto2.');
+
         $this->SUT->associateUsers([
             'toto1',
             'toto2',
@@ -58,12 +55,11 @@ class RudolphTest extends TestCase
         ]);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedException "These users were more than one time in the list: toto2, toto1."
-     */
-    public function test_it_refuses_list_with_several_duplicates()
+    public function test_it_refuses_list_with_several_duplicates(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('These users were more than one time in the list: toto2, toto1.');
+
         $this->SUT->associateUsers([
             'toto1',
             'toto2',
@@ -74,11 +70,10 @@ class RudolphTest extends TestCase
     }
 
     /**
-     * @param $users
-     *
+     * @param string[] $users
      * @dataProvider userListDataProvider
      */
-    public function test_it_create_associations(array $users)
+    public function test_it_create_associations(array $users): void
     {
         $associations = $this->SUT->associateUsers($users);
 
@@ -91,7 +86,10 @@ class RudolphTest extends TestCase
         }
     }
 
-    public function userListDataProvider()
+    /**
+     * @return string[][][]
+     */
+    public function userListDataProvider(): array
     {
         return [
             [[

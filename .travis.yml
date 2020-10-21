@@ -18,6 +18,7 @@ before_install:
 
 script:
     - ~/.local/bin/pipenv run inv tests
+    - ~/.local/bin/pipenv run inv qa
     - ~/.local/bin/pipenv run inv cs
 
 branches:

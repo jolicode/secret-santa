@@ -12,18 +12,20 @@
 namespace JoliCode\SecretSanta\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SlackControllerTest extends WebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_auth_page_redirects_to_slack()
+    public function test_auth_page_redirects_to_slack(): void
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', '/auth/slack');
         $response = $client->getResponse();
 
+        self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertSame(302, $response->getStatusCode());
         self::assertContains('https://slack.com/oauth', $response->getTargetUrl());
     }

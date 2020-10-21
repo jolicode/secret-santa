@@ -29,6 +29,9 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
     private $bugsnag;
     private $applications;
 
+    /**
+     * @param \Iterator<ApplicationInterface> $applications
+     */
     public function __construct(LoggerInterface $logger, Environment $twig, Client $bugsnag, iterable $applications)
     {
         $this->logger = $logger;
@@ -37,7 +40,7 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
         $this->applications = $applications;
     }
 
-    public function handleException(ExceptionEvent $event)
+    public function handleException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
         $statusCode = null;

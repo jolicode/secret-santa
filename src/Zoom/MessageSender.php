@@ -167,7 +167,7 @@ Happy Secret Santa!',
     /**
      * @todo Hack to build the JID. Had a confirmation "I can do it like this".
      */
-    private static function transformUserIdToJID(string $userId)
+    private static function transformUserIdToJID(string $userId): string
     {
         return mb_strtolower($userId . '@xmpp.zoom.us');
     }

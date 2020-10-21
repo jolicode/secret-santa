@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class ContentControllerTest extends WebTestCase
 {
-    public function test_homepage_works()
+    public function test_homepage_works(): void
     {
         $client = static::createClient();
 
@@ -26,7 +26,7 @@ class ContentControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('html:contains("Merry Christmas!")'));
     }
 
-    public function test_hall_of_fame_works()
+    public function test_hall_of_fame_works(): void
     {
         $client = static::createClient();
 
@@ -37,7 +37,7 @@ class ContentControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('img[alt="Monsieur Biz"]'));
     }
 
-    public function test_faq_works()
+    public function test_faq_works(): void
     {
         $client = static::createClient();
 
@@ -48,7 +48,7 @@ class ContentControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Help and Frequently Asked Questions")'));
     }
 
-    public function test_stats_works()
+    public function test_stats_works(): void
     {
         $client = static::createClient();
 
@@ -59,7 +59,7 @@ class ContentControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Secret Santa Statistics")'));
     }
 
-    public function test_terms_works()
+    public function test_terms_works(): void
     {
         $client = static::createClient();
 
@@ -70,7 +70,7 @@ class ContentControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Secret Santa Terms of Service")'));
     }
 
-    public function test_privacy_policy_works()
+    public function test_privacy_policy_works(): void
     {
         $client = static::createClient();
 
@@ -81,7 +81,7 @@ class ContentControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Privacy Policy")'));
     }
 
-    public function test_sitemap_works()
+    public function test_sitemap_works(): void
     {
         $client = static::createClient();
 

@@ -16,6 +16,7 @@ use JoliCode\Slack\ClientFactory as DefaultClientFactory;
 
 class ClientFactory
 {
+    /** @var array<string, Client> */
     private $clientsByToken = [];
 
     public function getClientForToken(string $token): Client

@@ -15,7 +15,7 @@ use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Zoom\MessageSender;
 use JoliCode\SecretSanta\Zoom\UserExtractor;
-use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -96,7 +96,7 @@ class ZoomApplication implements ApplicationInterface
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getBotToken()->getToken(), $this->getAccountId());
     }
 
-    public function reset()
+    public function reset(): void
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_BOT_TOKEN);
@@ -104,41 +104,41 @@ class ZoomApplication implements ApplicationInterface
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
     }
 
-    public function setAccountId(string $accountId)
+    public function setAccountId(string $accountId): void
     {
         $this->getSession()->set(self::SESSION_KEY_ACCOUNT_ID, $accountId);
     }
 
-    public function getAccountId()
+    public function getAccountId(): string
     {
         return $this->getSession()->get(self::SESSION_KEY_ACCOUNT_ID);
     }
 
-    public function setToken(AccessToken $token)
+    public function setToken(AccessTokenInterface $token): void
     {
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
-    public function setBotToken(AccessToken $token)
+    public function setBotToken(AccessTokenInterface $token): void
     {
         $this->getSession()->set(self::SESSION_KEY_BOT_TOKEN, $token);
     }
 
-    public function getToken(): AccessToken
+    public function getToken(): AccessTokenInterface
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!$token instanceof AccessToken) {
+        if (!$token instanceof AccessTokenInterface) {
             throw new \LogicException('Invalid token.');
         }
 
         return $token;
     }
 
-    public function getBotToken(): AccessToken
+    public function getBotToken(): AccessTokenInterface
     {
         $token = $this->getSession()->get(self::SESSION_KEY_BOT_TOKEN);
-        if (!$token instanceof AccessToken) {
+        if (!$token instanceof AccessTokenInterface) {
             throw new \LogicException('Invalid token.');
         }
 

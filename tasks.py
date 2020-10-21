@@ -132,6 +132,18 @@ def tests(c):
 
 
 @task
+def qa(c):
+    """
+    Run static analysis tools
+    """
+    with Builder(c):
+        # Make tests analyses working with Symfony's PHPUnit bridge
+        docker_compose_run(c, 'vendor/bin/simple-phpunit install', no_deps=True)
+
+        docker_compose_run(c, 'vendor/bin/phpstan analyse', no_deps=True)
+
+
+@task
 def cs(c, dry_run=False):
     """
     Fix coding standards in code

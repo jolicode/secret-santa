@@ -1,0 +1,16 @@
+parameters:
+    level: 6
+    paths:
+        - src
+        - tests
+
+    inferPrivatePropertyTypeFromConstructor: true
+
+    symfony:
+        container_xml_path: '%rootDir%/../../../var/cache/dev/JoliCode_SecretSanta_KernelDevDebugContainer.xml'
+
+    # Make tests analyses working with Symfony's PHPUnit bridge
+    bootstrapFiles:
+       - vendor/bin/.phpunit/phpunit-7.5-0/vendor/autoload.php
+
+    ignoreErrors: []

@@ -12,18 +12,20 @@
 namespace JoliCode\SecretSanta\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ZoomControllerTest extends WebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_auth_page_redirects_to_zoom()
+    public function test_auth_page_redirects_to_zoom(): void
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', '/auth/zoom');
         $response = $client->getResponse();
 
+        self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertSame(302, $response->getStatusCode());
         self::assertContains('https://zoom.us/oauth/authorize', $response->getTargetUrl());
     }

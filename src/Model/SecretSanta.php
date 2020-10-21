@@ -26,7 +26,8 @@ class SecretSanta
     private $errors = [];
 
     /**
-     * @param User[] $users
+     * @param User[]                $users
+     * @param array<string, string> $associations
      */
     public function __construct(
         string $application,
@@ -75,21 +76,33 @@ class SecretSanta
         return $this->users[$identifier] ?? null;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getAssociations(): array
     {
         return $this->associations;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getRemainingAssociations(): array
     {
         return $this->remainingAssociations;
     }
 
+    /**
+     * @return string[]
+     */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
+    /**
+     * @return string[]
+     */
     public function getUniqueErrors(): array
     {
         return array_unique($this->errors);

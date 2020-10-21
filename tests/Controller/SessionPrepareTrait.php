@@ -9,13 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace JoliCode\SecretSanta\tests\Controller;
+namespace JoliCode\SecretSanta\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 trait SessionPrepareTrait
 {
-    public function prepareSession(KernelBrowser $client, string $key, $value)
+    /**
+     * @param mixed $value
+     */
+    public function prepareSession(KernelBrowser $client, string $key, $value): void
     {
         $session = self::$kernel->getContainer()->get('session');
         $session->start();

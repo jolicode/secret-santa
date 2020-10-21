@@ -14,23 +14,25 @@ namespace JoliCode\SecretSanta\Tests\Controller;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SantaControllerTest extends WebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_run_page_redirects_to_auth_page()
+    public function test_run_page_redirects_to_auth_page(): void
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', '/run/slack');
         $response = $client->getResponse();
 
+        self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertSame(302, $response->getStatusCode());
         self::assertSame('/auth/slack', $response->getTargetUrl());
     }
 
-    public function test_finish_page_returns_404_without_hash()
+    public function test_finish_page_returns_404_without_hash(): void
     {
         $client = static::createClient();
 
@@ -40,7 +42,7 @@ class SantaControllerTest extends WebTestCase
         self::assertSame(404, $response->getStatusCode());
     }
 
-    public function test_finish_page_works_with_invalid_hash()
+    public function test_finish_page_works_with_invalid_hash(): void
     {
         $client = static::createClient();
 
@@ -50,7 +52,7 @@ class SantaControllerTest extends WebTestCase
         self::assertSame(404, $response->getStatusCode());
     }
 
-    public function test_finish_page_works_with_valid_hash_for_successful_secret_santa()
+    public function test_finish_page_works_with_valid_hash_for_successful_secret_santa(): void
     {
         $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => new User('toto1', 'Toto 1'),
@@ -73,7 +75,7 @@ class SantaControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('html:contains("Well done! All messages were sent")'));
     }
 
-    public function test_finish_page_works_with_valid_hash_for_failed_secret_santa()
+    public function test_finish_page_works_with_valid_hash_for_failed_secret_santa(): void
     {
         $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => new User('toto1', 'Toto 1'),
@@ -98,7 +100,7 @@ class SantaControllerTest extends WebTestCase
         self::assertCount(1, $crawler->filter('html:contains("toto2 must offer a gift to xxxxx")'));
     }
 
-    public function test_spoil_works_with_valid_code()
+    public function test_spoil_works_with_valid_code(): void
     {
         $client = static::createClient();
 
@@ -120,7 +122,7 @@ class SantaControllerTest extends WebTestCase
         self::assertContains('<strong>Toto 3</strong> must offer a gift to <strong>Toto 1</strong>', $response->getContent());
     }
 
-    public function test_spoil_works_with_invalid_code()
+    public function test_spoil_works_with_invalid_code(): void
     {
         $client = static::createClient();
 

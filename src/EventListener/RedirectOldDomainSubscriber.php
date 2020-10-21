@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class RedirectOldDomainSubscriber implements EventSubscriberInterface
 {
-    public function redirectOldDomain(RequestEvent $event)
+    public function redirectOldDomain(RequestEvent $event): void
     {
         if (!$event->isMasterRequest()) {
             return;
