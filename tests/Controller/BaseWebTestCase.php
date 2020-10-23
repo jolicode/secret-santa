@@ -15,9 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BaseWebTestCase extends WebTestCase
 {
-
     /**
-     * @param array<string> $options An array of options to pass to the createKernel method
+     * @param array<string>       $options An array of options to pass to the createKernel method
      * @param array<string,mixed> $server  An array of server parameters
      */
     protected static function createClient(array $options = [], array $server = [])
