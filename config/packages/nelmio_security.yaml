@@ -23,11 +23,11 @@ nelmio_security:
         enabled: true
         policies:
             - 'no-referrer'
-            - 'strict-origin-when-cross-origin'
 
     csp:
         enabled: true
         hosts: []
+        compat_headers: false
         content_types: []
         enforce:
             level1_fallback: true
@@ -52,3 +52,8 @@ nelmio_security:
                 - 'self'
             block-all-mixed-content: true # defaults to false, blocks HTTP content over HTTPS transport
             # upgrade-insecure-requests: true # defaults to false, upgrades HTTP requests to HTTPS transport
+
+    forced_ssl:
+       hsts_max_age: 2592000
+       hsts_subdomains: true
+       redirect_status_code: 301

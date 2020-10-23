@@ -11,9 +11,7 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class ContentControllerTest extends WebTestCase
+class ContentControllerTest extends BaseWebTestCase
 {
     public function test_homepage_works(): void
     {
@@ -24,6 +22,16 @@ class ContentControllerTest extends WebTestCase
 
         self::assertSame(200, $response->getStatusCode());
         self::assertCount(1, $crawler->filter('html:contains("Merry Christmas!")'));
+    }
+
+    public function test_homepage_works_http(): void
+    {
+        $client = static::createClient([], ['HTTPS' => false]);
+
+        $client->request('GET', '/');
+        $response = $client->getResponse();
+
+        self::assertSame(301, $response->getStatusCode());
     }
 
     public function test_hall_of_fame_works(): void

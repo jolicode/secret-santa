@@ -22,6 +22,7 @@ DirectoryIndex index.php
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-XSS-Protection "1; mode=block"
     Header always set X-Frame-Options "DENY"
+    Header always set Expect-CT "max-age=86400, enforce"
 </IfModule>
 
 <IfModule mod_rewrite.c>

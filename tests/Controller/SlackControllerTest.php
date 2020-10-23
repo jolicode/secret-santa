@@ -11,10 +11,9 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class SlackControllerTest extends WebTestCase
+class SlackControllerTest extends BaseWebTestCase
 {
     use SessionPrepareTrait;
 
