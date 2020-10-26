@@ -362,10 +362,6 @@ footer a {
 .jumbotron .actions {
     margin: 0.5em 0 2em;
 }
-.jumbotron .action-discord {
-    background-color: #aaaaaa !important;
-    border-color: #aaaaaa !important;
-}
 .jumbotron .action-slack:hover {
     color: var(--color-slack);
 }
