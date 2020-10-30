@@ -19,9 +19,10 @@ use RestCord\Model\Permissions\Role;
 class ApiHelper
 {
     const TOKEN_TYPE_BOT = 'Bot';
-    const TOKEN_TYPE_OAUTH = 'OAuth';
-
     private $botToken;
+    
+    /** @var DiscordClient|null */
+    private $client;
 
     public function __construct(string $discordBotToken)
     {
@@ -30,7 +31,7 @@ class ApiHelper
 
     public function getGuild(int $guildId): Guild
     {
-        $client = $this->getClient($this->botToken, self::TOKEN_TYPE_BOT);
+        $client = $this->getClient();
 
         return $client->guild->getGuild([
             'guild.id' => $guildId,
@@ -42,7 +43,7 @@ class ApiHelper
      */
     public function getMembersInGuild(int $guildId, int $after = null): array
     {
-        return $this->getClient($this->botToken, self::TOKEN_TYPE_BOT)->guild->listGuildMembers([
+        return $this->getClient()->guild->listGuildMembers([
             'guild.id' => $guildId,
             'limit' => 200,
             'after' => $after,
@@ -54,7 +55,7 @@ class ApiHelper
      */
     public function getRolesInGuild(int $guildId): array
     {
-        return $this->getClient($this->botToken, self::TOKEN_TYPE_BOT)->guild->getGuildRoles([
+        return $this->getClient()->guild->getGuildRoles([
             'guild.id' => $guildId,
             'limit' => 100,
         ]);
@@ -62,7 +63,7 @@ class ApiHelper
 
     public function sendMessage(int $userId, string $message): void
     {
-        $client = $this->getClient($this->botToken, self::TOKEN_TYPE_BOT);
+        $client = $this->getClient();
 
         $channel = $client->user->createDm([
             'recipient_id' => $userId,
@@ -74,11 +75,15 @@ class ApiHelper
         ]);
     }
 
-    private function getClient(string $token, string $tokenType): DiscordClient
+    private function getClient(): DiscordClient
     {
-        return new DiscordClient([
-            'token' => $token,
-            'tokenType' => $tokenType,
-        ]);
+        if (!($this->client instanceof DiscordClient)) {
+            $this->client = new DiscordClient([
+                'token' => $this->botToken,
+                'tokenType' => self::TOKEN_TYPE_BOT,
+            ]);
+        }
+
+        return $this->client;
     }
 }
