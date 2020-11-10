@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+    router:
+        image: alpine:latest
+        command: "true"
+        entrypoint: "true"
+
+    frontend:
+        ports:
+            - "8090:80"

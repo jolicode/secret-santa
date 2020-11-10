@@ -202,6 +202,14 @@ def destroy(c, force=False):
         docker_compose(c, 'down --remove-orphans --volumes --rmi=local')
 
 
+@task
+def preprod(c):
+    """
+    Setup preprod infrastructure
+    """
+    c.docker_compose_files = c.docker_compose_files + ['docker-compose.preprod.yml']
+
+
 @task(default=True)
 def help(c):
     """
