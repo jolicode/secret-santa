@@ -48,7 +48,7 @@ class MessageSender
             'body' => [
                 [
                     'type' => 'message',
-                    'text' => 'Hi! You have been *chosen* to be part of a Secret Santa ' . self::SANTA_EMOJI . '!',
+                    'text' => 'Hi! You have been *selected* to be part of a Secret Santa ' . self::SANTA_EMOJI . '!',
                 ],
             ],
         ];
@@ -56,46 +56,23 @@ class MessageSender
         if ($isSample) {
             $body['content']['head'] = [
                 'type' => 'message',
-                'text' => '_Find below a sample of the message that will be sent to each members of your Secret Santa._',
+                'text' => '_Find below a *sample* of the message that will be sent to all participants of your Secret Santa._',
             ];
         }
 
         $receiverUser = $secretSanta->getUser($receiver);
         $body['content']['body'][] = [
             'type' => 'message',
-            'text' => sprintf("*You have been chosen to gift:*\n\n" . self::GIFT_EMOJI . ' <!%s|%s> ' . self::GIFT_EMOJI . "\n\n",
+            'text' => sprintf("Someone will get you a gift and *you have been chosen to gift:*\n\n" . self::GIFT_EMOJI . ' <!%s|%s> ' . self::GIFT_EMOJI . "\n\n",
                 $receiver,
                 $receiverUser->getName()
             ),
         ];
 
-        if (!empty($secretSanta->getAdminMessage())) {
-            $body['content']['body'][] = [
-                'type' => 'message',
-                'text' => sprintf('*Here is a message from the Secret Santa admin (<!%s|%s>):*',
-                    $secretSanta->getAdmin()->getIdentifier(),
-                    $secretSanta->getAdmin()->getName()
-                ),
-            ];
-
-            $body['content']['body'][] = [
-                'type' => 'message',
-                'text' => $secretSanta->getAdminMessage(),
-            ];
-        } else {
-            $body['content']['body'][] = [
-                'type' => 'message',
-                'text' => sprintf('_If you have any question please ask your Secret Santa Admin: <!%s|%s>_',
-                    $secretSanta->getAdmin()->getIdentifier(),
-                    $secretSanta->getAdmin()->getName()
-                ),
-            ];
-        }
-
         if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
             $body['content']['body'][] = [
                 'type' => 'message',
-                'text' => sprintf('*Here is some notes about <!%s|%s>:*',
+                'text' => sprintf('*Here is some details about <!%s|%s>:*',
                     $receiver,
                     $receiverUser->getName()
                 ),
@@ -107,10 +84,34 @@ class MessageSender
             ];
         }
 
+        if (!empty($secretSanta->getAdminMessage())) {
+            $body['content']['body'][] = [
+                'type' => 'message',
+                'text' => '*Here is a message from the Secret Santa admin:*',
+            ];
+
+            $body['content']['body'][] = [
+                'type' => 'message',
+                'text' => $secretSanta->getAdminMessage(),
+            ];
+        } else {
+            $body['content']['body'][] = [
+                'type' => 'message',
+                'text' => 'If you have any question please ask your Secret Santa admin',
+            ];
+        }
+
+        $footer = '_Organized with https://secret-santa.team/';
+
+        if ($admin = $secretSanta->getAdmin()) {
+            $footer .= sprintf(' by <!%s|%s>_', $admin->getIdentifier(), $admin->getName());
+        } else {
+            $footer .= '_';
+        }
+
         $body['content']['body'][] = [
             'type' => 'message',
-            'text' => 'That\'s a secret only shared with you! Someone has also been chosen to get you a gift.'
-                . "\n" . 'https://secret-santa.team/',
+            'text' => $footer,
             'italic' => true, // Not working on android
         ];
 
@@ -139,7 +140,7 @@ class MessageSender
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl, string $token, string $accountId): void
     {
         $text = sprintf(
-            'Dear Secret Santa admin,
+            'Dear Secret Santa *admin*,
 
 In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
 

@@ -137,12 +137,12 @@
             })
             .then(function(response) {
               if (response.success) {
-                window.alert('The sample message have been sent successfully. Check it now before finishing the Secret Santa.');
+                window.alert('We have sent you a fake message. Check it now before finishing the Secret Santa.');
                 return;
               }
 
               const keys = Object.keys(response.errors);
-              let message = 'Error when sending the sample message:\n';
+              let message = 'Error when sending the fake message:\n';
 
               for (let i=0; i<keys.length; i++) {
                 message += response.errors[keys[i]] + "\n";

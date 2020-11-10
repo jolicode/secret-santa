@@ -32,34 +32,40 @@ class MessageSender
         $text = '';
 
         if ($isSample) {
-            $text .= "_Find below a sample of the message that will be sent to each members of your Secret Santa._\n----\n\n";
+            $text .= "_Find below a **sample** of the message that will be sent to all participants of your Secret Santa._\n----\n\n";
         }
+
+        $receiverUser = $secretSanta->getUser($receiver);
 
         $text .= sprintf(
 'Hi!
 
-You have been chosen to be part of a Secret Santa :santa:!
+You have been selected to be part of a Secret Santa :santa:!
 
-**You have been chosen to gift:**
-:gift: **<@%s>** :gift:
-**That\'s a secret we only shared with you!**
+Someone will get you a gift and **you have been chosen to gift:**
+:gift: **%s (<@!%s>)** :gift:', $receiverUser->getExtra()['nickname'] ?? $receiverUser->getName(), $receiver);
 
-Someone has also been chosen to get you a gift.', $receiver);
+        if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
+            // The extra space after the last %s seems mandatory to not break message in Discord mobile application
+            $text .= sprintf("\n\nHere is some details about %s:\n\n```%s ```", $receiverUser->getName(), $userNote);
+        }
 
         if (!empty($secretSanta->getAdminMessage())) {
             $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
+        } else {
+            $text .= "\n\nIf you have any question please ask your Secret Santa admin";
         }
 
-        if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
-            $text .= sprintf("\n\nHere is some notes about <@%s>:\n\n```%s```", $receiver, $userNote);
-        }
+        $text .= "\n\n_Organized with Secret-Santa.team";
 
-        if ($secretSanta->getAdmin()) {
-            $text .= sprintf("\n\n_Your Secret Santa admin, <@%s>._", $secretSanta->getAdmin()->getIdentifier());
+        if ($admin = $secretSanta->getAdmin()) {
+            $text .= sprintf(' by admin %s (<@!%s>)._', $admin->getExtra()['nickname'] ?? $admin->getName(), $admin->getIdentifier());
+        } else {
+            $text .= '_';
         }
 
         $text .= "\n\n";
-        $text .= '_If you see `@invalid-user` as the user you need to send a gift, please read the message from desktop. There is a known bug in Discord Mobile applications._';
+        $text .= '_Note: if you see `@invalid-user` as the user you need to send a gift, please read this message from desktop Discord application. There is a known bug in Discord Mobile applications._';
 
         try {
             $this->apiHelper->sendMessage((int) $giver, $text);
@@ -86,7 +92,7 @@ Someone has also been chosen to get you a gift.', $receiver);
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
         $text = sprintf(
-'Dear Secret Santa admin,
+'Dear Secret Santa **admin**,
 
 In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
 
