@@ -13,16 +13,24 @@ namespace JoliCode\SecretSanta\Slack;
 
 use JoliCode\Slack\Api\Client;
 use JoliCode\Slack\ClientFactory as DefaultClientFactory;
+use Psr\Http\Client\ClientInterface as PsrHttpClient;
 
 class ClientFactory
 {
+    private PsrHttpClient $httpClient;
+
     /** @var array<string, Client> */
     private $clientsByToken = [];
+
+    public function __construct(PsrHttpClient $httpClient)
+    {
+        $this->httpClient = $httpClient;
+    }
 
     public function getClientForToken(string $token): Client
     {
         if (!isset($this->clientsByToken[$token])) {
-            $this->clientsByToken[$token] = DefaultClientFactory::create($token);
+            $this->clientsByToken[$token] = DefaultClientFactory::create($token, $this->httpClient);
         }
 
         return $this->clientsByToken[$token];
