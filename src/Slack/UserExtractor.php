@@ -69,15 +69,7 @@ class UserExtractor
         $users = [];
 
         foreach ($slackUsers as $slackUser) {
-            $user = new User(
-                $slackUser->getId(),
-                $slackUser->getProfile()->getRealName(),
-                [
-                    'nickname' => $slackUser->getName(),
-                    'image' => $slackUser->getProfile()->getImage192(),
-                    'restricted' => $slackUser->getIsRestricted(),
-                ]
-            );
+            $user = $this->buildUserFromSlack($slackUser);
 
             $users[$user->getIdentifier()] = $user;
         }
@@ -114,5 +106,27 @@ class UserExtractor
         }
 
         return $groups;
+    }
+
+    public function getUser(string $token, string $id): User
+    {
+        $slackUser = $this->clientFactory->getClientForToken($token)->usersInfo([
+            'user' => $id,
+        ])->getUser();
+
+        return $this->buildUserFromSlack($slackUser);
+    }
+
+    private function buildUserFromSlack(ObjsUser $slackUser): User
+    {
+        return new User(
+            $slackUser->getId(),
+            $slackUser->getProfile()->getRealName(),
+            [
+                'nickname' => $slackUser->getName(),
+                'image' => $slackUser->getProfile()->getImage192(),
+                'restricted' => $slackUser->getIsRestricted(),
+            ]
+        );
     }
 }
