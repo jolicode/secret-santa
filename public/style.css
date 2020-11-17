@@ -152,6 +152,11 @@ a {
 .big-button.warning-btn:hover {
     background-color: var(--color-warning-dark);
 }
+.big-button.bellow {
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    background-color: transparent;
+}
 .hidden {
     position: absolute;
     width: 1px;
@@ -742,6 +747,10 @@ textarea {
     display: flex;
     align-items: center;
 }
+.user-list .user-item.notes {
+    min-height: 3.5em;
+}
+
 .user-list .no-result {
     min-height: 3em;
     vertical-align: middle;
@@ -755,8 +764,16 @@ textarea {
     display: none;
 }
 .user-list .user-item:hover {
-   background-color: var(--color-gray-light);
+    background-color: var(--color-gray-light);
     cursor: pointer;
+}
+.user-list .user-item.notes:hover {
+    background-color: transparent;
+    cursor: default;
+}
+.notes input[type="text"] {
+    margin-right: 20px;
+    width: 50%;
 }
 .user-list .user-item * {
     margin: 0 0 0 1em;

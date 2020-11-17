@@ -75,8 +75,20 @@ class SantaController extends AbstractController
             $errors = $this->validate($selectedUsers, $message);
 
             if (\count($errors) < 1) {
+                if ($request->request->has('notesRedirect')) {
+                    $request->getSession()->set('setup', [
+                        'selectedUsers' => $request->request->all('users'),
+                        'message' => $request->request->get('message'),
+                    ]);
+
+                    return $this->redirectToRoute('notes', [
+                        'application' => $application->getCode(),
+                    ]);
+                }
+
                 $associatedUsers = $rudolph->associateUsers($selectedUsers);
                 $hash = md5(serialize($associatedUsers));
+                $notes = $request->request->all('notes');
 
                 $secretSanta = new SecretSanta(
                     $application->getCode(),
@@ -87,7 +99,8 @@ class SantaController extends AbstractController
                     }),
                     $associatedUsers,
                     $application->getAdmin(),
-                    $message
+                    $message,
+                    $notes
                 );
 
                 $request->getSession()->set(
@@ -108,6 +121,23 @@ class SantaController extends AbstractController
             'selectedUsers' => $selectedUsers,
             'message' => $message,
             'errors' => $errors,
+        ]);
+
+        return new Response($content);
+    }
+
+    public function notes(Request $request, string $application): Response
+    {
+        $setup = $request->getSession()->get('setup');
+        $application = $this->getApplication($application);
+
+        $content = $this->twig->render('santa/application/notes_' . $application->getCode() . '.html.twig', [
+            'application' => $application->getCode(),
+            'users' => $application->getUsers(),
+            'groups' => $application->getGroups(),
+            'selectedUsers' => $setup['selectedUsers'],
+            'admin' => $application->getAdmin(),
+            'message' => $setup['message'],
         ]);
 
         return new Response($content);

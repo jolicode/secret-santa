@@ -1,0 +1,22 @@
+{% extends 'santa/notes.html.twig' %}
+
+{% block user_item %}
+    <label class="user-item notes">
+        {% if user.extra.image %}
+            <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+        {% endif %}
+        <span>{{ user.name }}{% if user.extra.nickname %} ({{ user.extra.nickname }}){% endif %}</span>
+        {% if groups %}
+            <span class="user-groups">
+                {% for group in groups %}
+                    {% if user.identifier in group.userIds %}
+                        <span class="user-group">{{ group.name }}</span>
+                    {% endif %}
+                {% endfor %}
+            </span>
+        {% endif %}
+
+        <input name="users[]" type="hidden" value="{{ user.identifier }}">
+        <input name="notes[{{ user.identifier }}]" type="text" {% if key in input_placeholders|keys %}placeholder="{{ input_placeholders[key] }}"{% endif %} />
+    </label>
+{% endblock %}

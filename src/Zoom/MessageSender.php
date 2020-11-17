@@ -92,6 +92,21 @@ class MessageSender
             ];
         }
 
+        if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
+            $body['content']['body'][] = [
+                'type' => 'message',
+                'text' => sprintf('*Here is some notes about <!%s|%s>:*',
+                    $receiver,
+                    $receiverUser->getName()
+                ),
+            ];
+
+            $body['content']['body'][] = [
+                'type' => 'message',
+                'text' => $userNote,
+            ];
+        }
+
         $body['content']['body'][] = [
             'type' => 'message',
             'text' => 'That\'s a secret only shared with you! Someone has also been chosen to get you a gift.'

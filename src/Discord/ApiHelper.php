@@ -20,7 +20,7 @@ class ApiHelper
 {
     const TOKEN_TYPE_BOT = 'Bot';
     private $botToken;
-    
+
     /** @var DiscordClient|null */
     private $client;
 

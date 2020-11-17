@@ -21,6 +21,7 @@ class SecretSanta
     private $remainingAssociations;
     private $admin;
     private $adminMessage;
+    private $notes;
 
     /** @var string[] */
     private $errors = [];
@@ -28,6 +29,7 @@ class SecretSanta
     /**
      * @param User[]                $users
      * @param array<string, string> $associations
+     * @param array<int, string>    $notes
      */
     public function __construct(
         string $application,
@@ -36,7 +38,8 @@ class SecretSanta
         array $users,
         array $associations,
         ?User $admin,
-        ?string $adminMessage
+        ?string $adminMessage,
+        array $notes = []
     ) {
         $this->application = $application;
         $this->organization = $organization;
@@ -46,6 +49,7 @@ class SecretSanta
         $this->remainingAssociations = $associations;
         $this->admin = $admin;
         $this->adminMessage = $adminMessage;
+        $this->notes = $notes;
     }
 
     public function getApplication(): ?string
@@ -74,6 +78,11 @@ class SecretSanta
     public function getUser(string $identifier): ?User
     {
         return $this->users[$identifier] ?? null;
+    }
+
+    public function getUserNote(string $identifier): string
+    {
+        return $this->notes[$identifier] ?? '';
     }
 
     /**

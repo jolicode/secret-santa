@@ -50,6 +50,10 @@ Someone has also been chosen to get you a gift.', $receiver);
             $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
         }
 
+        if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
+            $text .= sprintf("\n\nHere is some notes about <@%s>:\n\n```%s```", $receiver, $userNote);
+        }
+
         if ($secretSanta->getAdmin()) {
             $text .= sprintf("\n\n_Your Secret Santa admin, <@%s>._", $secretSanta->getAdmin()->getIdentifier());
         }
