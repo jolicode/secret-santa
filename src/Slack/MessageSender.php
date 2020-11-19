@@ -98,6 +98,24 @@ class MessageSender
             ];
         }
 
+        if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
+            $blocks[] = [
+                'type' => 'section',
+                'text' => [
+                    'type' => 'mrkdwn',
+                    'text' => sprintf('*Here is some notes about <@%s>:*', $receiver),
+                ],
+            ];
+
+            $blocks[] = [
+                'type' => 'section',
+                'text' => [
+                    'type' => 'mrkdwn',
+                    'text' => $userNote,
+                ],
+            ];
+        }
+
         $blocks[] = [
             'type' => 'divider',
         ];
