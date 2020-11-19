@@ -1,0 +1,64 @@
+name: CI
+
+on:
+    push:
+        branches: [ master ]
+    pull_request:
+    schedule:
+          - cron: '0 0 * * MON'
+
+jobs:
+    ci:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            # Cache
+            - uses: satackey/action-docker-layer-caching@v0.0.8
+              continue-on-error: true
+              with:
+                  key: docker-{hash}
+                  restore-keys: docker-
+            - name: Cache Composer
+              id: cache-composer
+              uses: actions/cache@v2
+              with:
+                  path: ~/.composer/cache/
+                  key: composer-${{ github.sha }}
+                  restore-keys: composer-
+            - name: Cache Pipenv
+              uses: actions/cache@v2
+              with:
+                  path: |
+                      ~/.cache/pip
+                      ~/.cache/pipenv
+                      ~/.local/share/virtualenvs/
+                  key: pip-pipenv-${{ hashFiles('Pipfile.lock') }}-${{ github.sha }}
+                  restore-keys: |
+                      pip-pipenv-
+                      pip-pipenv-${{ hashFiles('Pipfile.lock') }}-
+            - name: Cache PHPStan
+              uses: actions/cache@v2
+              with:
+                  path: var/phpstan-tmp/
+                  key: phpstan-${{ github.sha }}
+                  restore-keys: phpstan-
+            - name: Cache PHPUnit
+              uses: actions/cache@v2
+              with:
+                  path: bin/.phpunit/
+                  key: phpunit-${{ github.sha }}
+                  restore-keys: phpunit-
+
+            # Setup
+            - uses: actions/setup-python@v2
+              with:
+                  python-version: 3.7
+            - run: pip install pipenv
+
+            # Install the stack and run the tests
+            - run: pipenv install --deploy --dev
+            - run: pipenv run inv start && sleep 5
+            - run: pipenv run inv tests
+            - run: pipenv run inv qa
+            - run: pipenv run inv cs --dry-run
