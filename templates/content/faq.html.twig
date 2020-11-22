@@ -53,25 +53,30 @@
                         </h3>
                         <p>
                             Once authenticated with your favorite Chat tool, you will be prompted with the User Selection screen.<br/>
-                            We show you all the Users in your team. Just select the ones which will take part to your Secret Santa by clicking on their names.<br/>
+                            We show you all the users in your team. Just select the ones which will take part to your Secret Santa by clicking on their names.<br/>
                         </p>
 
                         <div class="is-center">
-                            <img class="img-border" src="{{ asset('images/running-app.png') }}" style="max-width: 80%" alt="The main form" />
+                            <img class="img-border" src="{{ asset('images/app-step1.png') }}" style="max-width: 80%" alt="The user selection form" />
                         </div>
 
                         <p>
-                            Optionally, you can add a custom message that will be sent along the Secret Santa draw.
+                            On the second screen, you will be able to customize a bit the message that will be sent to every participant.
+                            You can add an optional message that will be sent along the Secret Santa draw. You can even add details about every participant to help Santas achieve their mission.
                         </p>
+
+                        <div class="is-center">
+                            <img class="img-border" src="{{ asset('images/app-step2.png') }}" style="max-width: 80%" alt="The customization form" />
+                        </div>
 
                         <p>
                             You can always preview the private message that will be sent with the following button, that
-                            will send you and only you a custom message:
+                            will send you and only you a fake message:
                         </p>
                         <p class="is-center">
                             <button type="button" class="small-button">
                                 <span class="fas fa-wrench" aria-hidden="true"></span>
-                                Send me a sample message
+                                Send me a fake message
                             </button>
                         </p>
 
@@ -81,17 +86,17 @@
                         <div class="is-center">
                             <button type="submit" class="big-button">
                                 <span class="fas fa-paper-plane" aria-hidden="true"></span>
-                                Finish and send Secret Santa messages!
+                                Shuffle and send Secret Santa messages!
                             </button>
                         </div>
                         <p>
                             This will trigger the following operations:
                         </p>
                         <ol>
-                            <li>Shuffle all the Users;</li>
-                            <li>Assign a random User to each User, without collision;</li>
-                            <li><strong>Send a private message to each User</strong> with the User they must gift and your admin message;</li>
-                            <li>Send a private message to the Admin (you) with details.</li>
+                            <li>Shuffle all the users;</li>
+                            <li>Assign a random user to each user, without collision;</li>
+                            <li><strong>Send a private message to each user</strong> with the user they must gift and your admin message;</li>
+                            <li>Send a private message to the admin (you) with details.</li>
                         </ol>
                         <p>And that's it, you are done!</p>
                     </li>
