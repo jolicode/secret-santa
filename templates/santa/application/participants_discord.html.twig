@@ -1,26 +1,6 @@
-{% extends 'santa/run.html.twig' %}
-
-{% set hasRestrictedUser = true %}
+{% extends 'santa/participants.html.twig' %}
 
 {% import _self as current %}
-
-{% block content %}
-    <div class="run-block" style="margin-bottom: 0;">
-        <p class="error" style="width: 80%; margin: 10px auto; text-align: center;">
-            Please be aware that Zoom.us support is in beta right now.<br>
-            Also, the Linux Zoom client does not display messages correctly.<br>
-            Help us by reporting any suspicious behavior <a href="https://github.com/jolicode/secret-santa">on Github</a>
-            or via <a href="mailto:hello@secret-santa.team">email</a>!
-        </p>
-    </div>
-
-    {{ parent() }}
-
-    <div class="run-block is-center">
-        <p><em>Secret Santa can be removed from your account by following
-                <a href="{{ path('faq', { _fragment: 'zoom-uninstall' }) }}">those instructions</a>.</em></p>
-    </div>
-{% endblock content %}
 
 {% macro userSummary(user) %}
     <span class="user-summary">
@@ -34,9 +14,9 @@
 
 {% block user_item %}
     <label
-            class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
+            class="user-item"
             for="user-{{ user.identifier }}"
-            data-search-index="{{ user.name }}"
+            data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
         <input type="checkbox"
                {{ user.identifier in selectedUsers ? 'checked="checked"' : '' }}
@@ -48,7 +28,7 @@
         {% if user.extra.image %}
             <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
         {% endif %}
-        <span>{{ user.name }}</span>
+        <span>{{ user.name }}{% if user.extra.nickname %} ({{ user.extra.nickname }}){% endif %}</span>
         {% if groups %}
             <span class="user-groups">
                 {% for group in groups %}

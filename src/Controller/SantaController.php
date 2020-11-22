@@ -54,7 +54,7 @@ class SantaController extends AbstractController
         $this->bugsnag = $bugsnag;
     }
 
-    public function run(Rudolph $rudolph, Request $request, string $application): Response
+    public function run(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -62,82 +62,95 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
-        $allUsers = $application->getUsers();
+        $this->doReset(null, $request);
 
-        $selectedUsers = [];
-        $message = null;
+        return $this->redirectToRoute('participants', ['application' => $application->getCode()]);
+    }
+
+    public function participants(Request $request, string $application): Response
+    {
+        $application = $this->getApplication($application);
+
+        if (!$application->isAuthenticated()) {
+            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+        }
+
+        $session = $request->getSession();
+        $availableUsers = $session->get('available-users');
+
+        if (!$availableUsers) {
+            $availableUsers = $application->getUsers();
+
+            $session->set('available-users', $availableUsers);
+        }
+
+        $selectedUsers = $session->get('selected-users', []);
         $errors = [];
 
         if ($request->isMethod('POST')) {
             $selectedUsers = $request->request->get('users', []);
-            $message = $request->request->get('message');
 
-            $errors = $this->validate($selectedUsers, $message);
+            if (\count($selectedUsers) > 1) {
+                $session->set('selected-users', $selectedUsers);
 
-            if (\count($errors) < 1) {
-                if ($request->request->has('notesRedirect')) {
-                    $request->getSession()->set('setup', [
-                        'selectedUsers' => $request->request->all('users'),
-                        'message' => $request->request->get('message'),
-                    ]);
-
-                    return $this->redirectToRoute('notes', [
-                        'application' => $application->getCode(),
-                    ]);
-                }
-
-                $associatedUsers = $rudolph->associateUsers($selectedUsers);
-                $hash = md5(serialize($associatedUsers));
-                $notes = $request->request->all('notes');
-
-                $secretSanta = new SecretSanta(
-                    $application->getCode(),
-                    $application->getOrganization(),
-                    $hash,
-                    array_filter($allUsers, function (User $user) use ($selectedUsers) {
-                        return \in_array($user->getIdentifier(), $selectedUsers, true);
-                    }),
-                    $associatedUsers,
-                    $application->getAdmin(),
-                    $message,
-                    $notes
-                );
-
-                $request->getSession()->set(
-                    $this->getSecretSantaSessionKey(
-                        $secretSanta->getHash()
-                    ), $secretSanta
-                );
-
-                return new RedirectResponse($this->router->generate('send_messages', ['hash' => $secretSanta->getHash()]));
+                return $this->redirectToRoute('message', ['application' => $application->getCode()]);
             }
+
+            $errors[] = 'At least 2 users should be selected.';
         }
 
-        $content = $this->twig->render('santa/application/run_' . $application->getCode() . '.html.twig', [
+        $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', [
             'application' => $application->getCode(),
-            'users' => $allUsers,
+            'users' => $availableUsers,
             'groups' => $application->getGroups(),
-            'admin' => $application->getAdmin(),
             'selectedUsers' => $selectedUsers,
-            'message' => $message,
             'errors' => $errors,
+            'step' => 1,
         ]);
 
         return new Response($content);
     }
 
-    public function notes(Request $request, string $application): Response
+    public function message(Rudolph $rudolph, Request $request, string $application): Response
     {
-        $setup = $request->getSession()->get('setup');
         $application = $this->getApplication($application);
 
-        $content = $this->twig->render('santa/application/notes_' . $application->getCode() . '.html.twig', [
+        if (!$application->isAuthenticated()) {
+            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+        }
+
+        $session = $request->getSession();
+        $availableUsers = $session->get('available-users', []);
+        $selectedUsers = $session->get('selected-users', []);
+        $message = $session->get('message');
+        $notes = $session->get('notes');
+
+        if ($request->isMethod('POST')) {
+            $message = $request->request->get('message');
+            $notes = $request->request->get('notes');
+
+            $session->set('message', $message);
+            $session->set('notes', $notes);
+
+            $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
+
+            $session->set(
+                $this->getSecretSantaSessionKey(
+                    $secretSanta->getHash()
+                ), $secretSanta
+            );
+
+            return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
+        }
+
+        $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
             'application' => $application->getCode(),
-            'users' => $application->getUsers(),
-            'groups' => $application->getGroups(),
-            'selectedUsers' => $setup['selectedUsers'],
             'admin' => $application->getAdmin(),
-            'message' => $setup['message'],
+            'availableUsers' => $availableUsers,
+            'selectedUsers' => $selectedUsers,
+            'message' => $message,
+            'notes' => $notes,
+            'step' => 2,
         ]);
 
         return new Response($content);
@@ -148,7 +161,6 @@ class SantaController extends AbstractController
         $application = $this->getApplication($application);
 
         $errors = [];
-        $message = '';
 
         if (!$application->isAuthenticated()) {
             $errors['login'] = 'Your session has expired. Please refresh the page.';
@@ -163,24 +175,32 @@ class SantaController extends AbstractController
         }
 
         if (\count($errors) < 1) {
+            $session = $request->getSession();
+            $availableUsers = $session->get('available-users', []);
+            $selectedUsers = $session->get('selected-users', []);
+
             $message = $request->request->get('message', '');
+            $notes = array_filter($request->request->get('notes', []));
 
-            $errors = $this->validate([], $message, true);
-        }
+            if ($notes) {
+                $receiver = array_rand($notes);
+            } else {
+                $receiver = $selectedUsers[array_rand($selectedUsers)];
+            }
 
-        if (\count($errors) < 1) {
             $secretSanta = new SecretSanta(
                 $application->getCode(),
                 $application->getOrganization(),
                 'sample',
-                [$application->getAdmin()->getIdentifier() => $application->getAdmin()],
+                $availableUsers,
                 [],
                 $application->getAdmin(),
-                str_replace('```', '', $message)
+                str_replace('```', '', $message),
+                $notes
             );
 
             try {
-                $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $application->getAdmin()->getIdentifier(), true);
+                $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $receiver, true);
 
                 $this->statisticCollector->incrementSampleCount($secretSanta);
             } catch (MessageSendFailedException $e) {
@@ -213,6 +233,7 @@ class SantaController extends AbstractController
             $content = $this->twig->render('santa/send_messages.html.twig', [
                 'application' => $application->getCode(),
                 'secretSanta' => $secretSanta,
+                'step' => 3,
             ]);
 
             return new Response($content);
@@ -239,7 +260,7 @@ class SantaController extends AbstractController
             $error = true;
         }
 
-        $this->finishSantaIfDone($secretSanta, $application);
+        $this->finishSantaIfDone($request, $secretSanta, $application);
 
         $request->getSession()->set(
             $this->getSecretSantaSessionKey(
@@ -260,12 +281,13 @@ class SantaController extends AbstractController
 
         $content = $this->twig->render('santa/finish.html.twig', [
             'secretSanta' => $secretSanta,
+            'step' => 4,
         ]);
 
         return new Response($content);
     }
 
-    public function cancel(string $application): Response
+    public function cancel(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -273,7 +295,7 @@ class SantaController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        $application->reset();
+        $this->doReset($application, $request);
 
         return $this->redirectToRoute('homepage');
     }
@@ -319,6 +341,31 @@ class SantaController extends AbstractController
         return sprintf('secret-santa-%s', $hash);
     }
 
+    private function prepareSecretSanta(Rudolph $rudolph, Request $request, ApplicationInterface $application): SecretSanta
+    {
+        $session = $request->getSession();
+        $availableUsers = $session->get('available-users');
+        $selectedUsers = $session->get('selected-users');
+        $message = $session->get('message');
+        $notes = $session->get('notes');
+
+        $associatedUsers = $rudolph->associateUsers($selectedUsers);
+        $hash = md5(serialize($associatedUsers));
+
+        return new SecretSanta(
+            $application->getCode(),
+            $application->getOrganization(),
+            $hash,
+            array_filter($availableUsers, function (User $user) use ($selectedUsers) {
+                return \in_array($user->getIdentifier(), $selectedUsers, true);
+            }),
+            $associatedUsers,
+            $application->getAdmin(),
+            $message,
+            $notes
+        );
+    }
+
     private function getSecretSantaOrThrow404(Request $request, string $hash): SecretSanta
     {
         $secretSanta = $request->getSession()->get(
@@ -334,27 +381,24 @@ class SantaController extends AbstractController
         return $secretSanta;
     }
 
-    /**
-     * @param string[] $selectedUsers
-     *
-     * @return array<string, string[]>
-     */
-    private function validate(array $selectedUsers, string $message, bool $isSample = false): array
+    private function doReset(?ApplicationInterface $application, Request $request): void
     {
-        $errors = [];
+        $session = $request->getSession();
+        $session->remove('available-users');
+        $session->remove('selected-users');
+        $session->remove('message');
+        $session->remove('notes');
 
-        if (!$isSample && \count($selectedUsers) < 2) {
-            $errors['users'][] = 'At least 2 users should be selected.';
+        if ($application) {
+            $application->reset();
         }
-
-        return $errors;
     }
 
-    private function finishSantaIfDone(SecretSanta $secretSanta, ApplicationInterface $application): void
+    private function finishSantaIfDone(Request $request, SecretSanta $secretSanta, ApplicationInterface $application): void
     {
         if ($secretSanta->isDone()) {
             $this->statisticCollector->incrementUsageCount($secretSanta);
-            $application->reset();
+            $this->doReset($application, $request);
         }
     }
 }

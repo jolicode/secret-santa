@@ -1,0 +1,8 @@
+{% extends 'santa/message.html.twig' %}
+
+{% block user_item %}
+    {% if user.extra.image %}
+        <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+    {% endif %}
+    <span title="{{ user.name }}{% if user.extra.nickname %} ({{ user.extra.nickname }}){% endif %}">{{ user.name }}</span>
+{% endblock %}

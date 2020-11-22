@@ -22,7 +22,7 @@
         {% endblock %}
 
         <link rel="stylesheet" href="{{ asset('style.css') }}">
-        <link  rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
+        <link rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
 
         {% if 'production' == bugsnag_release_stage and bugsnag_api_key is not empty %}
             <script src="{{ asset('js/bugsnag.min.js') }}"></script>
@@ -80,8 +80,8 @@
 
             <footer class="footer is-center {% block footerClass %}{% endblock %}">
                 {% block contact %}
-                    <a href="{{ path('faq') }}" class="support-link"><i class="fas fa-question"></i> Help</a>
-                    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="far fa-life-ring"></i> Contact us!</a>
+                    <a href="{{ path('faq') }}" class="support-link"><i class="fas fa-life-ring"></i> Need help?</a>
+                    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="far fa-envelope"></i> Contact us!</a>
                 {% endblock contact %}
                 <p>
                     This free service to share the santa spirit is made with ♥ by <a href="https://jolicode.com">JoliCode</a>.

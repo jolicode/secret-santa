@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <nav class="is-center">
+        <ol class="breadcrumb">
+            <li class="{{ step >= 1 ? 'current' }}">
+                {% if step == 2 ? 'current' %}
+                    <a href="{{ path('participants', {application: application}) }}"><span class="fas fa-users" aria-hidden="true"></span> Participants</a>
+                {% else %}
+                    <span><span class="fas fa-users" aria-hidden="true"></span> Participants</span>
+                {% endif %}
+            </li>
+            <li class="{{ step >= 2 ? 'current' }}">
+                <span><span class="fas fa-pen" aria-hidden="true"></span> Customization</span>
+            </li>
+            <li class="{{ step >= 3 ? 'current' }}">
+                <span><span class="fas fa-paper-plane" aria-hidden="true"></span> Sending</span>
+            </li>
+            <li class="{{ step >= 4 ? 'current' }}">
+                <span><span class="fas fa-flag-checkered" aria-hidden="true"></span> Finish</span>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="">
+        {% block santa_content %}{% endblock %}
+    </div>
+{% endblock %}

@@ -1,61 +1,67 @@
-{% extends 'base.html.twig' %}
+{% extends 'santa/base.html.twig' %}
 
 {% set hasRestrictedUser = hasRestrictedUser|default(false) %}
 
-{% block content %}
+{% block santa_content %}
     <div class="run-block">
+        <h2>Select the participants of your Secret Santa</h2>
+
+        {% if errors %}
+            <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors|join('<br />') }}</span>
+        {% endif %}
+
         {% if users|length >= 2 %}
             <form method="post" id="run_form">
                 <div class="pure-g">
-                    <div class="pure-u-1 pure-u-lg-1-2 user-field run-step">
-                        <div class="run-column">
-                            <h2>Select the participants of your Secret Santa</h2>
-                            {% if errors and errors.users %}
-                                <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors.users|join('<br />') }}</span>
-                            {% endif %}
-
-                            {% if groups %}
-                                <div class="group-selection">
-                                    <label>Select all people in a group</label>
-                                    <div class="group-list" id="group-list">
-                                        {% for group in groups %}
-                                            <span class="group-button" data-user-ids="{{ group.userIds|join('|') }}" title="Select {{ group.userIds|length }} people in this group">{{ group.name }}</span>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-
-                            <div class="user-search">
-                                <div class="helper">
-                                    {% if hasRestrictedUser %}
-                                        <label>
-                                            <input type="checkbox" checked="checked" id="restrict-user-checkbox" value="" />
-                                            <span>Show restricted user</span>
-                                        </label>
+                    <div class="pure-u-1 pure-u-lg-1-2">
+                        <div class="run-column run-column-left">
+                            <div class="sticky-container">
+                                <div class="sticky">
+                                    <h3 class="is-center">Available users</h3>
+                                    {% if groups %}
+                                        <div class="group-selection">
+                                            <label>Select all people in a group with one click:</label>
+                                            <div class="group-list" id="group-list">
+                                                {% for group in groups %}
+                                                    <span class="group-button" data-user-ids="{{ group.userIds|join('|') }}" title="Select {{ group.userIds|length }} people in this group">{{ group.name }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
                                     {% endif %}
-                                    <span class="check-all" id="all-checker" title="Check all the visible users in the list below">Check all</span>
-                                    /
-                                    <span class="uncheck-all" id="all-unchecker" title="Uncheck all the visible users in the list below">Uncheck all</span>
-                                </div>
-                                <div class="search-wrapper">
-                                    <input autofocus placeholder="🔎 Search user by real name or username" type="text" id="user-search-input" autocomplete="off" />
-                                    <span class="search-cleaner fas fa-times is-hidden" id="search-cleaner" title="Empty the query"></span>
-                                </div>
-                            </div>
-                            {% apply spaceless %}
-                                <div class="user-list" id="user-list">
-                                    {% for user in users %}
-                                        {% block user_item %}{% endblock %}
-                                    {% endfor %}
-                                    <div class="no-result is-hidden" id="no-user-matching">
-                                        No user matching.
-                                    </div>
-                                </div>
-                            {% endapply %}
 
-                            <div class="checked-users-summary">
-                                <h2>Summary of your selection: <span id="summary-count"></span></h2>
-                                <div id="checked-users-summary"></div>
+                                    <p class="is-center">
+                                        Below is the list of all the users in your team. Select the ones that will
+                                        participate to your Secret Santa.
+                                    </p>
+
+                                    <div class="user-helper is-center">
+                                        {% if hasRestrictedUser %}
+                                            <label>
+                                                <input type="checkbox" checked="checked" id="restrict-user-checkbox" value="" />
+                                                <span>Show restricted user</span>
+                                            </label>
+                                        {% endif %}
+                                        <span class="check-all" id="all-checker" title="Check all the visible users in the list below">Check all</span>
+                                        <span class="uncheck-all" id="all-unchecker" title="Uncheck all the visible users in the list below">Uncheck all</span>
+                                    </div>
+
+                                    <div class="user-search">
+                                        <input autofocus placeholder="🔎    Search user by real name or username" type="text" id="user-search-input" autocomplete="off" />
+                                        <span class="search-cleaner fas fa-times is-hidden" id="search-cleaner" title="Empty the query"></span>
+                                    </div>
+                                    {% apply spaceless %}
+                                        <div class="user-container">
+                                            <div class="user-list" id="user-list">
+                                                <div class="no-result is-hidden" id="no-user-matching">
+                                                    No user matching.
+                                                </div>
+                                                {% for user in users %}
+                                                    {% block user_item %}{% endblock %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endapply %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,58 +69,29 @@
                         <div class="run-column run-column-right">
                             <div class="sticky-container">
                                 <div class="sticky">
-                                    <div class="message-field run-step">
-                                        <h2>
-                                            <label class="control-label" for="message">Write an optional message</label>
-                                        </h2>
-
-                                        <textarea name="message" id="message" rows="5" placeholder="Anything you want, but this is the right place to give a deadline and a price limit!">{{ message }}</textarea>
-
-                                        {% if admin %}
-                                            <p class="help">
-                                                Not sure how the private messages will render?
-                                                Click the button below, so you (and only you) will receive a fake message almost identical
-                                                to the ones send on the final step.
-                                            </p>
-                                            <div class="is-center">
-                                                <button type="button" class="small-button" id="sample-message-button">
-                                                    <span class="fas fa-wrench" aria-hidden="true"></span>
-                                                    Send me a sample message
-                                                </button>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                    <div class="run-step">
-                                        <h2>Ready?</h2>
+                                    <div class="is-center">
+                                        <h3 class="is-center">Ready for next step?</h3>
 
                                         <p>
-                                            We are going to shuffle selected users and send them a private message to inform them
-                                            of their peer name.
+                                            You selected <strong id="summary-count"></strong>.
+                                            If you are ready, let's validate the current selection and move to next step, a.k.a "message customization".
                                         </p>
 
-                                        <div class="is-center">
-                                            <button type="submit" class="big-button" id="submit-button">
-                                                <span class="fas fa-paper-plane" aria-hidden="true"></span>
-                                                Finish and send Secret Santa messages!
-                                            </button>
-                                            {% if false %}
-                                            <button type="submit" class="big-button bellow" id="add-button" name="notesRedirect">
-                                                <span class="fas fa-user-edit" aria-hidden="true"></span>
-                                                Add notes for your participants before sending
-                                            </button>
-                                            {% endif %}
-                                        </div>
+                                        <button type="submit" class="big-button" id="submit-button">
+                                            <span class="fas fa-users" aria-hidden="true"></span>
+                                            Validate selection
+                                        </button>
+                                    </div>
 
-                                        <p class="is-center">
-                                            or <a href="{{ path('cancel', {application: application}) }}">cancel</a>
-                                        </p>
+                                    <p class="is-center">
+                                        <small>
+                                            or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
+                                        </small>
+                                    </p>
 
-                                        <p class="help hidden" id="big-santa-warning">
-                                            When selecting a lot of participants, the final step (sending private messages)
-                                            can take some time.<br />
-                                            Don't worry, in case something goes wrong, a "Retry" button will allow you to
-                                            send remaining messages not yet sent.
-                                        </p>
+                                    <div class="checked-users-summary">
+                                        <h3 class="is-center">Summary of your selection</h3>
+                                        <div id="checked-users-summary" class="is-center"></div>
                                     </div>
                                 </div>
                             </div>
@@ -144,44 +121,7 @@
                 const noMatch = document.getElementById('no-user-matching');
                 const summaryCount = document.getElementById('summary-count');
                 const checkedUsersSummary = document.getElementById('checked-users-summary');
-                const bigSantaWarning = document.getElementById('big-santa-warning');
                 const submitButton = document.getElementById('submit-button');
-
-                /**
-                 * Handle sample message send
-                 */
-                const sampleMessageButton = document.getElementById('sample-message-button');
-                if (sampleMessageButton) {
-                    sampleMessageButton.addEventListener('click', function(e) {
-                        const body = new FormData();
-                        body.append('message', document.getElementById('message').value);
-
-                        fetch('{{ url('send_sample_message', {application: application}) }}', {
-                            method: 'post',
-                            credentials: 'include',
-                            headers: {'X-Requested-With': 'XMLHttpRequest'},
-                            body: body,
-                        })
-                        .then(function(response) {
-                            return response.json();
-                        })
-                        .then(function(response) {
-                            if (response.success) {
-                                window.alert('The sample message have been sent successfully. Check it now before finishing the Secret Santa.');
-                                return;
-                            }
-
-                            const keys = Object.keys(response.errors);
-                            let message = 'Error when sending the sample message:\n';
-
-                            for (let i=0; i<keys.length; i++) {
-                                message += response.errors[keys[i]] + "\n";
-                            }
-
-                            window.alert(message);
-                        })
-                    }, false);
-                }
 
                 /**
                  * Prevent the multi-submit of the form
@@ -213,12 +153,6 @@
 
                     summaryCount.innerHTML = users.length + ' people';
                     checkedUsersSummary.innerHTML = html;
-
-                    if (users.length >= 30) {
-                        bigSantaWarning.classList.remove('hidden');
-                    } else {
-                        bigSantaWarning.classList.add('hidden');
-                    }
                 }
 
                 /**
@@ -506,4 +440,4 @@
             </div>
         {% endif %}
     </div>
-{% endblock content %}
+{% endblock santa_content %}

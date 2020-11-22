@@ -34,9 +34,13 @@ run:
     path:     /run/{application}
     controller: JoliCode\SecretSanta\Controller\SantaController::run
 
-notes:
-    path:     /notes/{application}
-    controller: JoliCode\SecretSanta\Controller\SantaController::notes
+participants:
+    path:     /participants/{application}
+    controller: JoliCode\SecretSanta\Controller\SantaController::participants
+
+message:
+    path:     /message/{application}
+    controller: JoliCode\SecretSanta\Controller\SantaController::message
 
 send_sample_message:
     path:     /sample-message/{application}
