@@ -105,7 +105,6 @@ class SantaController extends AbstractController
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
             'errors' => $errors,
-            'step' => 1,
         ]);
 
         return new Response($content);
@@ -150,7 +149,6 @@ class SantaController extends AbstractController
             'selectedUsers' => $selectedUsers,
             'message' => $message,
             'notes' => $notes,
-            'step' => 2,
         ]);
 
         return new Response($content);
@@ -233,7 +231,6 @@ class SantaController extends AbstractController
             $content = $this->twig->render('santa/send_messages.html.twig', [
                 'application' => $application->getCode(),
                 'secretSanta' => $secretSanta,
-                'step' => 3,
             ]);
 
             return new Response($content);
@@ -281,7 +278,6 @@ class SantaController extends AbstractController
 
         $content = $this->twig->render('santa/finish.html.twig', [
             'secretSanta' => $secretSanta,
-            'step' => 4,
         ]);
 
         return new Response($content);

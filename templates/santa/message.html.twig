@@ -1,5 +1,7 @@
 {% extends 'santa/base.html.twig' %}
 
+{% set step = 2 %}
+
 {% block santa_content %}
     <div class="run-block">
         <form method="post" id="run_form" action="{{ path('message', { application: application }) }}">
