@@ -1,14 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'santa/base.html.twig' %}
 
-{% block content %}
+{% set step = 4 %}
+
+{% block santa_content %}
     <div class="content result-block">
         {% if secretSanta.isDone %}
-            <h2>Well done! All messages were sent, happy gifting!</h2>
+            <div class="is-center run-block">
+                <h2>Well done! All messages were sent, happy gifting!</h2>
 
-            <p class="summary">
-                You have received a private message explaining how to retrieve the santa repartition.
-                You should probably not look at it, to avoid breaking the Secret Santa magic.
-            </p>
+                <p>
+                    We have also sent you an <strong>additional private message</strong> explaining
+                    <strong>how to retrieve the secret Santa repartition</strong>.
+                </p>
+                <p>
+                    Please note that we do not store anything so this message will be your only way
+                    to retrieve the association.
+                </p>
+                <p>
+                    But unless you want to break Secret Santa magic, you should probably not try it 😇.
+                </p>
+            </div>
         {% else %}
             <h2>😱 All the messages are not sent yet, please read carefully</h2>
 
@@ -119,4 +130,4 @@
             </a>
         </div>
     </div>
-{% endblock content %}
+{% endblock santa_content %}

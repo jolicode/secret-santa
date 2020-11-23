@@ -76,6 +76,8 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     --color-slack: #ecb22e;
     --color-discord: #7289da;
     --color-zoom: #0E71EB; /* cf. https://zoom.us/brandguidelines */
+    --border-radius: 5px;
+    --button-border-radius: 10px;
 }
 
 /* Our css \o/ */
@@ -122,7 +124,7 @@ a {
     background-color: #fff;
     border: 1px solid var(--color-primary);
     color: var(--color-primary);
-    border-radius: 10px;
+    border-radius: var(--button-border-radius);
     padding: 0.5em;
 }
 .small-button:hover {
@@ -138,7 +140,7 @@ a {
     background-color: var(--color-primary);
     border: 0 none;
     color: white;
-    border-radius: 10px;
+    border-radius: var(--button-border-radius);
     padding: 1em;
 }
 .big-button:hover {
@@ -191,6 +193,7 @@ a {
     display: flex;
     max-width: 960px;
     margin: 0 auto;
+    padding: 1em 0;
 }
 .home-menu .pure-menu-heading a {
     color: white;
@@ -213,7 +216,6 @@ a {
 }
 .logo-wrapper {
     float: left;
-    margin-top: 10px;
     height: 100px;
     width: 100px;
     overflow: hidden;
@@ -235,7 +237,7 @@ a {
 .home-menu .pure-menu-link {
   background-color: transparent;
   border: 2px solid white;
-  border-radius: 5px;
+  border-radius: var(--button-border-radius);
   margin-right: 6px;
 }
 
@@ -285,13 +287,13 @@ footer {
 }
 footer a.support-link {
     display: inline-block;
-    margin-bottom: 1em;
+    margin: 0 1em 0.5em;
     font-size: 1.2em;
     text-decoration: none;
     background-color: white;
     border: 3px solid white;
     color: var(--color-primary);
-    border-radius: 10px;
+    border-radius: var(--button-border-radius);
     padding: 1em;
 }
 footer a.support-link:hover {
@@ -343,7 +345,6 @@ footer a {
 }
 .jumbotron h1 {
     display: inline-block;
-    border-radius: 2px;
     text-align: center;
     font-size: 3em;
     margin-top: 1em;
@@ -612,7 +613,7 @@ footer a {
     position: relative;
 }
 .run-block h2 {
-    margin-top: 2em;
+    margin-bottom: 2em;
     color: var(--color-primary);
     text-align: center;
 }
@@ -620,7 +621,7 @@ footer a {
     padding: 0 2em;
 }
 @media screen and (min-width: 1024px) {
-    .run-column-right {
+    .run-column {
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -650,14 +651,13 @@ textarea {
     box-sizing: border-box;
     padding: 1em;
     border: 1px solid var(--color-gray);
-    border-radius: 4px;
+    border-radius: var(--border-radius);
+}
+.message-step {
+    margin-bottom: 3em;
 }
 .message-field textarea {
     max-height: 150px;
-}
-.help {
-    color: var(--color-gray-dark);
-    font-size: 0.9em;
 }
 .next img {
     box-shadow: 10px 10px 25px var(--color-gray);
@@ -671,9 +671,9 @@ textarea {
  */
 .group-selection {
     border: 1px solid var(--color-gray);
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     padding: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
 }
 .group-selection .group-list {
     margin-top: 1em
@@ -690,55 +690,56 @@ textarea {
 /**
  * User list
  */
-.user-search {
+.user-helper {
+    padding: 0 1em;
     display: flex;
-    flex-direction: column;
-    border: 1px solid var(--color-gray);
-    border-radius: 4px 4px 0 0;
-}
-.user-search .search-wrapper {
     align-items: center;
+    height: 3em;
+    justify-content: center;
+}
+.user-helper label {
+    cursor: pointer;
+    margin-right: 1em;
+}
+.user-helper input {
+    vertical-align: middle;
+}
+.user-helper .check-all,
+.user-helper .uncheck-all {
+    color: var(--color-primary);
+    cursor: pointer;
+    padding: 0 1em;
+}
+.user-search {
+    border: 1px solid var(--color-gray);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
     position: relative;
 }
-.user-search .search-wrapper input {
+.user-search input {
     border: 0 none;
-    border-top: 1px solid var(--color-gray);
     line-height: 3em;
     box-sizing: border-box;
     width: 100%;
     padding: 0 1em;
+    background-color: transparent;
 }
-.user-search .search-wrapper span {
+.user-search span {
     position: absolute;
     right: 1em;
     top: 1em;
     cursor: pointer;
 }
-.user-search .helper {
-    display: flex;
-    align-items: center;
-    padding: 0 1em;
-    line-height: 3em;
+.user-search + .user-container {
+    border-top: 0 none;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
-.user-search .helper label {
-    cursor: pointer;
-    margin-right: 1em;
-}
-.user-search .helper input {
-    vertical-align: middle;
-}
-.user-search .helper .check-all,
-.user-search .helper .uncheck-all {
-    color: var(--color-primary);
-    cursor: pointer;
-    padding: 0 1em;
+.user-container {
+    border: 1px solid var(--color-gray);
+    border-radius: var(--border-radius);
 }
 .user-list {
     max-height: 410px;
     overflow-y: scroll;
-    border: 1px solid var(--color-gray);
-    border-top: 0 none;
-    border-radius: 0 0 4px 4px;
 }
 .user-list .user-item {
     min-height: 3em;
@@ -747,10 +748,28 @@ textarea {
     display: flex;
     align-items: center;
 }
-.user-list .user-item.notes {
-    min-height: 3.5em;
+.user-list .user-item:last-child {
+    border-bottom: 0 none;
 }
-
+.user-list .user-item.notes > span {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    height: 3em;
+    justify-content: left;
+    margin: 0;
+}
+.user-list .user-item.notes > input {
+    flex: 3;
+    border: 0 none;
+    border-left: 1px solid var(--color-gray);
+    line-height: 3em;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 1em;
+    margin: 0 0 0 1em;
+    background-color: transparent;
+}
 .user-list .no-result {
     min-height: 3em;
     vertical-align: middle;
@@ -771,10 +790,6 @@ textarea {
     background-color: transparent;
     cursor: default;
 }
-.notes input[type="text"] {
-    margin-right: 20px;
-    width: 50%;
-}
 .user-list .user-item * {
     margin: 0 0 0 1em;
     display: flex;
@@ -790,18 +805,20 @@ textarea {
 .group-selection .group-button,
 .user-list .user-item .user-group {
     background-color: var(--color-gray-light);
-    border-radius: 2px;
+    border-radius: var(--border-radius);
     font-size: 0.8em;
     padding: 0.5em;
     display: inline-block;
 }
 .checked-users-summary {
     margin-top: 3em;
+    padding-top: 2em;
+    border-top: 1px solid var(--color-gray);
 }
 .checked-users-summary .user-summary {
     background-color: var(--color-gray-light);
     padding: 0 0.5em;
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     margin-top: 0.5em;
     margin-right: 0.5em;
     display: inline-block;
@@ -843,10 +860,6 @@ textarea {
     margin-top: 2em;
     line-height: 1.5em;
 }
-.result-block .summary a {
-    color: var(--color-primary);
-    text-decoration: none;
-}
 
 /**
  * Error page
@@ -866,7 +879,7 @@ textarea {
 .error-code {
     display: block;
     padding: 1.5em;
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     line-height: 1.5em;
     text-align: center;
     color: var(--color-error);
@@ -1077,7 +1090,7 @@ textarea {
     content: '';
     padding: 10px;
     margin: 10px;
-    border-radius: 3px;
+    border-radius: var(--border-radius);
 }
 
 .legend .legend-item.total::before {
@@ -1107,7 +1120,7 @@ textarea {
 
 .single-value {
     background-color: var(--color-primary);
-    border-radius: 5px;
+    border-radius: var(--border-radius);
     padding: 20px;
     margin: 20px;
     text-align: center;
@@ -1244,4 +1257,105 @@ textarea {
 }
 .custom-fa-zoom:before {
     background-image: url("images/zoom-logo.svg");
+}
+
+/**
+ * Breadcrumb
+ */
+.breadcrumb {
+    display: inline-block;
+    padding: 0;
+    margin: 1em 0;
+    background-color: transparent;
+    border-radius: var(--button-border-radius);
+    list-style: none;
+    --color-breadcrumb-background: var(--color-gray-light);
+}
+.breadcrumb::after {
+     clear: both;
+     content: "";
+     display: table;
+ }
+.breadcrumb li {
+    position: relative;
+    padding: 0;
+    margin: 4px 4px 4px 0;
+    float: left;
+}
+.breadcrumb li > * {
+    display: inline-block;
+    position: relative;
+    padding: 1em .8em 1em 2.5em;
+    padding-left: 2.5em;
+    color: var(--color-black);
+    background-color: var(--color-breadcrumb-background);
+    border-color: #edeff0;
+}
+.breadcrumb li > a {
+    text-decoration: none;
+    background-color: var(--color-breadcrumb-background);
+}
+.breadcrumb li:first-of-type > * {
+    padding-left: 1.6em;
+    border-radius: var(--button-border-radius) 0 0 var(--button-border-radius);
+}
+.breadcrumb li:last-of-type > * {
+    padding-right: 1.6em;
+    border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
+}
+.breadcrumb li.current > * {
+    color: white;
+    font-weight: bold;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+ }
+.breadcrumb li.current > a:hover {
+    text-decoration: none;
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+.breadcrumb li::after {
+    display: inline-block;
+    content: '\00bb';
+    margin: 0 .6em;
+    color: var(--color-breadcrumb-background);
+}
+.breadcrumb li::after,
+.breadcrumb li > *::after {
+    /*
+      li > *::after is the colored triangle after each item
+      li::after is the white separator between two items
+    */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 100%;
+    height: 0;
+    width: 0;
+    /* 52px is the height of the li > * element */
+    border: 26px solid transparent;
+    border-right-width: 0;
+    border-left-width: 20px;
+}
+.breadcrumb li::after {
+    /* this is the white separator between two items */
+    z-index: 1;
+    -webkit-transform: translateX(4px);
+    -moz-transform: translateX(4px);
+    -ms-transform: translateX(4px);
+    -o-transform: translateX(4px);
+    transform: translateX(4px);
+    border-left-color: #ffffff;
+    /* reset style */
+    margin: 0;
+}
+.breadcrumb li > *::after {
+    /* this is the colored triangle after each element */
+    z-index: 2;
+    border-left-color: inherit;
+}
+.breadcrumb li:last-of-type::after,
+.breadcrumb li:last-of-type > *::after {
+    /* hide the triangle after the last step */
+    display: none;
 }

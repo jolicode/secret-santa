@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block seo %}
+    <meta name="robots" content="noindex">
+{% endblock %}
+
 {% macro singleValue(title, value, unit) %}
     <div class="single-value">
         <div class="title">

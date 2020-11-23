@@ -1,6 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'santa/base.html.twig' %}
 
-{% block content %}
+{% set step = 3 %}
+
+{% block santa_content %}
     <div class="content send-messages is-center">
         <h2>
             <span class="fas fa-spinner spin"></span>
@@ -64,4 +66,4 @@
             sendRemainingMessages();
         })();
     </script>
-{% endblock content %}
+{% endblock santa_content %}
