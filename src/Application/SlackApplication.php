@@ -61,7 +61,7 @@ class SlackApplication implements ApplicationInterface
 
     public function getOrganization(): string
     {
-        return $this->getToken()->getValues()['team_name'] ?? '';
+        return $this->getToken()->getValues()['team']['name'] ?? '';
     }
 
     public function getAdmin(): ?User
