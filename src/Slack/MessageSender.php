@@ -142,8 +142,7 @@ class MessageSender
 
         try {
             $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
-                'channel' => sprintf('@%s', $giver),
-                'username' => $isSample ? 'Secret Santa Preview' : 'Secret Santa Bot',
+                'channel' => $giver,
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
                 'text' => $fallbackText,
                 'blocks' => json_encode($blocks),
@@ -181,7 +180,6 @@ Happy Secret Santa!',
         try {
             $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
                 'channel' => $secretSanta->getAdmin()->getIdentifier(),
-                'username' => 'Secret Santa Bot Spoiler',
                 'icon_url' => 'https://secret-santa.team/images/logo-spoiler.png',
                 'text' => $text,
             ]);

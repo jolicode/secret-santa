@@ -11,11 +11,10 @@
 
 namespace JoliCode\SecretSanta\Controller;
 
-use AdamPaterson\OAuth2\Client\Provider\Slack;
-use AdamPaterson\OAuth2\Client\Provider\SlackResourceOwner;
 use JoliCode\SecretSanta\Application\SlackApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
-use JoliCode\SecretSanta\Model\User;
+use JoliCode\SecretSanta\Slack\SlackProvider;
+use JoliCode\SecretSanta\Slack\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -39,11 +38,11 @@ class SlackController extends AbstractController
     /**
      * Ask for Slack authentication and store the AccessToken in Session.
      */
-    public function authenticate(Request $request, SlackApplication $slackApplication): Response
+    public function authenticate(Request $request, SlackApplication $slackApplication, UserExtractor $userExtractor): Response
     {
         $session = $request->getSession();
 
-        $provider = new Slack([
+        $provider = new SlackProvider([
             'clientId' => $this->slackClientId,
             'clientSecret' => $this->slackClientSecret,
             'redirectUri' => $this->router->generate('slack_authenticate', [], RouterInterface::ABSOLUTE_URL),
@@ -57,7 +56,7 @@ class SlackController extends AbstractController
             // If we don't have an authorization code then get one
             $options = [
                 'scope' => [
-                    'chat:write:bot',
+                    'chat:write',
                     'users:read',
                     'usergroups:read',
                 ],
@@ -81,18 +80,13 @@ class SlackController extends AbstractController
                 'code' => $request->query->get('code'),
             ]);
 
-            // Who Am I?
-            /** @var SlackResourceOwner $user */
-            $user = $provider->getResourceOwner($token);
+            $admin = $userExtractor->getUser($token->getToken(), $token->getValues()['authed_user']['id']);
         } catch (\Exception $e) {
             throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Failed to retrieve data from Slack.', $e);
         }
 
         $slackApplication->setToken($token);
-        $slackApplication->setAdmin(new User($user->getId(), $user->getRealName(), [
-            'nickname' => $user->getName(),
-            'image' => $user->getImage192(),
-        ]));
+        $slackApplication->setAdmin($admin);
 
         return new RedirectResponse($this->router->generate('run', [
             'application' => $slackApplication->getCode(),
