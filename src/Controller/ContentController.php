@@ -153,6 +153,11 @@ class ContentController extends AbstractController
                 'image' => 'melvin-hamilton.png',
             ],
             [
+                'label' => 'Makers',
+                'link' => 'https://makers.tech/',
+                'image' => 'makers.png',
+            ],
+            [
                 'label' => 'Mixd',
                 'link' => 'https://www.mixd.co.uk/',
                 'image' => 'mixd.png',
@@ -166,6 +171,11 @@ class ContentController extends AbstractController
                 'label' => 'Perkbox',
                 'link' => 'https://www.perkbox.co.uk/',
                 'image' => 'perkbox-logo.png',
+            ],
+            [
+                'label' => 'Postman',
+                'link' => 'https://www.postman.com/',
+                'image' => 'postman.svg',
             ],
             [
                 'label' => 'Redirection.io',
