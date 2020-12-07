@@ -5,6 +5,8 @@
 {% block santa_content %}
     <div class="run-block">
         <form method="post" id="run_form" action="{{ path('message', { application: application }) }}">
+            {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
+            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
 
             <h2>Customize the private messages</h2>
 
