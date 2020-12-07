@@ -193,11 +193,11 @@ class SantaController extends AbstractController
             $availableUsers = $session->get('available-users', []);
             $selectedUsers = $session->get('selected-users', []);
 
-            if ($notes) {
-                $receiver = array_rand($notes);
-            } else {
-                $receiver = $selectedUsers[array_rand($selectedUsers)];
-            }
+            $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
+                return $application->getAdmin()->getIdentifier() !== $id;
+            });
+
+            $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
 
             $secretSanta = new SecretSanta(
                 $application->getCode(),
