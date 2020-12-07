@@ -153,6 +153,11 @@ class ContentController extends AbstractController
                 'image' => 'melvin-hamilton.png',
             ],
             [
+                'label' => 'Makers',
+                'link' => 'https://makers.tech/',
+                'image' => 'makers.png',
+            ],
+            [
                 'label' => 'Mixd',
                 'link' => 'https://www.mixd.co.uk/',
                 'image' => 'mixd.png',
