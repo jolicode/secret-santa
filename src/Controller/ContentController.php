@@ -168,6 +168,11 @@ class ContentController extends AbstractController
                 'image' => 'perkbox-logo.png',
             ],
             [
+                'label' => 'Postman',
+                'link' => 'https://www.postman.com/',
+                'image' => 'postman.svg',
+            ],
+            [
                 'label' => 'Redirection.io',
                 'link' => 'https://redirection.io/',
                 'image' => 'redirectionio.svg',
