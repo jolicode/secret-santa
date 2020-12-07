@@ -8,9 +8,13 @@
 
             <h2>Customize the private messages</h2>
 
+            {% if errors %}
+                <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors|join('<br />') }}</span>
+            {% endif %}
+
             <div class="message-field message-step">
                 <h3>
-                    <label class="control-label" for="message">Write an optional message</label>
+                    <label class="control-label" for="message">Write an optional message <small>(<span id="message-length">{{ message|length }}</span>/ 1000 characters)</small></label>
                 </h3>
 
                 <p>
@@ -106,6 +110,8 @@
        */
       let secretSantaFormSubmitted = false;
       const runForm = document.getElementById('run_form');
+      const message = document.getElementById('message');
+      const messageLength = document.getElementById('message-length');
       const submitButton = document.getElementById('submit-button');
 
       /**
@@ -120,6 +126,13 @@
           submitButton.children[0].className = 'fas fa-hourglass-start';
         }
       }, false);
+
+      function updateMessageLength() {
+        messageLength.innerHTML = message.value.length;
+      }
+
+      message.addEventListener('keyup', updateMessageLength);
+      updateMessageLength();
 
       /**
        * Handle sample message send
