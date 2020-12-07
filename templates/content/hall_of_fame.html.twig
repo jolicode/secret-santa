@@ -24,7 +24,7 @@
             <ul>
                 {% for company in companies %}
                 <li>
-                    <a href="{{ company.link }}">
+                    <a href="{{ company.link }}" rel="nofollow">
                         <img src="{{ asset('images/hall-of-fame/' ~ company.image) }}" alt="{{ company.label }}" width="160" />
                     </a>
                 </li>
