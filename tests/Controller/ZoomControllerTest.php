@@ -17,7 +17,7 @@ class ZoomControllerTest extends BaseWebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_auth_page_redirects_to_zoom(): void
+    public function testAuthPageRedirectsToZoom(): void
     {
         $client = static::createClient();
 

@@ -19,7 +19,7 @@ class SantaControllerTest extends BaseWebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_run_page_redirects_to_auth_page(): void
+    public function testRunPageRedirectsToAuthPage(): void
     {
         $client = static::createClient();
 
@@ -31,7 +31,7 @@ class SantaControllerTest extends BaseWebTestCase
         self::assertSame('/auth/slack', $response->getTargetUrl());
     }
 
-    public function test_finish_page_returns_404_without_hash(): void
+    public function testFinishPageReturns404WithoutHash(): void
     {
         $client = static::createClient();
 
@@ -41,7 +41,7 @@ class SantaControllerTest extends BaseWebTestCase
         self::assertSame(404, $response->getStatusCode());
     }
 
-    public function test_finish_page_works_with_invalid_hash(): void
+    public function testFinishPageWorksWithInvalidHash(): void
     {
         $client = static::createClient();
 
@@ -51,7 +51,7 @@ class SantaControllerTest extends BaseWebTestCase
         self::assertSame(404, $response->getStatusCode());
     }
 
-    public function test_finish_page_works_with_valid_hash_for_successful_secret_santa(): void
+    public function testFinishPageWorksWithValidHashForSuccessfulSecretSanta(): void
     {
         $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => new User('toto1', 'Toto 1'),
@@ -74,7 +74,7 @@ class SantaControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('html:contains("Well done! All messages were sent")'));
     }
 
-    public function test_finish_page_works_with_valid_hash_for_failed_secret_santa(): void
+    public function testFinishPageWorksWithValidHashForFailedSecretSanta(): void
     {
         $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => new User('toto1', 'Toto 1'),
@@ -99,7 +99,7 @@ class SantaControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('html:contains("toto2 must offer a gift to xxxxx")'));
     }
 
-    public function test_spoil_works_with_valid_code(): void
+    public function testSpoilWorksWithValidCode(): void
     {
         $client = static::createClient();
 
@@ -121,7 +121,7 @@ class SantaControllerTest extends BaseWebTestCase
         self::assertContains('<strong>Toto 3</strong> must offer a gift to <strong>Toto 1</strong>', $response->getContent());
     }
 
-    public function test_spoil_works_with_invalid_code(): void
+    public function testSpoilWorksWithInvalidCode(): void
     {
         $client = static::createClient();
 

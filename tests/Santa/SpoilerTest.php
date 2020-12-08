@@ -26,7 +26,7 @@ class SpoilerTest extends TestCase
         $this->SUT = new Spoiler();
     }
 
-    public function test_it_encodes_secret_santa_in_current_version(): void
+    public function testItEncodesSecretSantaInCurrentVersion(): void
     {
         $secretSanta = new SecretSanta('my_application', 'toto', 'yolo', [
             'user1' => new User('user1', 'User 1'),
@@ -48,7 +48,7 @@ class SpoilerTest extends TestCase
         self::assertSame($expectedCode, $code);
     }
 
-    public function test_it_decodes_in_v1(): void
+    public function testItDecodesInV1(): void
     {
         $code = 'v1@eyJ1c2VyMSI6InVzZXIyIiwidXNlcjIiOiJ1c2VyMSJ9';
 
@@ -61,7 +61,7 @@ class SpoilerTest extends TestCase
         self::assertSame($expectedRepartition, $repartition);
     }
 
-    public function test_it_decodes_in_v2(): void
+    public function testItDecodesInV2(): void
     {
         $code = 'v2@eyJVc2VyIDEiOiJVc2VyIDIiLCJVc2VyIDIiOiJVc2VyIDMiLCJVc2VyIDMiOiJVc2VyIDQiLCJVc2VyIDQiOiJVc2VyIDUiLCJVc2VyIDUiOiJVc2VyIDEifQ==';
 
@@ -77,7 +77,7 @@ class SpoilerTest extends TestCase
         self::assertSame($expectedRepartition, $repartition);
     }
 
-    public function test_it_decodes_in_v3(): void
+    public function testItDecodesInV3(): void
     {
         $code = 'v3@H4sIAAAAAAAAA4tWCi1OLVIwVNKBMIxgDGMYwwTGMFWKBQAbdZzDLgAAAA==';
 
@@ -93,7 +93,7 @@ class SpoilerTest extends TestCase
         self::assertSame($expectedRepartition, $repartition);
     }
 
-    public function test_it_fails_to_decode_in_wrong_version(): void
+    public function testItFailsToDecodeInWrongVersion(): void
     {
         $code = 'v0@eyJ1c2VyMSI6InVzZXIyIiwidXNlcjIiOiJ1c2VyMSJ9';
 
@@ -102,7 +102,7 @@ class SpoilerTest extends TestCase
         self::assertNull($repartition);
     }
 
-    public function test_it_fails_to_decode_invalid_code(): void
+    public function testItFailsToDecodeInvalidCode(): void
     {
         $code = 'v2@azerty';
 

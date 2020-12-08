@@ -15,7 +15,7 @@ class UserExtractionFailedException extends \RuntimeException implements Applica
 {
     private $applicationCode;
 
-    public function __construct(string $applicationCode, $message = '', \Throwable $previous = null)
+    public function __construct(string $applicationCode, string $message = '', \Throwable $previous = null)
     {
         $this->applicationCode = $applicationCode;
 
