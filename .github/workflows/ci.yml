@@ -24,7 +24,7 @@ jobs:
               uses: actions/cache@v2
               with:
                   path: ~/.composer/cache/
-                  key: composer-${{ github.sha }}
+                  key: composer-${{ hashFiles('composer.lock') }}
                   restore-keys: composer-
             - name: Cache Pipenv
               uses: actions/cache@v2
@@ -33,10 +33,8 @@ jobs:
                       ~/.cache/pip
                       ~/.cache/pipenv
                       ~/.local/share/virtualenvs/
-                  key: pip-pipenv-${{ hashFiles('Pipfile.lock') }}-${{ github.sha }}
-                  restore-keys: |
-                      pip-pipenv-
-                      pip-pipenv-${{ hashFiles('Pipfile.lock') }}-
+                  key: pip-pipenv-${{ hashFiles('Pipfile.lock') }}
+                  restore-keys: pip-pipenv-
             - name: Cache PHPStan
               uses: actions/cache@v2
               with:
