@@ -17,15 +17,14 @@ class Spoiler
 {
     public function encode(SecretSanta $santa): string
     {
-        $associations = [];
+        $givers = [];
 
         foreach ($santa->getAssociations() as $giver => $receiver) {
             $giverUser = $santa->getUser($giver);
-            $receiverUser = $santa->getUser($receiver);
-            $associations[$giverUser->getName() ?: $giverUser->getIdentifier()] = $receiverUser->getName() ?: $receiverUser->getIdentifier();
+            $givers[] = $giverUser->getName() ?: $giverUser->getIdentifier();
         }
 
-        return 'v2@' . base64_encode(json_encode($associations));
+        return 'v3@' . base64_encode(gzencode(json_encode($givers)));
     }
 
     /**
@@ -38,12 +37,13 @@ class Spoiler
         $version = substr($string, 0, strpos($string, '@'));
         $encoded = substr($string, \strlen($version) + 1);
 
-        if ('v1' === $version) {
-            return $this->decodeV1($encoded);
-        }
-
-        if ('v2' === $version) {
-            return $this->decodeV2($encoded);
+        switch ($version) {
+            case 'v1':
+                return $this->decodeV1($encoded);
+            case 'v2':
+                return $this->decodeV2($encoded);
+            case 'v3':
+                return $this->decodeV3($encoded);
         }
 
         return null;
@@ -87,5 +87,39 @@ class Spoiler
         }
 
         return $jsonDecoded;
+    }
+
+    /**
+     * @return array<string, string>|null
+     */
+    private function decodeV3(string $encoded): ?array
+    {
+        $base64Decoded = base64_decode($encoded, true);
+
+        if (!$base64Decoded) {
+            return null;
+        }
+
+        $gzDecoded = gzdecode($base64Decoded);
+
+        if (!$gzDecoded) {
+            return null;
+        }
+
+        $jsonDecoded = json_decode($gzDecoded, true);
+
+        if (!$jsonDecoded) {
+            return null;
+        }
+
+        $count = \count($jsonDecoded);
+        $associations = [];
+
+        for ($i = 0; $i < $count - 1; ++$i) {
+            $associations[$jsonDecoded[$i]] = $jsonDecoded[$i + 1];
+        }
+        $associations[$jsonDecoded[$count - 1]] = $jsonDecoded[0];
+
+        return $associations;
     }
 }
