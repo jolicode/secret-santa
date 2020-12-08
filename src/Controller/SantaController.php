@@ -413,7 +413,7 @@ class SantaController extends AbstractController
 
     private function validateMessage(string $message): ?string
     {
-        if (mb_strlen($message) >= 1000) {
+        if (\strlen($message) >= 1000) {
             return 'Your message should contain less than 1000 characters';
         }
 
