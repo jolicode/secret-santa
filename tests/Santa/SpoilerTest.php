@@ -31,13 +31,19 @@ class SpoilerTest extends TestCase
         $secretSanta = new SecretSanta('my_application', 'toto', 'yolo', [
             'user1' => new User('user1', 'User 1'),
             'user2' => new User('user2', 'User 2'),
+            'user3' => new User('user3', 'User 3'),
+            'user4' => new User('user4', 'User 4'),
+            'user5' => new User('user5', 'User 5'),
         ], [
             'user1' => 'user2',
-            'user2' => 'user1',
+            'user2' => 'user3',
+            'user3' => 'user4',
+            'user4' => 'user5',
+            'user5' => 'user1',
         ], null, null);
 
         $code = $this->SUT->encode($secretSanta);
-        $expectedCode = 'v2@eyJVc2VyIDEiOiJVc2VyIDIiLCJVc2VyIDIiOiJVc2VyIDEifQ==';
+        $expectedCode = 'v3@H4sIAAAAAAAAA4tWCi1OLVIwVNKBMIxgDGMYwwTGMFWKBQAbdZzDLgAAAA==';
 
         self::assertSame($expectedCode, $code);
     }
@@ -57,12 +63,31 @@ class SpoilerTest extends TestCase
 
     public function test_it_decodes_in_v2(): void
     {
-        $code = 'v2@eyJVc2VyIDEiOiJVc2VyIDIiLCJVc2VyIDIiOiJVc2VyIDEifQ==';
+        $code = 'v2@eyJVc2VyIDEiOiJVc2VyIDIiLCJVc2VyIDIiOiJVc2VyIDMiLCJVc2VyIDMiOiJVc2VyIDQiLCJVc2VyIDQiOiJVc2VyIDUiLCJVc2VyIDUiOiJVc2VyIDEifQ==';
 
         $repartition = $this->SUT->decode($code);
         $expectedRepartition = [
             'User 1' => 'User 2',
-            'User 2' => 'User 1',
+            'User 2' => 'User 3',
+            'User 3' => 'User 4',
+            'User 4' => 'User 5',
+            'User 5' => 'User 1',
+        ];
+
+        self::assertSame($expectedRepartition, $repartition);
+    }
+
+    public function test_it_decodes_in_v3(): void
+    {
+        $code = 'v3@H4sIAAAAAAAAA4tWCi1OLVIwVNKBMIxgDGMYwwTGMFWKBQAbdZzDLgAAAA==';
+
+        $repartition = $this->SUT->decode($code);
+        $expectedRepartition = [
+            'User 1' => 'User 2',
+            'User 2' => 'User 3',
+            'User 3' => 'User 4',
+            'User 4' => 'User 5',
+            'User 5' => 'User 1',
         ];
 
         self::assertSame($expectedRepartition, $repartition);
