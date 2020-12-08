@@ -124,22 +124,30 @@ class SantaController extends AbstractController
         $message = $session->get('message');
         $notes = $session->get('notes');
 
+        $errors = [];
+
         if ($request->isMethod('POST')) {
             $message = $request->request->get('message');
             $notes = $request->request->get('notes');
 
-            $session->set('message', $message);
-            $session->set('notes', $notes);
+            if ($messageError = $this->validateMessage($message)) {
+                $errors['message'] = $messageError;
+            }
 
-            $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
+            if (!$errors) {
+                $session->set('message', $message);
+                $session->set('notes', $notes);
 
-            $session->set(
-                $this->getSecretSantaSessionKey(
-                    $secretSanta->getHash()
-                ), $secretSanta
-            );
+                $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
 
-            return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
+                $session->set(
+                    $this->getSecretSantaSessionKey(
+                        $secretSanta->getHash()
+                    ), $secretSanta
+                );
+
+                return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
+            }
         }
 
         $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
@@ -149,6 +157,7 @@ class SantaController extends AbstractController
             'selectedUsers' => $selectedUsers,
             'message' => $message,
             'notes' => $notes,
+            'errors' => $errors,
         ]);
 
         return new Response($content);
@@ -172,19 +181,23 @@ class SantaController extends AbstractController
             });
         }
 
+        $message = $request->request->get('message', '');
+        $notes = array_filter($request->request->get('notes', []));
+
+        if ($messageError = $this->validateMessage($message)) {
+            $errors['message'] = $messageError;
+        }
+
         if (\count($errors) < 1) {
             $session = $request->getSession();
             $availableUsers = $session->get('available-users', []);
             $selectedUsers = $session->get('selected-users', []);
 
-            $message = $request->request->get('message', '');
-            $notes = array_filter($request->request->get('notes', []));
+            $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
+                return $application->getAdmin()->getIdentifier() !== $id;
+            });
 
-            if ($notes) {
-                $receiver = array_rand($notes);
-            } else {
-                $receiver = $selectedUsers[array_rand($selectedUsers)];
-            }
+            $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
 
             $secretSanta = new SecretSanta(
                 $application->getCode(),
@@ -396,5 +409,14 @@ class SantaController extends AbstractController
             $this->statisticCollector->incrementUsageCount($secretSanta);
             $this->doReset($application, $request);
         }
+    }
+
+    private function validateMessage(string $message): ?string
+    {
+        if (\strlen($message) >= 1000) {
+            return 'Your message should contain less than 1000 characters';
+        }
+
+        return null;
     }
 }
