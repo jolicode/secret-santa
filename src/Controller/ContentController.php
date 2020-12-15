@@ -62,6 +62,11 @@ class ContentController extends AbstractController
                 'image' => 'acseo.jpg',
             ],
             [
+                'label' => 'ApparelMagic',
+                'link' => 'https://www.apparelmagic.com/',
+                'image' => 'apparelmagic.png',
+            ],
+            [
                 'label' => 'BlaBlaCar',
                 'link' => 'https://www.blablacar.fr/',
                 'image' => 'blablacar.png',
