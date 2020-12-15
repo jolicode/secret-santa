@@ -173,6 +173,11 @@ class ContentController extends AbstractController
                 'image' => 'perkbox-logo.png',
             ],
             [
+                'label' => 'PipeCandy',
+                'link' => 'https://pipecandy.com/',
+                'image' => 'pipecandy.png',
+            ],
+            [
                 'label' => 'Postman',
                 'link' => 'https://www.postman.com/',
                 'image' => 'postman.svg',
