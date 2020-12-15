@@ -16,7 +16,7 @@
 
             <div class="message-field message-step">
                 <h3>
-                    <label class="control-label" for="message">Write an optional message <small>(<span id="message-length">{{ message|length }}</span>/ 800 characters)</small></label>
+                    <label class="control-label" for="message">Write an optional message <span class="message-length">(<span data-length-field="message">{{ message|length }}</span>&nbsp;/&nbsp;800 characters)</span></label>
                 </h3>
 
                 <p>
@@ -51,8 +51,15 @@
                             {% for user in availableUsers %}
                                 {% if user.identifier in selectedUsers %}
                                     <label class="user-item notes" for="note-{{ user.identifier }}">
-                                        <span>{% block user_item %}{% endblock %}</span>
-                                        <input id="note-{{ user.identifier }}" name="notes[{{ user.identifier }}]" type="text" {% if key in input_placeholders|keys %}placeholder="{{ input_placeholders[key] }}"{% endif %} />
+                                        <span class="user-column">
+                                            <span class="user-data">
+                                                {% block user_item %}{% endblock %}
+                                            </span>
+                                            <span class="note-length">
+                                                <span data-length-field="note-{{ user.identifier }}">{{ notes[user.identifier] }}</span>&nbsp;/&nbsp;400 characters
+                                            </span>
+                                        </span>
+                                        <input id="note-{{ user.identifier }}" name="notes[{{ user.identifier }}]" value="{{ notes[user.identifier] }}" type="text" {% if key in input_placeholders|keys %}placeholder="{{ input_placeholders[key] }}"{% endif %} />
                                     </label>
                                     {% set key = key + 1 %}
                                 {% endif %}
@@ -113,7 +120,7 @@
       let secretSantaFormSubmitted = false;
       const runForm = document.getElementById('run_form');
       const message = document.getElementById('message');
-      const messageLength = document.getElementById('message-length');
+      const fieldLengths = document.querySelectorAll('[data-length-field]');
       const submitButton = document.getElementById('submit-button');
 
       /**
@@ -129,12 +136,16 @@
         }
       }, false);
 
-      function updateMessageLength() {
-        messageLength.innerHTML = message.value.length;
+      function updateFieldLength(field, fieldLength) {
+        fieldLength.innerHTML = field.value.trim().replace('\r\n', '\n').length;
       }
 
-      message.addEventListener('keyup', updateMessageLength);
-      updateMessageLength();
+      fieldLengths.forEach(function(fieldLength) {
+        const field = document.getElementById(fieldLength.getAttribute('data-length-field'))
+
+        field.addEventListener('keyup', function() { updateFieldLength(field, fieldLength) });
+        updateFieldLength(field, fieldLength);
+      });
 
       /**
        * Handle sample message send

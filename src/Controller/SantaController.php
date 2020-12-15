@@ -127,11 +127,15 @@ class SantaController extends AbstractController
         $errors = [];
 
         if ($request->isMethod('POST')) {
-            $message = $request->request->get('message');
-            $notes = $request->request->get('notes');
+            $message = trim($request->request->get('message'));
+            $notes = array_map('trim', $request->request->get('notes'));
 
             if ($messageError = $this->validateMessage($message)) {
                 $errors['message'] = $messageError;
+            }
+
+            if ($notesError = $this->validateNotes($notes)) {
+                $errors['notes'] = $notesError;
             }
 
             if (!$errors) {
@@ -181,11 +185,15 @@ class SantaController extends AbstractController
             });
         }
 
-        $message = $request->request->get('message', '');
-        $notes = array_filter($request->request->get('notes', []));
+        $message = trim($request->request->get('message', ''));
+        $notes = array_filter(array_map('trim', $request->request->get('notes', [])));
 
         if ($messageError = $this->validateMessage($message)) {
             $errors['message'] = $messageError;
+        }
+
+        if ($notesError = $this->validateNotes($notes)) {
+            $errors['notes'] = $notesError;
         }
 
         if (\count($errors) < 1) {
@@ -413,8 +421,22 @@ class SantaController extends AbstractController
 
     private function validateMessage(string $message): ?string
     {
-        if (\strlen($message) >= 800) {
+        if (\strlen(preg_replace('/\r\n/', ' ', $message)) > 800) {
             return 'Your message should contain less than 800 characters';
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string[] $notes
+     */
+    private function validateNotes(array $notes): ?string
+    {
+        foreach ($notes as $note) {
+            if (\strlen(preg_replace('/\r\n/', ' ', $note)) > 400) {
+                return 'Each note should contain less than 400 characters';
+            }
         }
 
         return null;
