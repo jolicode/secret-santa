@@ -62,6 +62,11 @@ class ContentController extends AbstractController
                 'image' => 'acseo.jpg',
             ],
             [
+                'label' => 'ApparelMagic',
+                'link' => 'https://www.apparelmagic.com/',
+                'image' => 'apparelmagic.png',
+            ],
+            [
                 'label' => 'BlaBlaCar',
                 'link' => 'https://www.blablacar.fr/',
                 'image' => 'blablacar.png',
@@ -171,6 +176,11 @@ class ContentController extends AbstractController
                 'label' => 'Perkbox',
                 'link' => 'https://www.perkbox.co.uk/',
                 'image' => 'perkbox-logo.png',
+            ],
+            [
+                'label' => 'PipeCandy',
+                'link' => 'https://pipecandy.com/',
+                'image' => 'pipecandy.png',
             ],
             [
                 'label' => 'Postman',
