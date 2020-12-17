@@ -17,7 +17,7 @@ class SlackControllerTest extends BaseWebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_auth_page_redirects_to_slack(): void
+    public function testAuthPageRedirectsToSlack(): void
     {
         $client = static::createClient();
 

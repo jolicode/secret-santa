@@ -48,7 +48,7 @@ class MessageSender
             'type' => 'section',
             'text' => [
                 'type' => 'mrkdwn',
-                'text' => sprintf("Hi!\nYou have been selected to be part of a Secret Santa :santa:!\n\n"),
+                'text' => "Hi!\nYou have been selected to be part of a Secret Santa :santa:!\n\n",
             ],
         ];
 

@@ -13,7 +13,7 @@ namespace JoliCode\SecretSanta\Tests\Controller;
 
 class ContentControllerTest extends BaseWebTestCase
 {
-    public function test_homepage_works(): void
+    public function testHomepageWorks(): void
     {
         $client = static::createClient();
 
@@ -24,7 +24,7 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('html:contains("Merry Christmas!")'));
     }
 
-    public function test_homepage_works_http(): void
+    public function testHomepageWorksHttp(): void
     {
         $client = static::createClient([], ['HTTPS' => false]);
 
@@ -34,7 +34,7 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertSame(301, $response->getStatusCode());
     }
 
-    public function test_hall_of_fame_works(): void
+    public function testHallOfFameWorks(): void
     {
         $client = static::createClient();
 
@@ -45,7 +45,7 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('img[alt="Monsieur Biz"]'));
     }
 
-    public function test_faq_works(): void
+    public function testFaqWorks(): void
     {
         $client = static::createClient();
 
@@ -56,7 +56,7 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Help and Frequently Asked Questions")'));
     }
 
-    public function test_stats_works(): void
+    public function testStatsWorks(): void
     {
         $client = static::createClient();
 
@@ -67,7 +67,7 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Secret Santa Statistics")'));
     }
 
-    public function test_terms_works(): void
+    public function testTermsWorks(): void
     {
         $client = static::createClient();
 
@@ -78,7 +78,7 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Secret Santa Terms of Service")'));
     }
 
-    public function test_privacy_policy_works(): void
+    public function testPrivacyPolicyWorks(): void
     {
         $client = static::createClient();
 
@@ -89,7 +89,7 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('h1:contains("Privacy Policy")'));
     }
 
-    public function test_sitemap_works(): void
+    public function testSitemapWorks(): void
     {
         $client = static::createClient();
 

@@ -27,7 +27,7 @@
         "nelmio/security-bundle": "^2.10.1",
         "nyholm/psr7": "^1.2",
         "predis/predis": "^1.1",
-        "restcord/restcord": "^0.3",
+        "restcord/restcord": "^0.4",
         "symfony/asset": "*",
         "symfony/console": "*",
         "symfony/flex": "^1.4",
@@ -98,7 +98,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.1.*"
+            "require": "5.2.*"
         }
     }
 }

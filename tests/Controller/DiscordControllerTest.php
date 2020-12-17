@@ -17,7 +17,7 @@ class DiscordControllerTest extends BaseWebTestCase
 {
     use SessionPrepareTrait;
 
-    public function test_auth_page_redirects_to_discord(): void
+    public function testAuthPageRedirectsToDiscord(): void
     {
         $client = static::createClient();
 
