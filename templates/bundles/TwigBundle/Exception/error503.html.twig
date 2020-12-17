@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="content error-page">
+        <div class="is-center">
+            <h2>Error 503 - Maintenance</h2>
+
+            <p>We are currently working hard with Santa Claus to improve the application, please try again later!</p>
+
+            <img class="is-center" alt="Error 500" src="/images/error-503.gif">
+        </div>
+        <div class="is-center">
+            <a href="{{ path('homepage') }}" class="big-button">
+                <span class="fas fa-angle-left" aria-hidden="true"></span>
+                Go back to home page
+            </a>
+
+            <a href="mailto:hello@secret-santa.team" class="big-button">
+                <span class="far fa-life-ring" aria-hidden="true"></span>
+                Contact support
+            </a>
+        </div>
+    </div>
+{% endblock content %}
