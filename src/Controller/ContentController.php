@@ -72,6 +72,11 @@ class ContentController extends AbstractController
                 'image' => 'blablacar.png',
             ],
             [
+                'label' => 'Buy Me a Coffee',
+                'link' => 'https://www.buymeacoffee.com/',
+                'image' => 'buymeacoffee.png',
+            ],
+            [
                 'label' => 'Cap Collectif',
                 'link' => 'https://cap-collectif.com/',
                 'image' => 'cap-collectif.png',
