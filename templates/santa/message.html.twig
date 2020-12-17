@@ -56,10 +56,10 @@
                                                 {% block user_item %}{% endblock %}
                                             </span>
                                             <span class="note-length">
-                                                <span data-length-field="note-{{ user.identifier }}">{{ notes[user.identifier] }}</span>&nbsp;/&nbsp;400 characters
+                                                <span data-length-field="note-{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
                                             </span>
                                         </span>
-                                        <input id="note-{{ user.identifier }}" name="notes[{{ user.identifier }}]" value="{{ notes[user.identifier] }}" type="text" {% if key in input_placeholders|keys %}placeholder="{{ input_placeholders[key] }}"{% endif %} />
+                                        <input id="note-{{ user.identifier }}" name="notes[{{ user.identifier }}]" value="{{ notes[user.identifier]|default('') }}" type="text" {% if key in input_placeholders|keys %}placeholder="{{ input_placeholders[key] }}"{% endif %} />
                                     </label>
                                     {% set key = key + 1 %}
                                 {% endif %}
