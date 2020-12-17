@@ -361,10 +361,10 @@ class SantaController extends AbstractController
     private function prepareSecretSanta(Rudolph $rudolph, Request $request, ApplicationInterface $application): SecretSanta
     {
         $session = $request->getSession();
-        $availableUsers = $session->get('available-users');
-        $selectedUsers = $session->get('selected-users');
+        $availableUsers = $session->get('available-users', []);
+        $selectedUsers = $session->get('selected-users', []);
         $message = $session->get('message');
-        $notes = $session->get('notes');
+        $notes = $session->get('notes', []);
 
         $associatedUsers = $rudolph->associateUsers($selectedUsers);
         $hash = md5(serialize($associatedUsers));
