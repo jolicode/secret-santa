@@ -21,13 +21,20 @@
         {% for key, value in stats %}
             {% if value.applications is defined and max(value.applications) > 0 %}
                 <div class="graph-column">
+                    <div class="graph-counterValue">
+                        {{ value.total|number_format }}
+
+                        {% for application, applicationValue in value.applications %}
+                            {% if applicationValue > 0 %}
+                                <small class="application-{{ application }}-color">{{ applicationValue|number_format }}</small>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
                     <div class="column-multiple">
                         {% for application, applicationValue in value.applications %}
                             {% if applicationValue > 0 %}
-                                <div class="graph-column application-{{ application }}">
-                                    <div class="graph-counterValue">{{ applicationValue|number_format }}</div>
-                                    <div class="graph-bar" style="height: {{ (applicationValue / max) * 300 }}px;"></div>
-                                </div>
+                                <div class="graph-bar application-{{ application }}" style="height: {{ (applicationValue / max) * 300 }}px;"></div>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -40,9 +47,9 @@
                     <div class="graph-legend-x">{{ key|capitalize }}</div>
                 </div>
             {% else %}
-                <div class="graph-column {{ isApplication ? 'application-'~key }}">
+                <div class="graph-column">
                     <div class="graph-counterValue">{{ value|number_format }}</div>
-                    <div class="graph-bar" style="height: {{ (value / max(stats)) * 300 }}px;"></div>
+                    <div class="graph-bar {{ isApplication ? 'application-'~key }}" style="height: {{ (value / max(stats)) * 300 }}px;"></div>
                     <div class="graph-legend-x">{{ key|capitalize }}</div>
                 </div>
             {% endif %}
