@@ -11,6 +11,8 @@ framework:
         name: santaSession
         cookie_secure: auto
         cookie_samesite: lax
+        # 3h long session (this value is looked up by Predis too)
+        gc_maxlifetime: 10800 # 3H
 
     #esi: true
     #fragments: true
