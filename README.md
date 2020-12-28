@@ -4,7 +4,7 @@ Just go to https://secret-santa.team/ and have fun.
 
 Code source is under MIT License.
 
-- This application is powered by Symfony and its new Flex way to build app;
+- This application is powered by Symfony;
 - Hosting is provided by [Clever Cloud](https://www.clever-cloud.com/);
 - Built with ♥ by [@pyrech](https://github.com/pyrech) and [@damienalexandre](https://github.com/damienalexandre).
 
@@ -31,7 +31,7 @@ You can configure your current shell to be able to use Invoke commands directly
 pipenv shell
 ```
 
-Optionally, in order to improve your usage of invoke scripts, you can install console autocompletion script.
+Optionally, in order to improve your usage of invoke scripts, you can install a console autocompletion script.
 
 If you are using bash:
 
