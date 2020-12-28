@@ -18,6 +18,7 @@ use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use League\OAuth2\Client\Token\AccessTokenInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -158,6 +159,10 @@ class DiscordApplication implements ApplicationInterface
         }
 
         return $token;
+    }
+
+    public function configureMessageForm(FormBuilderInterface $builder): void
+    {
     }
 
     private function loadGroups(): void

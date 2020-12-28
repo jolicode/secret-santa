@@ -1,6 +1,30 @@
 {% extends 'santa/message.html.twig' %}
 
 {% block user_item %}
-    <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+    <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
     <span title="{{ user.name }} ({{ user.extra.nickname }})">{{ user.name }}</span>
+{% endblock %}
+
+{% block options %}
+    <div class="user-field message-step">
+        <h3><label for="{{ form.scheduled_at_tz.vars.id }}">Want to schedule the message to a later date?</label></h3>
+
+        <p>If not, you can just leave this field <strong>empty</strong>.</p>
+
+        {{ form_widget(form.scheduled_at_tz) }}
+        {{ form_widget(form.scheduled_at, {attr: {style: 'display: none;'}}) }}
+
+    </div>
+{% endblock %}
+
+
+{% block message_js %}
+    <script  nonce="{{ csp_nonce('script') }}">
+        let displayedDate = document.querySelector('#{{ form.scheduled_at_tz.vars.id }}');
+        if (displayedDate) {
+            displayedDate.addEventListener('change', function () {
+                document.querySelector('#{{ form.scheduled_at.vars.id }}').value = Math.ceil(new Date(displayedDate.value).getTime() / 1000)
+            })
+        }
+    </script>
 {% endblock %}

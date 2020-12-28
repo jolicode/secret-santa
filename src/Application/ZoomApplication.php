@@ -16,6 +16,7 @@ use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Zoom\MessageSender;
 use JoliCode\SecretSanta\Zoom\UserExtractor;
 use League\OAuth2\Client\Token\AccessTokenInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -143,6 +144,10 @@ class ZoomApplication implements ApplicationInterface
         }
 
         return $token;
+    }
+
+    public function configureMessageForm(FormBuilderInterface $builder): void
+    {
     }
 
     private function getSession(): SessionInterface

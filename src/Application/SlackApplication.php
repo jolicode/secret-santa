@@ -16,8 +16,13 @@ use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Slack\MessageSender;
 use JoliCode\SecretSanta\Slack\UserExtractor;
 use League\OAuth2\Client\Token\AccessTokenInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 
 class SlackApplication implements ApplicationInterface
 {
@@ -92,6 +97,26 @@ class SlackApplication implements ApplicationInterface
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getToken()->getToken());
+    }
+
+    public function configureMessageForm(FormBuilderInterface $builder): void
+    {
+        $builder->add('scheduled_at', HiddenType::class, [
+            'constraints' => [
+                new GreaterThanOrEqual([
+                    'value' => (new \DateTime())->getTimestamp(),
+                    'message' => 'You cannot schedule a Secret Santa for a past date',
+                ]),
+                new LessThanOrEqual([
+                    'value' => (new \DateTime('+120 days'))->getTimestamp(),
+                    'message' => 'You cannot schedule a Secret Santa for over 120 days in the future',
+                ]),
+            ],
+        ])
+        ->add('scheduled_at_tz', DateTimeType::class, [
+            'widget' => 'single_text',
+            'required' => false,
+        ]);
     }
 
     public function reset(): void
