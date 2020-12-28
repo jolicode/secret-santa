@@ -1174,17 +1174,20 @@ textarea {
     max-width: 90%;
 }
 
-.chart::-webkit-scrollbar {
-    display: none;
-}
-
 .graph-counterValue {
     margin-bottom: 10px;
+}
+
+.graph-counterValue small {
+    font-size: 0.65em;
+    line-height: 1.2em;
+    display: block;
 }
 
 .column-multiple {
     display: flex;
     align-items: flex-end;
+    flex-direction: column;
 }
 .column-multiple .graph-bar {
     margin: 0 5px;
@@ -1194,24 +1197,32 @@ textarea {
     background-color: var(--color-primary);
     margin: 1px;
     color: white;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
     min-height: 1px;
-    width: 50px;
+    width: 40px;
 }
 
-.application-slack .graph-bar {
+.application-slack {
     background-color: var(--color-slack);
 }
 
-.application-discord .graph-bar {
+.application-discord {
     background-color: var(--color-discord);
 }
 
-.application-zoom .graph-bar {
+.application-zoom {
     background-color: var(--color-zoom);
+}
+
+.application-slack-color {
+    color: var(--color-slack);
+}
+
+.application-discord-color {
+    color: var(--color-discord);
+}
+
+.application-zoom-color {
+    color: var(--color-zoom);
 }
 
 .graph-legend-x {
@@ -1226,7 +1237,8 @@ textarea {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    min-width: 100px;
+    min-width: 40px;
+    margin-right: 3px;
 }
 
 .column-multiple .graph-column {
