@@ -70,6 +70,3 @@ services:
     session.handler.predis:
         class: Predis\Session\Handler
         autowire: true
-        arguments:
-            $options:
-                gc_maxlifetime: 7200
