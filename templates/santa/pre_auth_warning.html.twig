@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="content error-page">
+        <div class="is-center">
+            <h2>⚠️ Zoom support may not be what you expect ⚠️</h2>
+
+            <p>
+                This application can only show and send private messages to <strong>your users</strong>. That means the users you
+                can see as a Zoom Admin here: <a href="https://zoom.us/account/user">https://zoom.us/account/user</a>.
+            </p>
+
+            <p>
+                We cannot show you your contacts, this is a known issue of the Zoom API and you
+                can found <a href="https://github.com/jolicode/secret-santa/issues/142#issuecomment-781204731">more information here</a>.
+            </p>
+        </div>
+    </div>
+    <div class="jumbotron" style="padding-bottom: 0;">
+        <div class="jumbotron-inner">
+            <a class="action hvr-buzz action-zoom" href="{{ path('run', { application: 'zoom' }) }}">
+                <i class="custom-fa-zoom"></i> Run on Zoom anyway!
+                <sup style="position:absolute;top:8px;right:4px;font-size: 0.6em;">beta</sup>
+            </a>
+        </div>
+    </div>
+    <div class="content error-page">
+        <div class="is-center">
+            <p>
+                Sorry for any disappointment!<br>
+                <em>(Also, this application is open-source, you can help!)</em>
+            </p>
+        </div>
+    </div>
+{% endblock content %}

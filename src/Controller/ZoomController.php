@@ -36,6 +36,13 @@ class ZoomController extends AbstractController
         $this->zoomClientSecret = $zoomClientSecret;
     }
 
+    public function preAuthWarning()
+    {
+        return $this->render('santa/pre_auth_warning.html.twig', [
+            'title' => 'Zoom Secret Santa warning',
+        ]);
+    }
+
     /**
      * Ask for Zoom authentication and store the AccessToken in Session.
      */
