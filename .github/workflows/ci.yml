@@ -51,7 +51,7 @@ jobs:
             # Setup
             - uses: actions/setup-python@v2
               with:
-                  python-version: 3.7
+                  python-version: '3.x'
             - run: pip install pipenv
 
             # Install the stack and run the tests
