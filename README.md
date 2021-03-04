@@ -1,4 +1,4 @@
-# Secret Santa app
+# Secret Santa app test
 
 Just go to https://secret-santa.team/ and have fun.
 
