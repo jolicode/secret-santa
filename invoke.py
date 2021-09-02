@@ -10,7 +10,7 @@ extra_domains = []
 project_directory = '.'
 
 # Usually, you should not edit the file above this point
-
+php_version = '7.4'
 docker_compose_files = [
     'docker-compose.yml',
     'docker-compose.worker.yml',
@@ -37,9 +37,13 @@ def __extract_runtime_configuration(config):
 
     config['root_dir'] = os.path.dirname(os.path.abspath(__file__))
 
-    composer_cache_dir = run('composer global config cache-dir -q', warn=True, hide=True).stdout
-    if composer_cache_dir:
-        config['composer_cache_dir'] = composer_cache_dir.strip()
+    if os.path.exists(config['root_dir'] + '/infrastructure/docker/docker-compose.override.yml'):
+        config['docker_compose_files'] += ['docker-compose.override.yml']
+
+    config['composer_cache_dir'] = composer_cache_dir
+    composer_cache_dir_from_host = run('composer global config cache-dir -q', warn=True, hide=True).stdout
+    if composer_cache_dir_from_host:
+        config['composer_cache_dir'] = composer_cache_dir_from_host.strip()
 
     if platform == "darwin":
         try:
@@ -67,12 +71,17 @@ def __extract_runtime_configuration(config):
             print('$Env:PROJECT_ROOT_DOMAIN="%s"' % config['root_domain'])
             print("$Env:PROJECT_DOMAINS='%s'" % domains)
             print('$Env:COMPOSER_CACHE_DIR="%s"' % config['composer_cache_dir'])
+            print('$Env:PHP_VERSION="%s"' % config['php_version'])
             sys.exit(1)
 
     if not config['power_shell']:
         config['user_id'] = int(run('id -u', hide=True).stdout)
 
     if config['user_id'] > 256000:
+        config['user_id'] = 1000
+
+    if config['user_id'] == 0:
+        print(Fore.YELLOW + 'Running as root? Fallback to fake user id.')
         config['user_id'] = 1000
 
     return config
