@@ -19,7 +19,7 @@
         }
     },
     "require": {
-        "php": "^7.4",
+        "php": "^8.0",
         "adam-paterson/oauth2-slack": "^1.1.3",
         "bugsnag/bugsnag-symfony": "^1.6.2",
         "iflorespaz/oauth2-zoom": "dev-master",
@@ -27,7 +27,7 @@
         "nelmio/security-bundle": "^2.10.1",
         "nyholm/psr7": "^1.2",
         "predis/predis": "^1.1",
-        "restcord/restcord": "^0.4",
+        "restcord/restcord": "^0.5",
         "symfony/asset": "*",
         "symfony/console": "*",
         "symfony/flex": "^1.4",
@@ -58,7 +58,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/jiminny/oauth2-zoom"
+            "url": "https://github.com/nispeon/oauth2-zoom"
         }
     ],
     "config": {
@@ -98,7 +98,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.2.*"
+            "require": "5.3.*"
         }
     }
 }
