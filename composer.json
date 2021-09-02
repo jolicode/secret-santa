@@ -52,8 +52,7 @@
         "symfony/phpunit-bridge": "*",
         "symfony/stopwatch": "*",
         "symfony/var-dumper": "^5.1",
-        "symfony/web-profiler-bundle": "*",
-        "symfony/web-server-bundle": "~4.4"
+        "symfony/web-profiler-bundle": "*"
     },
     "repositories": [
         {

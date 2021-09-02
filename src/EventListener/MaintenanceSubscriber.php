@@ -29,7 +29,7 @@ class MaintenanceSubscriber implements EventSubscriberInterface
 
     public function handleMaintenance(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 

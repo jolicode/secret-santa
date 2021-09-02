@@ -118,6 +118,6 @@ class SlackApplication implements ApplicationInterface
 
     private function getSession(): SessionInterface
     {
-        return $this->requestStack->getMasterRequest()->getSession();
+        return $this->requestStack->getMainRequest()->getSession();
     }
 }

@@ -88,7 +88,7 @@ class SantaController extends AbstractController
         $errors = [];
 
         if ($request->isMethod('POST')) {
-            $selectedUsers = $request->request->get('users', []);
+            $selectedUsers = $request->request->all('users', []);
 
             if (\count($selectedUsers) > 1) {
                 $session->set('selected-users', $selectedUsers);
@@ -128,7 +128,7 @@ class SantaController extends AbstractController
 
         if ($request->isMethod('POST')) {
             $message = trim($request->request->get('message'));
-            $notes = array_map('trim', $request->request->get('notes'));
+            $notes = array_map('trim', $request->request->all('notes'));
 
             if ($messageError = $this->validateMessage($message)) {
                 $errors['message'] = $messageError;
@@ -186,7 +186,7 @@ class SantaController extends AbstractController
         }
 
         $message = trim($request->request->get('message', ''));
-        $notes = array_filter(array_map('trim', $request->request->get('notes', [])));
+        $notes = array_filter(array_map('trim', $request->request->all('notes', [])));
 
         if ($messageError = $this->validateMessage($message)) {
             $errors['message'] = $messageError;

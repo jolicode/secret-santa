@@ -20,7 +20,7 @@ class RedirectOldDomainSubscriber implements EventSubscriberInterface
 {
     public function redirectOldDomain(RequestEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMainRequest()) {
             return;
         }
 
