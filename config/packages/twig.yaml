@@ -1,6 +1,9 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
-    debug: '%kernel.debug%'
     globals:
         bugsnag_api_key: '%env(BUGSNAG_KEY)%'
         bugsnag_release_stage: '%env(BUGSNAG_STAGE)%'
+
+when@test:
+    twig:
+        strict_variables: true

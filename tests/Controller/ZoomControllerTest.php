@@ -26,6 +26,6 @@ class ZoomControllerTest extends BaseWebTestCase
 
         self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertSame(302, $response->getStatusCode());
-        self::assertContains('https://zoom.us/oauth/authorize', $response->getTargetUrl());
+        self::assertStringContainsString('https://zoom.us/oauth', $response->getTargetUrl());
     }
 }
