@@ -11,6 +11,6 @@ parameters:
 
     # Make tests analyses working with Symfony's PHPUnit bridge
     bootstrapFiles:
-       - vendor/bin/.phpunit/phpunit-7.5-0/vendor/autoload.php
+       - vendor/bin/.phpunit/phpunit-9.5-0/vendor/autoload.php
 
     ignoreErrors: []
