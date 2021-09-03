@@ -36,7 +36,7 @@
         "symfony/monolog-bundle": "^3.3",
         "symfony/twig-bundle": "*",
         "symfony/yaml": "*",
-        "twig/twig": "^2.12",
+        "twig/twig": "^3.3",
         "wohali/oauth2-discord-new": "^1.0"
     },
     "require-dev": {
