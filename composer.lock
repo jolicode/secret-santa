@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac2e86961640a9606fe429d1ffa6c0ee",
+    "content-hash": "ab9ddc201abedcbb7639bb13ce15a697",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",

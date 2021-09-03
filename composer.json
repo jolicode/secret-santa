@@ -47,11 +47,11 @@
         "phpstan/phpstan-symfony": "^0.12.8",
         "symfony/browser-kit": "*",
         "symfony/css-selector": "*",
-        "symfony/debug-bundle": "^5.1",
+        "symfony/debug-bundle": "*",
         "symfony/dotenv": "*",
         "symfony/phpunit-bridge": "*",
         "symfony/stopwatch": "*",
-        "symfony/var-dumper": "^5.1",
+        "symfony/var-dumper": "*",
         "symfony/web-profiler-bundle": "*"
     },
     "repositories": [
