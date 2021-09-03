@@ -21,10 +21,8 @@ trait SessionPrepareTrait
      */
     public function prepareSession(KernelBrowser $client, string $key, $value): void
     {
-        $requestStack = self::$kernel->getContainer()->get("test." . RequestStack::class);
-        $session = $requestStack->getSession();
-        $session->start();
-        $session->set($key, $value);
+        $session = self::$kernel->getContainer()->get('test.session.storage.factory.mock_file')->createStorage(null);
+        $session->setSessionData([$key => $value]);
         $session->save();
     }
 }
