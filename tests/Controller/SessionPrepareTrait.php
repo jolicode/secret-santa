@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 trait SessionPrepareTrait
 {
@@ -20,7 +21,8 @@ trait SessionPrepareTrait
      */
     public function prepareSession(KernelBrowser $client, string $key, $value): void
     {
-        $session = self::$kernel->getContainer()->get('session');
+        $requestStack = self::$kernel->getContainer()->get(RequestStack::class);
+        $session = $requestStack->getSession();
         $session->start();
         $session->set($key, $value);
         $session->save();
