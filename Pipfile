@@ -9,8 +9,8 @@ docker = "*"
 invoke = ">=1.4"
 # https://github.com/docker/compose/issues/6839
 colorama = {version = ">=0.4, <1"}
-pypiwin32 = {version = "*", sys_platform = "== 'win32'"}
-pywin32 = {version = "*", sys_platform = "== 'win32'"}
+#pypiwin32 = {version = "*", sys_platform = "== 'win32'"}
+#pywin32 = {version = "*", sys_platform = "== 'win32'"}
 
 [requires]
 python_version = "3"
