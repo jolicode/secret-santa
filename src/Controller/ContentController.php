@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Controller;
 use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
 
 class ContentController extends AbstractController
@@ -27,6 +28,7 @@ class ContentController extends AbstractController
         $this->statisticCollector = $statisticCollector;
     }
 
+    #[Route('/', name:'homepage', methods:['GET'])]
     public function homepage(): Response
     {
         $content = $this->twig->render('content/homepage.html.twig');
