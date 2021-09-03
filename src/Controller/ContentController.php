@@ -36,6 +36,7 @@ class ContentController extends AbstractController
         return new Response($content);
     }
 
+    #[Route('/terms-of-service', name:'terms', methods:['GET'])]
     public function terms(): Response
     {
         $content = $this->twig->render('content/terms.html.twig');
@@ -43,6 +44,7 @@ class ContentController extends AbstractController
         return new Response($content);
     }
 
+    #[Route('/privacy-policy', name:'privacy_policy', methods:['GET'])]
     public function privacyPolicy(): Response
     {
         $content = $this->twig->render('content/privacy_policy.html.twig');
@@ -50,6 +52,7 @@ class ContentController extends AbstractController
         return new Response($content);
     }
 
+    #[Route('/hall-of-fame', name:'hall_of_fame', methods:['GET'])]
     public function hallOfFame(): Response
     {
         $companies = [
@@ -224,6 +227,7 @@ class ContentController extends AbstractController
         return new Response($content);
     }
 
+    #[Route('/stats', name:'stats', methods:['GET'])]
     public function stats(): Response
     {
         $content = $this->twig->render('content/stats.html.twig', [

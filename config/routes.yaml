@@ -1,77 +1,11 @@
-
-hall_of_fame:
-    path:     /hall-of-fame
-    controller: JoliCode\SecretSanta\Controller\ContentController::hallOfFame
-
-stats:
-    path:     /stats
-    controller: JoliCode\SecretSanta\Controller\ContentController::stats
-
-terms:
-    path:     /terms-of-service
-    controller: JoliCode\SecretSanta\Controller\ContentController::terms
-
-privacy_policy:
-    path:     /privacy-policy
-    controller: JoliCode\SecretSanta\Controller\ContentController::privacyPolicy
-
 faq:
-    path:     /faq
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template: content/faq.html.twig
+  path:     /faq
+  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+  defaults:
+    template: content/faq.html.twig
 
 sitemap:
-    path:     /sitemap.xml
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template: content/sitemap.xml.twig
-
-run:
-    path:     /run/{application}
-    controller: JoliCode\SecretSanta\Controller\SantaController::run
-
-participants:
-    path:     /participants/{application}
-    controller: JoliCode\SecretSanta\Controller\SantaController::participants
-
-message:
-    path:     /message/{application}
-    controller: JoliCode\SecretSanta\Controller\SantaController::message
-
-send_sample_message:
-    path:     /sample-message/{application}
-    methods:  POST
-    controller: JoliCode\SecretSanta\Controller\SantaController::sendSampleMessage
-
-send_messages:
-    path:     /send-messages/{hash}
-    controller: JoliCode\SecretSanta\Controller\SantaController::sendMessages
-
-finish:
-    path:     /finish/{hash}
-    controller: JoliCode\SecretSanta\Controller\SantaController::finish
-
-cancel:
-    path:     /cancel/{application}
-    controller: JoliCode\SecretSanta\Controller\SantaController::cancel
-
-spoil:
-    path:     /spoil
-    controller: JoliCode\SecretSanta\Controller\SantaController::spoil
-
-slack_authenticate:
-    path:     /auth/slack
-    controller: JoliCode\SecretSanta\Controller\SlackController::authenticate
-
-discord_authenticate:
-    path:     /auth/discord
-    controller: JoliCode\SecretSanta\Controller\DiscordController::authenticate
-
-zoom_authenticate:
-    path:     /auth/zoom
-    controller: JoliCode\SecretSanta\Controller\ZoomController::authenticate
-
-zoom_pre_auth_warning:
-    path:     /intro/zoom
-    controller: JoliCode\SecretSanta\Controller\ZoomController::preAuthWarning
+  path:     /sitemap.xml
+  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+  defaults:
+    template: content/sitemap.xml.twig
