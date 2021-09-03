@@ -115,10 +115,10 @@ class SantaControllerTest extends BaseWebTestCase
         $response = $client->getResponse();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertContains('Here is the secret repartition', $response->getContent());
-        self::assertContains('<strong>Toto 1</strong> must offer a gift to <strong>Toto 2</strong>', $response->getContent());
-        self::assertContains('<strong>Toto 2</strong> must offer a gift to <strong>Toto 3</strong>', $response->getContent());
-        self::assertContains('<strong>Toto 3</strong> must offer a gift to <strong>Toto 1</strong>', $response->getContent());
+        self::assertStringContainsString('Here is the secret repartition', $response->getContent());
+        self::assertStringContainsString('<strong>Toto 1</strong> must offer a gift to <strong>Toto 2</strong>', $response->getContent());
+        self::assertStringContainsString('<strong>Toto 2</strong> must offer a gift to <strong>Toto 3</strong>', $response->getContent());
+        self::assertStringContainsString('<strong>Toto 3</strong> must offer a gift to <strong>Toto 1</strong>', $response->getContent());
     }
 
     public function testSpoilWorksWithInvalidCode(): void
@@ -137,6 +137,6 @@ class SantaControllerTest extends BaseWebTestCase
         $response = $client->getResponse();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertContains('Content could not be decoded', $response->getContent());
+        self::assertStringContainsString('Content could not be decoded', $response->getContent());
     }
 }

@@ -151,9 +151,9 @@ def cs(c, dry_run=False):
     """
     with Builder(c):
         if dry_run:
-            docker_compose_run(c, 'vendor/bin/php-cs-fixer fix --config=.php_cs --dry-run --diff', no_deps=True)
+            docker_compose_run(c, 'vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --dry-run --diff', no_deps=True)
         else:
-            docker_compose_run(c, 'vendor/bin/php-cs-fixer fix --config=.php_cs', no_deps=True)
+            docker_compose_run(c, 'vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php', no_deps=True)
 
         docker_compose_run(c, 'pycodestyle --ignore=E501,W605,E722 invoke.py tasks.py', no_deps=True)
 

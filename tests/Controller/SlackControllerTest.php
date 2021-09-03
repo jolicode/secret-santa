@@ -26,6 +26,6 @@ class SlackControllerTest extends BaseWebTestCase
 
         self::assertInstanceOf(RedirectResponse::class, $response);
         self::assertSame(302, $response->getStatusCode());
-        self::assertContains('https://slack.com/oauth', $response->getTargetUrl());
+        self::assertStringContainsString('https://slack.com/oauth', $response->getTargetUrl());
     }
 }

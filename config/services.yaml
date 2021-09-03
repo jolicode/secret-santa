@@ -2,7 +2,7 @@
 # Files in the packages/ subdirectory configure your dependencies.
 
 # Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     env(REDIS_URL): redis://localhost:6379
 
@@ -67,6 +67,6 @@ services:
     Predis\ClientInterface:
         alias: Predis\Client
 
-    session.handler.predis:
-        class: Predis\Session\Handler
-        autowire: true
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler:
+        arguments:
+            - '@Predis\Client'
