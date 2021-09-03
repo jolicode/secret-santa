@@ -55,6 +55,7 @@ jobs:
             - run: pip3 install pipenv
 
             # Install the stack and run the tests
+            - run: pipenv --three install
             - run: pipenv install --deploy --dev
             - run: pipenv run inv start && sleep 5
             - run: pipenv run inv tests
