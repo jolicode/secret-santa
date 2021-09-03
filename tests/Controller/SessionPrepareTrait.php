@@ -16,13 +16,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 trait SessionPrepareTrait
 {
+
+    private RequestStack $requestStack;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
     /**
      * @param mixed $value
      */
     public function prepareSession(KernelBrowser $client, string $key, $value): void
     {
-        $requestStack = self::$kernel->getContainer()->get(RequestStack::class);
-        $session = $requestStack->getSession();
+        $session = $this->requestStack->getSession();
         $session->start();
         $session->set($key, $value);
         $session->save();
