@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 
 class ZoomController extends AbstractController
@@ -36,7 +37,8 @@ class ZoomController extends AbstractController
         $this->zoomClientSecret = $zoomClientSecret;
     }
 
-    public function preAuthWarning(): Response
+    #[Route('/intro/zoom', name:'zoom_pre_auth_warning', methods:['GET'])]
+    public function preAuthWarning()
     {
         return $this->render('santa/pre_auth_warning.html.twig', [
             'title' => 'Zoom Secret Santa warning',
@@ -46,6 +48,7 @@ class ZoomController extends AbstractController
     /**
      * Ask for Zoom authentication and store the AccessToken in Session.
      */
+    #[Route('/auth/zoom', name:'zoom_authenticate', methods:['GET'])]
     public function authenticate(Request $request, ZoomApplication $zoomApplication): Response
     {
         if ($request->query->has('error')) {
