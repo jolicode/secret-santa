@@ -38,7 +38,7 @@ class ZoomController extends AbstractController
     }
 
     #[Route('/intro/zoom', name:'zoom_pre_auth_warning', methods:['GET'])]
-    public function preAuthWarning()
+    public function preAuthWarning(): Response
     {
         return $this->render('santa/pre_auth_warning.html.twig', [
             'title' => 'Zoom Secret Santa warning',
