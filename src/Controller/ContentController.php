@@ -121,7 +121,7 @@ class ContentController extends AbstractController
                 'label' => 'IdeaFoster',
                 'link' => 'https://www.ideafoster.com',
                 'image' => 'ideafoster.png',
-            ],z
+            ],
             [
                 'label' => 'Idra',
                 'link' => 'https://www.idracompany.com/',
