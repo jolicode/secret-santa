@@ -76,8 +76,8 @@ def cache_clear(c):
     """
     Clear the application cache
     """
-    # with Builder(c):
-    #     docker_compose_run(c, 'rm -rf var/cache/ && php bin/console cache:warmup', no_deps=True)
+    with Builder(c):
+        docker_compose_run(c, 'rm -rf var/cache/ && php bin/console cache:warmup', no_deps=True)
 
 
 @task
