@@ -325,7 +325,7 @@ class SantaController extends AbstractController
         return $this->redirectToRoute('homepage');
     }
 
-    #[Route('/spoil', name:'spoil', methods:['GET'])]
+    #[Route('/spoil', name:'spoil', methods:['GET', 'POST'])]
     public function spoil(Request $request, Spoiler $spoiler): Response
     {
         $code = $request->request->get('code');
