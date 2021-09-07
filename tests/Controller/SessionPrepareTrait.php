@@ -12,7 +12,6 @@
 namespace JoliCode\SecretSanta\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 trait SessionPrepareTrait
 {
