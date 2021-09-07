@@ -39,7 +39,7 @@ class SlackController extends AbstractController
     /**
      * Ask for Slack authentication and store the AccessToken in Session.
      */
-    #[Route('/auth/slack', name:'slack_authenticate', methods:['GET'])]
+    #[Route('/auth/slack', name: 'slack_authenticate', methods: ['GET'])]
     public function authenticate(Request $request, SlackApplication $slackApplication, UserExtractor $userExtractor): Response
     {
         $session = $request->getSession();

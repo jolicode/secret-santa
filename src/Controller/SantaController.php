@@ -55,7 +55,7 @@ class SantaController extends AbstractController
         $this->bugsnag = $bugsnag;
     }
 
-    #[Route('/run/{application}', name:'run', methods:['GET', 'POST'])]
+    #[Route('/run/{application}', name: 'run', methods: ['GET', 'POST'])]
     public function run(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
@@ -69,7 +69,7 @@ class SantaController extends AbstractController
         return $this->redirectToRoute('participants', ['application' => $application->getCode()]);
     }
 
-    #[Route('/participants/{application}', name:'participants', methods:['GET', 'POST'])]
+    #[Route('/participants/{application}', name: 'participants', methods: ['GET', 'POST'])]
     public function participants(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
@@ -113,7 +113,7 @@ class SantaController extends AbstractController
         return new Response($content);
     }
 
-    #[Route('/message/{application}', name:'message', methods:['GET', 'POST'])]
+    #[Route('/message/{application}', name: 'message', methods: ['GET', 'POST'])]
     public function message(Rudolph $rudolph, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
@@ -171,7 +171,7 @@ class SantaController extends AbstractController
         return new Response($content);
     }
 
-    #[Route('/sample-message/{application}', name:'send_sample_message', methods:['GET', 'POST'])]
+    #[Route('/sample-message/{application}', name: 'send_sample_message', methods: ['GET', 'POST'])]
     public function sendSampleMessage(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
@@ -238,7 +238,7 @@ class SantaController extends AbstractController
         ]);
     }
 
-    #[Route('/send-messages/{hash}', name:'send_messages', methods:['GET', 'POST'])]
+    #[Route('/send-messages/{hash}', name: 'send_messages', methods: ['GET', 'POST'])]
     public function sendMessages(MessageDispatcher $messageDispatcher, Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
@@ -299,7 +299,7 @@ class SantaController extends AbstractController
         ]);
     }
 
-    #[Route('/finish/{hash}', name:'finish', methods:['GET'])]
+    #[Route('/finish/{hash}', name: 'finish', methods: ['GET'])]
     public function finish(Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
@@ -311,7 +311,7 @@ class SantaController extends AbstractController
         return new Response($content);
     }
 
-    #[Route('/cancel/{application}', name:'cancel', methods:['GET'])]
+    #[Route('/cancel/{application}', name: 'cancel', methods: ['GET'])]
     public function cancel(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
@@ -325,7 +325,7 @@ class SantaController extends AbstractController
         return $this->redirectToRoute('homepage');
     }
 
-    #[Route('/spoil', name:'spoil', methods:['GET', 'POST'])]
+    #[Route('/spoil', name: 'spoil', methods: ['GET', 'POST'])]
     public function spoil(Request $request, Spoiler $spoiler): Response
     {
         $code = $request->request->get('code');

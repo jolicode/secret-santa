@@ -37,8 +37,8 @@ class ZoomController extends AbstractController
         $this->zoomClientSecret = $zoomClientSecret;
     }
 
-    #[Route('/intro/zoom', name:'zoom_pre_auth_warning', methods:['GET'])]
-    public function preAuthWarning()
+    #[Route('/intro/zoom', name: 'zoom_pre_auth_warning', methods: ['GET'])]
+    public function preAuthWarning(): Response
     {
         return $this->render('santa/pre_auth_warning.html.twig', [
             'title' => 'Zoom Secret Santa warning',
@@ -48,7 +48,7 @@ class ZoomController extends AbstractController
     /**
      * Ask for Zoom authentication and store the AccessToken in Session.
      */
-    #[Route('/auth/zoom', name:'zoom_authenticate', methods:['GET'])]
+    #[Route('/auth/zoom', name: 'zoom_authenticate', methods: ['GET'])]
     public function authenticate(Request $request, ZoomApplication $zoomApplication): Response
     {
         if ($request->query->has('error')) {

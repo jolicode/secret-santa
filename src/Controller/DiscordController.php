@@ -40,7 +40,7 @@ class DiscordController extends AbstractController
     /**
      * Ask for Discord authentication and store the AccessToken in Session.
      */
-    #[Route('/auth/discord', name:'discord_authenticate', methods:['GET'])]
+    #[Route('/auth/discord', name: 'discord_authenticate', methods: ['GET'])]
     public function authenticate(Request $request, DiscordApplication $discordApplication): Response
     {
         $session = $request->getSession();

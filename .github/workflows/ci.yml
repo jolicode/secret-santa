@@ -26,15 +26,7 @@ jobs:
                   path: ~/.composer/cache/
                   key: composer-${{ hashFiles('composer.lock') }}
                   restore-keys: composer-
-            - name: Cache Pipenv
-              uses: actions/cache@v2
-              with:
-                  path: |
-                      ~/.cache/pip
-                      ~/.cache/pipenv
-                      ~/.local/share/virtualenvs/
-                  key: pip-pipenv-${{ hashFiles('Pipfile.lock') }}
-                  restore-keys: pip-pipenv-
+
             - name: Cache PHPStan
               uses: actions/cache@v2
               with:
@@ -52,7 +44,7 @@ jobs:
             - uses: actions/setup-python@v2
               with:
                   python-version: '3.x'
-            - run: pip install pipenv
+            - run: pip3 install pipenv
 
             # Install the stack and run the tests
             - run: pipenv install --deploy --dev
