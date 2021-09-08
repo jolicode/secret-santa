@@ -276,7 +276,6 @@ class SantaController extends AbstractController
         $error = false;
 
         try {
-
             $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
         } catch (MessageDispatchTimeoutException $e) {
             $timeout = true;

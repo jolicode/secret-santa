@@ -15,7 +15,6 @@ use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageDispatcher
 {
@@ -29,8 +28,6 @@ class MessageDispatcher
      */
     public function dispatchRemainingMessages(SecretSanta $secretSanta, ApplicationInterface $application): void
     {
-
-
         $startTime = time();
 
         foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
@@ -42,6 +39,5 @@ class MessageDispatcher
 
             $secretSanta->markAssociationAsProceeded($giver);
         }
-
     }
 }
