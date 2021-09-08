@@ -16,6 +16,7 @@ use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
+use JoliCode\SecretSanta\Form\ParticipantType;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Santa\MessageDispatcher;
@@ -44,7 +45,7 @@ class SantaController extends AbstractController
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
+    public function __construct(RouterInterface    $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
@@ -90,8 +91,17 @@ class SantaController extends AbstractController
         $selectedUsers = $session->get('selected-users', []);
         $errors = [];
 
+        $form = $this->createForm(ParticipantType::class, null, [
+            'available-users' => $availableUsers,
+        ],);
+
         if ($request->isMethod('POST')) {
-            $selectedUsers = $request->request->all('users');
+
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $selectedUsers = $form->getData();
+                dd($selectedUsers);
+            }
 
             if (\count($selectedUsers) > 1) {
                 $session->set('selected-users', $selectedUsers);
@@ -102,13 +112,12 @@ class SantaController extends AbstractController
             $errors[] = 'At least 2 users should be selected.';
         }
 
-        $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', [
-            'application' => $application->getCode(),
+        $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
             'users' => $availableUsers,
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
-            'errors' => $errors,
-        ]);
+            'form' => $form->createView(),
+            'errors' => $errors,]);
 
         return new Response($content);
     }

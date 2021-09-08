@@ -12,7 +12,10 @@
         {% endif %}
 
         {% if users|length >= 2 %}
-            <form method="post" id="run_form">
+            {{ form_start(form, {
+                'method': 'POST',
+                'attr': {'id': 'run_form'}
+                }) }}
                 <div class="pure-g">
                     <div class="pure-u-1 pure-u-lg-1-2">
                         <div class="run-column run-column-left">
@@ -56,7 +59,7 @@
                                                 <div class="no-result is-hidden" id="no-user-matching">
                                                     No user matching.
                                                 </div>
-                                                {% for user in users %}
+                                                {% for userForm in form.users %}
                                                     {% block user_item %}{% endblock %}
                                                 {% endfor %}
                                             </div>
@@ -99,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            {{ form_end(form) }}
 
             <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
                 /**
