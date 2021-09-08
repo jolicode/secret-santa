@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
@@ -114,7 +115,7 @@ class SantaController extends AbstractController
     }
 
     #[Route('/message/{application}', name: 'message', methods: ['GET', 'POST'])]
-    public function message(Rudolph $rudolph, Request $request, string $application): Response
+    public function message(Rudolph $rudolph, Request $request, Spoiler $spoiler, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -153,6 +154,14 @@ class SantaController extends AbstractController
                         $secretSanta->getHash()
                     ), $secretSanta
                 );
+
+                // Send a summary to the santa admin
+                if ($secretSanta->getAdmin()) {
+                    $code = $spoiler->encode($secretSanta);
+                    $spoilUrl = $this->generateUrl('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                    $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
+                }
 
                 return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
             }
@@ -267,6 +276,7 @@ class SantaController extends AbstractController
         $error = false;
 
         try {
+
             $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
         } catch (MessageDispatchTimeoutException $e) {
             $timeout = true;

@@ -19,15 +19,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageDispatcher
 {
-    private $spoiler;
-    private $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, Spoiler $spoiler)
-    {
-        $this->spoiler = $spoiler;
-        $this->urlGenerator = $urlGenerator;
-    }
-
     /**
      * Send messages for remaining associations.
      *
@@ -38,6 +29,8 @@ class MessageDispatcher
      */
     public function dispatchRemainingMessages(SecretSanta $secretSanta, ApplicationInterface $application): void
     {
+
+
         $startTime = time();
 
         foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
@@ -50,12 +43,5 @@ class MessageDispatcher
             $secretSanta->markAssociationAsProceeded($giver);
         }
 
-        // Send a summary to the santa admin
-        if ($secretSanta->getAdmin()) {
-            $code = $this->spoiler->encode($secretSanta);
-            $spoilUrl = $this->urlGenerator->generate('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
-        }
     }
 }
