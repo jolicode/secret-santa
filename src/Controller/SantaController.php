@@ -16,6 +16,7 @@ use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
+use JoliCode\SecretSanta\Form\MessageType;
 use JoliCode\SecretSanta\Form\ParticipantType;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
@@ -45,7 +46,7 @@ class SantaController extends AbstractController
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(RouterInterface    $router, Environment $twig, LoggerInterface $logger, iterable $applications,
+    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
@@ -96,15 +97,16 @@ class SantaController extends AbstractController
         ]);
 
         if ($request->isMethod('POST')) {
-
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $selectedUsers = $form->getData()['users'];
+                foreach ($form->getData()['users'] as $user) {
+                    $selectedUsers[] = $user->getIdentifier();
+                }
             }
-
 
             if (\count($selectedUsers) > 1) {
                 $session->set('selected-users', $selectedUsers);
+
                 return $this->redirectToRoute('message', ['application' => $application->getCode()]);
             }
 
@@ -116,7 +118,7 @@ class SantaController extends AbstractController
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
             'form' => $form->createView(),
-            'errors' => $errors,]);
+            'errors' => $errors, ]);
 
         return new Response($content);
     }
@@ -135,6 +137,11 @@ class SantaController extends AbstractController
         $selectedUsers = $session->get('selected-users', []);
         $message = $session->get('message');
         $notes = $session->get('notes');
+
+        $form = $this->createForm(MessageType::class, $selectedUsers, [
+            'message' => $message,
+            'selected-users' => $selectedUsers
+        ]);
 
         $errors = [];
 
@@ -174,6 +181,7 @@ class SantaController extends AbstractController
             'message' => $message,
             'notes' => $notes,
             'errors' => $errors,
+            'form' => $form->createView(),
         ]);
 
         return new Response($content);

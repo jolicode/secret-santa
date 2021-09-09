@@ -4,182 +4,195 @@
 
 {% block santa_content %}
     <div class="run-block">
-        <form method="post" id="run_form" action="{{ path('message', { application: application }) }}">
-            {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
-            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+        {{ form_start(form, {
+            'attr': {'id': 'run_form'},
+            'method': 'POST',
+            'action': path('message', { application: application })
+        }) }}
+        {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
+        <button type="submit" disabled style="display: none" aria-hidden="true"></button>
 
-            <h2>Customize the private messages</h2>
+        <h2>Customize the private messages</h2>
 
-            {% if errors %}
-                <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors|join('<br />') }}</span>
-            {% endif %}
+        {% if errors %}
+            <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors|join('<br />') }}</span>
+        {% endif %}
 
-            <div class="message-field message-step">
-                <h3>
-                    <label class="control-label" for="message">Write an optional message <span class="message-length">(<span data-length-field="message">{{ message|length }}</span>&nbsp;/&nbsp;800 characters)</span></label>
-                </h3>
+        <div class="message-field message-step">
+            <h3>
+                <label class="control-label" for="message">Write an optional message <span class="message-length">(<span
+                                data-length-field="message">{{ message|length }}</span>&nbsp;/&nbsp;800 characters)</span></label>
+            </h3>
 
-                <p>
-                    Here, you can write anything you want. This text will be <strong>sent to every participant</strong>.
-                    This is usually the right place to give more details like a <strong>deadline</strong>
-                    or a <strong>price limit</strong>!
-                </p>
+            <p>
+                Here, you can write anything you want. This text will be <strong>sent to every participant</strong>.
+                This is usually the right place to give more details like a <strong>deadline</strong>
+                or a <strong>price limit</strong>!
+            </p>
 
-                <textarea name="message" id="message" rows="5">{{ message }}</textarea>
-            </div>
+            {{ form_widget(form.message, {
+                'attr': {'id': 'message', 'rows': '5'}
+            }) }}
+        </div>
 
-            <div class="user-field message-step">
-                <h3>Add optional details about the participants</h3>
+        <div class="user-field message-step">
+            <h3>Add optional details about the participants</h3>
 
-                <p>
-                    If you want, you can add some <strong>details about the participants</strong>.
-                    Those details will be <strong>sent only to the Secret Santa of each user</strong>.
-                    You can use those notes to inform of <strong>address of delivery</strong>,
-                    <strong>food allergy</strong>, or <strong>whatever information</strong>
-                    participants need to know about their target.
-                </p>
+            <p>
+                If you want, you can add some <strong>details about the participants</strong>.
+                Those details will be <strong>sent only to the Secret Santa of each user</strong>.
+                You can use those notes to inform of <strong>address of delivery</strong>,
+                <strong>food allergy</strong>, or <strong>whatever information</strong>
+                participants need to know about their target.
+            </p>
 
-                {% apply spaceless %}
-                    <div class="user-container">
-                        <div class="user-list">
-                            {% set key = 0 %}
-                            {% set input_placeholders = {
-                                0: 'An address ;',
-                                1: 'A food allergy ;',
-                                2: 'Or whatever you want ...',
-                            } %}
-                            {% for user in availableUsers %}
-                                {% if user.identifier in selectedUsers %}
-                                    <label class="user-item notes" for="note-{{ user.identifier }}">
-                                        <span class="user-column">
-                                            <span class="user-data">
-                                                {% block user_item %}{% endblock %}
-                                            </span>
-                                            <span class="note-length">
-                                                <span data-length-field="note-{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
-                                            </span>
-                                        </span>
-                                        <input id="note-{{ user.identifier }}" name="notes[{{ user.identifier }}]" value="{{ notes[user.identifier]|default('') }}" type="text" {% if key in input_placeholders|keys %}placeholder="{{ input_placeholders[key] }}"{% endif %} />
-                                    </label>
-                                    {% set key = key + 1 %}
+            {% apply spaceless %}
+                <div class="user-container">
+                    <div class="user-list">
+                        {% set key = 0 %}
+                        {% set input_placeholders = {
+                            0: 'An address ;',
+                            1: 'A food allergy ;',
+                            2: 'Or whatever you want ...',
+                        } %}
+                        {% for userId in form.vars.value %}
+                            {% set user = availableUsers[userId] %}
+                            <label class="user-item notes" for="note-{{ user.identifier }}">
+                                <span class="user-column">
+                                    <span class="user-data">
+                                        {% block user_item %}{% endblock %}
+                                    </span>
+                                    <span class="note-length">
+                                        <span data-length-field="note-{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
+                                    </span>
+                                </span>
+
+                                {% if key in input_placeholders|keys %}
+                                    {{ form_widget(form['notes-' ~ userId], { 'attr': {'placeholder': input_placeholders[key]}}) }}
+                                {% else %}
+                                    {{ form_widget(form['notes-' ~ userId]) }}
                                 {% endif %}
-                            {% endfor %}
-                        </div>
+                            </label>
+                            {% set key = key + 1 %}
+                        {% endfor %}
                     </div>
-                {% endapply %}
-            </div>
-
-            <div class="user-field message-step">
-                <h3>Not sure how the private messages will render?</h3>
-
-                <p>
-                    The button below allows you (<strong>and only you</strong>) to receive a
-                    <strong>fake message</strong> almost identical to the real ones sent on
-                    the final step. Use it to have a look at how the message will look like.
-                </p>
-
-                <div class="is-center">
-                    <button type="button" class="small-button" id="sample-message-button">
-                        <span class="fas fa-wrench" aria-hidden="true"></span>
-                        Send me a fake message
-                    </button>
                 </div>
+            {% endapply %}
+        </div>
+
+        <div class="user-field message-step">
+            <h3>Not sure how the private messages will render?</h3>
+
+            <p>
+                The button below allows you (<strong>and only you</strong>) to receive a
+                <strong>fake message</strong> almost identical to the real ones sent on
+                the final step. Use it to have a look at how the message will look like.
+            </p>
+
+            <div class="is-center">
+                <button type="button" class="small-button" id="sample-message-button">
+                    <span class="fas fa-wrench" aria-hidden="true"></span>
+                    Send me a fake message
+                </button>
+            </div>
+        </div>
+
+        <div class="run-step">
+            <h2>Ready to send all the messages?</h2>
+
+            <p class="is-center">
+                Everything is setup? Let's go to the next step. We are going to shuffle the
+                participants and send them a private message to inform them of their peer name.
+            </p>
+
+            <div class="is-center">
+                <button type="submit" class="big-button" id="submit-button">
+                    <span class="fas fa-paper-plane" aria-hidden="true"></span>
+                    Shuffle and send Secret Santa messages!
+                </button>
             </div>
 
-            <div class="run-step">
-                <h2>Ready to send all the messages?</h2>
-
-                <p class="is-center">
-                    Everything is setup? Let's go to the next step. We are going to shuffle the
-                    participants and send them a private message to inform them of their peer name.
-                </p>
-
-                <div class="is-center">
-                    <button type="submit" class="big-button" id="submit-button">
-                        <span class="fas fa-paper-plane" aria-hidden="true"></span>
-                        Shuffle and send Secret Santa messages!
-                    </button>
-                </div>
-
-                <p class="is-center">
-                    <small>
-                        or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                    </small>
-                </p>
-            </div>
-        </form>
+            <p class="is-center">
+                <small>
+                    or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
+                </small>
+            </p>
+        </div>
+        {{ form_end(form) }}
     </div>
 
     <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-      /**
-       * I did know this is a global and I feel bad.
-       * Next time I will install 10mb of npm and react javascript to switch a flag :)
-       *
-       * @type {boolean}
-       */
-      let secretSantaFormSubmitted = false;
-      const runForm = document.getElementById('run_form');
-      const message = document.getElementById('message');
-      const fieldLengths = document.querySelectorAll('[data-length-field]');
-      const submitButton = document.getElementById('submit-button');
+        /**
+         * I did know this is a global and I feel bad.
+         * Next time I will install 10mb of npm and react javascript to switch a flag :)
+         *
+         * @type {boolean}
+         */
+        let secretSantaFormSubmitted = false;
+        const runForm = document.getElementById('run_form');
+        const message = document.getElementById('message');
+        const fieldLengths = document.querySelectorAll('[data-length-field]');
+        const submitButton = document.getElementById('submit-button');
 
-      /**
-       * Prevent the multi-submit of the form
-       */
-      runForm.addEventListener('submit', function(e) {
-        if (secretSantaFormSubmitted) {
-          e.preventDefault();
-        } else {
-          secretSantaFormSubmitted = true;
-          submitButton.disabled = true;
-          submitButton.children[0].className = 'fas fa-hourglass-start';
-        }
-      }, false);
-
-      function updateFieldLength(field, fieldLength) {
-        fieldLength.innerHTML = field.value.trim().replace('\r\n', '\n').length;
-      }
-
-      fieldLengths.forEach(function(fieldLength) {
-        const field = document.getElementById(fieldLength.getAttribute('data-length-field'))
-
-        field.addEventListener('keyup', function() { updateFieldLength(field, fieldLength) });
-        updateFieldLength(field, fieldLength);
-      });
-
-      /**
-       * Handle sample message send
-       */
-      const sampleMessageButton = document.getElementById('sample-message-button');
-      if (sampleMessageButton) {
-        sampleMessageButton.addEventListener('click', function(e) {
-          const body = new FormData(runForm);
-
-          fetch('{{ url('send_sample_message', {application: application}) }}', {
-            method: 'post',
-            credentials: 'include',
-            headers: {'X-Requested-With': 'XMLHttpRequest'},
-            body: body,
-          })
-            .then(function(response) {
-              return response.json();
-            })
-            .then(function(response) {
-              if (response.success) {
-                window.alert('We have sent you a fake message. Check it now before finishing the Secret Santa.');
-                return;
-              }
-
-              const keys = Object.keys(response.errors);
-              let message = 'Error when sending the fake message:\n';
-
-              for (let i=0; i<keys.length; i++) {
-                message += response.errors[keys[i]] + "\n";
-              }
-
-              window.alert(message);
-            })
+        /**
+         * Prevent the multi-submit of the form
+         */
+        runForm.addEventListener('submit', function (e) {
+            if (secretSantaFormSubmitted) {
+                e.preventDefault();
+            } else {
+                secretSantaFormSubmitted = true;
+                submitButton.disabled = true;
+                submitButton.children[0].className = 'fas fa-hourglass-start';
+            }
         }, false);
-      }
+
+        function updateFieldLength(field, fieldLength) {
+            fieldLength.innerHTML = field.value.trim().replace('\r\n', '\n').length;
+        }
+
+        fieldLengths.forEach(function (fieldLength) {
+            const field = document.getElementById(fieldLength.getAttribute('data-length-field'))
+
+            field.addEventListener('keyup', function () {
+                updateFieldLength(field, fieldLength)
+            });
+            updateFieldLength(field, fieldLength);
+        });
+
+        /**
+         * Handle sample message send
+         */
+        const sampleMessageButton = document.getElementById('sample-message-button');
+        if (sampleMessageButton) {
+            sampleMessageButton.addEventListener('click', function (e) {
+                const body = new FormData(runForm);
+
+                fetch('{{ url('send_sample_message', {application: application}) }}', {
+                    method: 'post',
+                    credentials: 'include',
+                    headers: {'X-Requested-With': 'XMLHttpRequest'},
+                    body: body,
+                })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (response) {
+                        if (response.success) {
+                            window.alert('We have sent you a fake message. Check it now before finishing the Secret Santa.');
+                            return;
+                        }
+
+                        const keys = Object.keys(response.errors);
+                        let message = 'Error when sending the fake message:\n';
+
+                        for (let i = 0; i < keys.length; i++) {
+                            message += response.errors[keys[i]] + "\n";
+                        }
+
+                        window.alert(message);
+                    })
+            }, false);
+        }
     </script>
 {% endblock santa_content %}
