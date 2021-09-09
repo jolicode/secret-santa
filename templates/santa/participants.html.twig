@@ -155,7 +155,7 @@
                         html = 'No user selected';
                     }
 
-                    summaryCount.innerHTML = users.length + ' people';
+                    summaryCount.innerHTML = users.length + (users.length <= 1 ?' person' : ' people');
                     checkedUsersSummary.innerHTML = html;
                 }
 
@@ -304,7 +304,7 @@
                     const userIds = e.target.getAttribute('data-user-ids').split('|');
 
                     for(let i=0; i<userIds.length; i++) {
-                        const userInput = document.getElementById('user-' + userIds[i]);
+                        const userInput = document.querySelector('[identifier="' + userIds[i] + '"');
 
                         if (userInput) {
                             userInput.checked = true;
@@ -315,7 +315,7 @@
                 }
 
                 /**
-                 * Here lives Damien's Kingdom
+                 * Here lies Damien's Kingdom
                  */
                 function removeDiacritics (str) {
                     const defaultDiacriticsRemovalMap = [

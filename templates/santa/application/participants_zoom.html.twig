@@ -38,13 +38,17 @@
             for="user-{{ user.identifier }}"
             data-search-index="{{ user.name }}"
     >
-        <input type="checkbox"
-               {{ user.identifier in selectedUsers ? 'checked="checked"' : '' }}
-               name="users[]"
-               value="{{ user.identifier }}"
-               id="user-{{ user.identifier }}"
-               data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
-        >
+        {{ form_widget(userForm, (user.identifier in selectedUsers ?
+            {'attr': {
+                'checked': 'checked',
+                'data-summary': current.userSummary(user)|escape('html_attr'),
+                'identifier': user.identifier
+            }} :
+            {'attr': {
+                'data-summary': current.userSummary(user)|escape('html_attr'),
+                'identifier': user.identifier
+            }}
+        )) }}
         {% if user.extra.image %}
             <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
         {% endif %}

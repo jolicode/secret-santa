@@ -21,9 +21,17 @@
             data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
 
-        {{ form_widget(userForm, {'attr': {
-            'data-summary': current.userSummary(user)|escape('html_attr'),
-            }}) }}
+        {{ form_widget(userForm, (user.identifier in selectedUsers ?
+            {'attr': {
+                'checked': 'checked',
+                'data-summary': current.userSummary(user)|escape('html_attr'),
+                'identifier': user.identifier
+            }} :
+            {'attr': {
+                'data-summary': current.userSummary(user)|escape('html_attr'),
+                'identifier': user.identifier
+            }}
+        )) }}
         {% if user.extra.image %}
             <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
         {% endif %}

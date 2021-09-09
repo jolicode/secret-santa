@@ -6,26 +6,33 @@
 
 {% macro userSummary(user) %}
     <span class="user-summary">
-        <img src="{{ user.extra.image }}" alt="" />
+        <img src="{{ user.extra.image }}" alt=""/>
         <span>{{ user.extra.nickname }}</span>
         <span data-uncheck-user="user-{{ user.identifier }}" class="fas fa-times" title="Unselect this user"></span>
     </span>
 {% endmacro %}
 
 {% block user_item %}
+    {% set user = userForm.parent.vars.choices[userForm.vars.value].data %}
+
     <label
             class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
             for="user-{{ user.identifier }}"
             data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
-        <input type="checkbox"
-               {{ user.identifier in selectedUsers ? 'checked="checked"' : '' }}
-               name="users[]"
-               value="{{ user.identifier }}"
-               id="user-{{ user.identifier }}"
-               data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
-        >
-        <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+
+        {{ form_widget(userForm, (user.identifier in selectedUsers ?
+            {'attr': {
+                'checked': 'checked',
+                'data-summary': current.userSummary(user)|escape('html_attr'),
+                'identifier': user.identifier
+            }} :
+            {'attr': {
+                'data-summary': current.userSummary(user)|escape('html_attr'),
+                'identifier': user.identifier
+            }}
+        )) }}
+        <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
         <span>{{ user.name }} ({{ user.extra.nickname }})</span>
         {% if groups %}
             <span class="user-groups">

@@ -93,19 +93,18 @@ class SantaController extends AbstractController
 
         $form = $this->createForm(ParticipantType::class, null, [
             'available-users' => $availableUsers,
-        ],);
+        ]);
 
         if ($request->isMethod('POST')) {
 
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $selectedUsers = $form->getData();
-                dd($selectedUsers);
+                $selectedUsers = $form->getData()['users'];
             }
+
 
             if (\count($selectedUsers) > 1) {
                 $session->set('selected-users', $selectedUsers);
-
                 return $this->redirectToRoute('message', ['application' => $application->getCode()]);
             }
 
