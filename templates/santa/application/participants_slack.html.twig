@@ -17,7 +17,7 @@
 
     <label
             class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
-            for="user-{{ user.identifier }}"
+            for="{{ userForm.vars.id }}"
             data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
 

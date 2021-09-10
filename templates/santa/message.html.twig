@@ -31,7 +31,7 @@
             </p>
 
             {{ form_widget(form.message, {
-                'attr': {'id': 'message', 'rows': '5'}
+                'attr': {'id': 'message', 'rows': '5', 'field': 'message'}
             }) }}
         </div>
 
@@ -55,7 +55,7 @@
                             1: 'A food allergy ;',
                             2: 'Or whatever you want ...',
                         } %}
-                        {% for userId in form.vars.value %}
+                        {% for userId in selectedUsers %}
                             {% set user = availableUsers[userId] %}
                             <label class="user-item notes" for="note-{{ user.identifier }}">
                                 <span class="user-column">
@@ -63,14 +63,19 @@
                                         {% block user_item %}{% endblock %}
                                     </span>
                                     <span class="note-length">
-                                        <span data-length-field="note-{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
+                                        <span data-length-field="{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
                                     </span>
                                 </span>
 
                                 {% if key in input_placeholders|keys %}
-                                    {{ form_widget(form['notes-' ~ userId], { 'attr': {'placeholder': input_placeholders[key]}}) }}
+                                    {{ form_widget(form['notes-' ~ userId], { 'attr': {
+                                        'placeholder': input_placeholders[key],
+                                        'field': user.identifier
+                                    }}) }}
                                 {% else %}
-                                    {{ form_widget(form['notes-' ~ userId]) }}
+                                    {{ form_widget(form['notes-' ~ userId],  { 'attr': {
+                                        'field': user.identifier
+                                    }}) }}
                                 {% endif %}
                             </label>
                             {% set key = key + 1 %}
@@ -147,19 +152,6 @@
             }
         }, false);
 
-        function updateFieldLength(field, fieldLength) {
-            fieldLength.innerHTML = field.value.trim().replace('\r\n', '\n').length;
-        }
-
-        fieldLengths.forEach(function (fieldLength) {
-            const field = document.getElementById(fieldLength.getAttribute('data-length-field'))
-
-            field.addEventListener('keyup', function () {
-                updateFieldLength(field, fieldLength)
-            });
-            updateFieldLength(field, fieldLength);
-        });
-
         /**
          * Handle sample message send
          */
@@ -194,5 +186,20 @@
                     })
             }, false);
         }
+
+        function updateFieldLength(field, fieldLength) {
+            fieldLength.innerHTML = field.value.trim().replace('\r\n', '\n').length;
+        }
+
+        window.addEventListener('load', function () {
+            fieldLengths.forEach(function (fieldLength) {
+                console.log('[field=' + fieldLength.getAttribute("data-length-field") + ']')
+                const field = document.querySelector('[field=' + fieldLength.getAttribute("data-length-field") + ']')
+                field.addEventListener('keyup', function () {
+                    updateFieldLength(field, fieldLength)
+                });
+                updateFieldLength(field, fieldLength);
+            });
+        })
     </script>
 {% endblock santa_content %}

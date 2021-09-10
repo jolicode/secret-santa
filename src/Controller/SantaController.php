@@ -46,7 +46,7 @@ class SantaController extends AbstractController
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
+    public function __construct(RouterInterface    $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
@@ -97,19 +97,23 @@ class SantaController extends AbstractController
         ]);
 
         if ($request->isMethod('POST')) {
+
             $form->handleRequest($request);
+
+            // looks counterintuitive, but it ensures that the symfony form doesn't get sent again when going back on the page from the next step
+            $selectedUsers = [];
+
             if ($form->isSubmitted() && $form->isValid()) {
                 foreach ($form->getData()['users'] as $user) {
                     $selectedUsers[] = $user->getIdentifier();
                 }
+
+                if (\count($selectedUsers) > 1) {
+                    $session->set('selected-users', $selectedUsers);
+                    return $this->redirectToRoute('message', ['application' => $application->getCode()]);
+                }
+
             }
-
-            if (\count($selectedUsers) > 1) {
-                $session->set('selected-users', $selectedUsers);
-
-                return $this->redirectToRoute('message', ['application' => $application->getCode()]);
-            }
-
             $errors[] = 'At least 2 users should be selected.';
         }
 
@@ -118,7 +122,7 @@ class SantaController extends AbstractController
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
             'form' => $form->createView(),
-            'errors' => $errors, ]);
+            'errors' => $errors,]);
 
         return new Response($content);
     }
@@ -138,23 +142,30 @@ class SantaController extends AbstractController
         $message = $session->get('message');
         $notes = $session->get('notes');
 
-        $form = $this->createForm(MessageType::class, $selectedUsers, [
+        $form = $this->createForm(MessageType::class, null, [
             'message' => $message,
             'selected-users' => $selectedUsers
         ]);
 
         $errors = [];
+        $form->handleRequest($request);
 
         if ($request->isMethod('POST')) {
-            $message = trim($request->request->get('message'));
-            $notes = array_map('trim', $request->request->all('notes'));
 
-            if ($messageError = $this->validateMessage($message)) {
-                $errors['message'] = $messageError;
+            if ($form->isSubmitted() && $form->isValid()) {
+                $message = $form->getData()['message'] ?? '';
+                foreach ($form->getData() as $data => $note) {
+                    if (str_contains($data, 'notes-')) {
+                        $notes[] = $note;
+                    }
+                }
             }
 
-            if ($notesError = $this->validateNotes($notes)) {
-                $errors['notes'] = $notesError;
+            if (!$form->isValid()) {
+                $formErrors = $form->getErrors(true);
+                foreach ($formErrors as $error) {
+                    $errors[] = $error->getMessage();
+                }
             }
 
             if (!$errors) {
@@ -192,7 +203,9 @@ class SantaController extends AbstractController
     {
         $application = $this->getApplication($application);
 
+
         $errors = [];
+
 
         if (!$application->isAuthenticated()) {
             $errors['login'] = 'Your session has expired. Please refresh the page.';
@@ -206,21 +219,36 @@ class SantaController extends AbstractController
             });
         }
 
-        $message = trim($request->request->get('message', ''));
-        $notes = array_filter(array_map('trim', $request->request->all('notes')));
 
-        if ($messageError = $this->validateMessage($message)) {
-            $errors['message'] = $messageError;
+        $session = $request->getSession();
+        $availableUsers = $session->get('available-users', []);
+        $selectedUsers = $session->get('selected-users', []);
+        $message = $session->get('message');
+
+        $form = $this->createForm(MessageType::class, null, [
+            'message' => $message,
+            'selected-users' => $selectedUsers
+        ]);
+        $form->handleRequest($request);
+
+        $notes = [];
+
+        $message = $form->getData()['message'] ?? '';
+        foreach ($form->getData() as $data => $note) {
+            if (str_contains($data, 'notes-') && $note) {
+                $notes[] = $note;
+            }
         }
 
-        if ($notesError = $this->validateNotes($notes)) {
-            $errors['notes'] = $notesError;
+        $formErrors = $form->getErrors(true) ?? null;
+
+        if ($formErrors) {
+            foreach ($formErrors as $error) {
+                $errors[] = $error->getMessage();
+            }
         }
 
         if (\count($errors) < 1) {
-            $session = $request->getSession();
-            $availableUsers = $session->get('available-users', []);
-            $selectedUsers = $session->get('selected-users', []);
 
             $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
                 return $application->getAdmin()->getIdentifier() !== $id;
@@ -442,28 +470,5 @@ class SantaController extends AbstractController
             $this->statisticCollector->incrementUsageCount($secretSanta);
             $this->doReset($application, $request);
         }
-    }
-
-    private function validateMessage(string $message): ?string
-    {
-        if (\strlen(preg_replace('/\r\n/', ' ', $message)) > 800) {
-            return 'Your message should contain less than 800 characters';
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string[] $notes
-     */
-    private function validateNotes(array $notes): ?string
-    {
-        foreach ($notes as $note) {
-            if (\strlen(preg_replace('/\r\n/', ' ', $note)) > 400) {
-                return 'Each note should contain less than 400 characters';
-            }
-        }
-
-        return null;
     }
 }
