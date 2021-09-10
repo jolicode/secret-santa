@@ -29,18 +29,22 @@ class MessageType extends AbstractType
                 'data' => $options['message'],
                 'required' => false,
                 'attr' => ['style' => 'resize: none'],
-                'constraints' => new Length([
-                    'max' => 800,
-                    'maxMessage' => 'Your message is too long, it should not exceed {{ limit }} characters.'
-                ])
+                'constraints' => [
+                    new Length([
+                        'max' => 800,
+                        'maxMessage' => 'Your message is too long, it should not exceed {{ limit }} characters.'
+                    ])
+                ]
             ]);
         foreach ($options['selected-users'] as $userId) {
             $builder->add('notes-' . $userId, TextType::class, [
                 'required' => false,
-                'constraints' => new Length([
-                    'max' => 400,
-                    'maxMessage' => 'Each note should contain less than {{ limit }} characters'
-                ])
+                'constraints' => [
+                    new Length([
+                        'max' => 400,
+                        'maxMessage' => 'Each note should contain less than {{ limit }} characters'
+                    ])
+                ]
             ]);
         }
     }
