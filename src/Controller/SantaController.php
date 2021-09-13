@@ -46,7 +46,7 @@ class SantaController extends AbstractController
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(RouterInterface    $router, Environment $twig, LoggerInterface $logger, iterable $applications,
+    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
@@ -97,7 +97,6 @@ class SantaController extends AbstractController
         ]);
 
         if ($request->isMethod('POST')) {
-
             $form->handleRequest($request);
 
             // looks counterintuitive, but it ensures that the symfony form doesn't get sent again when going back on the page from the next step
@@ -110,9 +109,9 @@ class SantaController extends AbstractController
 
                 if (\count($selectedUsers) > 1) {
                     $session->set('selected-users', $selectedUsers);
+
                     return $this->redirectToRoute('message', ['application' => $application->getCode()]);
                 }
-
             }
             $errors[] = 'At least 2 users should be selected.';
         }
@@ -122,7 +121,7 @@ class SantaController extends AbstractController
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
             'form' => $form->createView(),
-            'errors' => $errors,]);
+            'errors' => $errors, ]);
 
         return new Response($content);
     }
@@ -144,14 +143,13 @@ class SantaController extends AbstractController
 
         $form = $this->createForm(MessageType::class, null, [
             'message' => $message,
-            'selected-users' => $selectedUsers
+            'selected-users' => $selectedUsers,
         ]);
 
         $errors = [];
         $form->handleRequest($request);
 
         if ($request->isMethod('POST')) {
-
             if ($form->isSubmitted() && $form->isValid()) {
                 $message = $form->getData()['message'] ?? '';
                 foreach ($form->getData() as $data => $note) {
@@ -203,9 +201,7 @@ class SantaController extends AbstractController
     {
         $application = $this->getApplication($application);
 
-
         $errors = [];
-
 
         if (!$application->isAuthenticated()) {
             $errors['login'] = 'Your session has expired. Please refresh the page.';
@@ -219,7 +215,6 @@ class SantaController extends AbstractController
             });
         }
 
-
         $session = $request->getSession();
         $availableUsers = $session->get('available-users', []);
         $selectedUsers = $session->get('selected-users', []);
@@ -227,7 +222,7 @@ class SantaController extends AbstractController
 
         $form = $this->createForm(MessageType::class, null, [
             'message' => $message,
-            'selected-users' => $selectedUsers
+            'selected-users' => $selectedUsers,
         ]);
         $form->handleRequest($request);
 
@@ -242,14 +237,13 @@ class SantaController extends AbstractController
 
         $formErrors = $form->getErrors(true) ?? null;
 
-        if ($formErrors) {
+        if (null !== $formErrors) {
             foreach ($formErrors as $error) {
                 $errors[] = $error->getMessage();
             }
         }
 
         if (\count($errors) < 1) {
-
             $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
                 return $application->getAdmin()->getIdentifier() !== $id;
             });

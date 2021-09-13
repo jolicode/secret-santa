@@ -12,8 +12,6 @@
 namespace JoliCode\SecretSanta\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,7 +20,7 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class MessageType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('message', TextareaType::class, [
@@ -32,9 +30,9 @@ class MessageType extends AbstractType
                 'constraints' => [
                     new Length([
                         'max' => 800,
-                        'maxMessage' => 'Your message is too long, it should not exceed {{ limit }} characters.'
-                    ])
-                ]
+                        'maxMessage' => 'Your message is too long, it should not exceed {{ limit }} characters.',
+                    ]),
+                ],
             ]);
         foreach ($options['selected-users'] as $userId) {
             $builder->add('notes-' . $userId, TextType::class, [
@@ -42,18 +40,18 @@ class MessageType extends AbstractType
                 'constraints' => [
                     new Length([
                         'max' => 400,
-                        'maxMessage' => 'Each note should contain less than {{ limit }} characters'
-                    ])
-                ]
+                        'maxMessage' => 'Each note should contain less than {{ limit }} characters',
+                    ]),
+                ],
             ]);
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'message' => '',
-            'selected-users' => []
+            'selected-users' => [],
         ]);
     }
 }

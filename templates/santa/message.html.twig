@@ -15,7 +15,7 @@
         <h2>Customize the private messages</h2>
 
         {% if errors %}
-            <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors|join('<br />') }}</span>
+            <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors|join('<br />')|raw }}</span>
         {% endif %}
 
         <div class="message-field message-step">
