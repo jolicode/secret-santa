@@ -46,7 +46,7 @@ class SantaController extends AbstractController
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
+    public function __construct(RouterInterface    $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
@@ -90,30 +90,27 @@ class SantaController extends AbstractController
         }
 
         $selectedUsers = $session->get('selected-users', []);
-        $errors = [];
 
         $form = $this->createForm(ParticipantType::class, null, [
-            'available-users' => $availableUsers,
+            'available-users' => $availableUsers
         ]);
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
+        if ($request->isMethod('POST')) {
             // looks counterintuitive, but it ensures that the symfony form doesn't get sent again when going back on the page from the next step
             $selectedUsers = [];
+        }
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                foreach ($form->getData()['users'] as $user) {
-                    $selectedUsers[] = $user->getIdentifier();
-                }
-
-                if (\count($selectedUsers) > 1) {
-                    $session->set('selected-users', $selectedUsers);
-
-                    return $this->redirectToRoute('message', ['application' => $application->getCode()]);
-                }
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($form->getData()['users'] as $user) {
+                $selectedUsers[] = $user->getIdentifier();
             }
-            $errors[] = 'At least 2 users should be selected.';
+
+            $session->set('selected-users', $selectedUsers);
+
+            return $this->redirectToRoute('message', ['application' => $application->getCode()]);
+
         }
 
         $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
@@ -121,7 +118,7 @@ class SantaController extends AbstractController
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
             'form' => $form->createView(),
-            'errors' => $errors, ]);
+            ]);
 
         return new Response($content);
     }
@@ -146,40 +143,28 @@ class SantaController extends AbstractController
             'selected-users' => $selectedUsers,
         ]);
 
-        $errors = [];
         $form->handleRequest($request);
 
-        if ($request->isMethod('POST')) {
-            if ($form->isSubmitted() && $form->isValid()) {
-                $message = $form->getData()['message'] ?? '';
-                foreach ($form->getData() as $data => $note) {
-                    if (str_contains($data, 'notes-')) {
-                        $notes[] = $note;
-                    }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $message = $form->getData()['message'] ?? '';
+            foreach ($form->getData() as $data => $note) {
+                if (str_contains($data, 'notes-')) {
+                    $notes[] = $note;
                 }
             }
 
-            if (!$form->isValid()) {
-                $formErrors = $form->getErrors(true);
-                foreach ($formErrors as $error) {
-                    $errors[] = $error->getMessage();
-                }
-            }
+            $session->set('message', $message);
+            $session->set('notes', $notes);
 
-            if (!$errors) {
-                $session->set('message', $message);
-                $session->set('notes', $notes);
+            $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
 
-                $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
+            $session->set(
+                $this->getSecretSantaSessionKey(
+                    $secretSanta->getHash()
+                ), $secretSanta
+            );
 
-                $session->set(
-                    $this->getSecretSantaSessionKey(
-                        $secretSanta->getHash()
-                    ), $secretSanta
-                );
-
-                return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
-            }
+            return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
         }
 
         $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
@@ -189,7 +174,6 @@ class SantaController extends AbstractController
             'selectedUsers' => $selectedUsers,
             'message' => $message,
             'notes' => $notes,
-            'errors' => $errors,
             'form' => $form->createView(),
         ]);
 

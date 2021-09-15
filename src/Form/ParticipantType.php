@@ -16,6 +16,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\Count;
+use Symfony\Component\Validator\Constraints\Length;
 
 class ParticipantType extends AbstractType
 {
@@ -29,14 +32,20 @@ class ParticipantType extends AbstractType
                 },
                 'multiple' => true,
                 'expanded' => true,
-            ])
-        ;
+                'constraints' => [
+                    new Count([
+                        'min' => 2,
+                        'minMessage' => 'You have to select at least 2 users',
+                    ]),
+                ],
+                'error_bubbling' => true
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'available-users' => [],
-         ]);
+        ]);
     }
 }

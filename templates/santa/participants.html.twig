@@ -7,8 +7,11 @@
     <div class="run-block">
         <h2>Select the participants of your Secret Santa</h2>
 
-        {% if errors %}
-            <span class="error"><i class="fas fa-exclamation-triangle"></i> {{ errors|join('<br />') }}</span>
+        {% if not form.vars.valid %}
+            <span class="error">
+            <i class="fas fa-exclamation-triangle"></i>
+            {%  for error in form.vars.errors %}<br>{{ error.message }} {% endfor %}
+        </span>
         {% endif %}
 
         {% if users|length >= 2 %}
