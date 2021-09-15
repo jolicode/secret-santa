@@ -15,19 +15,9 @@ use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MessageDispatcher
 {
-    private $spoiler;
-    private $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator, Spoiler $spoiler)
-    {
-        $this->spoiler = $spoiler;
-        $this->urlGenerator = $urlGenerator;
-    }
-
     /**
      * Send messages for remaining associations.
      *
@@ -48,14 +38,6 @@ class MessageDispatcher
             $application->sendSecretMessage($secretSanta, $giver, $receiver);
 
             $secretSanta->markAssociationAsProceeded($giver);
-        }
-
-        // Send a summary to the santa admin
-        if ($secretSanta->getAdmin()) {
-            $code = $this->spoiler->encode($secretSanta);
-            $spoilUrl = $this->urlGenerator->generate('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
-
-            $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
         }
     }
 }
