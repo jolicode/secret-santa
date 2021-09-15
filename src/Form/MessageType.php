@@ -24,7 +24,6 @@ class MessageType extends AbstractType
     {
         $builder
             ->add('message', TextareaType::class, [
-                'data' => $options['message'],
                 'required' => false,
                 'attr' => ['style' => 'resize: none'],
                 'constraints' => [
@@ -52,7 +51,6 @@ class MessageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'message' => '',
             'selected-users' => [],
         ]);
     }

@@ -118,7 +118,7 @@ class SantaController extends AbstractController
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
             'form' => $form->createView(),
-            ]);
+        ]);
 
         return new Response($content);
     }
@@ -138,23 +138,24 @@ class SantaController extends AbstractController
         $message = $session->get('message');
         $notes = $session->get('notes');
 
-        $form = $this->createForm(MessageType::class, null, [
-            'message' => $message,
+        $form = $this->createForm(MessageType::class, ['message' => $message], [
             'selected-users' => $selectedUsers,
         ]);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             $message = $form->getData()['message'] ?? '';
+            $session->set('message', $message);
             foreach ($form->getData() as $data => $note) {
                 if (str_contains($data, 'notes-')) {
                     $notes[] = $note;
                 }
             }
-
-            $session->set('message', $message);
             $session->set('notes', $notes);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
 
@@ -204,8 +205,7 @@ class SantaController extends AbstractController
         $selectedUsers = $session->get('selected-users', []);
         $message = $session->get('message');
 
-        $form = $this->createForm(MessageType::class, null, [
-            'message' => $message,
+        $form = $this->createForm(MessageType::class, ['message' => $message], [
             'selected-users' => $selectedUsers,
         ]);
         $form->handleRequest($request);
@@ -219,48 +219,51 @@ class SantaController extends AbstractController
             }
         }
 
-        $formErrors = $form->getErrors(true) ?? null;
+        $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
+            return $application->getAdmin()->getIdentifier() !== $id;
+        });
 
-        if (null !== $formErrors) {
-            foreach ($formErrors as $error) {
-                $errors[] = $error->getMessage();
+        $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
+
+        if ($form->isSubmitted()) {
+
+            $formErrors = array_map(function ($error) {
+                    return $error->getMessage();
+                }, iterator_to_array($form->getErrors(true, false))) ?? null;
+
+            $errors = array_merge($errors, $formErrors);
+
+            if ($form->isValid()) {
+                $secretSanta = new SecretSanta(
+                    $application->getCode(),
+                    $application->getOrganization(),
+                    'sample',
+                    $availableUsers,
+                    [],
+                    $application->getAdmin(),
+                    str_replace('```', '', $message),
+                    $notes
+                );
+
+                try {
+                    $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $receiver, true);
+
+                    $this->statisticCollector->incrementSampleCount($secretSanta);
+                } catch (MessageSendFailedException $e) {
+                    $errors['send'] = $e->getMessage();
+                }
             }
+
         }
-
-        if (\count($errors) < 1) {
-            $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
-                return $application->getAdmin()->getIdentifier() !== $id;
-            });
-
-            $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
-
-            $secretSanta = new SecretSanta(
-                $application->getCode(),
-                $application->getOrganization(),
-                'sample',
-                $availableUsers,
-                [],
-                $application->getAdmin(),
-                str_replace('```', '', $message),
-                $notes
-            );
-
-            try {
-                $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $receiver, true);
-
-                $this->statisticCollector->incrementSampleCount($secretSanta);
-            } catch (MessageSendFailedException $e) {
-                $errors['send'] = $e->getMessage();
-            }
-        }
-
         return new JsonResponse([
             'success' => empty($errors),
             'errors' => $errors,
         ]);
     }
 
-    #[Route('/send-messages/{hash}', name: 'send_messages', methods: ['GET', 'POST'])]
+
+    #[
+        Route('/send-messages/{hash}', name: 'send_messages', methods: ['GET', 'POST'])]
     public function sendMessages(MessageDispatcher $messageDispatcher, Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
