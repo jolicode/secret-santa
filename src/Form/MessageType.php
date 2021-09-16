@@ -32,7 +32,7 @@ class MessageType extends AbstractType
                         'maxMessage' => 'Your message is too long, it should not exceed {{ limit }} characters.',
                     ]),
                 ],
-                'error_bubbling' => true
+                'error_bubbling' => true,
             ]);
         foreach ($options['selected-users'] as $userId) {
             $builder->add('notes-' . $userId, TextType::class, [
@@ -43,7 +43,7 @@ class MessageType extends AbstractType
                         'maxMessage' => 'Each note should contain less than {{ limit }} characters',
                     ]),
                 ],
-                'error_bubbling' => true
+                'error_bubbling' => true,
             ]);
         }
     }

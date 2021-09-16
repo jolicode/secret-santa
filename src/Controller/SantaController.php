@@ -46,7 +46,7 @@ class SantaController extends AbstractController
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(RouterInterface    $router, Environment $twig, LoggerInterface $logger, iterable $applications,
+    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
                                 StatisticCollector $statistic, Client $bugsnag)
     {
         $this->router = $router;
@@ -91,8 +91,15 @@ class SantaController extends AbstractController
 
         $selectedUsers = $session->get('selected-users', []);
 
-        $form = $this->createForm(ParticipantType::class, null, [
-            'available-users' => $availableUsers
+        $selectedUsersByIds = array_map(function ($user) use ($selectedUsers) {
+            if (\in_array($user->getIdentifier(), $selectedUsers, true)) {
+                return $user;
+            }
+            return null;
+        }, $availableUsers, []);
+
+        $form = $this->createForm(ParticipantType::class, ['users' => $selectedUsersByIds], [
+            'available-users' => $availableUsers,
         ]);
 
         $form->handleRequest($request);
@@ -110,7 +117,6 @@ class SantaController extends AbstractController
             $session->set('selected-users', $selectedUsers);
 
             return $this->redirectToRoute('message', ['application' => $application->getCode()]);
-
         }
 
         $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
@@ -156,7 +162,6 @@ class SantaController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
 
             $session->set(
@@ -226,10 +231,9 @@ class SantaController extends AbstractController
         $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
 
         if ($form->isSubmitted()) {
-
             $formErrors = array_map(function ($error) {
-                    return $error->getMessage();
-                }, iterator_to_array($form->getErrors(true, false))) ?? null;
+                return $error->getMessage();
+            }, iterator_to_array($form->getErrors(true, false))) ?? null;
 
             $errors = array_merge($errors, $formErrors);
 
@@ -253,14 +257,13 @@ class SantaController extends AbstractController
                     $errors['send'] = $e->getMessage();
                 }
             }
-
         }
+
         return new JsonResponse([
             'success' => empty($errors),
             'errors' => $errors,
         ]);
     }
-
 
     #[
         Route('/send-messages/{hash}', name: 'send_messages', methods: ['GET', 'POST'])]
