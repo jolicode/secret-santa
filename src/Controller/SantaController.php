@@ -95,6 +95,7 @@ class SantaController extends AbstractController
             if (\in_array($user->getIdentifier(), $selectedUsers, true)) {
                 return $user;
             }
+
             return null;
         }, $availableUsers, []);
 
