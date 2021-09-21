@@ -42,3 +42,7 @@
         {% endif %}
     </label>
 {% endblock %}
+
+{% block disclaimer %}
+    <p>To receive their message, participants must allow direct messages from server members. (See <a href="{{ path('faq', {'_fragment': 'discord-server-dm'}) }}" target="_blank">F.A.Q</a>)</p>
+{% endblock %}
