@@ -25,7 +25,6 @@ class MessageType extends AbstractType
         $builder
             ->add('message', TextareaType::class, [
                 'required' => false,
-                'attr' => ['style' => 'resize: none'],
                 'constraints' => [
                     new Length([
                         'max' => 800,

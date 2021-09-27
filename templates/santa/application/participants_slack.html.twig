@@ -23,10 +23,8 @@
 
 
         <div class="data-summary"
-             data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}"
-             data-identifier=""{{ user.identifier }}>
+             data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}">
             {{ form_widget(userForm, {'attr': {
-                'data-summary': current.userSummary(user)|escape('html_attr')|raw,
                 'data-identifier': user.identifier
             }}
             ) }}
