@@ -13,18 +13,22 @@
 {% endmacro %}
 
 {% block user_item %}
+    {% set user = userForm.parent.vars.choices[userForm.vars.value].data %}
+
     <label
             class="user-item"
-            for="user-{{ user.identifier }}"
+            for="{{ userForm.vars.id }}"
             data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
-        <input type="checkbox"
-               {{ user.identifier in selectedUsers ? 'checked="checked"' : '' }}
-               name="users[]"
-               value="{{ user.identifier }}"
-               id="user-{{ user.identifier }}"
-               data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
-        >
+
+        <div class="data-summary"
+             data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}">
+            {{ form_widget(userForm, {'attr': {
+                'data-identifier': user.identifier
+            }}
+            ) }}
+        </div>
+
         {% if user.extra.image %}
             <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
         {% endif %}

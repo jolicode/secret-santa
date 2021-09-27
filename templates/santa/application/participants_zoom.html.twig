@@ -9,7 +9,8 @@
         <p class="error" style="width: 80%; margin: 10px auto; text-align: center;">
             Please be aware that Zoom.us support is in beta right now.<br>
             Also, the Linux Zoom client does not display messages correctly.<br>
-            Help us by reporting any suspicious behavior <a href="https://github.com/jolicode/secret-santa">on Github</a>
+            Help us by reporting any suspicious behavior <a href="https://github.com/jolicode/secret-santa">on
+                Github</a>
             or via <a href="mailto:hello@secret-santa.team">email</a>!
         </p>
     </div>
@@ -25,7 +26,7 @@
 {% macro userSummary(user) %}
     <span class="user-summary">
         {% if user.extra.image %}
-            <img src="{{ user.extra.image }}" alt="" />
+            <img src="{{ user.extra.image }}" alt=""/>
         {% endif %}
         <span>{{ user.name }}</span>
         <span data-uncheck-user="user-{{ user.identifier }}" class="fas fa-times" title="Unselect this user"></span>
@@ -38,15 +39,16 @@
             for="user-{{ user.identifier }}"
             data-search-index="{{ user.name }}"
     >
-        <input type="checkbox"
-               {{ user.identifier in selectedUsers ? 'checked="checked"' : '' }}
-               name="users[]"
-               value="{{ user.identifier }}"
-               id="user-{{ user.identifier }}"
-               data-summary="{{ current.userSummary(user)|escape('html_attr') }}"
-        >
+        <div class="data-summary"
+             data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}">
+            {{ form_widget(userForm, {'attr': {
+                'data-identifier': user.identifier
+            }}
+            ) }}
+        </div>
+
         {% if user.extra.image %}
-            <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+            <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
         {% endif %}
         <span>{{ user.name }}</span>
         {% if groups %}

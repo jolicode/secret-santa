@@ -16,6 +16,8 @@ use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
+use JoliCode\SecretSanta\Form\MessageType;
+use JoliCode\SecretSanta\Form\ParticipantType;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Santa\MessageDispatcher;
@@ -89,26 +91,37 @@ class SantaController extends AbstractController
         }
 
         $selectedUsers = $session->get('selected-users', []);
-        $errors = [];
 
-        if ($request->isMethod('POST')) {
-            $selectedUsers = $request->request->all('users');
-
-            if (\count($selectedUsers) > 1) {
-                $session->set('selected-users', $selectedUsers);
-
-                return $this->redirectToRoute('message', ['application' => $application->getCode()]);
+        $selectedUsersAsObjects = array_filter($availableUsers, function (User $user) use ($selectedUsers) {
+            if (\in_array($user->getIdentifier(), $selectedUsers, true)) {
+                return true;
             }
 
-            $errors[] = 'At least 2 users should be selected.';
+            return false;
+        });
+
+        $form = $this->createForm(ParticipantType::class, ['users' => $selectedUsersAsObjects], [
+            'available-users' => $availableUsers,
+        ]);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $selectedUsers = [];
+            foreach ($form->getData()['users'] as $user) {
+                $selectedUsers[] = $user->getIdentifier();
+            }
+
+            $session->set('selected-users', $selectedUsers);
+
+            return $this->redirectToRoute('message', ['application' => $application->getCode()]);
         }
 
-        $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', [
-            'application' => $application->getCode(),
+        $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
             'users' => $availableUsers,
             'groups' => $application->getGroups(),
             'selectedUsers' => $selectedUsers,
-            'errors' => $errors,
+            'form' => $form->createView(),
         ]);
 
         return new Response($content);
@@ -129,42 +142,41 @@ class SantaController extends AbstractController
         $message = $session->get('message');
         $notes = $session->get('notes');
 
-        $errors = [];
+        $form = $this->createForm(MessageType::class, ['message' => $message], [
+            'selected-users' => $selectedUsers,
+        ]);
 
-        if ($request->isMethod('POST')) {
-            $message = trim($request->request->get('message'));
-            $notes = array_map('trim', $request->request->all('notes'));
+        $form->handleRequest($request);
 
-            if ($messageError = $this->validateMessage($message)) {
-                $errors['message'] = $messageError;
-            }
-
-            if ($notesError = $this->validateNotes($notes)) {
-                $errors['notes'] = $notesError;
-            }
-
-            if (!$errors) {
-                $session->set('message', $message);
-                $session->set('notes', $notes);
-
-                $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
-
-                $session->set(
-                    $this->getSecretSantaSessionKey(
-                        $secretSanta->getHash()
-                    ), $secretSanta
-                );
-
-                // Send a summary to the santa admin
-                if ($secretSanta->getAdmin()) {
-                    $code = $spoiler->encode($secretSanta);
-                    $spoilUrl = $this->generateUrl('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
-
-                    $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
+        if ($form->isSubmitted()) {
+            $message = $form->getData()['message'] ?? '';
+            $session->set('message', $message);
+            foreach ($form->getData() as $data => $note) {
+                if (str_contains($data, 'notes-')) {
+                    $notes[str_replace('notes-', '', $data)] = $note;
                 }
-
-                return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
             }
+            $session->set('notes', $notes);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
+
+            $session->set(
+                $this->getSecretSantaSessionKey(
+                    $secretSanta->getHash()
+                ), $secretSanta
+            );
+
+            // Send a summary to the santa admin
+            if ($secretSanta->getAdmin()) {
+                $code = $spoiler->encode($secretSanta);
+                $spoilUrl = $this->generateUrl('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
+            }
+
+            return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
         }
 
         $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
@@ -174,7 +186,7 @@ class SantaController extends AbstractController
             'selectedUsers' => $selectedUsers,
             'message' => $message,
             'notes' => $notes,
-            'errors' => $errors,
+            'form' => $form->createView(),
         ]);
 
         return new Response($content);
@@ -199,45 +211,57 @@ class SantaController extends AbstractController
             });
         }
 
-        $message = trim($request->request->get('message', ''));
-        $notes = array_filter(array_map('trim', $request->request->all('notes')));
+        $session = $request->getSession();
+        $availableUsers = $session->get('available-users', []);
+        $selectedUsers = $session->get('selected-users', []);
+        $message = $session->get('message');
 
-        if ($messageError = $this->validateMessage($message)) {
-            $errors['message'] = $messageError;
+        $form = $this->createForm(MessageType::class, ['message' => $message], [
+            'selected-users' => $selectedUsers,
+        ]);
+        $form->handleRequest($request);
+
+        $message = $form->getData()['message'] ?? '';
+
+        $notes = [];
+        foreach ($form->getData() as $data => $note) {
+            if (str_contains($data, 'notes-') && $note) {
+                $notes[str_replace('notes-', '', $data)] = $note;
+            }
         }
 
-        if ($notesError = $this->validateNotes($notes)) {
-            $errors['notes'] = $notesError;
-        }
+        $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
+            return $application->getAdmin()->getIdentifier() !== $id;
+        });
 
-        if (\count($errors) < 1) {
-            $session = $request->getSession();
-            $availableUsers = $session->get('available-users', []);
-            $selectedUsers = $session->get('selected-users', []);
+        $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
 
-            $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
-                return $application->getAdmin()->getIdentifier() !== $id;
-            });
+        if ($form->isSubmitted()) {
+            $formErrors = array_map(function ($error) {
+                return $error->getMessage();
+            }, iterator_to_array($form->getErrors(true, false))) ?? null;
 
-            $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
+            $errors = array_merge($errors, $formErrors);
 
-            $secretSanta = new SecretSanta(
-                $application->getCode(),
-                $application->getOrganization(),
-                'sample',
-                $availableUsers,
-                [],
-                $application->getAdmin(),
-                str_replace('```', '', $message),
-                $notes
-            );
+            if ($form->isValid()) {
+                $secretSanta = new SecretSanta(
+                    $application->getCode(),
+                    $application->getOrganization(),
+                    'sample',
+                    $availableUsers,
+                    [],
+                    $application->getAdmin(),
+                    str_replace('```', '', $message),
+                    $notes
+                );
 
-            try {
-                $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $receiver, true);
+                try {
+                    $application->sendSecretMessage($secretSanta, $application->getAdmin()->getIdentifier(), $receiver, true);
 
-                $this->statisticCollector->incrementSampleCount($secretSanta);
-            } catch (MessageSendFailedException $e) {
-                $errors['send'] = $e->getMessage();
+                    $this->statisticCollector->incrementSampleCount($secretSanta);
+                } catch (MessageSendFailedException $e) {
+                    $errors['send'] = $e->getMessage();
+                }
             }
         }
 
@@ -435,28 +459,5 @@ class SantaController extends AbstractController
             $this->statisticCollector->incrementUsageCount($secretSanta);
             $this->doReset($application, $request);
         }
-    }
-
-    private function validateMessage(string $message): ?string
-    {
-        if (\strlen(preg_replace('/\r\n/', ' ', $message)) > 800) {
-            return 'Your message should contain less than 800 characters';
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string[] $notes
-     */
-    private function validateNotes(array $notes): ?string
-    {
-        foreach ($notes as $note) {
-            if (\strlen(preg_replace('/\r\n/', ' ', $note)) > 400) {
-                return 'Each note should contain less than 400 characters';
-            }
-        }
-
-        return null;
     }
 }
