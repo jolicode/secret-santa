@@ -21,11 +21,15 @@
             data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
 
-        {{ form_widget(userForm, {'attr': {
-            'data-summary': current.userSummary(user)|escape('html_attr')|raw,
-            'data-identifier': user.identifier
-        }}
-        ) }}
+        <div class="data-summary"
+             data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}"
+             data-identifier=""{{ user.identifier }}>
+            {{ form_widget(userForm, {'attr': {
+                'data-summary': current.userSummary(user)|escape('html_attr')|raw,
+                'data-identifier': user.identifier
+            }}
+            ) }}
+        </div>
 
         {% if user.extra.image %}
             <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
