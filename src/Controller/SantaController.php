@@ -153,7 +153,7 @@ class SantaController extends AbstractController
             $session->set('message', $message);
             foreach ($form->getData() as $data => $note) {
                 if (str_contains($data, 'notes-')) {
-                    $notes[] = $note;
+                    $notes[str_replace('notes-', '', $data)] = $note;
                 }
             }
             $session->set('notes', $notes);
@@ -221,12 +221,12 @@ class SantaController extends AbstractController
         ]);
         $form->handleRequest($request);
 
-        $notes = [];
-
         $message = $form->getData()['message'] ?? '';
+
+        $notes = [];
         foreach ($form->getData() as $data => $note) {
             if (str_contains($data, 'notes-') && $note) {
-                $notes[] = $note;
+                $notes[str_replace('notes-', '', $data)] = $note;
             }
         }
 
