@@ -34,7 +34,7 @@
             </p>
 
             {{ form_widget(form.message, {
-                'attr': {'id': 'message', 'rows': '5', 'field': 'message'}
+                'attr': {'id': 'message', 'rows': '5', 'data-field': 'message'}
             }) }}
         </div>
 
@@ -73,11 +73,11 @@
                                 {% if key in input_placeholders|keys %}
                                     {{ form_widget(form['notes-' ~ userId], { 'attr': {
                                         'placeholder': input_placeholders[key],
-                                        'field': user.identifier
+                                        'data-field': user.identifier
                                     }}) }}
                                 {% else %}
                                     {{ form_widget(form['notes-' ~ userId],  { 'attr': {
-                                        'field': user.identifier
+                                        'data-field': user.identifier
                                     }}) }}
                                 {% endif %}
                             </label>
@@ -196,7 +196,7 @@
 
         window.addEventListener('load', function () {
             fieldLengths.forEach(function (fieldLength) {
-                const field = document.querySelector('[field=' + fieldLength.getAttribute("data-length-field") + ']')
+                const field = document.querySelector('[data-field=' + fieldLength.getAttribute("data-length-field") + ']')
                 field.addEventListener('keyup', function () {
                     updateFieldLength(field, fieldLength)
                 });

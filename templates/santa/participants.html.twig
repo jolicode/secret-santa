@@ -309,7 +309,7 @@
                     const userIds = e.target.getAttribute('data-user-ids').split('|');
 
                     for(let i=0; i<userIds.length; i++) {
-                        const userInput = document.querySelector('[identifier="' + userIds[i] + '"');
+                        const userInput = document.querySelector('[data-identifier="' + userIds[i] + '"');
 
                         if (userInput) {
                             userInput.checked = true;

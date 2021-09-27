@@ -23,7 +23,7 @@
 
         {{ form_widget(userForm, {'attr': {
                 'data-summary': current.userSummary(user)|escape('html_attr')|raw,
-                'identifier': user.identifier
+                'data-identifier': user.identifier
             }}
         ) }}
         <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>

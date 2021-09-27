@@ -92,26 +92,22 @@ class SantaController extends AbstractController
 
         $selectedUsers = $session->get('selected-users', []);
 
-        $selectedUsersByIds = array_map(function ($user) use ($selectedUsers) {
+        $selectedUsersAsObjects = array_filter($availableUsers, function (User $user) use ($selectedUsers) {
             if (\in_array($user->getIdentifier(), $selectedUsers, true)) {
-                return $user;
+                return true;
             }
 
-            return null;
-        }, $availableUsers, []);
+            return false;
+        });
 
-        $form = $this->createForm(ParticipantType::class, ['users' => $selectedUsersByIds], [
+        $form = $this->createForm(ParticipantType::class, ['users' => $selectedUsersAsObjects], [
             'available-users' => $availableUsers,
         ]);
 
         $form->handleRequest($request);
 
-        if ($request->isMethod('POST')) {
-            // looks counterintuitive, but it ensures that the symfony form doesn't get sent again when going back on the page from the next step
-            $selectedUsers = [];
-        }
-
         if ($form->isSubmitted() && $form->isValid()) {
+            $selectedUsers = [];
             foreach ($form->getData()['users'] as $user) {
                 $selectedUsers[] = $user->getIdentifier();
             }
@@ -275,8 +271,7 @@ class SantaController extends AbstractController
         ]);
     }
 
-    #[
-        Route('/send-messages/{hash}', name: 'send_messages', methods: ['GET', 'POST'])]
+    #[Route('/send-messages/{hash}', name: 'send_messages', methods: ['GET', 'POST'])]
     public function sendMessages(MessageDispatcher $messageDispatcher, Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);

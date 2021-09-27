@@ -22,8 +22,8 @@
     >
 
         {{ form_widget(userForm, {'attr': {
-            'data-summary': current.userSummary(user)|escape('html_attr'),
-            'identifier': user.identifier
+            'data-summary': current.userSummary(user)|escape('html_attr')|raw,
+            'data-identifier': user.identifier
         }}
         ) }}
 
