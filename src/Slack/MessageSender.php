@@ -146,6 +146,8 @@ class MessageSender
                 'icon_url' => 'https://secret-santa.team/images/logo.png',
                 'text' => $fallbackText,
                 'blocks' => json_encode($blocks),
+                'unfurl_links' => false,
+                'unfurl_media' => false,
             ]);
 
             if (!$response->getOk()) {
