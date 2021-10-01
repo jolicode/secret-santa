@@ -31,11 +31,16 @@ class MessageSender
         $fallbackText = '';
         $blocks = [];
 
+        $schedule = $secretSanta->getOptions()['scheduled_at'] ?? null;
+
         if ($isSample) {
             $blocks[] = [
                 'type' => 'context',
                 'elements' => [
-                    ['type' => 'mrkdwn', 'text' => '_Find below a *sample* of the message that will be sent to all participants of your Secret Santa._'],
+                    [
+                        'type' => 'mrkdwn',
+                        'text' => '_Find below a *sample* of the message that will be sent to all participants of your Secret Santa._',
+                    ],
                 ],
             ];
 
@@ -140,15 +145,21 @@ class MessageSender
             ],
         ];
 
+        $messageParameters = [
+            'channel' => $giver,
+            'text' => $fallbackText,
+            'blocks' => json_encode($blocks),
+            'unfurl_links' => false,
+            'unfurl_media' => false,
+        ];
+
         try {
-            $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
-                'channel' => $giver,
-                'icon_url' => 'https://secret-santa.team/images/logo.png',
-                'text' => $fallbackText,
-                'blocks' => json_encode($blocks),
-                'unfurl_links' => false,
-                'unfurl_media' => false,
-            ]);
+            if ($schedule && !$isSample) {
+                $messageParameters['post_at'] = (int) $schedule;
+                $response = $this->clientFactory->getClientForToken($token)->chatScheduleMessage($messageParameters);
+            } else {
+                $response = $this->clientFactory->getClientForToken($token)->chatPostMessage($messageParameters);
+            }
 
             if (!$response->getOk()) {
                 throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver));
@@ -163,7 +174,9 @@ class MessageSender
      */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl, string $token): void
     {
-        $text = sprintf(
+        $scheduled = $secretSanta->getOptions()['scheduled_at'] ?? null;
+
+        $message =
             'Dear Secret Santa *admin*,
 
 In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
@@ -172,9 +185,15 @@ In case of trouble or if you need it for whatever reason, here is a way to retri
 ```%s```
 - Paste the content on <%s|this page> then submit
 
-Remember, with great power comes great responsibility!
+Remember, with great power comes great responsibility!' . \PHP_EOL;
 
-Happy Secret Santa!',
+        if ($scheduled) {
+            $message .= 'The messages will be sent at this time : ' . date('H:i - m/d/Y', $secretSanta->getOptions()['scheduled_at']) . 'UTC' . \PHP_EOL;
+        }
+
+        $message .= 'Happy Secret Santa!';
+
+        $text = sprintf($message,
             $code,
             $spoilUrl
         );

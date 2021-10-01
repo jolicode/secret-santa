@@ -656,6 +656,14 @@ textarea {
 .message-step {
     margin-bottom: 3em;
 }
+
+.message-step input {
+    box-sizing: border-box;
+    padding: 1em;
+    border: var(--color-gray) 1px solid;
+    border-radius: var(--border-radius);
+}
+
 .message-field textarea {
     max-height: 150px;
 }

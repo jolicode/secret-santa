@@ -16,6 +16,7 @@ use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
+use Symfony\Component\Form\FormBuilderInterface;
 
 interface ApplicationInterface
 {
@@ -54,6 +55,8 @@ interface ApplicationInterface
      * @throws MessageSendFailedException
      */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void;
+
+    public function configureMessageForm(FormBuilderInterface $builder): void;
 
     public function reset(): void;
 }

@@ -8,22 +8,22 @@
             'attr': {'id': 'run_form'},
             'method': 'POST',
             'action': path('message', { application: application })
-            }) }}
+        }) }}
             {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
             <button type="submit" disabled style="display: none" aria-hidden="true"></button>
 
             <h2>Customize the private messages</h2>
 
             {% if not form.vars.valid %}
-            <span class="error">
-                <i class="fas fa-exclamation-triangle"></i>
-                {%  for error in form.vars.errors %}<br>{{ error.message }} {% endfor %}
-            </span>
+                <span class="error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {% for error in form.vars.errors %}<br>{{ error.message }} {% endfor %}
+                </span>
             {% endif %}
 
             <div class="message-field message-step">
                 <h3>
-                    <label class="control-label" for="message">Write an optional message <span class="message-length">(<span
+                    <label class="control-label" for="{{ form.message.vars.id }}">Write an optional message <span class="message-length">(<span
                                     data-length-field="message">{{ message|length }}</span>&nbsp;/&nbsp;800 characters)</span></label>
                 </h3>
 
@@ -34,7 +34,7 @@
                 </p>
 
                 {{ form_widget(form.message, {
-                    'attr': {'id': 'message', 'rows': '5', 'data-field': 'message', 'style': 'resize: none;'}
+                    attr: {rows: '5', 'data-field': 'message', style: 'resize: none;'}
                 }) }}
             </div>
 
@@ -60,15 +60,15 @@
                             } %}
                             {% for userId in selectedUsers %}
                                 {% set user = availableUsers[userId] %}
-                                <label class="user-item notes" for="note-{{ user.identifier }}">
-                                    <span class="user-column">
-                                        <span class="user-data">
-                                            {% block user_item %}{% endblock %}
+                                <label class="user-item notes" for="{{ form['notes-' ~ userId].vars.id }}">
+                                        <span class="user-column">
+                                            <span class="user-data">
+                                                {% block user_item %}{% endblock %}
+                                            </span>
+                                            <span class="note-length">
+                                                <span data-length-field="{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
+                                            </span>
                                         </span>
-                                        <span class="note-length">
-                                            <span data-length-field="{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
-                                        </span>
-                                    </span>
 
                                     {% if key in input_placeholders|keys %}
                                         {{ form_widget(form['notes-' ~ userId], { 'attr': {
@@ -104,6 +104,8 @@
                     </button>
                 </div>
             </div>
+
+            {% block options %}{% endblock %}
 
             <div class="run-step">
                 <h2>Ready to send all the messages?</h2>
@@ -162,7 +164,6 @@
         if (sampleMessageButton) {
             sampleMessageButton.addEventListener('click', function (e) {
                 const body = new FormData(runForm);
-
                 fetch('{{ url('send_sample_message', {application: application}) }}', {
                     method: 'post',
                     credentials: 'include',
@@ -177,7 +178,6 @@
                             window.alert('We have sent you a fake message. Check it now before finishing the Secret Santa.');
                             return;
                         }
-
                         const keys = Object.keys(response.errors);
                         let message = 'Error when sending the fake message:\n';
 
@@ -196,7 +196,7 @@
 
         window.addEventListener('load', function () {
             fieldLengths.forEach(function (fieldLength) {
-                const field = document.querySelector('[data-field=' + fieldLength.getAttribute("data-length-field") + ']')
+                const field = document.querySelector('[data-field="' + fieldLength.getAttribute("data-length-field") + '"]')
                 field.addEventListener('keyup', function () {
                     updateFieldLength(field, fieldLength)
                 });
@@ -204,4 +204,6 @@
             });
         })
     </script>
+
+    {% block message_js %}{% endblock %}
 {% endblock santa_content %}

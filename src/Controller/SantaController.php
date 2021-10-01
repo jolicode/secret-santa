@@ -26,6 +26,7 @@ use JoliCode\SecretSanta\Santa\Spoiler;
 use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -128,7 +129,7 @@ class SantaController extends AbstractController
     }
 
     #[Route('/message/{application}', name: 'message', methods: ['GET', 'POST'])]
-    public function message(Rudolph $rudolph, Request $request, Spoiler $spoiler, string $application): Response
+    public function message(Rudolph $rudolph, FormFactoryInterface $formFactory, Request $request, Spoiler $spoiler, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -141,10 +142,15 @@ class SantaController extends AbstractController
         $selectedUsers = $session->get('selected-users', []);
         $message = $session->get('message');
         $notes = $session->get('notes');
+        $options = $session->get('options', []);
 
-        $form = $this->createForm(MessageType::class, ['message' => $message], [
+        $builder = $formFactory->createBuilder(MessageType::class, ['message' => $message], [
             'selected-users' => $selectedUsers,
         ]);
+
+        $application->configureMessageForm($builder);
+
+        $form = $builder->getForm();
 
         $form->handleRequest($request);
 
@@ -157,11 +163,16 @@ class SantaController extends AbstractController
                 }
             }
             $session->set('notes', $notes);
+
+            if (isset($form->getData()['scheduled_at'])) {
+                $options['scheduled_at'] = $form->getData()['scheduled_at'];
+            }
+            $session->set('notes', $notes);
+            $session->set('options', $options);
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
-
             $session->set(
                 $this->getSecretSantaSessionKey(
                     $secretSanta->getHash()
@@ -186,6 +197,7 @@ class SantaController extends AbstractController
             'selectedUsers' => $selectedUsers,
             'message' => $message,
             'notes' => $notes,
+            'options' => $options,
             'form' => $form->createView(),
         ]);
 
@@ -214,7 +226,8 @@ class SantaController extends AbstractController
         $session = $request->getSession();
         $availableUsers = $session->get('available-users', []);
         $selectedUsers = $session->get('selected-users', []);
-        $message = $session->get('message');
+        $message = $session->get('message', '');
+        $options = $session->get('options', []);
 
         $form = $this->createForm(MessageType::class, ['message' => $message], [
             'selected-users' => $selectedUsers,
@@ -252,7 +265,8 @@ class SantaController extends AbstractController
                     [],
                     $application->getAdmin(),
                     str_replace('```', '', $message),
-                    $notes
+                    $notes,
+                    $options
                 );
 
                 try {
@@ -407,6 +421,7 @@ class SantaController extends AbstractController
         $selectedUsers = $session->get('selected-users', []);
         $message = $session->get('message');
         $notes = $session->get('notes', []);
+        $options = $session->get('options', []);
 
         $associatedUsers = $rudolph->associateUsers($selectedUsers);
         $hash = md5(serialize($associatedUsers));
@@ -421,7 +436,8 @@ class SantaController extends AbstractController
             $associatedUsers,
             $application->getAdmin(),
             $message,
-            $notes
+            $notes,
+            $options,
         );
     }
 
@@ -447,10 +463,9 @@ class SantaController extends AbstractController
         $session->remove('selected-users');
         $session->remove('message');
         $session->remove('notes');
+        $session->remove('options');
 
-        if ($application) {
-            $application->reset();
-        }
+        $application?->reset();
     }
 
     private function finishSantaIfDone(Request $request, SecretSanta $secretSanta, ApplicationInterface $application): void

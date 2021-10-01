@@ -13,43 +13,30 @@ namespace JoliCode\SecretSanta\Model;
 
 class SecretSanta
 {
-    private $application;
-    private $organization;
-    private $hash;
-    private $users;
-    private $associations;
-    private $remainingAssociations;
-    private $admin;
-    private $adminMessage;
-    private $notes;
+    /** @var array<string, string> */
+    private array $remainingAssociations;
 
     /** @var string[] */
-    private $errors = [];
+    private array $errors = [];
 
     /**
      * @param User[]                $users
      * @param array<string, string> $associations
      * @param array<int, string>    $notes
+     * @param array<string, mixed>  $options
      */
     public function __construct(
-        string $application,
-        string $organization,
-        string $hash,
-        array $users,
-        array $associations,
-        ?User $admin,
-        ?string $adminMessage,
-        array $notes = []
+        private string $application,
+        private string $organization,
+        private string $hash,
+        private array $users,
+        private array $associations,
+        private ?User $admin,
+        private ?string $adminMessage,
+        private array $notes = [],
+        private array $options = []
     ) {
-        $this->application = $application;
-        $this->organization = $organization;
-        $this->hash = $hash;
-        $this->users = $users;
-        $this->associations = $associations;
         $this->remainingAssociations = $associations;
-        $this->admin = $admin;
-        $this->adminMessage = $adminMessage;
-        $this->notes = $notes;
     }
 
     public function getApplication(): ?string
@@ -125,6 +112,22 @@ class SecretSanta
     public function getAdminMessage(): ?string
     {
         return $this->adminMessage;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    public function setOptions(array $options): void
+    {
+        $this->options = $options;
     }
 
     public function isDone(): bool
