@@ -34,9 +34,11 @@
 {% endmacro %}
 
 {% block user_item %}
+    {% set user = userForm.parent.vars.choices[userForm.vars.name].data %}
+
     <label
-            class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
-            for="user-{{ user.identifier }}"
+            class="user-item"
+            for="{{ userForm.vars.id }}"
             data-search-index="{{ user.name }}"
     >
         <div class="data-summary"

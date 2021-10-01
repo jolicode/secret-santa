@@ -17,6 +17,7 @@ use JoliCode\SecretSanta\Slack\MessageSender;
 use JoliCode\SecretSanta\Slack\UserExtractor;
 use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -101,22 +102,25 @@ class SlackApplication implements ApplicationInterface
 
     public function configureMessageForm(FormBuilderInterface $builder): void
     {
-        $builder->add('scheduled_at', HiddenType::class, [
-            'constraints' => [
-                new GreaterThanOrEqual([
-                    'value' => (new \DateTime())->getTimestamp(),
-                    'message' => 'You cannot schedule a Secret Santa for a past date',
-                ]),
-                new LessThanOrEqual([
-                    'value' => (new \DateTime('+120 days'))->getTimestamp(),
-                    'message' => 'You cannot schedule a Secret Santa for over 120 days in the future',
-                ]),
-            ],
-        ])
-        ->add('scheduled_at_tz', DateTimeType::class, [
-            'widget' => 'single_text',
-            'required' => false,
-        ]);
+        $builder->add(
+            $builder->create('options', FormType::class)
+            ->add('scheduled_at', HiddenType::class, [
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'value' => (new \DateTime())->getTimestamp(),
+                        'message' => 'You cannot schedule a Secret Santa for a past date',
+                    ]),
+                    new LessThanOrEqual([
+                        'value' => (new \DateTime('+120 days'))->getTimestamp(),
+                        'message' => 'You cannot schedule a Secret Santa for over 120 days in the future',
+                    ]),
+                ],
+            ])
+            ->add('scheduled_at_tz', DateTimeType::class, [
+                'widget' => 'single_text',
+                'required' => false,
+            ]))
+        ;
     }
 
     public function reset(): void

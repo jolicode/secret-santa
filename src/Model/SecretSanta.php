@@ -19,22 +19,14 @@ class SecretSanta
     /** @var string[] */
     private array $errors = [];
 
-    /**
-     * @param User[]                $users
-     * @param array<string, string> $associations
-     * @param array<int, string>    $notes
-     * @param array<string, mixed>  $options
-     */
+    /** @param array<string, string> $associations */
     public function __construct(
         private string $application,
         private string $organization,
         private string $hash,
-        private array $users,
         private array $associations,
         private ?User $admin,
-        private ?string $adminMessage,
-        private array $notes = [],
-        private array $options = []
+        private Config $config,
     ) {
         $this->remainingAssociations = $associations;
     }
@@ -54,22 +46,19 @@ class SecretSanta
         return $this->hash;
     }
 
-    /**
-     * @return User[]
-     */
-    public function getUsers(): array
+    public function getUserCount(): int
     {
-        return $this->users;
+        return \count($this->config->getSelectedUsers());
     }
 
     public function getUser(string $identifier): ?User
     {
-        return $this->users[$identifier] ?? null;
+        return $this->config->getAvailableUsers()[$identifier] ?? null;
     }
 
     public function getUserNote(string $identifier): string
     {
-        return $this->notes[$identifier] ?? '';
+        return $this->config->getNotes()[$identifier] ?? '';
     }
 
     /**
@@ -111,7 +100,7 @@ class SecretSanta
 
     public function getAdminMessage(): ?string
     {
-        return $this->adminMessage;
+        return $this->config->getMessage();
     }
 
     /**
@@ -119,7 +108,7 @@ class SecretSanta
      */
     public function getOptions(): array
     {
-        return $this->options;
+        return $this->config->getOptions();
     }
 
     /**
@@ -127,7 +116,7 @@ class SecretSanta
      */
     public function setOptions(array $options): void
     {
-        $this->options = $options;
+        $this->config->setOptions($options);
     }
 
     public function isDone(): bool
@@ -143,5 +132,15 @@ class SecretSanta
     public function addError(string $error): void
     {
         $this->errors[] = $error;
+    }
+
+    public function getConfig(): Config
+    {
+        return $this->config;
+    }
+
+    public function setConfig(Config $config): void
+    {
+        $this->config = $config;
     }
 }

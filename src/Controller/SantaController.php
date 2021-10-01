@@ -18,14 +18,15 @@ use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\SecretSantaException;
 use JoliCode\SecretSanta\Form\MessageType;
 use JoliCode\SecretSanta\Form\ParticipantType;
+use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\SecretSanta;
-use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Santa\MessageDispatcher;
 use JoliCode\SecretSanta\Santa\Rudolph;
 use JoliCode\SecretSanta\Santa\Spoiler;
 use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -83,45 +84,32 @@ class SantaController extends AbstractController
         }
 
         $session = $request->getSession();
-        $availableUsers = $session->get('available-users');
 
-        if (!$availableUsers) {
-            $availableUsers = $application->getUsers();
+        $config = $session->get('config');
 
-            $session->set('available-users', $availableUsers);
+        if (!$config) {
+            $config = new Config($application->getUsers());
+            $session->set('config', $config);
         }
 
-        $selectedUsers = $session->get('selected-users', []);
+        $availableUsers = $config->getAvailableUsers();
 
-        $selectedUsersAsObjects = array_filter($availableUsers, function (User $user) use ($selectedUsers) {
-            if (\in_array($user->getIdentifier(), $selectedUsers, true)) {
-                return true;
-            }
-
-            return false;
-        });
-
-        $form = $this->createForm(ParticipantType::class, ['users' => $selectedUsersAsObjects], [
+        $form = $this->createForm(ParticipantType::class, $config, [
             'available-users' => $availableUsers,
         ]);
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $selectedUsers = [];
-            foreach ($form->getData()['users'] as $user) {
-                $selectedUsers[] = $user->getIdentifier();
+        if ($form->isSubmitted()) {
+            $session->set('config', $config);
+            if ($form->isValid()) {
+                return $this->redirectToRoute('message', ['application' => $application->getCode()]);
             }
-
-            $session->set('selected-users', $selectedUsers);
-
-            return $this->redirectToRoute('message', ['application' => $application->getCode()]);
         }
 
         $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
             'users' => $availableUsers,
             'groups' => $application->getGroups(),
-            'selectedUsers' => $selectedUsers,
             'form' => $form->createView(),
         ]);
 
@@ -137,15 +125,27 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
-        $session = $request->getSession();
-        $availableUsers = $session->get('available-users', []);
-        $selectedUsers = $session->get('selected-users', []);
-        $message = $session->get('message');
-        $notes = $session->get('notes');
-        $options = $session->get('options', []);
+        $errors = [];
 
-        $builder = $formFactory->createBuilder(MessageType::class, ['message' => $message], [
-            'selected-users' => $selectedUsers,
+        $session = $request->getSession();
+
+        /** @var Config $config * */
+        $config = $session->get('config');
+
+        // We remove notes from users that aren't selected anymore, and create empty ones for those who are
+        // and don't have any yet.
+        $selectedUsersAsArray = $config->getSelectedUsers();
+        $notes = array_filter($config->getNotes(), function ($userIdentifier) use ($selectedUsersAsArray) {
+            return \in_array($userIdentifier, $selectedUsersAsArray, true);
+        }, \ARRAY_FILTER_USE_KEY);
+        foreach ($config->getSelectedUsers() as $user) {
+            $notes[$user] ??= '';
+        }
+
+        $config->setNotes($notes);
+
+        $builder = $formFactory->createBuilder(MessageType::class, $config, [
+            'selected-users' => $config->getSelectedUsers(),
         ]);
 
         $application->configureMessageForm($builder);
@@ -155,49 +155,41 @@ class SantaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $message = $form->getData()['message'] ?? '';
-            $session->set('message', $message);
-            foreach ($form->getData() as $data => $note) {
-                if (str_contains($data, 'notes-')) {
-                    $notes[str_replace('notes-', '', $data)] = $note;
+            $session->set('config', $config);
+
+            if ($form->isValid()) {
+                $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
+                $session->set(
+                    $this->getSecretSantaSessionKey(
+                        $secretSanta->getHash()
+                    ), $secretSanta
+                );
+
+                // Send a summary to the santa admin
+                if ($secretSanta->getAdmin()) {
+                    $code = $spoiler->encode($secretSanta);
+                    $spoilUrl = $this->generateUrl('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+                    $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
                 }
-            }
-            $session->set('notes', $notes);
 
-            if (isset($form->getData()['scheduled_at'])) {
-                $options['scheduled_at'] = $form->getData()['scheduled_at'];
-            }
-            $session->set('notes', $notes);
-            $session->set('options', $options);
-        }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
-            $session->set(
-                $this->getSecretSantaSessionKey(
-                    $secretSanta->getHash()
-                ), $secretSanta
-            );
-
-            // Send a summary to the santa admin
-            if ($secretSanta->getAdmin()) {
-                $code = $spoiler->encode($secretSanta);
-                $spoilUrl = $this->generateUrl('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
-
-                $application->sendAdminMessage($secretSanta, $code, $spoilUrl);
+                return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
             }
 
-            return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
+            $errors = array_map(function (FormError $error) {
+                return $error->getMessage();
+            }, iterator_to_array($form->getErrors(true, false))) ?? null;
+
+            if ($errors) {
+                $errors = array_unique($errors);
+            }
         }
 
         $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
             'application' => $application->getCode(),
             'admin' => $application->getAdmin(),
-            'availableUsers' => $availableUsers,
-            'selectedUsers' => $selectedUsers,
-            'message' => $message,
-            'notes' => $notes,
-            'options' => $options,
+            'config' => $config,
+            'errors' => $errors,
             'form' => $form->createView(),
         ]);
 
@@ -205,7 +197,7 @@ class SantaController extends AbstractController
     }
 
     #[Route('/sample-message/{application}', name: 'send_sample_message', methods: ['GET', 'POST'])]
-    public function sendSampleMessage(Request $request, string $application): Response
+    public function sendSampleMessage(Request $request, FormFactoryInterface $formFactory, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -224,35 +216,36 @@ class SantaController extends AbstractController
         }
 
         $session = $request->getSession();
-        $availableUsers = $session->get('available-users', []);
-        $selectedUsers = $session->get('selected-users', []);
-        $message = $session->get('message', '');
-        $options = $session->get('options', []);
 
-        $form = $this->createForm(MessageType::class, ['message' => $message], [
-            'selected-users' => $selectedUsers,
+        /** @var Config $config * */
+        $config = $session->get('config');
+
+        $builder = $formFactory->createBuilder(MessageType::class, $config, [
+            'selected-users' => $config->getSelectedUsers(),
         ]);
+
+        $application->configureMessageForm($builder);
+
+        $form = $builder->getForm();
+
         $form->handleRequest($request);
 
-        $message = $form->getData()['message'] ?? '';
-
-        $notes = [];
-        foreach ($form->getData() as $data => $note) {
-            if (str_contains($data, 'notes-') && $note) {
-                $notes[str_replace('notes-', '', $data)] = $note;
-            }
-        }
-
-        $candidates = array_filter($notes ? array_keys($notes) : $selectedUsers, function ($id) use ($application) {
-            return $application->getAdmin()->getIdentifier() !== $id;
-        });
-
-        $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
-
         if ($form->isSubmitted()) {
-            $formErrors = array_map(function ($error) {
+            $notes = $config->getNotes();
+
+            $candidates = array_filter($notes ? array_keys($notes) : $config->getSelectedUsers(), function ($id) use ($application) {
+                return $application->getAdmin()->getIdentifier() !== $id;
+            });
+
+            $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
+
+            $formErrors = array_map(function (FormError $error) {
                 return $error->getMessage();
             }, iterator_to_array($form->getErrors(true, false))) ?? null;
+
+            if ($formErrors) {
+                $formErrors = array_unique($formErrors);
+            }
 
             $errors = array_merge($errors, $formErrors);
 
@@ -261,12 +254,9 @@ class SantaController extends AbstractController
                     $application->getCode(),
                     $application->getOrganization(),
                     'sample',
-                    $availableUsers,
                     [],
                     $application->getAdmin(),
-                    str_replace('```', '', $message),
-                    $notes,
-                    $options
+                    $config
                 );
 
                 try {
@@ -417,27 +407,23 @@ class SantaController extends AbstractController
     private function prepareSecretSanta(Rudolph $rudolph, Request $request, ApplicationInterface $application): SecretSanta
     {
         $session = $request->getSession();
-        $availableUsers = $session->get('available-users', []);
-        $selectedUsers = $session->get('selected-users', []);
-        $message = $session->get('message');
-        $notes = $session->get('notes', []);
-        $options = $session->get('options', []);
 
-        $associatedUsers = $rudolph->associateUsers($selectedUsers);
+        /** @var Config $config * */
+        $config = $session->get('config');
+
+        $selectedUsersAsArray = $config->getSelectedUsers();
+
+        $associatedUsers = $rudolph->associateUsers($selectedUsersAsArray);
+
         $hash = md5(serialize($associatedUsers));
 
         return new SecretSanta(
             $application->getCode(),
             $application->getOrganization(),
             $hash,
-            array_filter($availableUsers, function (User $user) use ($selectedUsers) {
-                return \in_array($user->getIdentifier(), $selectedUsers, true);
-            }),
             $associatedUsers,
             $application->getAdmin(),
-            $message,
-            $notes,
-            $options,
+            $config,
         );
     }
 
@@ -459,11 +445,7 @@ class SantaController extends AbstractController
     private function doReset(?ApplicationInterface $application, Request $request): void
     {
         $session = $request->getSession();
-        $session->remove('available-users');
-        $session->remove('selected-users');
-        $session->remove('message');
-        $session->remove('notes');
-        $session->remove('options');
+        $session->remove('config');
 
         $application?->reset();
     }

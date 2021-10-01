@@ -17,14 +17,14 @@
             {% if not form.vars.valid %}
                 <span class="error">
                     <i class="fas fa-exclamation-triangle"></i>
-                    {% for error in form.vars.errors %}<br>{{ error.message }} {% endfor %}
+                    {% for error in errors %}<br>{{ error }} {% endfor %}
                 </span>
             {% endif %}
 
             <div class="message-field message-step">
                 <h3>
                     <label class="control-label" for="{{ form.message.vars.id }}">Write an optional message <span class="message-length">(<span
-                                    data-length-field="message">{{ message|length }}</span>&nbsp;/&nbsp;800 characters)</span></label>
+                                    data-length-field="message">{{ form.message.vars.data|length }}</span>&nbsp;/&nbsp;800 characters)</span></label>
                 </h3>
 
                 <p>
@@ -58,9 +58,9 @@
                                 1: 'A food allergy ;',
                                 2: 'Or whatever you want ...',
                             } %}
-                            {% for userId in selectedUsers %}
-                                {% set user = availableUsers[userId] %}
-                                <label class="user-item notes" for="{{ form['notes-' ~ userId].vars.id }}">
+                            {% for child in form.notes %}
+                                {% set user = config.availableUsers[child.vars.name] %}
+                                <label class="user-item notes" for="{{ child.vars.id }}">
                                         <span class="user-column">
                                             <span class="user-data">
                                                 {% block user_item %}{% endblock %}
@@ -71,12 +71,12 @@
                                         </span>
 
                                     {% if key in input_placeholders|keys %}
-                                        {{ form_widget(form['notes-' ~ userId], { 'attr': {
+                                        {{ form_widget(child, { 'attr': {
                                             'placeholder': input_placeholders[key],
                                             'data-field': user.identifier
                                         }}) }}
                                     {% else %}
-                                        {{ form_widget(form['notes-' ~ userId],  { 'attr': {
+                                        {{ form_widget(child,  { 'attr': {
                                             'data-field': user.identifier
                                         }}) }}
                                     {% endif %}

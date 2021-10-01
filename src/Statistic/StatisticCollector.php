@@ -39,11 +39,11 @@ class StatisticCollector
         $this->client->incr("stats:year-app:$currentYear-$applicationCode");
         $this->client->incr("stats:app:$applicationCode");
         $this->client->incr('stats:total');
-        $this->client->incrby('stats:users', \count($secretSanta->getUsers()));
+        $this->client->incrby('stats:users', $secretSanta->getUserCount());
 
         $usersMax = (int) $this->client->get('stats:users-max');
-        if (\count($secretSanta->getUsers()) > $usersMax) {
-            $this->client->set('stats:users-max', \count($secretSanta->getUsers()));
+        if ($secretSanta->getUserCount() > $usersMax) {
+            $this->client->set('stats:users-max', $secretSanta->getUserCount());
         }
     }
 
