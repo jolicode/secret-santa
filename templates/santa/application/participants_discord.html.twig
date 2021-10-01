@@ -5,7 +5,7 @@
 {% macro userSummary(user) %}
     <span class="user-summary">
         {% if user.extra.image %}
-            <img src="{{ user.extra.image }}" alt="" />
+            <img src="{{ user.extra.image }}" alt=""/>
         {% endif %}
         <span>{{ user.name }}</span>
         <span data-uncheck-user="user-{{ user.identifier }}" class="fas fa-times" title="Unselect this user"></span>
@@ -13,7 +13,7 @@
 {% endmacro %}
 
 {% block user_item %}
-    {% set user = userForm.parent.vars.choices[userForm.vars.value].data %}
+    {% set user = userForm.parent.vars.choices[userForm.vars.name].data %}
 
     <label
             class="user-item"
@@ -30,7 +30,7 @@
         </div>
 
         {% if user.extra.image %}
-            <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+            <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
         {% endif %}
         <span>{{ user.name }}{% if user.extra.nickname %} ({{ user.extra.nickname }}){% endif %}</span>
         {% if groups %}
@@ -46,5 +46,6 @@
 {% endblock %}
 
 {% block disclaimer %}
-    <p>To receive their message, participants must allow direct messages from server members. (See <a href="{{ path('faq', {'_fragment': 'discord-server-dm'}) }}" target="_blank">F.A.Q</a>)</p>
+    <p>To receive their message, participants must allow direct messages from server members. (See <a
+                href="{{ path('faq', {'_fragment': 'discord-server-dm'}) }}" target="_blank">F.A.Q</a>)</p>
 {% endblock %}

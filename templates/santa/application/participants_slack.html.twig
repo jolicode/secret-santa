@@ -13,14 +13,13 @@
 {% endmacro %}
 
 {% block user_item %}
-    {% set user = userForm.parent.vars.choices[userForm.vars.value].data %}
+    {% set user = userForm.parent.vars.choices[userForm.vars.name].data %}
 
     <label
             class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
             for="{{ userForm.vars.id }}"
             data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
-
 
         <div class="data-summary"
              data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}">

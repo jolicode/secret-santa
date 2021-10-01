@@ -62,7 +62,7 @@
                                                 <div class="no-result is-hidden" id="no-user-matching">
                                                     No user matching.
                                                 </div>
-                                                {% for userForm in form.users %}
+                                                {% for userForm in form.selectedUsers %}
                                                     {% block user_item %}{% endblock %}
                                                 {% endfor %}
                                             </div>

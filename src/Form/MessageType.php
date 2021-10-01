@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -32,19 +33,20 @@ class MessageType extends AbstractType
                     ]),
                 ],
                 'error_bubbling' => true,
-            ]);
-        foreach ($options['selected-users'] as $userId) {
-            $builder->add('notes-' . $userId, TextType::class, [
-                'required' => false,
-                'constraints' => [
-                    new Length([
-                        'max' => 400,
-                        'maxMessage' => 'Each note should contain less than {{ limit }} characters',
-                    ]),
+            ])
+            ->add('notes', CollectionType::class, [
+                'entry_type' => TextType::class,
+                'entry_options' => [
+                    'constraints' => [
+                        new Length([
+                            'max' => 400,
+                            'maxMessage' => 'Each note should contain less than {{ limit }} characters',
+                        ]),
+                    ],
+                    'error_bubbling' => true,
                 ],
-                'error_bubbling' => true,
+                'required' => false,
             ]);
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
