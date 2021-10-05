@@ -1,5 +1,9 @@
 {% extends 'santa/message.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/flatpickr.min.css') }}" nonce="{{ csp_nonce('style') }}">
+{% endblock %}
+
 {% block user_item %}
     <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
     <span title="{{ user.name }} ({{ user.extra.nickname }})">{{ user.name }}</span>
@@ -19,7 +23,16 @@
 
 
 {% block message_js %}
-    <script  nonce="{{ csp_nonce('script') }}">
+    <script src="{{ asset('js/flatpickr.js') }}" nonce="{{ csp_nonce('script') }}"></script>
+
+    <script nonce="{{ csp_nonce('script') }}">
+        flatpickr('#{{ form.options.scheduled_at_tz.vars.id }}', {
+            altInput: true,
+            altFormat: 'F j, Y - H:i',
+            enableTime: true,
+            time_24hr: true
+        })
+
         let displayedDate = document.querySelector('#{{ form.options.scheduled_at_tz.vars.id }}');
         if (displayedDate) {
             displayedDate.addEventListener('change', function () {

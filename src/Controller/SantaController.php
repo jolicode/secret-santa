@@ -178,7 +178,7 @@ class SantaController extends AbstractController
 
             $errors = array_map(function (FormError $error) {
                 return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true, false))) ?? null;
+            }, iterator_to_array($form->getErrors(true, false))) ?? [];
 
             if ($errors) {
                 $errors = array_unique($errors);
@@ -241,7 +241,7 @@ class SantaController extends AbstractController
 
             $formErrors = array_map(function (FormError $error) {
                 return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true, false))) ?? null;
+            }, iterator_to_array($form->getErrors(true, false))) ?? [];
 
             if ($formErrors) {
                 $formErrors = array_unique($formErrors);
