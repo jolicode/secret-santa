@@ -138,6 +138,11 @@ class ContentController extends AbstractController
                 'image' => 'ingot.jpg',
             ],
             [
+                'label' => 'IS Decisions',
+                'link' => 'https://www.isdecisions.com/',
+                'image' => 'isd.jpg',
+            ],
+            [
                 'label' => 'JoliCode',
                 'link' => 'https://jolicode.com/',
                 'image' => 'jolicode.svg',
