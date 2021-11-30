@@ -1266,6 +1266,14 @@ textarea {
     list-style: none;
     padding-left: 0;
 }
+summary {
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--color-primary);
+}
+summary i {
+    margin: 0 10px;
+}
 
 /** Override Font Awesome because the logo are not up to date **/
 .custom-fa-slack, .custom-fa-discord, .custom-fa-zoom {
