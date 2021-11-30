@@ -104,12 +104,12 @@ class ContentController extends AbstractController
             ],
             [
                 'label' => 'Fabernovel Institute',
-                'link' => 'http://institute.fabernovel.com',
+                'link' => 'http://www.fabernovel.com',
                 'image' => 'fabernovel-institute.png',
             ],
             [
                 'label' => 'Ferdio',
-                'link' => 'https://ferdio.com',
+                'link' => 'https://www.ferdio.com',
                 'image' => 'ferdio.svg',
             ],
             [
@@ -124,7 +124,7 @@ class ContentController extends AbstractController
             ],
             [
                 'label' => 'IdeaFoster',
-                'link' => 'https://www.ideafoster.com',
+                'link' => 'https://ideafoster.com',
                 'image' => 'ideafoster.png',
             ],
             [
@@ -158,14 +158,14 @@ class ContentController extends AbstractController
                 'image' => 'les-tilleuls.png',
             ],
             [
+                'label' => 'Lionix',
+                'link' => 'https://lionix.io/',
+                'image' => 'lionix.svg',
+            ],
+            [
                 'label' => 'Living Actor',
                 'link' => 'https://www.livingactor.com',
                 'image' => 'livingactor.png',
-            ],
-            [
-                'label' => 'M6web',
-                'link' => 'https://tech.m6web.fr/',
-                'image' => 'm6web.png',
             ],
             [
                 'label' => 'Melvin & Hamilton',
@@ -189,7 +189,7 @@ class ContentController extends AbstractController
             ],
             [
                 'label' => 'Perkbox',
-                'link' => 'https://www.perkbox.co.uk/',
+                'link' => 'https://www.perkbox.com/',
                 'image' => 'perkbox-logo.png',
             ],
             [
