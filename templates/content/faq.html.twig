@@ -17,30 +17,40 @@
 
                 <ul>
                     <li id="data-collect">
-                        <h3>
-                            <a href="#data-collect">What do you do with the data you collect?</a>
-                        </h3>
-                        <p>
-                            <strong>Short answer</strong>:
-                            Nothing 😚
-                        </p>
-                        <p>
-                            <strong>Detailed answer</strong>:
-                            We receive only the data mandatory to start the Secret Santa:
-                            the list of users and usergroups in your organization.
-                            Everything will be forgotten automatically after you finished the draw!
-                            In fact, we do not even have a database 😮
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#data-collect"><i class="fas fa-link"></i></a>What do you do with the
+                                        data you collect?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                <strong>Short answer</strong>:
+                                Nothing 😚
+                            </p>
+                            <p>
+                                <strong>Detailed answer</strong>:
+                                We receive only the data mandatory to start the Secret Santa:
+                                the list of users and usergroups in your organization.
+                                Everything will be forgotten automatically after you finished the draw!
+                                In fact, we do not even have a database 😮
+                            </p>
+                        </details>
                     </li>
                     <li id="data-retention">
-                        <h3>
-                            <a href="#data-retention">How long do you keep the collected data?</a>
-                        </h3>
-                        <p>
-                            This project do not use a database. Every data is stored only during
-                            the time of your session and will be deleted a few hours after your last
-                            interaction with the application.
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#data-retention"><i class="fas fa-link"></i></a>How long do you keep the
+                                        collected data?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                This project do not use a database. Every data is stored only during
+                                the time of your session and will be deleted a few hours after your last
+                                interaction with the application.
+                            </p>
+                        </details>
                     </li>
                 </ul>
 
@@ -48,105 +58,208 @@
 
                 <ul>
                     <li id="howto">
-                        <h3>
-                            <a href="#howto">How does it work?</a>
-                        </h3>
-                        <p>
-                            Once authenticated with your favorite Chat tool, you will be prompted with the User Selection screen.<br/>
-                            We show you all the users in your team. Just select the ones which will take part to your Secret Santa by clicking on their names.<br/>
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#howto"><i class="fas fa-link"></i></a>How does it work?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                Once authenticated with your favorite Chat tool, you will be prompted with the User
+                                Selection screen.<br/>
+                                We show you all the users in your team. Just select the ones which will take part to
+                                your
+                                Secret Santa by clicking on their names.<br/>
+                            </p>
 
-                        <div class="is-center">
-                            <img class="img-border" src="{{ asset('images/app-step1.png') }}" style="max-width: 80%" alt="The user selection form" />
-                        </div>
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/app-step1.png') }}" style="max-width: 80%"
+                                     alt="The user selection form"/>
+                            </div>
 
-                        <p>
-                            On the second screen, you will be able to customize a bit the message that will be sent to every participant.
-                            You can add an optional message that will be sent along the Secret Santa draw. You can even add details about every participant to help Santas achieve their mission.
-                        </p>
+                            <p>
+                                On the second screen, you will be able to customize a bit the message that will be sent
+                                to
+                                every participant.
+                                You can add an optional message that will be sent along the Secret Santa draw. You can
+                                even
+                                add details about every participant to help Santas achieve their mission.
+                            </p>
 
-                        <div class="is-center">
-                            <img class="img-border" src="{{ asset('images/app-step2.png') }}" style="max-width: 80%" alt="The customization form" />
-                        </div>
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/app-step2.png') }}" style="max-width: 80%"
+                                     alt="The customization form"/>
+                            </div>
 
-                        <p>
-                            You can always preview the private message that will be sent with the following button, that
-                            will send you and only you a fake message:
-                        </p>
-                        <p class="is-center">
-                            <button type="button" class="small-button">
-                                <span class="fas fa-wrench" aria-hidden="true"></span>
-                                Send me a fake message
-                            </button>
-                        </p>
+                            <p>
+                                You can always preview the private message that will be sent with the following button,
+                                that
+                                will send you and only you a fake message:
+                            </p>
+                            <p class="is-center">
+                                <button type="button" class="small-button">
+                                    <span class="fas fa-wrench" aria-hidden="true"></span>
+                                    Send me a fake message
+                                </button>
+                            </p>
 
-                        <p>
-                            Once you are ready, you can submit the Secret Santa by clicking this big red button:
-                        </p>
-                        <div class="is-center">
-                            <button type="submit" class="big-button">
-                                <span class="fas fa-paper-plane" aria-hidden="true"></span>
-                                Shuffle and send Secret Santa messages!
-                            </button>
-                        </div>
-                        <p>
-                            This will trigger the following operations:
-                        </p>
-                        <ol>
-                            <li>Shuffle all the users;</li>
-                            <li>Assign a random user to each user, without collision;</li>
-                            <li><strong>Send a private message to each user</strong> with the user they must gift and your admin message;</li>
-                            <li>Send a private message to the admin (you) with details.</li>
-                        </ol>
-                        <p>And that's it, you are done!</p>
+                            <p>
+                                Once you are ready, you can submit the Secret Santa by clicking this big red button:
+                            </p>
+                            <div class="is-center">
+                                <button type="submit" class="big-button">
+                                    <span class="fas fa-paper-plane" aria-hidden="true"></span>
+                                    Shuffle and send Secret Santa messages!
+                                </button>
+                            </div>
+                            <p>
+                                This will trigger the following operations:
+                            </p>
+                            <ol>
+                                <li>Shuffle all the users;</li>
+                                <li>Assign a random user to each user, without collision;</li>
+                                <li><strong>Send a private message to each user</strong> with the user they must gift
+                                    and
+                                    your admin message;
+                                </li>
+                                <li>Send a private message to the admin (you) with details.</li>
+                            </ol>
+                            <p>And that's it, you are done!</p>
+                        </details>
+                    </li>
+
+                    <li id="#secret-repartition">
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#secret-repartition"><i class="fas fa-link"></i></a>How can I retrieve
+                                        the
+                                        secret repartition ?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                As the organizer of the Secret Santa, you will receive a private message that will look
+                                like this :
+                            </p>
+
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/app-spoil.png') }}"
+                                     style="max-width: 80%"
+                                     alt="The customization form"/>
+                            </div>
+
+                            <p>
+                                From there, you can click on
+                                "<a href="{{ path('spoil') }}">this page</a>"
+                                in the message, which will take you to a page where you can paste the long code to
+                                receive the secret repartition.
+                            </p>
+                        </details>
+                    </li>
+                    <li id="custom-message">
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a><i class="fas fa-link"></i></a>Can I add a custom message for some members ?
+                                    </p>
+                                </h3>
+                            </summary>
+
+                            <p>
+                                Yes! If you need to specify some information for some users in particular (e.g:
+                                allergies, address), you can easily do so! <br/>
+                                On the customization step,
+                                you will see a list of all the participating users, and each of them will have a field
+                                next to their name where you can enter the information :
+                            </p>
+
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/step-notes.png') }}"
+                                     style="max-width: 80%"
+                                     alt="The customization form"/>
+                            </div>
+
+                            <p>
+                                The note you write for each member will only be seen by their secret santa.
+                            </p>
+                        </details>
                     </li>
                     <li id="odd">
-                        <h3>
-                            <a href="#odd">Will the app work with an odd number of participant?</a>
-                        </h3>
-                        <p>
-                            Don't worry! The draw works perfectly no matter how many participants
-                            you selected (of course we need a minimum of 2 participants 😉).
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#odd"><i class="fas fa-link"></i></a>Will the app work with an odd
+                                        number of participant?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                Don't worry! The draw works perfectly no matter how many participants
+                                you selected (of course we need a minimum of 2 participants 😉).
+                            </p>
+                        </details>
                     </li>
                     <li id="avoid-association">
-                        <h3>
-                            <a href="#avoid-association">Can I make sure someone will be matched or not matched with someone else?</a>
-                        </h3>
-                        <p>
-                            No, the association is purely random so you cannot do that with our application.
-                            An alternative could be to launch 2 Secret Santa with two groups of people.
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#avoid-association"><i class="fas fa-link"></i></a>Can I make sure
+                                        someone will be matched or not matched with
+                                        someone else?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                No, the association is purely random so you cannot do that with our application.
+                                An alternative could be to launch 2 Secret Santa with two groups of people.
+                            </p>
+                        </details>
                     </li>
                     <li id="new-participant">
-                        <h3>
-                            <a href="#new-participant">Can I add a new participant once messages have been sent?</a>
-                        </h3>
-                        <p>
-                            No, you can't. However, you can still start a new Secret Santa. We advice you to add a note in the
-                            message mentioning that this new draw cancels and replaces the old one.
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#new-participant"><i class="fas fa-link"></i></a>Can I add a new
+                                        participant once messages have been sent?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                No, you can't. However, you can still start a new Secret Santa. We advice you to add a
+                                note
+                                in the
+                                message mentioning that this new draw cancels and replaces the old one.
+                            </p>
+                        </details>
                     </li>
                     <li id="big-team">
-                        <h3>
-                            <a href="#big-team">Will the app work with team larger than 500 people?</a>
-                        </h3>
-                        <p>
-                            The first step in our application is to retrieve all the users on your Slack workspace
-                            / Discord server / Zoom.us Chat - yes we retrieve all the users to allow you to select the
-                            ones that will participate to your Secret Santa.
-                        </p>
-                        <p>
-                            When your team is really big, Slack, Discord or Zoom.us APIs can fail to send us all the users in a
-                            reasonable duration. That means you will not be able to start a Secret Santa.
-                            A possible workaround would be to create a new Slack workspace / Discord server / Zoom.us Chat
-                            with only the participants.
-                        </p>
-                        <p>
-                            The second step is to dispatch a private message to all the selected users. Even if you started
-                            a Secret Santa with a lot of participants, the application will send all the messages progressively.
-                            So there should not be any problem at this step.
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#big-team"><i class="fas fa-link"></i></a>Will the app work with team
+                                        larger than 500 people?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                The first step in our application is to retrieve all the users on your Slack workspace
+                                / Discord server / Zoom.us Chat - yes we retrieve all the users to allow you to select
+                                the
+                                ones that will participate to your Secret Santa.
+                            </p>
+                            <p>
+                                When your team is really big, Slack, Discord or Zoom.us APIs can fail to send us all the
+                                users in a
+                                reasonable duration. That means you will not be able to start a Secret Santa.
+                                A possible workaround would be to create a new Slack workspace / Discord server /
+                                Zoom.us
+                                Chat
+                                with only the participants.
+                            </p>
+                            <p>
+                                The second step is to dispatch a private message to all the selected users. Even if you
+                                started
+                                a Secret Santa with a lot of participants, the application will send all the messages
+                                progressively.
+                                So there should not be any problem at this step.
+                            </p>
+                        </details>
                     </li>
                 </ul>
 
@@ -154,34 +267,53 @@
 
                 <ul>
                     <li id="discord-server-dm">
-                        <h3>
-                            <a href="#discord-server-dm">What to do when a user does not allow to receive private message on a Discord server?</a>
-                        </h3>
-                        <p>
-                            Discord has an option to allow someone to not receive private message on a their server they
-                            belongs to.
-                        </p>
-                        <p>
-                            If you throw a Secret Santa in a server where a user does not allow to receive private message,
-                            Discord will prevent us to send them a message. So if you hit this error, you need to ask them
-                            to <strong>change their privacy settings</strong> on this server. See the example below:
-                        </p>
-                        <div class="is-center">
-                            <img src="{{ asset('images/discord-privacy-settings.gif') }}" alt="How to change the privacy settings on Discord" />
-                        </div>
-                        <p>
-                            Once they made the change, you can safely retry to send the remaining messages. When the draw is finished,
-                            they can of course re-disable this setting as they wish.
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#discord-server-dm"><i class="fas fa-link"></i></a>What to do when a
+                                        user does not allow to receive private
+                                        message on a Discord server?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                Discord has an option to allow someone to not receive private message on a their server
+                                they
+                                belongs to.
+                            </p>
+                            <p>
+                                If you throw a Secret Santa in a server where a user does not allow to receive private
+                                message,
+                                Discord will prevent us to send them a message. So if you hit this error, you need to
+                                ask
+                                them
+                                to <strong>change their privacy settings</strong> on this server. See the example below:
+                            </p>
+                            <div class="is-center">
+                                <img src="{{ asset('images/discord-privacy-settings.gif') }}"
+                                     alt="How to change the privacy settings on Discord"/>
+                            </div>
+                            <p>
+                                Once they made the change, you can safely retry to send the remaining messages. When the
+                                draw is finished,
+                                they can of course re-disable this setting as they wish.
+                            </p>
+                        </details>
                     </li>
                     <li id="invalid-user">
-                        <h3>
-                            <a href="#invalid-user">Why did someone receive <code>@invalid-user</code> as the person to gift?</a>
-                        </h3>
-                        <p>
-                            This is due to a known bug of the Discord Android application. The workaround is to open the
-                            conversation on the Discord desktop app (for Windows, MacOS or Linux) or on the website.
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#invalid-user"><i class="fas fa-link"></i></a>Why did someone receive
+                                        <code>@invalid-user</code> as the person to
+                                        gift?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                This is due to a known bug of the Discord Android application. The workaround is to open
+                                the
+                                conversation on the Discord desktop app (for Windows, MacOS or Linux) or on the website.
+                            </p>
+                        </details>
                     </li>
                 </ul>
 
@@ -189,32 +321,46 @@
 
                 <ul>
                     <li id="zoom-install">
-                        <h3>
-                            <a href="#zoom-install">How to install the app on Zoom.us?</a>
-                        </h3>
-                        <p>
-                            Go to <a href="{{ path('homepage') }}">Secret-Santa homepage</a> and click "Run on Zoom".
-                            You will be asked for permissions to use your Zoom Account:
-                        </p>
-                        <div class="is-center">
-                            <img class="img-border" src="{{ asset('images/zoom-install.png') }}" width="473px" alt="Install on Zoom" />
-                        </div>
-                        <p>Those permissions are <strong>mandatory</strong> to use Secret Santa.</p>
-                        <p>You will be then redirected to the Secret Santa screen, please refer to
-                            <a href="#howto">the main How-To</a> to learn how to use it.</p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#zoom-install"><i class="fas fa-link"></i></a>How to install the app on
+                                        Zoom.us?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                Go to <a href="{{ path('homepage') }}">Secret-Santa homepage</a> and click "Run on
+                                Zoom".
+                                You will be asked for permissions to use your Zoom Account:
+                            </p>
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/zoom-install.png') }}" width="473px"
+                                     alt="Install on Zoom"/>
+                            </div>
+                            <p>Those permissions are <strong>mandatory</strong> to use Secret Santa.</p>
+                            <p>You will be then redirected to the Secret Santa screen, please refer to
+                                <a href="#howto">the main How-To</a> to learn how to use it.</p>
+                        </details>
                     </li>
                     <li id="zoom-uninstall">
-                        <h3>
-                            <a href="#zoom-uninstall">Uninstalling from your Zoom Account</a>
-                        </h3>
-                        <p>
-                            All you need to do is revoke the App from your Zoom.us account here: <a
-                                    href="https://marketplace.zoom.us/user/installed">https://marketplace.zoom.us/user/installed</a>.
-                        </p>
-                        <div class="is-center">
-                            <img class="img-border" src="{{ asset('images/zoom-uninstall.png') }}" width="436px" alt="Uninstall Zoom" />
-                        </div>
-                        <p>There is no other required actions, <strong>we do not store any data</strong> about your organisation.</p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#zoom-uninstall"><i class="fas fa-link"></i></a>Uninstalling from your
+                                        Zoom Account</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                All you need to do is revoke the App from your Zoom.us account here: <a
+                                        href="https://marketplace.zoom.us/user/installed">https://marketplace.zoom.us/user/installed</a>.
+                            </p>
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/zoom-uninstall.png') }}" width="436px"
+                                     alt="Uninstall Zoom"/>
+                            </div>
+                            <p>There is no other required actions, <strong>we do not store any data</strong> about your
+                                organisation.</p>
+                        </details>
                     </li>
                 </ul>
 
@@ -222,14 +368,21 @@
 
                 <ul>
                     <li id="hall-of-fame">
-                        <h3>
-                            <a href="#hall-of-fame">How can I add my company / organization to your Hall of Fame?</a>
-                        </h3>
-                        <p>
-                            Simply drop us an email at <a href="mailto:hello@secret-santa.team">hello@secret-santa.team</a>
-                            with the name, url and logo of the entity you want to add. It's free but if you want to tweet
-                            or share our app to the world, you are more than welcome.
-                        </p>
+                        <details>
+                            <summary>
+                                <h3>
+                                    <p><a href="#hall-of-fame"><i class="fas fa-link"></i></a>How can I add my company /
+                                        organization to your Hall of Fame?</p>
+                                </h3>
+                            </summary>
+                            <p>
+                                Simply drop us an email at <a
+                                        href="mailto:hello@secret-santa.team">hello@secret-santa.team</a>
+                                with the name, url and logo of the entity you want to add. It's free but if you want to
+                                tweet
+                                or share our app to the world, you are more than welcome.
+                            </p>
+                        </details>
                     </li>
                 </ul>
             </div>
@@ -238,5 +391,6 @@
 {% endblock content %}
 
 {% block contact %}
-    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="fas fa-envelope"></i> Did not find an answer to your question? Contact us!</a>
+    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="fas fa-envelope"></i> Did not find an answer
+        to your question? Contact us!</a>
 {% endblock contact %}
