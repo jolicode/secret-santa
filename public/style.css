@@ -87,6 +87,7 @@ body, html, .pure-g [class *= "pure-u"] {
 }
 html {
     background-color:var(--color-primary);
+    scroll-behavior: smooth;
 }
 body {
     background-color:#FFFFFF;
@@ -1259,14 +1260,15 @@ textarea {
 .faq h2 {
     margin-top: 100px;
 }
-.faq h3 {
-    margin-top: 50px;
-}
 .faq ul {
     list-style: none;
     padding-left: 0;
 }
+details {
+    margin-bottom: 2em;
+}
 summary {
+    padding-top: 2px;
     cursor: pointer;
     font-weight: bold;
     color: var(--color-primary);
