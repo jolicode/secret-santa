@@ -53,6 +53,7 @@ class Rudolph
 
         if (\count($filteredUsers) !== \count($users)) {
             $duplicated = array_unique(array_diff_key($users, $filteredUsers));
+
             throw new \LogicException(sprintf('%s more than one time in the list: %s.', \count($duplicated) > 1 ? 'These users were' : 'This user was', implode(', ', $duplicated)));
         }
 

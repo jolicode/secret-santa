@@ -1,46 +1,43 @@
 <?php
 
-$header = <<<'EOF'
-This file is part of the Secret Santa project.
+/*
+ * This file is part of the Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-(c) JoliCode <coucou@jolicode.com>
+$fileHeaderComment = <<<'EOF'
+    This file is part of the Secret Santa project.
 
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-EOF;
+    (c) JoliCode <coucou@jolicode.com>
 
-return PhpCsFixer\Config::create()
+    For the full copyright and license information, please view the LICENSE
+    file that was distributed with this source code.
+    EOF;
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__)
+    ->exclude('var')
+    ->append([
+        __FILE__,
+    ])
+;
+
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
-    ->setRules(array(
+    ->setRules([
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        'header_comment' => array('header' => $header),
-        'array_syntax' => array('syntax' => 'short'),
-        'ordered_class_elements' => true,
-        'ordered_imports' => true,
-        'heredoc_to_nowdoc' => true,
-        'php_unit_strict' => true,
-        'php_unit_construct' => true,
-        'phpdoc_add_missing_param_annotation' => true,
-        'phpdoc_order' => true,
-        'strict_comparison' => true,
-        'strict_param' => true,
-        'no_extra_consecutive_blank_lines' => array('break', 'continue', 'extra', 'return', 'throw', 'use', 'parenthesis_brace_block', 'square_brace_block', 'curly_brace_block'),
-        'no_short_echo_tag' => true,
-        'no_unreachable_default_argument_value' => true,
-        'no_useless_else' => true,
-        'no_useless_return' => true,
-        'semicolon_after_instruction' => true,
-        'combine_consecutive_unsets' => true,
-        'concat_space' => array('spacing' => 'one'),
-    ))
-    ->setFinder(
-        PhpCsFixer\Finder::create()
-            ->exclude('vendor')
-            ->in(__DIR__ . '/config')
-            ->in(__DIR__ . '/public')
-            ->in(__DIR__ . '/src')
-            ->in(__DIR__ . '/tests')
-    )
-    ->setCacheFile('.php-cs-fixer.cache') // forward compatibility with 3.x line
+        '@PHP80Migration' => true,
+        '@PhpCsFixer' => true,
+        'php_unit_internal_class' => false, // From @PhpCsFixer but we don't want it
+        'php_unit_test_class_requires_covers' => false, // From @PhpCsFixer but we don't want it
+        'phpdoc_add_missing_param_annotation' => false, // From @PhpCsFixer but we don't want it
+        'header_comment' => ['header' => $fileHeaderComment],
+        'concat_space' => ['spacing' => 'one'],
+    ])
+    ->setFinder($finder)
 ;

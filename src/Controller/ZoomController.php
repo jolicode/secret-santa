@@ -77,8 +77,9 @@ class ZoomController extends AbstractController
             $session->set(ZoomApplication::SESSION_KEY_STATE, $provider->getState());
 
             return new RedirectResponse($authUrl);
+        }
         // Check given state against previously stored one to mitigate CSRF attack
-        } elseif (empty($request->query->get('state')) || $request->query->get('state') !== $session->get(ZoomApplication::SESSION_KEY_STATE)) {
+        if (empty($request->query->get('state')) || $request->query->get('state') !== $session->get(ZoomApplication::SESSION_KEY_STATE)) {
             $session->remove(ZoomApplication::SESSION_KEY_STATE);
 
             throw new AuthenticationException(ZoomApplication::APPLICATION_CODE, 'Invalid OAuth state.');

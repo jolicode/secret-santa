@@ -193,7 +193,8 @@ Remember, with great power comes great responsibility!' . \PHP_EOL;
 
         $message .= 'Happy Secret Santa!';
 
-        $text = sprintf($message,
+        $text = sprintf(
+            $message,
             $code,
             $spoilUrl
         );

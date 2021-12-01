@@ -54,13 +54,15 @@ class SantaControllerTest extends BaseWebTestCase
 
     public function testFinishPageWorksWithValidHashForSuccessfulSecretSanta(): void
     {
-        $config = new Config([
+        $config = new Config(
+            [
                 'toto1' => new User('toto1', 'Toto 1'),
                 'toto2' => new User('toto2', 'Toto 2'),
                 'toto3' => new User('toto3', 'Toto 3'),
             ],
             ['toto1', 'toto2', 'toto3'],
-            'hello test');
+            'hello test'
+        );
 
         $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => 'toto2',
@@ -81,13 +83,15 @@ class SantaControllerTest extends BaseWebTestCase
 
     public function testFinishPageWorksWithValidHashForFailedSecretSanta(): void
     {
-        $config = new Config([
+        $config = new Config(
+            [
                 'toto1' => new User('toto1', 'Toto 1'),
                 'toto2' => new User('toto2', ''),
                 'toto3' => new User('toto3', 'Toto 3'),
             ],
             ['toto1', 'toto2', 'toto3'],
-            'hello test');
+            'hello test'
+        );
 
         $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => 'toto2',

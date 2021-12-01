@@ -18,10 +18,11 @@ use RestCord\Model\Permissions\Role;
 
 class ApiHelper
 {
-    const TOKEN_TYPE_BOT = 'Bot';
+    private const TOKEN_TYPE_BOT = 'Bot';
+
     private $botToken;
 
-    /** @var DiscordClient|null */
+    /** @var null|DiscordClient */
     private $client;
 
     public function __construct(string $discordBotToken)

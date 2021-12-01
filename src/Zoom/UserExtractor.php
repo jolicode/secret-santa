@@ -72,7 +72,7 @@ class UserExtractor
                 $zoomUser['id'],
                 $zoomUser['first_name'] . ' ' . $zoomUser['last_name'],
                 [
-                    'image' => isset($zoomUser['pic_url']) ? $zoomUser['pic_url'] : null,
+                    'image' => $zoomUser['pic_url'] ?? null,
                     'restricted' => false,
                 ]
             );

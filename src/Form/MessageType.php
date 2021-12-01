@@ -46,7 +46,8 @@ class MessageType extends AbstractType
                     'error_bubbling' => true,
                 ],
                 'required' => false,
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

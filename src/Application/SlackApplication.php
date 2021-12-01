@@ -121,7 +121,8 @@ class SlackApplication implements ApplicationInterface
                     'widget' => 'single_text',
                     'required' => false,
                     'error_bubbling' => true,
-                ]));
+                ])
+        );
     }
 
     public function reset(): void

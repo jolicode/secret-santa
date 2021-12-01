@@ -38,12 +38,15 @@ class MessageSender
         $receiverUser = $secretSanta->getUser($receiver);
 
         $text .= sprintf(
-'Hi!
+            'Hi!
 
 You have been selected to be part of a Secret Santa :santa:!
 
 Someone will get you a gift and **you have been chosen to gift:**
-:gift: **%s (<@!%s>)** :gift:', $receiverUser->getExtra()['nickname'] ?? $receiverUser->getName(), $receiver);
+:gift: **%s (<@!%s>)** :gift:',
+            $receiverUser->getExtra()['nickname'] ?? $receiverUser->getName(),
+            $receiver
+        );
 
         if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
             // The extra space after the last %s seems mandatory to not break message in Discord mobile application
@@ -92,7 +95,7 @@ Someone will get you a gift and **you have been chosen to gift:**
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
         $text = sprintf(
-'Dear Secret Santa **admin**,
+            'Dear Secret Santa **admin**,
 
 In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
 
