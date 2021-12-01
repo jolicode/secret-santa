@@ -18,8 +18,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MessageSender
 {
-    const SANTA_EMOJI = "\xF0\x9F\x8E\x85";
-    const GIFT_EMOJI = "\xF0\x9F\x8E\x81";
+    private const SANTA_EMOJI = "\xF0\x9F\x8E\x85";
+    private const GIFT_EMOJI = "\xF0\x9F\x8E\x81";
 
     private $httpClient;
     private $zoomBotJid;
@@ -63,7 +63,8 @@ class MessageSender
         $receiverUser = $secretSanta->getUser($receiver);
         $body['content']['body'][] = [
             'type' => 'message',
-            'text' => sprintf("Someone will get you a gift and *you have been chosen to gift:*\n\n" . self::GIFT_EMOJI . ' <!%s|%s> ' . self::GIFT_EMOJI . "\n\n",
+            'text' => sprintf(
+                "Someone will get you a gift and *you have been chosen to gift:*\n\n" . self::GIFT_EMOJI . ' <!%s|%s> ' . self::GIFT_EMOJI . "\n\n",
                 $receiver,
                 $receiverUser->getName()
             ),
@@ -72,7 +73,8 @@ class MessageSender
         if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
             $body['content']['body'][] = [
                 'type' => 'message',
-                'text' => sprintf('*Here is some details about <!%s|%s>:*',
+                'text' => sprintf(
+                    '*Here is some details about <!%s|%s>:*',
                     $receiver,
                     $receiverUser->getName()
                 ),

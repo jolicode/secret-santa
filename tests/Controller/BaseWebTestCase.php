@@ -21,7 +21,7 @@ class BaseWebTestCase extends WebTestCase
      */
     protected static function createClient(array $options = [], array $server = [])
     {
-        $server['HTTPS'] = $server['HTTPS'] ?? true;
+        $server['HTTPS'] ??= true;
 
         return parent::createClient($options, $server);
     }

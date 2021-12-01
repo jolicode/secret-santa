@@ -29,7 +29,8 @@ class SpoilerTest extends TestCase
 
     public function testItEncodesSecretSantaInCurrentVersion(): void
     {
-        $config = new Config([
+        $config = new Config(
+            [
                 'user1' => new User('user1', 'User 1'),
                 'user2' => new User('user2', 'User 2'),
                 'user3' => new User('user3', 'User 3'),
@@ -37,7 +38,8 @@ class SpoilerTest extends TestCase
                 'user5' => new User('user5', 'User 5'),
             ],
             ['user1', 'user2', 'user3', 'user4', 'user5'],
-            'hello test');
+            'hello test'
+        );
 
         $secretSanta = new SecretSanta('my_application', 'toto', 'yolo', [
             'user1' => 'user2',

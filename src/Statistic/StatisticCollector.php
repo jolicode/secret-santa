@@ -33,11 +33,11 @@ class StatisticCollector
         $currentMonth = date('m');
 
         // If the key does not exist, it is set to 0 before performing the operation
-        $this->client->incr("stats:month:$currentYear-$currentMonth");
-        $this->client->incr("stats:month-app:$currentYear-$currentMonth-$applicationCode");
-        $this->client->incr("stats:year:$currentYear");
-        $this->client->incr("stats:year-app:$currentYear-$applicationCode");
-        $this->client->incr("stats:app:$applicationCode");
+        $this->client->incr("stats:month:{$currentYear}-{$currentMonth}");
+        $this->client->incr("stats:month-app:{$currentYear}-{$currentMonth}-{$applicationCode}");
+        $this->client->incr("stats:year:{$currentYear}");
+        $this->client->incr("stats:year-app:{$currentYear}-{$applicationCode}");
+        $this->client->incr("stats:app:{$applicationCode}");
         $this->client->incr('stats:total');
         $this->client->incrby('stats:users', $secretSanta->getUserCount());
 
@@ -104,20 +104,20 @@ class StatisticCollector
                         $counter[$key]['applications'][$applicationCode] = 0;
                     } else {
                         $counter[$key]['applications'][$applicationCode] =
-                            !empty($counters["$stat-app"])
-                            && !empty($counters["$stat-app"]["$key-$applicationCode"])
-                                ? $counters["$stat-app"]["$key-$applicationCode"]
+                            !empty($counters["{$stat}-app"])
+                            && !empty($counters["{$stat}-app"]["{$key}-{$applicationCode}"])
+                                ? $counters["{$stat}-app"]["{$key}-{$applicationCode}"]
                                 : 0;
                     }
                 }
             }
 
-            unset($counters["$stat-app"]);
+            unset($counters["{$stat}-app"]);
 
             $counters[$stat] = $counter;
 
             if (\count($counter) > 0) {
-                $counters["$stat-max"] = max(array_column($counter, 'total'));
+                $counters["{$stat}-max"] = max(array_column($counter, 'total'));
             }
         }
 

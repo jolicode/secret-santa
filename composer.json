@@ -43,7 +43,7 @@
         "wohali/oauth2-discord-new": "^1.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.15",
+        "friendsofphp/php-cs-fixer": "^3.3.2",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.50",
         "phpstan/phpstan-phpunit": "^0.12.16",

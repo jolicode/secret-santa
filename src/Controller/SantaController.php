@@ -49,9 +49,14 @@ class SantaController extends AbstractController
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(RouterInterface $router, Environment $twig, LoggerInterface $logger, iterable $applications,
-                                StatisticCollector $statistic, Client $bugsnag)
-    {
+    public function __construct(
+        RouterInterface $router,
+        Environment $twig,
+        LoggerInterface $logger,
+        iterable $applications,
+        StatisticCollector $statistic,
+        Client $bugsnag
+    ) {
         $this->router = $router;
         $this->twig = $twig;
         $this->logger = $logger;
@@ -162,7 +167,8 @@ class SantaController extends AbstractController
                 $session->set(
                     $this->getSecretSantaSessionKey(
                         $secretSanta->getHash()
-                    ), $secretSanta
+                    ),
+                    $secretSanta
                 );
 
                 // Send a summary to the santa admin
@@ -326,7 +332,8 @@ class SantaController extends AbstractController
         $request->getSession()->set(
             $this->getSecretSantaSessionKey(
                 $secretSanta->getHash()
-            ), $secretSanta
+            ),
+            $secretSanta
         );
 
         return new JsonResponse([

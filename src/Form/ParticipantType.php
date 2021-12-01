@@ -38,7 +38,8 @@ class ParticipantType extends AbstractType
                     ]),
                 ],
                 'error_bubbling' => true,
-            ]);
+            ])
+        ;
 
         $builder->get('selectedUsers')->addModelTransformer(new class($options) implements DataTransformerInterface {
             /** @param array<string, mixed> $options */

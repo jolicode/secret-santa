@@ -28,7 +28,7 @@ class Spoiler
     }
 
     /**
-     * @return array<string, string>|null
+     * @return null|array<string, string>
      */
     public function decode(string $string): ?array
     {
@@ -40,8 +40,10 @@ class Spoiler
         switch ($version) {
             case 'v1':
                 return $this->decodeV1($encoded);
+
             case 'v2':
                 return $this->decodeV2($encoded);
+
             case 'v3':
                 return $this->decodeV3($encoded);
         }
@@ -50,7 +52,7 @@ class Spoiler
     }
 
     /**
-     * @return array<string, string>|null
+     * @return null|array<string, string>
      */
     private function decodeV1(string $encoded): ?array
     {
@@ -70,7 +72,7 @@ class Spoiler
     }
 
     /**
-     * @return array<string, string>|null
+     * @return null|array<string, string>
      */
     private function decodeV2(string $encoded): ?array
     {
@@ -90,7 +92,7 @@ class Spoiler
     }
 
     /**
-     * @return array<string, string>|null
+     * @return null|array<string, string>
      */
     private function decodeV3(string $encoded): ?array
     {

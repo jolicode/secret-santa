@@ -36,8 +36,8 @@ class DiscordApplication implements ApplicationInterface
     private $userExtractor;
     private $messageSender;
 
-    /** @var Group[]|null */
-    private $groups = null;
+    /** @var null|Group[] */
+    private $groups;
 
     public function __construct(RequestStack $requestStack, ApiHelper $apiHelper, UserExtractor $userExtractor, MessageSender $messageSender)
     {
