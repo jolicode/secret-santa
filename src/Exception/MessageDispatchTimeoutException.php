@@ -15,12 +15,8 @@ use JoliCode\SecretSanta\Model\SecretSanta;
 
 class MessageDispatchTimeoutException extends \RuntimeException implements SecretSantaException
 {
-    private $secretSanta;
-
-    public function __construct(SecretSanta $secretSanta)
+    public function __construct(private SecretSanta $secretSanta)
     {
-        $this->secretSanta = $secretSanta;
-
         parent::__construct('It takes too much time to send messages!');
     }
 

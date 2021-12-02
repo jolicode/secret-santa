@@ -26,15 +26,11 @@ use Symfony\Component\Routing\RouterInterface;
 
 class ZoomController extends AbstractController
 {
-    private $router;
-    private $zoomClientId;
-    private $zoomClientSecret;
-
-    public function __construct(string $zoomClientId, string $zoomClientSecret, RouterInterface $router)
-    {
-        $this->router = $router;
-        $this->zoomClientId = $zoomClientId;
-        $this->zoomClientSecret = $zoomClientSecret;
+    public function __construct(
+        private string $zoomClientId,
+        private string $zoomClientSecret,
+        private RouterInterface $router,
+    ) {
     }
 
     #[Route('/intro/zoom', name: 'zoom_pre_auth_warning', methods: ['GET'])]

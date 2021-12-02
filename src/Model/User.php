@@ -13,18 +13,14 @@ namespace JoliCode\SecretSanta\Model;
 
 class User
 {
-    private $identifier;
-    private $name;
-    private $extra;
-
     /**
      * @param array<string, mixed> $extra
      */
-    public function __construct(string $identifier, string $name, array $extra = [])
-    {
-        $this->identifier = $identifier;
-        $this->name = $name;
-        $this->extra = $extra;
+    public function __construct(
+        private string $identifier,
+        private string $name,
+        private array $extra = [],
+    ) {
     }
 
     public function getIdentifier(): string

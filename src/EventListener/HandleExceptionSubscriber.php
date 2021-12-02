@@ -24,20 +24,15 @@ use Twig\Environment;
 
 class HandleExceptionSubscriber implements EventSubscriberInterface
 {
-    private $logger;
-    private $twig;
-    private $bugsnag;
-    private $applications;
-
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
-    public function __construct(LoggerInterface $logger, Environment $twig, Client $bugsnag, iterable $applications)
-    {
-        $this->logger = $logger;
-        $this->twig = $twig;
-        $this->bugsnag = $bugsnag;
-        $this->applications = $applications;
+    public function __construct(
+        private LoggerInterface $logger,
+        private Environment $twig,
+        private Client $bugsnag,
+        private iterable $applications,
+    ) {
     }
 
     public function handleException(ExceptionEvent $event): void

@@ -21,13 +21,10 @@ class MessageSender
     private const SANTA_EMOJI = "\xF0\x9F\x8E\x85";
     private const GIFT_EMOJI = "\xF0\x9F\x8E\x81";
 
-    private $httpClient;
-    private $zoomBotJid;
-
-    public function __construct(HttpClientInterface $httpClient, string $zoomBotJid)
-    {
-        $this->httpClient = $httpClient;
-        $this->zoomBotJid = $zoomBotJid;
+    public function __construct(
+        private HttpClientInterface $httpClient,
+        private string $zoomBotJid,
+    ) {
     }
 
     /**

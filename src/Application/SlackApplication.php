@@ -33,15 +33,11 @@ class SlackApplication implements ApplicationInterface
     private const SESSION_KEY_TOKEN = 'santa.slack.token';
     private const SESSION_KEY_ADMIN = 'santa.slack.admin';
 
-    private $requestStack;
-    private $userExtractor;
-    private $messageSender;
-
-    public function __construct(RequestStack $requestStack, UserExtractor $userExtractor, MessageSender $messageSender)
-    {
-        $this->requestStack = $requestStack;
-        $this->userExtractor = $userExtractor;
-        $this->messageSender = $messageSender;
+    public function __construct(
+        private RequestStack $requestStack,
+        private UserExtractor $userExtractor,
+        private MessageSender $messageSender,
+    ) {
     }
 
     public function getCode(): string

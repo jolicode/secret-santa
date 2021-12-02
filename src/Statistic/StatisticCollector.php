@@ -16,14 +16,11 @@ use Predis\Client;
 
 class StatisticCollector
 {
-    private $client;
-
     /**
      * @param Client<string, Client> $client
      */
-    public function __construct(Client $client)
+    public function __construct(private Client $client)
     {
-        $this->client = $client;
     }
 
     public function incrementUsageCount(SecretSanta $secretSanta): void

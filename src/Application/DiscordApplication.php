@@ -31,20 +31,15 @@ class DiscordApplication implements ApplicationInterface
     private const SESSION_KEY_ADMIN = 'santa.discord.admin';
     private const SESSION_KEY_GUILD_ID = 'santa.discord.guild_id';
 
-    private $requestStack;
-    private $apiHelper;
-    private $userExtractor;
-    private $messageSender;
-
     /** @var null|Group[] */
-    private $groups;
+    private ?array $groups = null;
 
-    public function __construct(RequestStack $requestStack, ApiHelper $apiHelper, UserExtractor $userExtractor, MessageSender $messageSender)
-    {
-        $this->requestStack = $requestStack;
-        $this->apiHelper = $apiHelper;
-        $this->userExtractor = $userExtractor;
-        $this->messageSender = $messageSender;
+    public function __construct(
+        private RequestStack $requestStack,
+        private ApiHelper $apiHelper,
+        private UserExtractor $userExtractor,
+        private MessageSender $messageSender,
+    ) {
     }
 
     public function getCode(): string

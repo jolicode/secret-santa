@@ -17,14 +17,11 @@ use Psr\Http\Client\ClientInterface as PsrHttpClient;
 
 class ClientFactory
 {
-    private PsrHttpClient $httpClient;
-
     /** @var array<string, Client> */
-    private $clientsByToken = [];
+    private array $clientsByToken = [];
 
-    public function __construct(PsrHttpClient $httpClient)
+    public function __construct(private PsrHttpClient $httpClient)
     {
-        $this->httpClient = $httpClient;
     }
 
     public function getClientForToken(string $token): Client

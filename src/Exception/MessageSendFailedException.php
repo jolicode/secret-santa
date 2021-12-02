@@ -16,14 +16,12 @@ use JoliCode\SecretSanta\Model\User;
 
 class MessageSendFailedException extends \RuntimeException implements SecretSantaException
 {
-    private $secretSanta;
-    private $recipient;
-
-    public function __construct(SecretSanta $secretSanta, User $recipient, \Throwable $previous = null, string $precision = null)
-    {
-        $this->secretSanta = $secretSanta;
-        $this->recipient = $recipient;
-
+    public function __construct(
+        private SecretSanta $secretSanta,
+        private User $recipient,
+        ?\Throwable $previous = null,
+        ?string $precision = null,
+    ) {
         parent::__construct(sprintf('Fail to send message to @%s.%s', $recipient->getName(), $precision ? ' ' . $precision : ''), 0, $previous);
     }
 
