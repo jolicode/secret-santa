@@ -30,15 +30,11 @@ class ZoomApplication implements ApplicationInterface
     private const SESSION_KEY_ADMIN = 'santa.zoom.admin';
     private const SESSION_KEY_ACCOUNT_ID = 'santa.zoom.account_id';
 
-    private $requestStack;
-    private $userExtractor;
-    private $messageSender;
-
-    public function __construct(RequestStack $requestStack, UserExtractor $userExtractor, MessageSender $messageSender)
-    {
-        $this->requestStack = $requestStack;
-        $this->userExtractor = $userExtractor;
-        $this->messageSender = $messageSender;
+    public function __construct(
+        private RequestStack $requestStack,
+        private UserExtractor $userExtractor,
+        private MessageSender $messageSender,
+    ) {
     }
 
     public function getCode(): string

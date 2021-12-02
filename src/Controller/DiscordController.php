@@ -26,15 +26,11 @@ use Wohali\OAuth2\Client\Provider\DiscordResourceOwner;
 
 class DiscordController extends AbstractController
 {
-    private $discordClientId;
-    private $discordClientSecret;
-    private $router;
-
-    public function __construct(string $discordClientId, string $discordClientSecret, RouterInterface $router)
-    {
-        $this->router = $router;
-        $this->discordClientId = $discordClientId;
-        $this->discordClientSecret = $discordClientSecret;
+    public function __construct(
+        private string $discordClientId,
+        private string $discordClientSecret,
+        private RouterInterface $router,
+    ) {
     }
 
     /**

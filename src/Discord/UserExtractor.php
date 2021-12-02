@@ -20,11 +20,8 @@ use RestCord\Model\Guild\Role;
 
 class UserExtractor
 {
-    private $apiHelper;
-
-    public function __construct(ApiHelper $apiHelper)
+    public function __construct(private ApiHelper $apiHelper)
     {
-        $this->apiHelper = $apiHelper;
     }
 
     /**
@@ -48,7 +45,7 @@ class UserExtractor
 
             try {
                 /** @var GuildMember[] $members */
-                $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember ? $lastMember->user->id : null);
+                $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember?->user->id);
             } catch (\Throwable $t) {
                 throw new UserExtractionFailedException(DiscordApplication::APPLICATION_CODE, 'Could not fetch members in guild.', $t);
             }

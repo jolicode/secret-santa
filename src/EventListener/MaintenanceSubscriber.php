@@ -20,11 +20,8 @@ use Twig\Environment;
 
 class MaintenanceSubscriber implements EventSubscriberInterface
 {
-    private Environment $twig;
-
-    public function __construct(Environment $twig)
+    public function __construct(private Environment $twig)
     {
-        $this->twig = $twig;
     }
 
     public function handleMaintenance(RequestEvent $event): void

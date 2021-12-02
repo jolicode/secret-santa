@@ -25,15 +25,11 @@ use Symfony\Component\Routing\RouterInterface;
 
 class SlackController extends AbstractController
 {
-    private $slackClientId;
-    private $slackClientSecret;
-    private $router;
-
-    public function __construct(string $slackClientId, string $slackClientSecret, RouterInterface $router)
-    {
-        $this->router = $router;
-        $this->slackClientId = $slackClientId;
-        $this->slackClientSecret = $slackClientSecret;
+    public function __construct(
+        private string $slackClientId,
+        private string $slackClientSecret,
+        private RouterInterface $router,
+    ) {
     }
 
     /**

@@ -17,11 +17,8 @@ use JoliCode\SecretSanta\Model\SecretSanta;
 
 class MessageSender
 {
-    private $apiHelper;
-
-    public function __construct(ApiHelper $apiHelper)
+    public function __construct(private ApiHelper $apiHelper)
     {
-        $this->apiHelper = $apiHelper;
     }
 
     /**

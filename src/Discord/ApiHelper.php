@@ -20,14 +20,10 @@ class ApiHelper
 {
     private const TOKEN_TYPE_BOT = 'Bot';
 
-    private $botToken;
+    private ?DiscordClient $client = null;
 
-    /** @var null|DiscordClient */
-    private $client;
-
-    public function __construct(string $discordBotToken)
+    public function __construct(private string $discordBotToken)
     {
-        $this->botToken = $discordBotToken;
     }
 
     public function getGuild(int $guildId): Guild
@@ -80,7 +76,7 @@ class ApiHelper
     {
         if (!($this->client instanceof DiscordClient)) {
             $this->client = new DiscordClient([
-                'token' => $this->botToken,
+                'token' => $this->discordBotToken,
                 'tokenType' => self::TOKEN_TYPE_BOT,
             ]);
         }

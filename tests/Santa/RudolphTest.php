@@ -16,8 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class RudolphTest extends TestCase
 {
-    /** @var Rudolph */
-    private $SUT;
+    private Rudolph $SUT;
 
     protected function setUp(): void
     {

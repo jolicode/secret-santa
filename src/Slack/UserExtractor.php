@@ -19,11 +19,8 @@ use JoliCode\Slack\Api\Model\ObjsUser;
 
 class UserExtractor
 {
-    private $clientFactory;
-
-    public function __construct(ClientFactory $clientFactory)
+    public function __construct(private ClientFactory $clientFactory)
     {
-        $this->clientFactory = $clientFactory;
     }
 
     /**

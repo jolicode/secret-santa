@@ -37,18 +37,12 @@ class Spoiler
         $version = substr($string, 0, strpos($string, '@'));
         $encoded = substr($string, \strlen($version) + 1);
 
-        switch ($version) {
-            case 'v1':
-                return $this->decodeV1($encoded);
-
-            case 'v2':
-                return $this->decodeV2($encoded);
-
-            case 'v3':
-                return $this->decodeV3($encoded);
-        }
-
-        return null;
+        return match ($version) {
+            'v1' => $this->decodeV1($encoded),
+            'v2' => $this->decodeV2($encoded),
+            'v3' => $this->decodeV3($encoded),
+            default => null,
+        };
     }
 
     /**

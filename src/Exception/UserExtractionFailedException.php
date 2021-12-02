@@ -13,12 +13,11 @@ namespace JoliCode\SecretSanta\Exception;
 
 class UserExtractionFailedException extends \RuntimeException implements ApplicationRelatedException
 {
-    private $applicationCode;
-
-    public function __construct(string $applicationCode, string $message = '', \Throwable $previous = null)
-    {
-        $this->applicationCode = $applicationCode;
-
+    public function __construct(
+        private string $applicationCode,
+        string $message = '',
+        ?\Throwable $previous = null,
+    ) {
         parent::__construct($message, 0, $previous);
     }
 

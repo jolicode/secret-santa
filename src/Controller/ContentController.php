@@ -19,13 +19,10 @@ use Twig\Environment;
 
 class ContentController extends AbstractController
 {
-    private $twig;
-    private $statisticCollector;
-
-    public function __construct(Environment $twig, StatisticCollector $statisticCollector)
-    {
-        $this->twig = $twig;
-        $this->statisticCollector = $statisticCollector;
+    public function __construct(
+        private Environment $twig,
+        private StatisticCollector $statisticCollector,
+    ) {
     }
 
     #[Route('/', name: 'homepage', methods: ['GET'])]

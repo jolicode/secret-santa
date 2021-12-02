@@ -39,30 +39,17 @@ use Twig\Environment;
 
 class SantaController extends AbstractController
 {
-    private $router;
-    private $twig;
-    private $logger;
-    private $applications;
-    private $statisticCollector;
-    private $bugsnag;
-
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
     public function __construct(
-        RouterInterface $router,
-        Environment $twig,
-        LoggerInterface $logger,
-        iterable $applications,
-        StatisticCollector $statistic,
-        Client $bugsnag
+        private RouterInterface $router,
+        private Environment $twig,
+        private LoggerInterface $logger,
+        private iterable $applications,
+        private StatisticCollector $statisticCollector,
+        private Client $bugsnag,
     ) {
-        $this->router = $router;
-        $this->twig = $twig;
-        $this->logger = $logger;
-        $this->applications = $applications;
-        $this->statisticCollector = $statistic;
-        $this->bugsnag = $bugsnag;
     }
 
     #[Route('/run/{application}', name: 'run', methods: ['GET', 'POST'])]

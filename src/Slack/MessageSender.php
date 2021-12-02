@@ -16,11 +16,8 @@ use JoliCode\SecretSanta\Model\SecretSanta;
 
 class MessageSender
 {
-    private $clientFactory;
-
-    public function __construct(ClientFactory $clientFactory)
+    public function __construct(private ClientFactory $clientFactory)
     {
-        $this->clientFactory = $clientFactory;
     }
 
     /**

@@ -13,15 +13,13 @@ namespace JoliCode\SecretSanta\Model;
 
 class Group
 {
-    private $identifier;
-    private $name;
     /** @var string[] */
-    private $userIds = [];
+    private array $userIds = [];
 
-    public function __construct(string $identifier, string $name)
-    {
-        $this->identifier = $identifier;
-        $this->name = $name;
+    public function __construct(
+        private string $identifier,
+        private string $name,
+    ) {
     }
 
     public function getIdentifier(): string

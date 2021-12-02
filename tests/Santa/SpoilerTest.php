@@ -19,8 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class SpoilerTest extends TestCase
 {
-    /** @var Spoiler */
-    private $SUT;
+    private Spoiler $SUT;
 
     protected function setUp(): void
     {
