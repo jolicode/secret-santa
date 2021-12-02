@@ -29,14 +29,18 @@ class MessageDispatcher
     public function dispatchRemainingMessages(SecretSanta $secretSanta, ApplicationInterface $application): void
     {
         $startTime = time();
+        $failedUsers = $secretSanta->getErrors();
 
         foreach ($secretSanta->getRemainingAssociations() as $giver => $receiver) {
             if ((time() - $startTime) > 5) {
                 throw new MessageDispatchTimeoutException($secretSanta);
             }
 
-            $application->sendSecretMessage($secretSanta, $giver, $receiver);
+            if ($failedUsers[$giver] ?? false) {
+                continue;
+            }
 
+            $application->sendSecretMessage($secretSanta, $giver, $receiver);
             $secretSanta->markAssociationAsProceeded($giver);
         }
     }

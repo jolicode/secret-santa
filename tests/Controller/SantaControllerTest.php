@@ -92,8 +92,9 @@ class SantaControllerTest extends BaseWebTestCase
         $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
+            'toto3' => 'toto1',
         ], null, $config);
-        $secretSanta->addError('Knock knock. Who\'s there? A santa error!');
+        $secretSanta->addError('Knock knock. Who\'s there? A santa error!', 'toto1');
 
         $client = static::createClient();
         $this->prepareSession($client, 'secret-santa-azerty', $secretSanta);

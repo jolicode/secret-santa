@@ -77,12 +77,22 @@ class SecretSanta
         return $this->remainingAssociations;
     }
 
+    public function addError(string $error, string $giver): void
+    {
+        $this->errors[$giver] = $error;
+    }
+
     /**
      * @return string[]
      */
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function resetErrors(): void
+    {
+        $this->errors = [];
     }
 
     /**
@@ -121,17 +131,18 @@ class SecretSanta
 
     public function isDone(): bool
     {
+        foreach ($this->errors as $user => $error) {
+            if (\array_key_exists($user, $this->remainingAssociations)) {
+                return false;
+            }
+        }
+
         return empty($this->remainingAssociations);
     }
 
     public function markAssociationAsProceeded(string $giver): void
     {
         unset($this->remainingAssociations[$giver]);
-    }
-
-    public function addError(string $error): void
-    {
-        $this->errors[] = $error;
     }
 
     public function getConfig(): Config
