@@ -25,13 +25,13 @@
 
             <div class="result-error">
                 <p>
-                    Sometimes, even Santa run into problems when doing its job. But keep reading, everything is not lost!
+                    Sometimes, even Santa runs into problems when doing his job. But keep reading, everything is not lost!
                 </p>
 
                 <h3>We need you to send the remaining messages</h3>
 
                 <p>
-                    Here is the list of users that didn't reveive their Secret Santa message <strong>yet</strong> (click <button id="reveal" class="">here</button> to reveal the receivers):
+                    Here is the list of users that didn't receive their Secret Santa message <strong>yet</strong> (click <button id="reveal" class="">here</button> to reveal the receivers):
                 </p>
 
                 <ul>
@@ -54,11 +54,13 @@
 
                 <h3>Explanation</h3>
 
+                {% set errors = secretSanta.uniqueErrors %}
+
                 <p>
-                    For information, here is the evil error{{ secretSanta.uniqueErrors|length > 1 ? 's' }} that caused this failure:
+                    For information, here {{ errors|length > 1 ? 'are' : 'is' }} the evil error{{ errors|length > 1 ? 's' }} that caused this failure:
                 </p>
 
-                {% for error in secretSanta.uniqueErrors %}
+                {% for error in errors %}
                     <div class="error-code">
                         {% if loop.length > 1 %}- {% endif %}{{ error|raw }}
                     </div>
@@ -85,7 +87,7 @@
                 </p>
 
                 <div class="is-center">
-                    <a href="{{ path('send_messages', {hash: secretSanta.hash}) }}" class="big-button warning-btn" id="retry-button">
+                    <a href="{{ path('retry', {hash: secretSanta.hash}) }}" class="big-button warning-btn" id="retry-button">
                         <span class="fas fa-redo" aria-hidden="true"></span>
                         Continue - Send the remaining messages
                     </a>

@@ -15,7 +15,6 @@ use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
-use JoliCode\SecretSanta\Exception\SecretSantaException;
 use JoliCode\SecretSanta\Form\MessageType;
 use JoliCode\SecretSanta\Form\ParticipantType;
 use JoliCode\SecretSanta\Model\Config;
@@ -300,16 +299,15 @@ class SantaController extends AbstractController
             $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
         } catch (MessageDispatchTimeoutException $e) {
             $timeout = true;
-        } catch (SecretSantaException $e) {
+        } catch (MessageSendFailedException $e) {
+            $secretSanta->addError($e->getMessage(), $e->getRecipient()->getIdentifier());
+
             $this->logger->error($e->getMessage(), [
                 'exception' => $e,
             ]);
-
             $this->bugsnag->notifyException($e, function ($report) {
                 $report->setSeverity('info');
             });
-
-            $secretSanta->addError($e->getMessage());
 
             $error = true;
         }
@@ -340,6 +338,16 @@ class SantaController extends AbstractController
         ]);
 
         return new Response($content);
+    }
+
+    #[Route('/retry/{hash}', name: 'retry', methods: ['GET'])]
+    public function retry(Request $request, string $hash): Response
+    {
+        $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
+
+        $secretSanta->resetErrors();
+
+        return $this->redirectToRoute('send_messages', ['hash' => $hash]);
     }
 
     #[Route('/cancel/{application}', name: 'cancel', methods: ['GET'])]
