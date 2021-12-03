@@ -173,22 +173,21 @@ class MessageSender
     {
         $scheduled = $secretSanta->getOptions()['scheduled_at'] ?? null;
 
-        $message =
-            'Dear Secret Santa *admin*,
+        $message = 'Dear Secret Santa *admin*,' . \PHP_EOL . \PHP_EOL;
 
-In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
+        if ($scheduled) {
+            $message .= 'As a reminder, the messages will be sent on *' . date('m/d/Y', $secretSanta->getOptions()['scheduled_at']) . '* at *' . date('H:i', $secretSanta->getOptions()['scheduled_at']) . 'UTC*.' . \PHP_EOL . \PHP_EOL;
+        }
+
+        $message .= 'In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
 
 - Copy the following content:
 ```%s```
 - Paste the content on <%s|this page> then submit
 
-Remember, with great power comes great responsibility!' . \PHP_EOL;
+Remember, with great power comes great responsibility!
 
-        if ($scheduled) {
-            $message .= 'The messages will be sent at this time : ' . date('H:i - m/d/Y', $secretSanta->getOptions()['scheduled_at']) . 'UTC' . \PHP_EOL;
-        }
-
-        $message .= 'Happy Secret Santa!';
+Happy Secret Santa!';
 
         $text = sprintf(
             $message,
