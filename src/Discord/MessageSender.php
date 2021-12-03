@@ -94,7 +94,7 @@ Someone will get you a gift and **you have been chosen to gift:**
         $text = sprintf(
             'Dear Secret Santa **admin**,
 
-In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
+In case of trouble or if you need it for whatever reason, here is a way to **retrieve the secret repartition**:
 
 - Copy the following content:
 ```%s```

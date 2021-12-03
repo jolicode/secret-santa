@@ -141,7 +141,7 @@ class MessageSender
         $text = sprintf(
             'Dear Secret Santa *admin*,
 
-In case of trouble or if you need it for whatever reason, here is a way to retrieve the secret repartition:
+In case of trouble or if you need it for whatever reason, here is a way to *retrieve the secret repartition*:
 
 - Copy the following content:
 
