@@ -15,7 +15,11 @@
 
         <p>If not, you can just leave this field <strong>empty</strong>.</p>
 
-        {{ form_widget(form.options.scheduled_at_tz) }}
+        <div class="scheduling">
+            {{ form_widget(form.options.scheduled_at_tz, {attr: {readonly: 'readonly'}}) }}
+            <span id="scheduling-clear" class="scheduling-clear fas fa-times" title="Remove the scheduling date"></span>
+        </div>
+
         {{ form_widget(form.options.scheduled_at, {attr: {style: 'display: none;'}}) }}
 
     </div>
@@ -26,17 +30,37 @@
     <script src="{{ asset('js/flatpickr.js') }}" nonce="{{ csp_nonce('script') }}"></script>
 
     <script nonce="{{ csp_nonce('script') }}">
+        const now = new Date();
+        const minDate = new Date(now.getTime() + 10*60000)
+        const defaultDate = new Date(now.getTime() + 30*60000);
+        const maxDate = new Date(now.getTime() + 120*24*60*60000)
+
         flatpickr('#{{ form.options.scheduled_at_tz.vars.id }}', {
             altInput: true,
             altFormat: 'F j, Y - H:i',
             enableTime: true,
-            time_24hr: true
+            time_24hr: true,
+            minDate: minDate,
+            maxDate: maxDate,
+            defaultHour: defaultDate.getHours(),
+            defaultMinute: defaultDate.getMinutes(),
+            minuteIncrement: 1,
         })
 
         let displayedDate = document.querySelector('#{{ form.options.scheduled_at_tz.vars.id }}');
         if (displayedDate) {
             displayedDate.addEventListener('change', function () {
                 document.querySelector('#{{ form.options.scheduled_at.vars.id }}').value = Math.ceil(new Date(displayedDate.value).getTime() / 1000)
+            })
+        }
+
+        let dateClearer = document.querySelector('#scheduling-clear');
+
+        if (dateClearer) {
+            dateClearer.addEventListener('click', function () {
+                document.querySelector('#{{ form.options.scheduled_at.vars.id }}').value = null;
+                document.querySelector('#{{ form.options.scheduled_at_tz.vars.id }}').value = null;
+                document.querySelector('.scheduling .input').value = null;
             })
         }
     </script>
