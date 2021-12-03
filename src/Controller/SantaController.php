@@ -224,7 +224,7 @@ class SantaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $notes = $config->getNotes();
+            $notes = array_filter($config->getNotes());
 
             $candidates = array_filter($notes ? array_keys($notes) : $config->getSelectedUsers(), function ($id) use ($application) {
                 return $application->getAdmin()->getIdentifier() !== $id;
