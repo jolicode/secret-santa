@@ -2,13 +2,13 @@
 
 {% import _self as current %}
 
-{% macro userSummary(user) %}
+{% macro userSummary(userForm, user) %}
     <span class="user-summary">
         {% if user.extra.image %}
             <img src="{{ user.extra.image }}" alt=""/>
         {% endif %}
         <span>{{ user.name }}</span>
-        <span data-uncheck-user="user-{{ user.identifier }}" class="fas fa-times" title="Unselect this user"></span>
+        <span data-uncheck-user="{{ userForm.vars.id }}" class="fas fa-times" title="Unselect this user"></span>
     </span>
 {% endmacro %}
 
@@ -22,7 +22,7 @@
     >
 
         <div class="data-summary"
-             data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}">
+             data-summary="{{ current.userSummary(userForm, user)|escape('html_attr')|raw }}">
             {{ form_widget(userForm, {'attr': {
                 'data-identifier': user.identifier
             }}
