@@ -658,13 +658,6 @@ textarea {
     margin-bottom: 3em;
 }
 
-.message-step input {
-    box-sizing: border-box;
-    padding: 1em;
-    border: var(--color-gray) 1px solid;
-    border-radius: var(--border-radius);
-}
-
 .message-field textarea {
     max-height: 150px;
 }
@@ -672,6 +665,22 @@ textarea {
 .note-length {
     color: var(--color-gray-dark);
     font-size: 0.8em;
+}
+.scheduling {
+    position: relative;
+    display: inline-block;
+}
+.scheduling input {
+    box-sizing: border-box;
+    padding: 1em;
+    border: var(--color-gray) 1px solid;
+    border-radius: var(--border-radius);
+}
+.scheduling-clear {
+    cursor: pointer;
+    position: absolute;
+    right: 1em;
+    top: 1.25em;
 }
 .next img {
     box-shadow: 10px 10px 25px var(--color-gray);
