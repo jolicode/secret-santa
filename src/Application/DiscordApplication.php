@@ -31,7 +31,7 @@ class DiscordApplication implements ApplicationInterface
     private const SESSION_KEY_ADMIN = 'santa.discord.admin';
     private const SESSION_KEY_GUILD_ID = 'santa.discord.guild_id';
 
-    /** @var null|Group[] */
+    /** @var Group[]|null */
     private ?array $groups = null;
 
     public function __construct(
