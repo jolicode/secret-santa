@@ -28,7 +28,7 @@ class Spoiler
     }
 
     /**
-     * @return null|array<string, string>
+     * @return array<string, string>|null
      */
     public function decode(string $string): ?array
     {
@@ -46,7 +46,7 @@ class Spoiler
     }
 
     /**
-     * @return null|array<string, string>
+     * @return array<string, string>|null
      */
     private function decodeV1(string $encoded): ?array
     {
@@ -66,7 +66,7 @@ class Spoiler
     }
 
     /**
-     * @return null|array<string, string>
+     * @return array<string, string>|null
      */
     private function decodeV2(string $encoded): ?array
     {
@@ -86,7 +86,7 @@ class Spoiler
     }
 
     /**
-     * @return null|array<string, string>
+     * @return array<string, string>|null
      */
     private function decodeV3(string $encoded): ?array
     {
