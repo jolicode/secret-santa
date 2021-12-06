@@ -11,6 +11,8 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
+use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
+
 class ContentControllerTest extends BaseWebTestCase
 {
     public function testHomepageWorks(): void
@@ -26,7 +28,7 @@ class ContentControllerTest extends BaseWebTestCase
 
     public function testHomepageWorksHttp(): void
     {
-        $client = static::createClient([], ['HTTPS' => false]);
+        $client = static::createClient(server: ['HTTPS' => false]);
 
         $client->request('GET', '/');
         $response = $client->getResponse();

@@ -37,7 +37,7 @@
         "symfony/http-client": "*",
         "symfony/monolog-bundle": "^3.3",
         "symfony/twig-bundle": "*",
-        "symfony/validator": "5.3.*",
+        "symfony/validator": "*",
         "symfony/yaml": "*",
         "twig/twig": "^3.3",
         "wohali/oauth2-discord-new": "^1.0"
@@ -101,7 +101,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.3.*"
+            "require": "5.4.*"
         }
     }
 }

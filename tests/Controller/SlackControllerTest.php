@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SlackControllerTest extends BaseWebTestCase
 {
-    use SessionPrepareTrait;
-
     public function testAuthPageRedirectsToSlack(): void
     {
         $client = static::createClient();

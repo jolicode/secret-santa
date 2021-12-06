@@ -332,6 +332,7 @@ class SantaController extends AbstractController
     public function finish(Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
+        dump($secretSanta);
 
         $content = $this->twig->render('santa/finish.html.twig', [
             'secretSanta' => $secretSanta,

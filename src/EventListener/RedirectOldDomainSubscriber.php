@@ -33,7 +33,7 @@ class RedirectOldDomainSubscriber implements EventSubscriberInterface
         $event->setResponse(new RedirectResponse('https://secret-santa.team' . $request->getRequestUri(), 301));
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::REQUEST => ['redirectOldDomain', 90000000000],

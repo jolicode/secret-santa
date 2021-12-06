@@ -15,14 +15,13 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 trait SessionPrepareTrait
 {
-    /**
-     * @param mixed $value
-     */
-    public function prepareSession(KernelBrowser $client, string $key, $value): void
+    public function prepareSession(KernelBrowser $client, string $key, mixed $value): void
     {
-        $session = self::$kernel->getContainer()->get('session');
-        $session->start();
-        $session->set($key, $value);
-        $session->save();
+        $sessionStorageFactory = self::$kernel->getContainer()->get('test.session.storage.factory.mock_file');
+        $sessionStorage = $sessionStorageFactory->createStorage(null);
+
+        $sessionStorage->start();
+        $sessionStorage->setSessionData([$key => $value]);
+        $sessionStorage->save();
     }
 }
