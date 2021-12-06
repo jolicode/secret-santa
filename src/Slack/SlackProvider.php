@@ -19,7 +19,7 @@ use AdamPaterson\OAuth2\Client\Provider\Slack;
  */
 class SlackProvider extends Slack
 {
-    public function getBaseAuthorizationUrl()
+    public function getBaseAuthorizationUrl(): string
     {
         return 'https://slack.com/oauth/v2/authorize';
     }
@@ -27,7 +27,7 @@ class SlackProvider extends Slack
     /**
      * @param array<string,mixed> $params
      */
-    public function getBaseAccessTokenUrl(array $params)
+    public function getBaseAccessTokenUrl(array $params): string
     {
         return 'https://slack.com/api/oauth.v2.access';
     }

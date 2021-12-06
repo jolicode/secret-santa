@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ZoomControllerTest extends BaseWebTestCase
 {
-    use SessionPrepareTrait;
-
     public function testAuthPageRedirectsToZoom(): void
     {
         $client = static::createClient();

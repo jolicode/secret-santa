@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class DiscordControllerTest extends BaseWebTestCase
 {
-    use SessionPrepareTrait;
-
     public function testAuthPageRedirectsToDiscord(): void
     {
         $client = static::createClient();
@@ -25,7 +23,7 @@ class DiscordControllerTest extends BaseWebTestCase
         $response = $client->getResponse();
 
         self::assertInstanceOf(RedirectResponse::class, $response);
-        self::assertSame(302, $response->getStatusCode());
+        self::assertSame(302, (int) $response->getStatusCode());
         self::assertStringContainsString('https://discord.com/api/', $response->getTargetUrl());
     }
 }
