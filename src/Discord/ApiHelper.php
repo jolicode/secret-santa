@@ -12,7 +12,6 @@
 namespace JoliCode\SecretSanta\Discord;
 
 use RestCord\DiscordClient;
-use RestCord\Model\Guild\Guild;
 use RestCord\Model\Guild\GuildMember;
 use RestCord\Model\Permissions\Role;
 
@@ -24,15 +23,6 @@ class ApiHelper
 
     public function __construct(private string $discordBotToken)
     {
-    }
-
-    public function getGuild(int $guildId): Guild
-    {
-        $client = $this->getClient();
-
-        return $client->guild->getGuild([
-            'guild.id' => $guildId,
-        ]);
     }
 
     /**

@@ -11,11 +11,11 @@
 
 namespace JoliCode\SecretSanta\Application;
 
+use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Slack\MessageSender;
 use JoliCode\SecretSanta\Slack\UserExtractor;
-use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -63,7 +63,7 @@ class SlackApplication implements ApplicationInterface
 
     public function getOrganization(): string
     {
-        return $this->getToken()->getValues()['team']['name'] ?? '';
+        return $this->getToken()->getContext()['team'] ?? '';
     }
 
     public function getAdmin(): ?User
@@ -127,16 +127,16 @@ class SlackApplication implements ApplicationInterface
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
     }
 
-    public function setToken(AccessTokenInterface $token): void
+    public function setToken(ApplicationToken $token): void
     {
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
-    private function getToken(): AccessTokenInterface
+    private function getToken(): ApplicationToken
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!$token instanceof AccessTokenInterface) {
+        if (!$token instanceof ApplicationToken) {
             throw new \LogicException('Invalid token.');
         }
 
