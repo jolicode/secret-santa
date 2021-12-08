@@ -11,13 +11,12 @@
 
 namespace JoliCode\SecretSanta\Application;
 
-use JoliCode\SecretSanta\Discord\ApiHelper;
 use JoliCode\SecretSanta\Discord\MessageSender;
 use JoliCode\SecretSanta\Discord\UserExtractor;
+use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
-use League\OAuth2\Client\Token\AccessTokenInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -29,14 +28,12 @@ class DiscordApplication implements ApplicationInterface
 
     private const SESSION_KEY_TOKEN = 'santa.discord.token';
     private const SESSION_KEY_ADMIN = 'santa.discord.admin';
-    private const SESSION_KEY_GUILD_ID = 'santa.discord.guild_id';
 
     /** @var Group[]|null */
     private ?array $groups = null;
 
     public function __construct(
         private RequestStack $requestStack,
-        private ApiHelper $apiHelper,
         private UserExtractor $userExtractor,
         private MessageSender $messageSender,
     ) {
@@ -65,7 +62,7 @@ class DiscordApplication implements ApplicationInterface
 
     public function getOrganization(): string
     {
-        return $this->apiHelper->getGuild($this->getGuildId())->name;
+        return $this->getToken()->getContext()['guildName'];
     }
 
     public function getAdmin(): ?User
@@ -80,12 +77,7 @@ class DiscordApplication implements ApplicationInterface
 
     public function getGuildId(): ?int
     {
-        return $this->getSession()->get(self::SESSION_KEY_GUILD_ID);
-    }
-
-    public function setGuildId(int $guild): void
-    {
-        $this->getSession()->set(self::SESSION_KEY_GUILD_ID, $guild);
+        return $this->getToken()->getContext()['guildId'];
     }
 
     public function getGroups(): array
@@ -137,19 +129,18 @@ class DiscordApplication implements ApplicationInterface
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
-        $this->getSession()->remove(self::SESSION_KEY_GUILD_ID);
     }
 
-    public function setToken(AccessTokenInterface $token): void
+    public function setToken(ApplicationToken $token): void
     {
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
-    public function getToken(): AccessTokenInterface
+    public function getToken(): ApplicationToken
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 
-        if (!$token instanceof AccessTokenInterface) {
+        if (!$token instanceof ApplicationToken) {
             throw new \LogicException('Invalid token.');
         }
 

@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Controller;
 
 use JoliCode\SecretSanta\Application\DiscordApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
+use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\User;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -84,6 +85,11 @@ class DiscordController extends AbstractController
                 'code' => $request->query->get('code'),
             ]);
 
+            $appToken = new ApplicationToken($token->getToken(), [
+                'guildId' => $token->getValues()['guild']['id'],
+                'guildName' => $token->getValues()['guild']['name'],
+            ]);
+
             // Who Am I?
             /** @var DiscordResourceOwner $user */
             $user = $provider->getResourceOwner($token);
@@ -91,9 +97,8 @@ class DiscordController extends AbstractController
             throw new AuthenticationException(DiscordApplication::APPLICATION_CODE, 'Failed to retrieve data from Discord.', $e);
         }
 
-        $discordApplication->setToken($token);
+        $discordApplication->setToken($appToken);
         $discordApplication->setAdmin(new User($user->getId(), $user->getUsername()));
-        $discordApplication->setGuildId($request->query->getInt('guild_id'));
 
         return new RedirectResponse($this->router->generate('run', [
             'application' => $discordApplication->getCode(),

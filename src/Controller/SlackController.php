@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Controller;
 
 use JoliCode\SecretSanta\Application\SlackApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
+use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Slack\SlackProvider;
 use JoliCode\SecretSanta\Slack\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
@@ -79,12 +80,14 @@ class SlackController extends AbstractController
                 'code' => $request->query->get('code'),
             ]);
 
+            $appToken = new ApplicationToken($token->getToken(), ['team' => $token->getValues()['team']['name']]);
+
             $admin = $userExtractor->getUser($token->getToken(), $token->getValues()['authed_user']['id']);
         } catch (\Exception $e) {
             throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Failed to retrieve data from Slack.', $e);
         }
 
-        $slackApplication->setToken($token);
+        $slackApplication->setToken($appToken);
         $slackApplication->setAdmin($admin);
 
         return new RedirectResponse($this->router->generate('run', [
