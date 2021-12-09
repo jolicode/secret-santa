@@ -11,8 +11,6 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
-use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
-
 class ContentControllerTest extends BaseWebTestCase
 {
     public function testHomepageWorks(): void
