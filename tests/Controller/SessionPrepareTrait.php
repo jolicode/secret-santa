@@ -23,7 +23,7 @@ trait SessionPrepareTrait
         $sessionStorageFactory = self::$kernel->getContainer()->get('test.session.storage.factory.mock_file');
         $sessionStorage = $sessionStorageFactory->createStorage(null);
 
-        $sessionStorage->setId('session-mock');
+        $sessionStorage->setId('session-mock-id');
         $sessionStorage->start();
         $sessionStorage->setSessionData(
             [
@@ -33,7 +33,7 @@ trait SessionPrepareTrait
 
         $sessionStorage->save();
 
-        $cookie = new Cookie('santaSession', 'session-mock');
+        $cookie = new Cookie('MOCKSESSID', 'session-mock-id');
         $client->getCookieJar()->set($cookie);
     }
 }

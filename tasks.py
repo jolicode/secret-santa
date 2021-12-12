@@ -124,12 +124,15 @@ def stop(c):
 
 
 @task
-def tests(c):
+def tests(c, filter=""):
     """
     Launch tests
     """
     with Builder(c):
-        docker_compose_run(c, 'bin/phpunit')
+        if filter == "":
+            docker_compose_run(c, 'bin/phpunit')
+        else:
+            docker_compose_run(c, 'bin/phpunit --filter=%s' % filter)
 
 
 @task
