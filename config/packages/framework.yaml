@@ -24,9 +24,10 @@ when@test:
     framework:
         test: true
         session:
-            storage_factory_id: session.storage.factory.mock_file
+            name: MOCKSESSID
+            storage_factory_id: test.session.storage.factory.mock_file
 
     services:
         test.session.storage.factory.mock_file:
-            alias : session.storage.factory.mock_file
+            alias: session.storage.factory.mock_file
             public: true
