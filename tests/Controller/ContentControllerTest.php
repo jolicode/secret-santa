@@ -29,12 +29,14 @@ class ContentControllerTest extends BaseWebTestCase
         // @todo: fixme
         self::markTestSkipped();
 
+        /*
         $client = static::createClient(server: ['HTTPS' => false]);
 
         $client->request('GET', '/');
         $response = $client->getResponse();
 
         self::assertSame(301, $response->getStatusCode());
+        */
     }
 
     public function testHallOfFameWorks(): void

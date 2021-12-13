@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorageFactory;
 
 trait SessionPrepareTrait
@@ -21,6 +22,7 @@ trait SessionPrepareTrait
     {
         /** @var MockFileSessionStorageFactory $sessionStorageFactory */
         $sessionStorageFactory = self::$kernel->getContainer()->get('test.session.storage.factory.mock_file');
+        /** @var MockFileSessionStorage $sessionStorage */
         $sessionStorage = $sessionStorageFactory->createStorage(null);
 
         $sessionStorage->setId('session-mock-id');
