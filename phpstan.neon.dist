@@ -7,13 +7,8 @@ parameters:
     inferPrivatePropertyTypeFromConstructor: true
 
     symfony:
-        container_xml_path: '%rootDir%/../../../var/cache/dev/JoliCode_SecretSanta_KernelDevDebugContainer.xml'
+        container_xml_path: '%rootDir%/../../../var/cache/test/JoliCode_SecretSanta_KernelTestDebugContainer.xml'
 
     # Make tests analyses working with Symfony's PHPUnit bridge
     bootstrapFiles:
        - vendor/bin/.phpunit/phpunit-9.5-0/vendor/autoload.php
-
-    ignoreErrors:
-        -
-         message: '#Service "session" is not registered in the container.#'
-         path: tests/Controller/SessionPrepareTrait.php
