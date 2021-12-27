@@ -24,11 +24,11 @@
         "bugsnag/bugsnag-symfony": "^1.10",
         "doctrine/annotations": "^1.13",
         "iflorespaz/oauth2-zoom": "dev-master",
-        "jolicode/slack-php-api": "^4.0",
-        "nelmio/security-bundle": "^2.10",
+        "jolicode/slack-php-api": "dev-update-jane-v7",
+        "nelmio/security-bundle": "dev-support-symfony-6",
         "nyholm/psr7": "^1.4",
         "predis/predis": "^1.1",
-        "restcord/restcord": "^0.5",
+        "restcord/restcord": "dev-Nispeon-patch-2",
         "symfony/asset": "*",
         "symfony/console": "*",
         "symfony/flex": "^2.0",
@@ -36,6 +36,7 @@
         "symfony/framework-bundle": "*",
         "symfony/http-client": "*",
         "symfony/monolog-bundle": "^3.7",
+        "symfony/runtime": "*",
         "symfony/twig-bundle": "*",
         "symfony/validator": "*",
         "symfony/yaml": "*",
@@ -62,6 +63,14 @@
         {
             "type": "vcs",
             "url": "https://github.com/nispeon/oauth2-zoom"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/Nispeon/restcord"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/pyrech/NelmioSecurityBundle"
         }
     ],
     "config": {
@@ -101,7 +110,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "5.4.*"
+            "require": "6.0.*"
         }
     }
 }
