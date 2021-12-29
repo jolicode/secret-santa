@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "458658299b770a27f17a98fdd99fe0d6",
+    "content-hash": "8ae641eecef3ca030e07461792e6b289",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",
@@ -1287,16 +1287,16 @@
         },
         {
             "name": "jolicode/slack-php-api",
-            "version": "dev-update-jane-v7",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jolicode/slack-php-api.git",
-                "reference": "1a6c8a6930b1fe0827afef4964c58b630cf64317"
+                "reference": "836217b880fedb47b34a4bcb2eccaa2502b92e57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jolicode/slack-php-api/zipball/1a6c8a6930b1fe0827afef4964c58b630cf64317",
-                "reference": "1a6c8a6930b1fe0827afef4964c58b630cf64317",
+                "url": "https://api.github.com/repos/jolicode/slack-php-api/zipball/836217b880fedb47b34a4bcb2eccaa2502b92e57",
+                "reference": "836217b880fedb47b34a4bcb2eccaa2502b92e57",
                 "shasum": ""
             },
             "require": {
@@ -1353,9 +1353,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jolicode/slack-php-api/issues",
-                "source": "https://github.com/jolicode/slack-php-api/tree/update-jane-v7"
+                "source": "https://github.com/jolicode/slack-php-api/tree/v4.4.0"
             },
-            "time": "2021-12-27T21:13:58+00:00"
+            "time": "2021-12-29T11:18:06+00:00"
         },
         {
             "name": "league/oauth2-client",
@@ -1699,12 +1699,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pyrech/NelmioSecurityBundle.git",
-                "reference": "cf2959acaa8ddb6dd70dbaa7b354816299595090"
+                "reference": "8017cb3e97bb380f9d94ffa823f89e0cfd172001"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pyrech/NelmioSecurityBundle/zipball/cf2959acaa8ddb6dd70dbaa7b354816299595090",
-                "reference": "cf2959acaa8ddb6dd70dbaa7b354816299595090",
+                "url": "https://api.github.com/repos/pyrech/NelmioSecurityBundle/zipball/8017cb3e97bb380f9d94ffa823f89e0cfd172001",
+                "reference": "8017cb3e97bb380f9d94ffa823f89e0cfd172001",
                 "shasum": ""
             },
             "require": {
@@ -1757,7 +1757,7 @@
             "support": {
                 "source": "https://github.com/pyrech/NelmioSecurityBundle/tree/support-symfony-6"
             },
-            "time": "2021-12-27T22:27:43+00:00"
+            "time": "2021-12-28T12:55:46+00:00"
         },
         {
             "name": "netresearch/jsonmapper",
@@ -2869,16 +2869,16 @@
         },
         {
             "name": "restcord/restcord",
-            "version": "dev-Nispeon-patch-2",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Nispeon/restcord.git",
-                "reference": "54ae4d0f97c3189e65bbc9635593a45ada96ee3c"
+                "url": "https://github.com/restcord/restcord.git",
+                "reference": "4c7c38e9ef5d1d69e2c31d973b386a6be0a2656a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Nispeon/restcord/zipball/54ae4d0f97c3189e65bbc9635593a45ada96ee3c",
-                "reference": "54ae4d0f97c3189e65bbc9635593a45ada96ee3c",
+                "url": "https://api.github.com/repos/restcord/restcord/zipball/4c7c38e9ef5d1d69e2c31d973b386a6be0a2656a",
+                "reference": "4c7c38e9ef5d1d69e2c31d973b386a6be0a2656a",
                 "shasum": ""
             },
             "require": {
@@ -2898,17 +2898,14 @@
                 "symfony/var-dumper": "^2.6|^3.0|^4.0",
                 "twig/twig": "^1.20|^2.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "RestCord\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "RestCord\\Test\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2920,9 +2917,10 @@
             ],
             "description": "REST Library for the Discord API",
             "support": {
-                "source": "https://github.com/Nispeon/restcord/tree/Nispeon-patch-2"
+                "issues": "https://github.com/restcord/restcord/issues",
+                "source": "https://github.com/restcord/restcord/tree/develop"
             },
-            "time": "2021-11-29T17:27:21+00:00"
+            "time": "2021-12-28T00:16:46+00:00"
         },
         {
             "name": "symfony/asset",
@@ -8457,7 +8455,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "iflorespaz/oauth2-zoom": 20,
-        "jolicode/slack-php-api": 20,
         "nelmio/security-bundle": 20,
         "restcord/restcord": 20
     },

@@ -24,11 +24,11 @@
         "bugsnag/bugsnag-symfony": "^1.10",
         "doctrine/annotations": "^1.13",
         "iflorespaz/oauth2-zoom": "dev-master",
-        "jolicode/slack-php-api": "dev-update-jane-v7",
+        "jolicode/slack-php-api": "^4.4",
         "nelmio/security-bundle": "dev-support-symfony-6",
         "nyholm/psr7": "^1.4",
         "predis/predis": "^1.1",
-        "restcord/restcord": "dev-Nispeon-patch-2",
+        "restcord/restcord": "dev-develop",
         "symfony/asset": "*",
         "symfony/console": "*",
         "symfony/flex": "^2.0",
@@ -63,10 +63,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/nispeon/oauth2-zoom"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/Nispeon/restcord"
         },
         {
             "type": "vcs",
