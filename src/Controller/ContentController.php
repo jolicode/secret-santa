@@ -205,6 +205,12 @@ class ContentController extends AbstractController
                 'image' => 'redirectionio.svg',
             ],
             [
+                'label' => 'Rome Blockchain Labs',
+                'link' => 'https://romeblockchain.com/',
+                'image' => 'romeblockchain.png',
+            ],
+
+            [
                 'label' => 'Sencrop',
                 'link' => 'https://sencrop.com/',
                 'image' => 'sencrop.png',
