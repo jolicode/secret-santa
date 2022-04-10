@@ -59,7 +59,7 @@ class DiscordController extends AbstractController
                     'identify',
                     'bot',
                 ],
-                //'permissions' => '2048',
+                // 'permissions' => '2048',
             ];
             $authUrl = $provider->getAuthorizationUrl($options);
 
