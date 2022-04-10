@@ -35,26 +35,11 @@
             "config/routes/annotations.yaml"
         ]
     },
-    "doctrine/cache": {
-        "version": "v1.8.0"
-    },
-    "doctrine/collections": {
-        "version": "v1.5.0"
-    },
-    "doctrine/event-manager": {
-        "version": "v1.0.0"
-    },
     "doctrine/inflector": {
         "version": "2.0.4"
     },
     "doctrine/lexer": {
         "version": "1.2.1"
-    },
-    "doctrine/persistence": {
-        "version": "v1.0.1"
-    },
-    "doctrine/reflection": {
-        "version": "v1.0.0"
     },
     "friendsofphp/php-cs-fixer": {
         "version": "3.4",
@@ -67,9 +52,6 @@
         "files": [
             ".php-cs-fixer.dist.php"
         ]
-    },
-    "gecko-packages/gecko-php-unit": {
-        "version": "v2.2"
     },
     "guzzlehttp/command": {
         "version": "1.2.1"
@@ -142,9 +124,6 @@
         "files": [
             "config/packages/nyholm_psr7.yaml"
         ]
-    },
-    "php": {
-        "version": "7.4"
     },
     "php-cs-fixer/diff": {
         "version": "v2.0.2"
@@ -256,9 +235,6 @@
         "files": [
             "config/packages/dev/debug.yaml"
         ]
-    },
-    "symfony/debug-pack": {
-        "version": "v1.0.8"
     },
     "symfony/dependency-injection": {
         "version": "v6.0.1"
@@ -381,9 +357,6 @@
             "tests/bootstrap.php"
         ]
     },
-    "symfony/polyfill-apcu": {
-        "version": "v1.5.0"
-    },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.23.1"
     },
@@ -404,9 +377,6 @@
     },
     "symfony/process": {
         "version": "v6.0.0"
-    },
-    "symfony/profiler-pack": {
-        "version": "v1.0.3"
     },
     "symfony/property-access": {
         "version": "v6.0.0"
