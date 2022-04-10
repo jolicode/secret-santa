@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efa702f1f41c3546365a5a7a0e674b04",
+    "content-hash": "3e096e3a85896e737248cc80c670e5e8",
     "packages": [
         {
             "name": "adam-paterson/oauth2-slack",
@@ -1055,106 +1055,6 @@
                 }
             ],
             "time": "2021-10-07T12:57:01+00:00"
-        },
-        {
-            "name": "iflorespaz/oauth2-zoom",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Nispeon/oauth2-zoom.git",
-                "reference": "2a17b1bd85672d94921069bd3fc87e4bcc4c7871"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Nispeon/oauth2-zoom/zipball/2a17b1bd85672d94921069bd3fc87e4bcc4c7871",
-                "reference": "2a17b1bd85672d94921069bd3fc87e4bcc4c7871",
-                "shasum": ""
-            },
-            "require": {
-                "jakeasmith/http_build_url": "^1.0",
-                "league/oauth2-client": "~2.3",
-                "php": "^5.6|^7.0|^8.0"
-            },
-            "require-dev": {
-                "squizlabs/php_codesniffer": "~2.0"
-            },
-            "default-branch": true,
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\OAuth2\\Client\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "League\\OAuth2\\Client\\Test\\": "test/src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "iflorespaz",
-                    "email": "isaac@deluxus.net",
-                    "homepage": "https://github.com/iflorespaz"
-                }
-            ],
-            "description": "Zoom OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
-            "keywords": [
-                "authorisation",
-                "authorization",
-                "client",
-                "oauth",
-                "oauth2",
-                "zoom"
-            ],
-            "support": {
-                "source": "https://github.com/Nispeon/oauth2-zoom/tree/master"
-            },
-            "time": "2021-09-28T08:51:43+00:00"
-        },
-        {
-            "name": "jakeasmith/http_build_url",
-            "version": "1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jakeasmith/http_build_url.git",
-                "reference": "93c273e77cb1edead0cf8bcf8cd2003428e74e37"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jakeasmith/http_build_url/zipball/93c273e77cb1edead0cf8bcf8cd2003428e74e37",
-                "reference": "93c273e77cb1edead0cf8bcf8cd2003428e74e37",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/http_build_url.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jake A. Smith",
-                    "email": "theman@jakeasmith.com"
-                }
-            ],
-            "description": "Provides functionality for http_build_url() to environments without pecl_http.",
-            "support": {
-                "issues": "https://github.com/jakeasmith/http_build_url/issues",
-                "source": "https://github.com/jakeasmith/http_build_url"
-            },
-            "time": "2017-05-01T15:36:40+00:00"
         },
         {
             "name": "jane-php/json-schema-runtime",
@@ -8451,7 +8351,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "iflorespaz/oauth2-zoom": 20,
         "nelmio/security-bundle": 20,
         "restcord/restcord": 20
     },

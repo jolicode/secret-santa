@@ -71,12 +71,6 @@
     "guzzlehttp/uri-template": {
         "version": "v1.0.1"
     },
-    "iflorespaz/oauth2-zoom": {
-        "version": "1.0.x-dev"
-    },
-    "jakeasmith/http_build_url": {
-        "version": "1.0.1"
-    },
     "jane-php/json-schema-runtime": {
         "version": "v7.1.5"
     },

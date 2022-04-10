@@ -23,7 +23,6 @@
         "adam-paterson/oauth2-slack": "^1.1",
         "bugsnag/bugsnag-symfony": "^1.10",
         "doctrine/annotations": "^1.13",
-        "iflorespaz/oauth2-zoom": "dev-master",
         "jolicode/slack-php-api": "^4.4",
         "nelmio/security-bundle": "dev-support-symfony-6",
         "nyholm/psr7": "^1.4",
@@ -60,10 +59,6 @@
         "symfony/web-profiler-bundle": "*"
     },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/nispeon/oauth2-zoom"
-        },
         {
             "type": "vcs",
             "url": "https://github.com/pyrech/NelmioSecurityBundle"
