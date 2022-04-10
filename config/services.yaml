@@ -13,7 +13,6 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.# automatically injects dependencies in your services
         bind:
             iterable $applications: !tagged_iterator secret_santa.application
-            string $zoomBotJid: '%env(ZOOM_BOT_JID)%'
 
     _instanceof:
         JoliCode\SecretSanta\Application\ApplicationInterface:
@@ -43,11 +42,6 @@ services:
         arguments:
             $discordClientId: '%env(DISCORD_CLIENT_ID)%'
             $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
-
-    JoliCode\SecretSanta\Controller\ZoomController:
-        arguments:
-            $zoomClientId: '%env(ZOOM_CLIENT_ID)%'
-            $zoomClientSecret: '%env(ZOOM_CLIENT_SECRET)%'
 
     JoliCode\SecretSanta\Discord\ApiHelper:
         public: true
