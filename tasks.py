@@ -143,6 +143,7 @@ def qa(c):
     with Builder(c):
         # Make tests analyses working with Symfony's PHPUnit bridge
         docker_compose_run(c, 'vendor/bin/simple-phpunit install', no_deps=True)
+        docker_compose_run(c, 'bin/console cache:warmup --env=test', no_deps=True)
 
         docker_compose_run(c, 'vendor/bin/phpstan analyse', no_deps=True)
 
