@@ -1,3 +1,7 @@
+*.pyc
+/infrastructure/docker/docker-compose.override.yml
+/infrastructure/docker/services/router/etc/ssl/certs/*.pem
+
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php

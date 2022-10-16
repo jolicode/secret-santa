@@ -1,6 +1,7 @@
 from invoke import task
 from shlex import quote
 from colorama import Fore
+from distutils.spawn import find_executable
 import json
 import os
 import re
@@ -47,6 +48,7 @@ def start(c):
             c.run('docker-machine ssh dinghy "echo \'nameserver 8.8.8.8\' | sudo tee -a /etc/resolv.conf && sudo /etc/init.d/docker restart"')
 
     stop_workers(c)
+    generate_certificates(c)
     up(c)
     cache_clear(c)
     install(c)
@@ -66,9 +68,9 @@ def install(c):
         if os.path.isfile(c.root_dir + '/' + c.project_directory + '/composer.json'):
             docker_compose_run(c, 'composer install -n --prefer-dist --optimize-autoloader', no_deps=True)
         if os.path.isfile(c.root_dir + '/' + c.project_directory + '/yarn.lock'):
-            run_in_docker_or_locally_for_dinghy(c, 'yarn', no_deps=True)
+            run_in_docker_or_locally_for_mac(c, 'yarn', no_deps=True)
         elif os.path.isfile(c.root_dir + '/' + c.project_directory + '/package.json'):
-            run_in_docker_or_locally_for_dinghy(c, 'npm install', no_deps=True)
+            run_in_docker_or_locally_for_mac(c, 'npm install', no_deps=True)
 
 
 @task
@@ -136,9 +138,9 @@ def tests(c, filter=""):
 
 
 @task
-def qa(c):
+def phpstan(c):
     """
-    Run static analysis tools
+    Run phpstan
     """
     with Builder(c):
         # Make tests analyses working with Symfony's PHPUnit bridge
@@ -205,6 +207,7 @@ def destroy(c, force=False):
 
     with Builder(c):
         docker_compose(c, 'down --remove-orphans --volumes --rmi=local')
+        c.run('rm -f infrastructure/docker/services/router/etc/ssl/certs/*.pem')
 
 
 @task(default=True)
@@ -240,11 +243,51 @@ def help(c):
         pass
 
 
-def run_in_docker_or_locally_for_dinghy(c, command, no_deps=False):
+@task
+def generate_certificates(c, force=False):
+    """
+    Generate SSL certificates (with mkcert if available or self-signed if not)
+    """
+    with Builder(c):
+        if (os.path.isfile(c.root_dir + '/infrastructure/docker/services/router/etc/ssl/certs/cert.pem') and not force):
+            print(Fore.GREEN + 'SSL certificates found in infrastructure/docker/services/router/etc/ssl/certs/*.pem.')
+            print('Run "inv generate-certificates --force" to generate new certificates.')
+            return
+
+        if force:
+            if os.path.isfile(c.root_dir + '/infrastructure/docker/services/router/etc/ssl/certs/cert.pem'):
+                print('Removing existing certificates in infrastructure/docker/services/router/etc/ssl/certs/*.pem.')
+                os.remove('infrastructure/docker/services/router/etc/ssl/certs/cert.pem')
+
+            if os.path.isfile(c.root_dir + '/infrastructure/docker/services/router/etc/ssl/certs/key.pem'):
+                os.remove('infrastructure/docker/services/router/etc/ssl/certs/key.pem')
+
+        if find_executable('mkcert') is not None:
+            path_caroot = c.run('mkcert -CAROOT', hide=True).stdout.strip()
+
+            if not os.path.isdir(path_caroot):
+                print(Fore.RED + 'You must have mkcert CA Root installed on your host with `mkcert -install` command')
+                return
+
+            c.run('mkcert -cert-file infrastructure/docker/services/router/etc/ssl/certs/cert.pem -key-file infrastructure/docker/services/router/etc/ssl/certs/key.pem %s "*.%s" %s' % (c.root_domain, c.root_domain, ' '.join(c.extra_domains)))
+            print(Fore.GREEN + 'Successfully generated SSL certificates with mkcert.')
+            if force:
+                print('Please restart the infrastructure to use the new certificates with "inv up" or "inv start".')
+            return
+
+        c.run('infrastructure/docker/services/router/generate-ssl.sh')
+
+        print(Fore.GREEN + 'Successfully generated self-signed SSL certificates in infrastructure/docker/services/router/etc/ssl/certs/*.pem.')
+        print(Fore.YELLOW + 'Consider installing mkcert to generate locally trusted SSL certificates and run "inv generate-certificates --force".')
+        if force:
+            print('Please restart the infrastructure to use the new certificates with "inv up" or "inv start".')
+
+
+def run_in_docker_or_locally_for_mac(c, command, no_deps=False):
     """
     Mac users have a lot of problems running Yarn / Webpack on the Docker stack so this func allow them to run these tools on their host
     """
-    if c.dinghy:
+    if c.macos:
         with c.cd(c.project_directory):
             c.run(command)
     else:
