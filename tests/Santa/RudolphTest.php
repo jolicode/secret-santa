@@ -70,6 +70,7 @@ class RudolphTest extends TestCase
 
     /**
      * @param string[] $users
+     *
      * @dataProvider userListDataProvider
      */
     public function testItCreateAssociations(array $users): void

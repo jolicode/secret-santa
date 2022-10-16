@@ -40,9 +40,9 @@ interface ApplicationInterface
     /**
      * An array of User indexed by their identifier.
      *
-     * @throws UserExtractionFailedException
-     *
      * @return User[]
+     *
+     * @throws UserExtractionFailedException
      */
     public function getUsers(): array;
 

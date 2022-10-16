@@ -19,7 +19,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-COPY etc/. /etc/
+COPY etc/apache2/. /etc/apache2/
+COPY etc/service/. /etc/service/
 COPY php-configuration /etc/php/${PHP_VERSION}
 
 RUN phpenmod app-default \

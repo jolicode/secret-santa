@@ -1,54 +1,39 @@
 name: CI
 
-on:
+'on':
     push:
-        branches: [ main ]
-    pull_request:
+        branches:
+            - main
+    pull_request: null
     schedule:
-          - cron: '0 0 * * MON'
+        -
+            cron: '0 0 * * MON'
 
 jobs:
     ci:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-
-            # Cache
-            - uses: satackey/action-docker-layer-caching@v0.0.8
-              continue-on-error: true
-              with:
-                  key: docker-{hash}
-                  restore-keys: docker-
-            - name: Cache Composer
-              id: cache-composer
-              uses: actions/cache@v2
-              with:
-                  path: ~/.composer/cache/
-                  key: composer-${{ hashFiles('composer.lock') }}
-                  restore-keys: composer-
-
-            - name: Cache PHPStan
-              uses: actions/cache@v2
-              with:
-                  path: var/phpstan-tmp/
-                  key: phpstan-${{ github.sha }}
-                  restore-keys: phpstan-
-            - name: Cache PHPUnit
-              uses: actions/cache@v2
-              with:
-                  path: bin/.phpunit/
-                  key: phpunit-${{ github.sha }}
-                  restore-keys: phpunit-
+            -
+                uses: actions/checkout@v2
 
             # Setup
-            - uses: actions/setup-python@v2
-              with:
-                  python-version: '3.x'
-            - run: pip3 install pipenv
+
+            -
+                uses: actions/setup-python@v2
+                with:
+                    python-version: '3.9'
+            -
+                run: 'pip3 install pipenv'
 
             # Install the stack and run the tests
-            - run: pipenv install --deploy --dev
-            - run: pipenv run inv start && sleep 5
-            - run: pipenv run inv tests
-            - run: pipenv run inv qa
-            - run: pipenv run inv cs --dry-run
+
+            -
+                run: 'pipenv install --deploy --dev'
+            -
+                run: 'pipenv run inv start && sleep 5'
+            -
+                run: 'pipenv run inv tests'
+            -
+                run: 'pipenv run inv phpstan'
+            -
+                run: 'pipenv run inv cs --dry-run'
