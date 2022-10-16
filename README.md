@@ -14,9 +14,9 @@ Code source is under MIT License.
 
 A Docker environment is provided and requires you to have these tools available:
 
- * Docker
- * Bash
- * pipenv (see [these instructions](https://pipenv.readthedocs.io/en/latest/install/) for how to install)
+* Docker
+* Bash
+* pipenv (see [these instructions](https://pipenv.readthedocs.io/en/latest/install/) for how to install)
 
 Install and run `pipenv` to install the required tools:
 
@@ -31,7 +31,7 @@ You can configure your current shell to be able to use Invoke commands directly
 pipenv shell
 ```
 
-Optionally, in order to improve your usage of invoke scripts, you can install a console autocompletion script.
+Optionally, in order to improve your usage of invoke scripts, you can install console autocompletion script.
 
 If you are using bash:
 
@@ -39,19 +39,19 @@ If you are using bash:
 invoke --print-completion-script=bash > /etc/bash_completion.d/invoke
 ```
 
-If you are using something else, please refer to your shell documentation. But
-you may need to use `invoke --print-completion-script=zsh > /to/somewhere`
+If you are using something else, please refer to your shell documentation.
+You may need to use `invoke --print-completion-script=zsh > /to/somewhere`.
 
 Invoke supports completion for `bash`, `zsh` & `fish` shells.
 
 ### Docker environment
 
 The Docker infrastructure provides a web stack with:
- - NGINX
- - Redis
- - PHP 7.4
- - Traefik
- - A container with some tooling:
+- NGINX
+- Redis
+- PHP
+- Traefik
+- A container with some tooling:
    - Composer
    - Node
    - Yarn / NPM
@@ -89,12 +89,32 @@ inv start
 
 > Note: the first start of the stack should take a few minutes.
 
-The site is now accessible at https://secret-santa.test
-(you may need to accept self-signed SSL certificate).
+The site is now accessible at the hostnames your have configured over HTTPS
+(you may need to accept self-signed SSL certificate if you do not have mkcert
+installed on your computer - see below).
+
+### SSL certificates
+
+This stack no longer embeds self-signed SSL certificates. Instead they will be
+generated the first time you start the infrastructure (`inv start`) or if you
+run `inv generate-certificates`. So *HTTPS will work out of the box*.
+
+If you have `mkcert` installed on your computer, it will be used to generate
+locally trusted certificates. See [`mkcert` documentation](https://github.com/FiloSottile/mkcert#installation)
+to understand how to install it. Do not forget to install CA root from mkcert
+by running `mkcert -install`.
+
+If you don't have `mkcert`, then self-signed certificates will instead be
+generated with openssl. You can configure [infrastructure/docker/services/router/openssl.cnf](infrastructure/docker/services/router/openssl.cnf)
+to tweak certificates.
+
+You can run `inv generate-certificates --force` to recreate new certificates
+if some were already generated. Remember to restart the infrastructure to make
+use of the new certificates with `inv up` or `inv start`.
 
 ### Builder
 
-Having some composer, yarn or another modifications to make on the project?
+Having some composer, yarn or other modifications to make on the project?
 Start the builder which will give you access to a container with all these
 tools available:
 
@@ -102,9 +122,17 @@ tools available:
 inv builder
 ```
 
-Note: You can add as many Invoke command as you want. But the command should be
-ran by the builder, don't forget to add `@with_builder` annotation to the
-function.
+Note: You can add as many Invoke commands as you want. If a command should be
+ran by the builder, don't forget to use `with Builder(c):`:
+```
+@task
+def mycommand(c):
+    """
+    My documentation
+    """
+    with Builder(c):
+        docker_compose_run(c, 'echo "HelloWorld")
+```
 
 ### Tests
 
