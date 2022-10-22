@@ -13,19 +13,36 @@ namespace JoliCode\SecretSanta\Model;
 
 class Config
 {
-    /**
-     * @param User[]               $availableUsers
-     * @param string[]             $selectedUsers
-     * @param array<int, string>   $notes
-     * @param array<string, mixed> $options
-     */
+    /** @var User[] */
+    private array $availableUsers = [];
+    /** @var string[] */
+    private array $selectedUsers = [];
+    private ?string $message = '';
+    /** @var array<int, string> */
+    private array $notes = [];
+    /** @var array<string, mixed> */
+    private array $options = [];
+
     public function __construct(
-        private array $availableUsers,
-        private array $selectedUsers = [],
-        private ?string $message = '',
-        private array $notes = [],
-        private array $options = [],
+        private string $application,
+        private string $organization,
+        private ?User $admin,
     ) {
+    }
+
+    public function getApplication(): ?string
+    {
+        return $this->application;
+    }
+
+    public function getOrganization(): ?string
+    {
+        return $this->organization;
+    }
+
+    public function getAdmin(): ?User
+    {
+        return $this->admin;
     }
 
     /**

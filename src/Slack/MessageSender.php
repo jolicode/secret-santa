@@ -128,7 +128,7 @@ class MessageSender
 
         $footer = 'Organized with <https://secret-santa.team/|Secret-Santa.team>';
 
-        if ($admin = $secretSanta->getAdmin()) {
+        if ($admin = $secretSanta->getConfig()->getAdmin()) {
             $footer .= sprintf(' by admin <@%s>.', $admin->getIdentifier());
         }
 
@@ -197,16 +197,16 @@ Happy Secret Santa!';
 
         try {
             $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
-                'channel' => $secretSanta->getAdmin()->getIdentifier(),
+                'channel' => $secretSanta->getConfig()->getAdmin()->getIdentifier(),
                 'icon_url' => 'https://secret-santa.team/images/logo-spoiler.png',
                 'text' => $text,
             ]);
 
             if (!$response->getOk()) {
-                throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin());
+                throw new MessageSendFailedException($secretSanta, $secretSanta->getConfig()->getAdmin());
             }
         } catch (\Throwable $t) {
-            throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getConfig()->getAdmin(), $t);
         }
     }
 }

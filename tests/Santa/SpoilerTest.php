@@ -28,25 +28,26 @@ class SpoilerTest extends TestCase
 
     public function testItEncodesSecretSantaInCurrentVersion(): void
     {
-        $config = new Config(
+        $config = new Config('my_application', 'toto', null);
+        $config->setAvailableUsers(
             [
                 'user1' => new User('user1', 'User 1'),
                 'user2' => new User('user2', 'User 2'),
                 'user3' => new User('user3', 'User 3'),
                 'user4' => new User('user4', 'User 4'),
                 'user5' => new User('user5', 'User 5'),
-            ],
-            ['user1', 'user2', 'user3', 'user4', 'user5'],
-            'hello test'
+            ]
         );
+        $config->setSelectedUsers(['user1', 'user2', 'user3', 'user4', 'user5']);
+        $config->setMessage('hello test');
 
-        $secretSanta = new SecretSanta('my_application', 'toto', 'yolo', [
+        $secretSanta = new SecretSanta('yolo', [
             'user1' => 'user2',
             'user2' => 'user3',
             'user3' => 'user4',
             'user4' => 'user5',
             'user5' => 'user1',
-        ], null, $config);
+        ], $config);
 
         $code = $this->SUT->encode($secretSanta);
         $expectedCode = 'v3@H4sIAAAAAAAAA4tWCi1OLVIwVNKBMIxgDGMYwwTGMFWKBQAbdZzDLgAAAA==';

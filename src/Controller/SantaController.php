@@ -38,6 +38,8 @@ use Twig\Environment;
 
 class SantaController extends AbstractController
 {
+    private const SESSION_KEY_CONFIG = 'config';
+
     /**
      * @param \Iterator<ApplicationInterface> $applications
      */
@@ -62,6 +64,14 @@ class SantaController extends AbstractController
 
         $this->doReset(null, $request);
 
+        $config = new Config(
+            $application->getCode(),
+            $application->getOrganization(),
+            $application->getAdmin(),
+        );
+
+        $this->saveConfig($request, $config);
+
         return $this->redirectToRoute('participants', ['application' => $application->getCode()]);
     }
 
@@ -74,13 +84,11 @@ class SantaController extends AbstractController
             return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
         }
 
-        $session = $request->getSession();
+        $config = $this->getConfigOrThrow404($request);
 
-        $config = $session->get('config');
-
-        if (!$config) {
-            $config = new Config($application->getUsers());
-            $session->set('config', $config);
+        if (!$config->getAvailableUsers()) {
+            $config->setAvailableUsers($application->getUsers());
+            $this->saveConfig($request, $config);
         }
 
         $availableUsers = $config->getAvailableUsers();
@@ -92,7 +100,7 @@ class SantaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $session->set('config', $config);
+            $this->saveConfig($request, $config);
             if ($form->isValid()) {
                 return $this->redirectToRoute('message', ['application' => $application->getCode()]);
             }
@@ -118,10 +126,7 @@ class SantaController extends AbstractController
 
         $errors = [];
 
-        $session = $request->getSession();
-
-        /** @var Config $config * */
-        $config = $session->get('config');
+        $config = $this->getConfigOrThrow404($request);
 
         // We remove notes from users that aren't selected anymore, and create empty ones for those who are
         // and don't have any yet.
@@ -146,10 +151,11 @@ class SantaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $session->set('config', $config);
+            $this->saveConfig($request, $config);
 
             if ($form->isValid()) {
-                $secretSanta = $this->prepareSecretSanta($rudolph, $request, $application);
+                $secretSanta = $this->prepareSecretSanta($rudolph, $request, $config);
+                $session = $request->getSession();
                 $session->set(
                     $this->getSecretSantaSessionKey(
                         $secretSanta->getHash()
@@ -158,7 +164,7 @@ class SantaController extends AbstractController
                 );
 
                 // Send a summary to the santa admin
-                if ($secretSanta->getAdmin()) {
+                if ($config->getAdmin()) {
                     $code = $spoiler->encode($secretSanta);
                     $spoilUrl = $this->generateUrl('spoil', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -207,10 +213,7 @@ class SantaController extends AbstractController
             });
         }
 
-        $session = $request->getSession();
-
-        /** @var Config $config * */
-        $config = $session->get('config');
+        $config = $this->getConfigOrThrow404($request);
 
         $builder = $formFactory->createBuilder(MessageType::class, $config, [
             'selected-users' => $config->getSelectedUsers(),
@@ -243,11 +246,8 @@ class SantaController extends AbstractController
 
             if ($form->isValid()) {
                 $secretSanta = new SecretSanta(
-                    $application->getCode(),
-                    $application->getOrganization(),
                     'sample',
                     [],
-                    $application->getAdmin(),
                     $config
                 );
 
@@ -271,7 +271,7 @@ class SantaController extends AbstractController
     public function sendMessages(MessageDispatcher $messageDispatcher, Request $request, string $hash): Response
     {
         $secretSanta = $this->getSecretSantaOrThrow404($request, $hash);
-        $application = $this->getApplication($secretSanta->getApplication());
+        $application = $this->getApplication($secretSanta->getConfig()->getApplication());
 
         if (!$request->isXmlHttpRequest()) {
             if ($secretSanta->isDone()) {
@@ -406,13 +406,8 @@ class SantaController extends AbstractController
         return sprintf('secret-santa-%s', $hash);
     }
 
-    private function prepareSecretSanta(Rudolph $rudolph, Request $request, ApplicationInterface $application): SecretSanta
+    private function prepareSecretSanta(Rudolph $rudolph, Request $request, Config $config): SecretSanta
     {
-        $session = $request->getSession();
-
-        /** @var Config $config * */
-        $config = $session->get('config');
-
         $selectedUsersAsArray = $config->getSelectedUsers();
 
         $associatedUsers = $rudolph->associateUsers($selectedUsersAsArray);
@@ -420,13 +415,30 @@ class SantaController extends AbstractController
         $hash = md5(serialize($associatedUsers));
 
         return new SecretSanta(
-            $application->getCode(),
-            $application->getOrganization(),
             $hash,
             $associatedUsers,
-            $application->getAdmin(),
             $config,
         );
+    }
+
+    private function saveConfig(Request $request, Config $config): void
+    {
+        $session = $request->getSession();
+        $session->set(self::SESSION_KEY_CONFIG, $config);
+    }
+
+    private function getConfigOrThrow404(Request $request): Config
+    {
+        $session = $request->getSession();
+
+        /** @var Config|null $config * */
+        $config = $session->get(self::SESSION_KEY_CONFIG);
+
+        if (!$config) {
+            throw $this->createNotFoundException('No config found in session.');
+        }
+
+        return $config;
     }
 
     private function getSecretSantaOrThrow404(Request $request, string $hash): SecretSanta
@@ -447,7 +459,7 @@ class SantaController extends AbstractController
     private function doReset(?ApplicationInterface $application, Request $request): void
     {
         $session = $request->getSession();
-        $session->remove('config');
+        $session->remove(self::SESSION_KEY_CONFIG);
 
         $application?->reset();
     }

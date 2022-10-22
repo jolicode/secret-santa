@@ -21,24 +21,11 @@ class SecretSanta
 
     /** @param array<string, string> $associations */
     public function __construct(
-        private string $application,
-        private string $organization,
         private string $hash,
         private array $associations,
-        private ?User $admin,
         private Config $config,
     ) {
         $this->remainingAssociations = $associations;
-    }
-
-    public function getApplication(): ?string
-    {
-        return $this->application;
-    }
-
-    public function getOrganization(): ?string
-    {
-        return $this->organization;
     }
 
     public function getHash(): ?string
@@ -101,11 +88,6 @@ class SecretSanta
     public function getUniqueErrors(): array
     {
         return array_unique($this->errors);
-    }
-
-    public function getAdmin(): ?User
-    {
-        return $this->admin;
     }
 
     public function getAdminMessage(): ?string

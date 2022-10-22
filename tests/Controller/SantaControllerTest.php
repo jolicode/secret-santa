@@ -54,20 +54,21 @@ class SantaControllerTest extends BaseWebTestCase
 
     public function testFinishPageWorksWithValidHashForSuccessfulSecretSanta(): void
     {
-        $config = new Config(
+        $config = new Config('my_application', 'toto', null);
+        $config->setAvailableUsers(
             [
                 'toto1' => new User('toto1', 'Toto 1'),
                 'toto2' => new User('toto2', 'Toto 2'),
                 'toto3' => new User('toto3', 'Toto 3'),
-            ],
-            ['toto1', 'toto2', 'toto3'],
-            'hello test'
+            ]
         );
+        $config->setSelectedUsers(['toto1', 'toto2', 'toto3']);
+        $config->setMessage('hello test');
 
-        $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
+        $secretSanta = new SecretSanta('azerty', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
-        ], null, $config);
+        ], $config);
         $secretSanta->markAssociationAsProceeded('toto1');
         $secretSanta->markAssociationAsProceeded('toto2');
 
@@ -83,21 +84,22 @@ class SantaControllerTest extends BaseWebTestCase
 
     public function testFinishPageWorksWithValidHashForFailedSecretSanta(): void
     {
-        $config = new Config(
+        $config = new Config('my_application', 'toto', null);
+        $config->setAvailableUsers(
             [
                 'toto1' => new User('toto1', 'Toto 1'),
                 'toto2' => new User('toto2', ''),
                 'toto3' => new User('toto3', 'Toto 3'),
-            ],
-            ['toto1', 'toto2', 'toto3'],
-            'hello test'
+            ]
         );
+        $config->setSelectedUsers(['toto1', 'toto2', 'toto3']);
+        $config->setMessage('hello test');
 
-        $secretSanta = new SecretSanta('my_application', 'toto', 'azerty', [
+        $secretSanta = new SecretSanta('azerty', [
             'toto1' => 'toto2',
             'toto2' => 'toto3',
             'toto3' => 'toto1',
-        ], null, $config);
+        ], $config);
         $secretSanta->addError('Knock knock. Who\'s there? A santa error!', 'toto1');
 
         $client = static::createClient();
