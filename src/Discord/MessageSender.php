@@ -58,7 +58,7 @@ Someone will get you a gift and **you have been chosen to gift:**
 
         $text .= "\n\n_Organized with Secret-Santa.team";
 
-        if ($admin = $secretSanta->getAdmin()) {
+        if ($admin = $secretSanta->getConfig()->getAdmin()) {
             $text .= sprintf(' by admin %s (<@!%s>)._', $admin->getExtra()['nickname'] ?? $admin->getName(), $admin->getIdentifier());
         } else {
             $text .= '_';
@@ -76,7 +76,7 @@ Someone will get you a gift and **you have been chosen to gift:**
                 $precision = sprintf(
                     '@%s does not allow to receive DM on the server "%s". Please ask them to change their server privacy settings as explained in our faq.',
                     $secretSanta->getUser($giver)->getName(),
-                    $secretSanta->getOrganization()
+                    $secretSanta->getConfig()->getOrganization()
                 );
             }
 
@@ -108,7 +108,7 @@ Happy Secret Santa!',
         );
 
         try {
-            $this->apiHelper->sendMessage((int) $secretSanta->getAdmin()->getIdentifier(), $text);
+            $this->apiHelper->sendMessage((int) $secretSanta->getConfig()->getAdmin()->getIdentifier(), $text);
         } catch (CommandClientException $e) {
             $precision = null;
 
@@ -116,9 +116,9 @@ Happy Secret Santa!',
                 $precision = 'You do not allow to receive DM on this server. Please change your server settings.';
             }
 
-            throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $e, $precision);
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getConfig()->getAdmin(), $e, $precision);
         } catch (\Throwable $t) {
-            throw new MessageSendFailedException($secretSanta, $secretSanta->getAdmin(), $t);
+            throw new MessageSendFailedException($secretSanta, $secretSanta->getConfig()->getAdmin(), $t);
         }
     }
 }

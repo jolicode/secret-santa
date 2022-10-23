@@ -25,7 +25,7 @@ class StatisticCollector
 
     public function incrementUsageCount(SecretSanta $secretSanta): void
     {
-        $applicationCode = $secretSanta->getApplication();
+        $applicationCode = $secretSanta->getConfig()->getApplication();
         $currentYear = date('Y');
         $currentMonth = date('m');
 
