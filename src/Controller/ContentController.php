@@ -215,11 +215,15 @@ class ContentController extends AbstractController
                 'link' => 'https://sencrop.com/',
                 'image' => 'sencrop.png',
             ],
-
             [
                 'label' => 'SensioLabs',
                 'link' => 'https://sensiolabs.com/',
                 'image' => 'sensiolabs.png',
+            ],
+            [
+                'label' => 'TMRR',
+                'link' => 'https://temeraire-marketing.lu/',
+                'image' => 'tmrr.png',
             ],
             [
                 'label' => 'Uppler',
