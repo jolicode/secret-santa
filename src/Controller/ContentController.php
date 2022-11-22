@@ -221,6 +221,11 @@ class ContentController extends AbstractController
                 'image' => 'sensiolabs.png',
             ],
             [
+                'label' => 'Stream.tv',
+                'link' => 'https://stream.tv/',
+                'image' => 'streamtv.png',
+            ],
+            [
                 'label' => 'TMRR',
                 'link' => 'https://temeraire-marketing.lu/',
                 'image' => 'tmrr.png',
