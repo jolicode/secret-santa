@@ -84,6 +84,11 @@ class ContentController extends AbstractController
                 'image' => 'cap-collectif.png',
             ],
             [
+                'label' => 'Digital Darts',
+                'link' => 'https://www.digitaldarts.com.au',
+                'image' => 'digital-darts.png',
+            ],
+            [
                 'label' => 'Digital Ping Pong',
                 'link' => 'https://digitalpingpong.com/',
                 'image' => 'digital-ping-pong.svg',
