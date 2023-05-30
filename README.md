@@ -63,7 +63,8 @@ point the IP of your Docker daemon by editing your `/etc/hosts` file.
 
 This IP is probably `127.0.0.1` unless you run Docker in a special VM (docker-machine, dinghy, etc).
 
-Note: The router binds port 80 and 443, that's why it will work with `127.0.0.1`
+> **Note**
+> The router binds port 80 and 443, that's why it will work with `127.0.0.1`
 
 ```
 echo '127.0.0.1 secret-santa.test' | sudo tee -a /etc/hosts
