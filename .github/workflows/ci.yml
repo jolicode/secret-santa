@@ -1,17 +1,35 @@
-name: CI
+name: Continuous Integration
 
 'on':
     push:
-        branches:
-            - main
-    pull_request: null
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "main" ]
     schedule:
-        -
-            cron: '0 0 * * MON'
+        - cron: '0 0 * * MON'
+
+permissions:
+    contents: read
 
 jobs:
-    ci:
+    check-dockerfiles:
+        name: Check Dockerfile
         runs-on: ubuntu-latest
+        steps:
+        -   name: Checkout
+            uses: actions/checkout@v3
+
+        -   name: Check php/Dockerfile
+            uses: hadolint/hadolint-action@v3.1.0
+            with:
+                dockerfile: infrastructure/docker/services/php/Dockerfile
+
+    ci:
+        name: Continuous Integration
+        runs-on: ubuntu-latest
+        env:
+            BUILDKIT_PROGRESS: plain
+            CI: 1
         steps:
             -
                 uses: actions/checkout@v3
@@ -19,21 +37,32 @@ jobs:
             # Setup
 
             -
-                uses: actions/setup-python@v4
+                name: Setup PHP
+                uses: shivammathur/setup-php@v2
                 with:
-                    python-version: '3.9'
-            -
-                run: 'pip3 install pipenv'
-
-            # Install the stack and run the tests
+                    php-version: 8.1
+                    tools: jolicode/castor
 
             -
-                run: 'pipenv install --deploy --dev'
+                name: 'Build and start the infrastructure'
+                run: 'castor start && sleep 5'
+
             -
-                run: 'pipenv run inv start && sleep 5'
+                name: 'Test HTTP server'
+                run: |
+                    set -e
+                    set -o pipefail
+
+                    curl --fail --insecure --silent -H "Host: secret-santa.test" https://127.0.0.1 | grep "Secret Santa"
+
             -
-                run: 'pipenv run inv tests'
+                name: 'Run PHPUnit'
+                run: castor qa:phpunit
+
             -
-                run: 'pipenv run inv phpstan'
+                name: 'Run PHPStan'
+                run: castor qa:phpstan
+
             -
-                run: 'pipenv run inv cs --dry-run'
+                name: 'Run PHP-CS-Fixer'
+                run: castor qa:cs

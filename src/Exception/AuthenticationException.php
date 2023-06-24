@@ -16,7 +16,7 @@ class AuthenticationException extends \RuntimeException implements ApplicationRe
     public function __construct(
         private string $applicationCode,
         string $message = '',
-        ?\Throwable $previous = null,
+        \Throwable $previous = null,
     ) {
         parent::__construct($message, 0, $previous);
     }
