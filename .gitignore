@@ -1,6 +1,8 @@
-*.pyc
+# Infra stuff
+/.castor.stub.php
+/infrastructure/docker/.env
 /infrastructure/docker/docker-compose.override.yml
-/infrastructure/docker/services/router/etc/ssl/certs/*.pem
+/infrastructure/docker/services/router/certs/*
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -11,6 +13,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###

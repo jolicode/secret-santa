@@ -43,11 +43,6 @@
         "wohali/oauth2-discord-new": "^1.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.12",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^1.8",
-        "phpstan/phpstan-phpunit": "^1.1",
-        "phpstan/phpstan-symfony": "^1.2",
         "symfony/browser-kit": "*",
         "symfony/css-selector": "*",
         "symfony/debug-bundle": "*",
@@ -67,7 +62,8 @@
         "allow-plugins": {
             "phpstan/extension-installer": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "php-http/discovery": true
         }
     },
     "replace": {

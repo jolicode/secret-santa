@@ -4,15 +4,15 @@ volumes:
     builder-data: {}
 
 services:
-    php-base:
-        build: services/php-base
-
     builder:
-        build: services/builder
+        build:
+            context: services/php
+            target: builder
         depends_on:
             - redis
         environment:
             - COMPOSER_MEMORY_LIMIT=-1
+            - UID=${USER_ID}
             - PHP_CS_FIXER_IGNORE_ENV=1
             # The following list contains the common environment variables exposed by CI platforms
             - GITHUB_ACTIONS
