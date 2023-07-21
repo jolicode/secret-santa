@@ -33,7 +33,7 @@ function create_default_variables(): array
             "www.{$projectName}.{$tld}",
         ],
         'project_directory' => '.',
-        'php_version' => '8.1',
+        'php_version' => '8.2',
     ];
 }
 
