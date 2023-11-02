@@ -1,0 +1,32 @@
+{% extends 'santa/participants.html.twig' %}
+
+{% import _self as current %}
+
+{% macro userSummary(userForm, user) %}
+    <span class="user-summary">
+        <span>{{ user.name }}</span>
+        <span data-uncheck-user="{{ userForm.vars.id }}" class="fas fa-times" title="Unselect this user"></span>
+    </span>
+{% endmacro %}
+
+{% block user_item %}
+    {% set user = userForm.parent.vars.choices[userForm.vars.name].data %}
+
+    <label
+            class="user-item"
+            for="{{ userForm.vars.id }}"
+            data-search-index="{{ user.name }}"
+    >
+
+        <div class="data-summary"
+             data-summary="{{ current.userSummary(userForm, user)|escape('html_attr')|raw }}">
+            {{ form_widget(userForm, {'attr': {
+                'data-identifier': user.identifier
+            }}
+            ) }}
+        </div>
+
+
+        <span>{{ user.name }}</span>
+    </label>
+{% endblock %}

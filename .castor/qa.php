@@ -32,6 +32,7 @@ function install(): void
 #[AsTask(description: 'Runs PHPStan')]
 function phpstan(): void
 {
+    docker_compose_run('bin/console about --env=test'); // to create the cache
     docker_compose_run('phpstan');
 }
 
