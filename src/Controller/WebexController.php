@@ -71,7 +71,7 @@ class WebexController extends AbstractController
         }
 
         // Check given state against previously stored one to mitigate CSRF attack
-        if (empty($request->query->get('state')) || ($request->query->get('state') !== $session->get(WebexApplication::SESSION_KEY_STATE))) {
+        if (!$request->query->get('state') || $request->query->get('state') !== $session->get(WebexApplication::SESSION_KEY_STATE)) {
             $session->remove(WebexApplication::SESSION_KEY_STATE);
 
             throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Invalid OAuth state.');
