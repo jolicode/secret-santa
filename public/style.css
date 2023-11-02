@@ -74,6 +74,7 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
     --color-error: var(--color-primary-dark);
     --color-error-background: #ffeaea;
     --color-slack: #ecb22e;
+    --color-webex: #316aff;
     --color-discord: #7289da;
     --color-zoom: #0E71EB; /* cf. https://zoom.us/brandguidelines */
     --border-radius: 5px;
@@ -377,6 +378,9 @@ footer a {
 }
 .jumbotron .action-zoom:hover {
     color: var(--color-zoom);
+}
+.jumbotron .action-webex:hover {
+    color: var(--color-webex);
 }
 .jumbotron .action {
     display: inline-block;
@@ -1144,6 +1148,10 @@ textarea {
     background-color: var(--color-zoom);
 }
 
+.legend .legend-item.webex::before {
+    background-color: var(--color-webex);
+}
+
 .single-values {
     padding: 10px;
     display: flex;
@@ -1231,6 +1239,10 @@ textarea {
     background-color: var(--color-zoom);
 }
 
+.application-webex {
+    background-color: var(--color-webex);
+}
+
 .application-slack-color {
     color: var(--color-slack);
 }
@@ -1241,6 +1253,10 @@ textarea {
 
 .application-zoom-color {
     color: var(--color-zoom);
+}
+
+.application-webex-color {
+    color: var(--color-webex);
 }
 
 .graph-legend-x {
@@ -1315,7 +1331,7 @@ summary i {
     background-image: url("images/zoom-logo.svg");
 }
 .custom-fa-webex:before {
-    top: 0px;
+    top: 0;
     background-image: url("images/webex-logo.svg");
 }
 

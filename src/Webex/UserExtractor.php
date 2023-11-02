@@ -59,7 +59,7 @@ class UserExtractor
             // Looking for a header like this:
             // Link: <https://webexapis.com/v1/people?displayName=Harold&max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU>; rel="next"
             if (isset($headers['link']) && preg_match('/<(.+)>; rel="next"/', $headers['link'][0], $matches)) {
-                $nextPageUrl = $matches[0];
+                $nextPageUrl = $matches[1];
             }
         } while ($nextPageUrl);
 
