@@ -26,29 +26,42 @@ class UserExtractor
      */
     public function extractAll(string $token): array
     {
-        $people = $this->client->request('GET', 'https://webexapis.com/v1/people', [
-            'auth_bearer' => $token,
-            'headers' => [
-                'accept' => 'application/json',
-            ],
-        ]);
-
-        if (403 === $people->getStatusCode()) {
-            throw new UserExtractionFailedException('webex', 'Only Webex Site Administrator can use this application.');
-        }
-
         $users = [];
-        $people = $people->toArray();
-        foreach ($people['items'] as $person) {
-            $users[$person['id']] = new User(
-                $person['id'],
-                $person['displayName'],
-                [
-                    'nickname' => $person['nickName'] ?: null,
-                    'image' => $person['avatar'] ?? null, // Huge 1600px image!
-                ]
-            );
-        }
+        $nextPageUrl = 'https://webexapis.com/v1/people';
+
+        do {
+            $peopleResponse = $this->client->request('GET', $nextPageUrl, [
+                'auth_bearer' => $token,
+                'headers' => [
+                    'accept' => 'application/json',
+                ],
+            ]);
+
+            if (403 === $peopleResponse->getStatusCode()) {
+                throw new UserExtractionFailedException('webex', 'Only Webex Site Administrator can use this application.');
+            }
+
+            $people = $peopleResponse->toArray();
+            foreach ($people['items'] as $person) {
+                $users[$person['id']] = new User(
+                    $person['id'],
+                    $person['displayName'],
+                    [
+                        'nickname' => $person['nickName'] ?: null,
+                        'image' => $person['avatar'] ?? null, // Huge 1600px image!
+                    ]
+                );
+            }
+
+            // See if there is a next page:
+            $nextPageUrl = null;
+            $headers = $peopleResponse->getHeaders();
+            // Looking for a header like this:
+            // Link: <https://webexapis.com/v1/people?displayName=Harold&max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU>; rel="next"
+            if (isset($headers['link']) && preg_match('/<(.+)>; rel="next"/', $headers['link'][0], $matches)) {
+                $nextPageUrl = $matches[0];
+            }
+        } while ($nextPageUrl);
 
         return $users;
     }

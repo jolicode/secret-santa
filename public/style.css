@@ -1287,14 +1287,14 @@ summary i {
 }
 
 /** Override Font Awesome because the logo are not up to date **/
-.custom-fa-slack, .custom-fa-discord, .custom-fa-zoom {
+.custom-fa-slack, .custom-fa-discord, .custom-fa-zoom, .custom-fa-webex {
     display: inline-block;
     font-style: normal;
     font-variant: normal;
     text-rendering: auto;
     line-height: 1;
 }
-.custom-fa-slack:before, .custom-fa-discord:before, .custom-fa-zoom:before {
+.custom-fa-slack:before, .custom-fa-discord:before, .custom-fa-zoom:before, .custom-fa-webex:before {
     content: ' ';
     background-size: contain;
     background-repeat: no-repeat;
@@ -1313,6 +1313,10 @@ summary i {
 }
 .custom-fa-zoom:before {
     background-image: url("images/zoom-logo.svg");
+}
+.custom-fa-webex:before {
+    top: 0px;
+    background-image: url("images/webex-logo.svg");
 }
 
 /**

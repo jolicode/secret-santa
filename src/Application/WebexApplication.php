@@ -74,7 +74,6 @@ class WebexApplication implements ApplicationInterface
     public function getGroups(): array
     {
         return [];
-        //        return $this->userExtractor->extractGroups($this->getToken()->getToken());
     }
 
     public function getUsers(): array
