@@ -43,11 +43,11 @@ Someone will get you a gift and **you have been chosen to gift:**
         );
 
         if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
-            $text .= sprintf("\n\nHere is some details about %s:\n\n```%s```", $receiverUser->getName(), $userNote);
+            $text .= sprintf("\n\nHere is some details about %s:\n\n```\n%s\n```", $receiverUser->getName(), $userNote);
         }
 
         if (!empty($secretSanta->getAdminMessage())) {
-            $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
+            $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . "\n```";
         } else {
             $text .= "\n\nIf you have any question please ask your Secret Santa admin";
         }

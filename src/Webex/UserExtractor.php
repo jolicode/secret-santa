@@ -34,13 +34,20 @@ class UserExtractor
         ]);
 
         if (403 === $people->getStatusCode()) {
-            throw new UserExtractionFailedException('Only Webex administrator can use this application.');
+            throw new UserExtractionFailedException('webex', 'Only Webex Site Administrator can use this application.');
         }
 
         $users = [];
         $people = $people->toArray();
         foreach ($people['items'] as $person) {
-            $users[$person['id']] = new User($person['id'], $person['displayName']);
+            $users[$person['id']] = new User(
+                $person['id'],
+                $person['displayName'],
+                [
+                    'nickname' => $person['nickName'] ?: null,
+                    'image' => $person['avatar'] ?? null, // Huge 1600px image!
+                ]
+            );
         }
 
         return $users;
@@ -53,7 +60,13 @@ class UserExtractor
             'headers' => [
                 'accept' => 'application/json',
             ],
-        ])->toArray();
+        ]);
+
+        if (403 === $me->getStatusCode()) {
+            throw new UserExtractionFailedException('webex', 'Only Webex Site Administrator can use this application.');
+        }
+
+        $me = $me->toArray();
 
         return new User($me['id'], $me['displayName']);
     }

@@ -4,6 +4,9 @@
 
 {% macro userSummary(userForm, user) %}
     <span class="user-summary">
+        {% if user.extra.image %}
+            <img src="{{ user.extra.image }}" alt=""/>
+        {% endif %}
         <span>{{ user.name }}</span>
         <span data-uncheck-user="{{ userForm.vars.id }}" class="fas fa-times" title="Unselect this user"></span>
     </span>
@@ -15,7 +18,7 @@
     <label
             class="user-item"
             for="{{ userForm.vars.id }}"
-            data-search-index="{{ user.name }}"
+            data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
 
         <div class="data-summary"
@@ -26,7 +29,9 @@
             ) }}
         </div>
 
-
-        <span>{{ user.name }}</span>
+        {% if user.extra.image %}
+            <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
+        {% endif %}
+        <span>{{ user.name }}{% if user.extra.nickname and user.extra.nickname != user.name %} ({{ user.extra.nickname }}){% endif %}</span>
     </label>
 {% endblock %}

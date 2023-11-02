@@ -49,7 +49,7 @@ class WebexController extends AbstractController
 
         if ($request->query->has('error')) {
             if ('invalid_scope' === $request->query->get('error')) {
-                throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Cannot get the required permissions, are you Webex admin?');
+                throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Cannot get the required permissions.');
             }
 
             return $this->redirectToRoute('homepage');
@@ -60,10 +60,7 @@ class WebexController extends AbstractController
             $options = [
                 'scope' => [
                     'spark:kms', // This scope is required to give your integration permission to interact with encrypted content (such as messages).
-                    // 'spark:people_read',
-                    //
-                    'spark-admin:people_read',
-                    // 'spark:teams_read',
+                    'spark-admin:people_read', // Because of this, only an admin can run this app
                 ],
             ];
             $authUrl = $provider->getAuthorizationUrl($options);
@@ -88,11 +85,11 @@ class WebexController extends AbstractController
             ]);
 
             $appToken = new ApplicationToken($token->getToken());
-            $admin = $userExtractor->getMe($token->getToken());
         } catch (\Exception $e) {
-            throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Failed to retrieve data from Webex.', $e);
+            throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Failed to login on Webex.', $e);
         }
 
+        $admin = $userExtractor->getMe($token->getToken());
         $webexApplication->setToken($appToken);
         $webexApplication->setAdmin($admin);
 
