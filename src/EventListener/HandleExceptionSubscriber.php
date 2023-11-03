@@ -44,6 +44,7 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
         if ($exception instanceof AuthenticationException) {
             $this->logger->error(sprintf('Authentication error: %s', $exception->getMessage()), [
                 'exception' => $exception,
+                'previous' => $exception->getPrevious(),
             ]);
 
             $this->bugsnag->notifyException($exception, function ($report) {

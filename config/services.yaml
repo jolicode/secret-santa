@@ -42,6 +42,15 @@ services:
             $discordClientId: '%env(DISCORD_CLIENT_ID)%'
             $discordClientSecret: '%env(DISCORD_CLIENT_SECRET)%'
 
+    JoliCode\SecretSanta\Controller\WebexController:
+        arguments:
+            $webexClientId: '%env(WEBEX_CLIENT_ID)%'
+            $webexClientSecret: '%env(WEBEX_CLIENT_SECRET)%'
+
+    JoliCode\SecretSanta\Webex\MessageSender:
+        arguments:
+            $webexBotToken: '%env(WEBEX_BOT_TOKEN)%'
+
     JoliCode\SecretSanta\Discord\ApiHelper:
         public: true
         arguments:

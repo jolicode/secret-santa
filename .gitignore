@@ -3,6 +3,7 @@
 /infrastructure/docker/.env
 /infrastructure/docker/docker-compose.override.yml
 /infrastructure/docker/services/router/certs/*
+!/infrastructure/docker/services/router/certs/.gitkeep
 
 ###> symfony/framework-bundle ###
 /.env.local
