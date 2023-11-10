@@ -34,7 +34,7 @@ class UserExtractor
 
         $startTime = time();
         do {
-            if ((time() - $startTime) > 19) {
+            if ((time() - $startTime) > 120) {
                 throw new UserExtractionFailedException(SlackApplication::APPLICATION_CODE, 'Took too much time to retrieve all the users on your team.');
             }
 
