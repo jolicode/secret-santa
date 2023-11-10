@@ -4,7 +4,7 @@
 
 {% macro userSummary(userForm, user) %}
     <span class="user-summary">
-        {% if user.extra.image %}
+        {% if user.extra.image is defined %}
             <img src="{{ user.extra.image }}" alt=""/>
         {% endif %}
         <span>{{ user.name }}</span>
@@ -18,18 +18,17 @@
     <label
             class="user-item"
             for="{{ userForm.vars.id }}"
-            data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
+            data-search-index="{{ user.name }}"
     >
-
         <div class="data-summary"
              data-summary="{{ current.userSummary(userForm, user)|escape('html_attr')|raw }}"
         >
             {{ form_widget(userForm, {'attr': { 'data-identifier': user.identifier }}) }}
         </div>
 
-        {% if user.extra.image %}
+        {% if user.extra.image is defined %}
             <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
         {% endif %}
-        <span>{{ user.name }}{% if user.extra.nickname and user.extra.nickname != user.name %} ({{ user.extra.nickname }}){% endif %}</span>
+        <span>{{ user.name }}</span>
     </label>
 {% endblock %}

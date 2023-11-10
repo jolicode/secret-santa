@@ -60,7 +60,9 @@ class WebexController extends AbstractController
             $options = [
                 'scope' => [
                     'spark:kms', // This scope is required to give your integration permission to interact with encrypted content (such as messages).
-                    'spark-admin:people_read', // Because of this, only an admin can run this app
+                    'spark:memberships_read',
+                    'spark:rooms_read',
+                    'spark:people_read',
                 ],
             ];
             $authUrl = $provider->getAuthorizationUrl($options);

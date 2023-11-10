@@ -11,7 +11,7 @@
 
 namespace JoliCode\SecretSanta\Webex;
 
-use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
+use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -22,49 +22,42 @@ class UserExtractor
     }
 
     /**
-     * @return array<User>
+     * @return array{array<User>, array<Group>}
      */
     public function extractAll(string $token): array
     {
         $users = [];
-        // Use high value for MAX because pagination is broken on Webex side.
-        $nextPageUrl = 'https://webexapis.com/v1/people?max=1000';
+        $groups = [];
 
-        do {
-            $peopleResponse = $this->client->request('GET', $nextPageUrl, [
+        $roomsResponse = $this->client->request('GET', 'https://webexapis.com/v1/rooms?type=group&sortBy=lastactivity&max=20', [
+            'auth_bearer' => $token,
+            'headers' => [
+                'accept' => 'application/json',
+            ],
+        ]);
+
+        foreach ($roomsResponse->toArray()['items'] as $room) {
+            $group = new Group((string) $room['id'], $room['title']);
+            $groups[$room['id']] = $group;
+
+            $roomMembersResponse = $this->client->request('GET', 'https://webexapis.com/v1/memberships?roomId=' . $room['id'], [
                 'auth_bearer' => $token,
                 'headers' => [
                     'accept' => 'application/json',
                 ],
             ]);
 
-            if (403 === $peopleResponse->getStatusCode()) {
-                throw new UserExtractionFailedException('webex', 'Only Webex Site Administrator can use this application.');
-            }
-
-            $people = $peopleResponse->toArray();
-            foreach ($people['items'] as $person) {
-                $users[$person['id']] = new User(
-                    $person['id'],
-                    $person['displayName'],
-                    [
-                        'nickname' => $person['nickName'] ?: null,
-                        'image' => $person['avatar'] ?? null, // Huge 1600px image!
-                    ]
+            foreach ($roomMembersResponse->toArray()['items'] as $user) {
+                $users[$user['personId']] = new User(
+                    $user['personId'],
+                    $user['personDisplayName']
                 );
-            }
 
-            // See if there is a next page:
-            $nextPageUrl = null;
-            $headers = $peopleResponse->getHeaders();
-            // Looking for a header like this:
-            // Link: <https://webexapis.com/v1/people?displayName=Harold&max=10&before&after=Y2lzY29zcGFyazovL3VzL1BFT1BMRS83MTZlOWQxYy1jYTQ0LTRmZWQtOGZjYS05ZGY0YjRmNDE3ZjU>; rel="next"
-            if (isset($headers['link']) && preg_match('/<(.+)>; rel="next"/', $headers['link'][0], $matches)) {
-                $nextPageUrl = $matches[1];
+                $group->addUser($user['personId']);
             }
-        } while ($nextPageUrl);
+        }
 
-        return $users;
+        return [$users, $groups];
     }
 
     public function getMe(string $token): User
@@ -75,10 +68,6 @@ class UserExtractor
                 'accept' => 'application/json',
             ],
         ]);
-
-        if (403 === $me->getStatusCode()) {
-            throw new UserExtractionFailedException('webex', 'Only Webex Site Administrator can use this application.');
-        }
 
         $me = $me->toArray();
 

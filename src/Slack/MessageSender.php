@@ -111,7 +111,7 @@ class MessageSender
                 ],
             ];
 
-            $fallbackText .= sprintf("\n\nHere is a message from the Secret Santa admin:\n\n```%s```", $secretSanta->getAdminMessage());
+            $fallbackText .= sprintf("\n\nHere is a message from the Secret Santa admin:\n\n```\n%s\n```", $secretSanta->getAdminMessage());
         } else {
             $blocks[] = [
                 'type' => 'section',

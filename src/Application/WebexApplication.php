@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Model\ApplicationToken;
+use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Webex\MessageSender;
@@ -27,6 +28,11 @@ class WebexApplication implements ApplicationInterface
 
     private const SESSION_KEY_TOKEN = 'santa.webex.token';
     private const SESSION_KEY_ADMIN = 'santa.webex.admin';
+
+    /**
+     * @var array<Group>
+     */
+    private array $groups = [];
 
     public function __construct(
         private RequestStack $requestStack,
@@ -73,12 +79,16 @@ class WebexApplication implements ApplicationInterface
 
     public function getGroups(): array
     {
-        return [];
+        return $this->groups;
     }
 
     public function getUsers(): array
     {
-        return $this->userExtractor->extractAll($this->getToken()->getToken());
+        [$users, $groups] = $this->userExtractor->extractAll($this->getToken()->getToken());
+
+        $this->groups = $groups;
+
+        return $users;
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
