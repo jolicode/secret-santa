@@ -27,7 +27,8 @@ class UserExtractor
     public function extractAll(string $token): array
     {
         $users = [];
-        $nextPageUrl = 'https://webexapis.com/v1/people';
+        // Use high value for MAX because pagination is broken on Webex side.
+        $nextPageUrl = 'https://webexapis.com/v1/people?max=1000';
 
         do {
             $peopleResponse = $this->client->request('GET', $nextPageUrl, [
