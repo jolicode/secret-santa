@@ -15,6 +15,8 @@ class Config
 {
     /** @var User[] */
     private array $availableUsers = [];
+    /** @var Group[] */
+    private array $groups = [];
     /** @var string[] */
     private array $selectedUsers = [];
     private ?string $message = '';
@@ -117,5 +119,21 @@ class Config
     public function setOptions(array $options): void
     {
         $this->options = $options;
+    }
+
+    /**
+     * @param array<Group> $groups
+     */
+    public function setGroups(array $groups): void
+    {
+        $this->groups = $groups;
+    }
+
+    /**
+     * @return Group[]
+     */
+    public function getGroups(): array
+    {
+        return $this->groups;
     }
 }

@@ -86,13 +86,15 @@ class SantaController extends AbstractController
 
         $config = $this->getConfigOrThrow404($request);
 
+        // Fetch the users and groups and save them
         if (!$config->getAvailableUsers()) {
             $config->setAvailableUsers($application->getUsers());
+            $config->setGroups($application->getGroups());
+
             $this->saveConfig($request, $config);
         }
 
         $availableUsers = $config->getAvailableUsers();
-
         $form = $this->createForm(ParticipantType::class, $config, [
             'available-users' => $availableUsers,
         ]);
@@ -108,7 +110,7 @@ class SantaController extends AbstractController
 
         $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
             'users' => $availableUsers,
-            'groups' => $application->getGroups(),
+            'groups' => $config->getGroups(),
             'form' => $form->createView(),
         ]);
 

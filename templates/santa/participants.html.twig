@@ -448,6 +448,12 @@
             <div class="error" role="alert">
                 Ooops, we didn't find enough users in your team. You need at least 2 users to start a Secret Santa.
             </div>
+
+            {% if application == 'webex' %}
+                <div class="error" role="alert">
+                    <i class="custom-fa-webex" style="vertical-align: text-bottom;"></i> You need to be in a messaging Space with the people you want to participate with. <a href="{{ path('cancel', { application: 'webex' }) }}">Retry</a>.
+                </div>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock santa_content %}

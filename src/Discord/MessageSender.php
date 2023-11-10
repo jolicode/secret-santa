@@ -51,7 +51,7 @@ Someone will get you a gift and **you have been chosen to gift:**
         }
 
         if (!empty($secretSanta->getAdminMessage())) {
-            $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```" . $secretSanta->getAdminMessage() . '```';
+            $text .= "\n\nHere is a message from the Secret Santa admin:\n\n```\n" . $secretSanta->getAdminMessage() . "\n```";
         } else {
             $text .= "\n\nIf you have any question please ask your Secret Santa admin";
         }
