@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="home">
+        <div class="jumbotron" style="padding-bottom: 10px">
+            <div class="snow foreground"></div>
+            <div class="snow foreground layered"></div>
+            <div class="snow middleground"></div>
+            <div class="snow middleground layered"></div>
+
+            <div class="jumbotron-inner">
+                <h1>Throw a Secret Santa with<br> your Webex Messaging!</h1>
+
+                <p>
+                    Webex by Cisco is a collaboration app that helps your team stay organized and have conversations all in one place.<br>
+                    With this free Secret Santa Webex app, you can now <strong>Randomly</strong> assign to each member of your <strong>Webex Messaging</strong>
+                    a person to whom they anonymously <strong>give a gift</strong>.
+                </p>
+
+                <div class="actions">
+                    <a class="action hvr-buzz action-webex" href="{{ path('run', { application: 'webex' }) }}">
+                        <i class="custom-fa-webex"></i> Run on Webex for FREE
+                    </a>
+
+                    <p>
+                        <strong>Compatible with Webex Free. No other account needed.</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content how-block">
+            <section class="step-feature reverse">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/webex-logo.svg') }}" alt="Connect to Your Application" style="height: 120px">
+                </div>
+                <div class="step-feature-text">
+                    <h3>1. Start Secret Santa</h3>
+                        <p>You only need your Webex Messaging account to use this integration.<br>
+                        <br>Start by clicking the "Run on Webex" button.
+                    </p>
+                </div>
+            </section>
+
+            <section class="step-feature ">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/webex/login.png') }}" alt="Login" >
+                </div>
+                <div class="step-feature-text">
+                    <h3>2. Login on Webex</h3>
+                    <p>
+                        Connect to your Webex account. You will be asked to accept the integration permissions to continue.
+                    </p>
+                </div>
+            </section>
+
+            <section class="step-feature reverse">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/step-users.png') }}" alt="Select Users" >
+                </div>
+                <div class="step-feature-text">
+                    <h3>3. Select Users</h3>
+                    <p>We show you all the users in your team (excluding the bots, because they don't do nice gifts). Just select the ones which will take part to your Secret Santa.</p>
+                </div>
+            </section>
+
+            <section class="step-feature">
+                <div class="step-feature-image">
+                    <img src="{{ asset('images/webex/message.png') }}" alt="Inform Users">
+                </div>
+                <div class="step-feature-text">
+                    <h3>4. Inform Users</h3>
+                    <p>Each participant gets a private message from the Secret Santa bot, with his peer name and an optional admin message.</p>
+                </div>
+            </section>
+        </div>
+
+        <div class="sample-message" style="padding-bottom: 0;">
+            <div class="sample-message-inner">
+                <h2 class="content-head is-center">Any question?</h2>
+                <p>
+                    Head over our FAQ to learn more about this integration or contact us directly!
+                </p>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}
