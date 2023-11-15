@@ -78,7 +78,8 @@ Launch the stack by running this command:
 castor start
 ```
 
-> Note: the first start of the stack should take a few minutes.
+> [!NOTE]
+> the first start of the stack should take a few minutes.
 
 The site is now accessible at the hostnames your have configured over HTTPS
 (you may need to accept self-signed SSL certificate if you do not have mkcert
