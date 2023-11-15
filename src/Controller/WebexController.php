@@ -99,4 +99,10 @@ class WebexController extends AbstractController
             'application' => $webexApplication->getCode(),
         ]));
     }
+
+    #[Route('/landing/webex', name: 'webex_landing', methods: ['GET'])]
+    public function landing(): Response
+    {
+        return $this->render('webex/landing.html.twig');
+    }
 }
