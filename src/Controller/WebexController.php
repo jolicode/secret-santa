@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Controller;
 use JoliCode\SecretSanta\Application\WebexApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Model\ApplicationToken;
+use JoliCode\SecretSanta\Webex\MessageSender;
 use JoliCode\SecretSanta\Webex\UserExtractor;
 use JoliCode\SecretSanta\Webex\WebexProvider;
 use League\OAuth2\Client\Token\AccessToken;
@@ -104,5 +105,28 @@ class WebexController extends AbstractController
     public function landing(): Response
     {
         return $this->render('webex/landing.html.twig');
+    }
+
+    #[Route('/bot/webex', name: 'webex_bot', methods: ['POST'])]
+    public function bot(Request $request, MessageSender $messageSender): Response
+    {
+        $eventData = $request->toArray();
+
+        if ('messages' !== $eventData['resource']) {
+            return new Response();
+        }
+
+        if ('created' !== $eventData['event']) {
+            return new Response();
+        }
+
+        // Avoid to answer to ourselves
+        if ('secret-santa@webex.bot' === $eventData['data']['personEmail']) {
+            return new Response();
+        }
+
+        $messageSender->sendDummyBotAnswer($eventData['data']['personId']);
+
+        return new Response();
     }
 }
