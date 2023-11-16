@@ -113,4 +113,18 @@ Happy Secret Santa!',
 
         throw new MessageSendFailedException($secretSanta, $secretSanta->getConfig()->getAdmin());
     }
+
+    public function sendDummyBotAnswer(string $string): void
+    {
+        $this->client->request('POST', 'https://webexapis.com/v1/messages', [
+            'auth_bearer' => $this->webexBotToken,
+            'headers' => [
+                'accept' => 'application/json',
+            ],
+            'json' => [
+                'toPersonId' => $string,
+                'markdown' => 'Hello, thanks for reaching out! If you wish to run a Secret Santa, you must go to https://secret-santa.team/landing/webex and start over!',
+            ],
+        ]);
+    }
 }
