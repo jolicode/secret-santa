@@ -13,12 +13,16 @@ namespace JoliCode\SecretSanta\Webex;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MessageSender
 {
-    public function __construct(readonly private HttpClientInterface $client, readonly private string $webexBotToken)
-    {
+    public function __construct(
+        readonly private HttpClientInterface $client,
+        readonly private RouterInterface $router,
+        readonly private string $webexBotToken
+    ) {
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample): void
@@ -116,6 +120,8 @@ Happy Secret Santa!',
 
     public function sendDummyBotAnswer(string $string): void
     {
+        $webexLandingUrl = $this->router->generate('webex_landing', referenceType: RouterInterface::ABSOLUTE_URL);
+
         $this->client->request('POST', 'https://webexapis.com/v1/messages', [
             'auth_bearer' => $this->webexBotToken,
             'headers' => [
@@ -123,7 +129,11 @@ Happy Secret Santa!',
             ],
             'json' => [
                 'toPersonId' => $string,
-                'markdown' => 'Hello, thanks for reaching out! If you wish to run a Secret Santa, you must go to https://secret-santa.team/landing/webex and start over!',
+                'markdown' => sprintf(
+                    'Hello, thanks for reaching out! If you wish to run a Secret Santa,
+                    you must go to %s and click on "Run on Webex"!',
+                    $webexLandingUrl
+                ),
             ],
         ]);
     }
