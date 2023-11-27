@@ -74,6 +74,11 @@ class ContentController extends AbstractController
                 'image' => 'arbuckle-media.png',
             ],
             [
+                'label' => 'Beyonds',
+                'link' => 'https://www.beyonds.fr/',
+                'image' => 'beyonds.svg',
+            ],
+            [
                 'label' => 'BlaBlaCar',
                 'link' => 'https://www.blablacar.fr/',
                 'image' => 'blablacar.png',
