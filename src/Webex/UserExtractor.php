@@ -37,15 +37,20 @@ class UserExtractor
         ]);
 
         foreach ($roomsResponse->toArray()['items'] as $room) {
-            $group = new Group((string) $room['id'], $room['title']);
-            $groups[$room['id']] = $group;
-
             $roomMembersResponse = $this->client->request('GET', 'https://webexapis.com/v1/memberships?roomId=' . $room['id'], [
                 'auth_bearer' => $token,
                 'headers' => [
                     'accept' => 'application/json',
                 ],
             ]);
+
+            if (404 === $roomMembersResponse->getStatusCode()) {
+                // Ignore this room, looks like we cannot read it.
+                continue;
+            }
+
+            $group = new Group((string) $room['id'], $room['title']);
+            $groups[$room['id']] = $group;
 
             foreach ($roomMembersResponse->toArray()['items'] as $user) {
                 $users[$user['personId']] = new User(
