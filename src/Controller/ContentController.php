@@ -165,6 +165,11 @@ class ContentController extends AbstractController
                 'image' => 'kvikymart.svg',
             ],
             [
+                'label' => 'Leroy Automation',
+                'link' => 'https://www.leroy-automation.com/',
+                'image' => 'leroy.svg',
+            ],
+            [
                 'label' => 'Les-Tilleuls.coop',
                 'link' => 'https://les-tilleuls.coop/',
                 'image' => 'les-tilleuls.png',
