@@ -1,12 +1,12 @@
 name: Continuous Integration
 
-'on':
+"on":
     push:
-        branches: [ "main" ]
+        branches: ["main"]
     pull_request:
-        branches: [ "main" ]
+        branches: ["main"]
     schedule:
-        - cron: '0 0 * * MON'
+        - cron: "0 0 * * MON"
 
 permissions:
     contents: read
@@ -16,13 +16,13 @@ jobs:
         name: Check Dockerfile
         runs-on: ubuntu-latest
         steps:
-        -   name: Checkout
-            uses: actions/checkout@v4
+            - name: Checkout
+              uses: actions/checkout@v4
 
-        -   name: Check php/Dockerfile
-            uses: hadolint/hadolint-action@v3.1.0
-            with:
-                dockerfile: infrastructure/docker/services/php/Dockerfile
+            - name: Check php/Dockerfile
+              uses: hadolint/hadolint-action@v3.1.0
+              with:
+                  dockerfile: infrastructure/docker/services/php/Dockerfile
 
     ci:
         name: Continuous Integration
@@ -31,36 +31,29 @@ jobs:
             BUILDKIT_PROGRESS: plain
             CI: 1
         steps:
-            -
-                uses: actions/checkout@v4
+            - uses: actions/checkout@v4
 
-            -
-                name: Setup PHP
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 8.1
-                    tools: jolicode/castor
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: 8.1
+                  tools: jolicode/castor
 
-            -
-                name: 'Build and start the infrastructure'
-                run: 'castor start && sleep 5'
+            - name: "Build and start the infrastructure"
+              run: "castor start && sleep 5"
 
-            -
-                name: 'Test HTTP server'
-                run: |
-                    set -e
-                    set -o pipefail
+            - name: "Test HTTP server"
+              run: |
+                  set -e
+                  set -o pipefail
 
-                    curl --fail --insecure --silent -H "Host: secret-santa.test" https://127.0.0.1 | grep "Secret Santa"
+                  curl --fail --insecure --silent -H "Host: secret-santa.test" https://127.0.0.1 | grep "Secret Santa"
 
-            -
-                name: 'Run PHPUnit'
-                run: castor qa:phpunit
+            - name: "Run PHPUnit"
+              run: castor qa:phpunit
 
-            -
-                name: 'Run PHPStan'
-                run: castor qa:phpstan
+            - name: "Run PHPStan"
+              run: castor qa:phpstan
 
-            -
-                name: 'Run PHP-CS-Fixer'
-                run: castor qa:cs
+            - name: "Run PHP-CS-Fixer"
+              run: castor qa:cs
