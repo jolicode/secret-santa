@@ -1,4 +1,5 @@
-version: '3.7'
+include:
+    - docker-compose.worker.yml
 
 volumes:
     redis-data: {}
@@ -9,20 +10,29 @@ services:
         volumes:
             - "/var/run/docker.sock:/var/run/docker.sock"
             - "./services/router/certs:/etc/ssl/certs"
-        network_mode: host
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+        networks:
+            - default
+        profiles:
+            - default
 
     frontend:
         build:
             context: services/php
             target: frontend
         depends_on:
-            - redis
+            redis:
+                condition: service_healthy
         volumes:
-            - "../../${PROJECT_DIRECTORY}:/home/app/application:cached"
-        environment:
-            - "PHP_VERSION=${PHP_VERSION}"
+            - "../..:/var/www:cached"
+        profiles:
+            - default
         labels:
             - "traefik.enable=true"
+            - "project-name=${PROJECT_NAME}"
             - "traefik.http.routers.${PROJECT_NAME}-frontend.rule=Host(${PROJECT_DOMAINS})"
             - "traefik.http.routers.${PROJECT_NAME}-frontend.tls=true"
             - "traefik.http.routers.${PROJECT_NAME}-frontend-unsecure.rule=Host(${PROJECT_DOMAINS})"
@@ -30,6 +40,13 @@ services:
             - "traefik.http.routers.${PROJECT_NAME}-frontend-unsecure.middlewares=redirect-to-https@file"
 
     redis:
-        build: services/redis
+        image: redis:5
         volumes:
-            - "redis-data:/data"
+            - redis-data:/data
+        healthcheck:
+            test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+        profiles:
+            - default
