@@ -11,5 +11,7 @@ sitemap:
         template: content/sitemap.xml.twig
 
 controllers:
-    resource: ../src/Controller/
+    resource:
+        path: ../src/Controller/
+        namespace: JoliCode\SecretSanta\Controller
     type: attribute
