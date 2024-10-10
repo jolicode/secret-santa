@@ -34,7 +34,7 @@ class MessageSender
 
         $receiverUser = $secretSanta->getUser($receiver);
 
-        $text .= sprintf(
+        $text .= \sprintf(
             'Hi!
 
 You have been selected to be part of a Secret Santa :santa:!
@@ -47,7 +47,7 @@ Someone will get you a gift and **you have been chosen to gift:**
 
         if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
             // The extra space after the last %s seems mandatory to not break message in Discord mobile application
-            $text .= sprintf("\n\nHere is some details about %s:\n\n```%s ```", $receiverUser->getName(), $userNote);
+            $text .= \sprintf("\n\nHere is some details about %s:\n\n```%s ```", $receiverUser->getName(), $userNote);
         }
 
         if (!empty($secretSanta->getAdminMessage())) {
@@ -59,7 +59,7 @@ Someone will get you a gift and **you have been chosen to gift:**
         $text .= "\n\n_Organized with Secret-Santa.team";
 
         if ($admin = $secretSanta->getConfig()->getAdmin()) {
-            $text .= sprintf(' by admin %s (<@!%s>)._', $admin->getExtra()['nickname'] ?? $admin->getName(), $admin->getIdentifier());
+            $text .= \sprintf(' by admin %s (<@!%s>)._', $admin->getExtra()['nickname'] ?? $admin->getName(), $admin->getIdentifier());
         } else {
             $text .= '_';
         }
@@ -73,7 +73,7 @@ Someone will get you a gift and **you have been chosen to gift:**
             $precision = null;
 
             if (($response = $e->getResponse()) && 403 === $response->getStatusCode()) {
-                $precision = sprintf(
+                $precision = \sprintf(
                     '@%s does not allow to receive DM on the server "%s". Please ask them to change their server privacy settings as explained in our faq.',
                     $secretSanta->getUser($giver)->getName(),
                     $secretSanta->getConfig()->getOrganization()
@@ -91,7 +91,7 @@ Someone will get you a gift and **you have been chosen to gift:**
      */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
-        $text = sprintf(
+        $text = \sprintf(
             'Dear Secret Santa **admin**,
 
 In case of trouble or if you need it for whatever reason, here is a way to **retrieve the secret repartition**:

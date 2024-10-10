@@ -59,7 +59,7 @@ class MessageSender
             'type' => 'section',
             'text' => [
                 'type' => 'mrkdwn',
-                'text' => sprintf("Someone will get you a gift and *you have been chosen to gift:*\n\n:gift: *<@%s>* :gift:\n\n", $receiver),
+                'text' => \sprintf("Someone will get you a gift and *you have been chosen to gift:*\n\n:gift: *<@%s>* :gift:\n\n", $receiver),
             ],
         ];
 
@@ -73,7 +73,7 @@ class MessageSender
 
         $blocks[] = $receiverBlock;
 
-        $fallbackText .= sprintf('You have been selected to be part of a Secret Santa :santa:!
+        $fallbackText .= \sprintf('You have been selected to be part of a Secret Santa :santa:!
 *You have been chosen to gift:* :gift: *<@%s>* :gift:', $receiver);
 
         if (!empty($userNote = $secretSanta->getUserNote($receiver))) {
@@ -81,7 +81,7 @@ class MessageSender
                 'type' => 'section',
                 'text' => [
                     'type' => 'mrkdwn',
-                    'text' => sprintf('*Here is some details about <@%s>:*', $receiver),
+                    'text' => \sprintf('*Here is some details about <@%s>:*', $receiver),
                 ],
             ];
 
@@ -111,7 +111,7 @@ class MessageSender
                 ],
             ];
 
-            $fallbackText .= sprintf("\n\nHere is a message from the Secret Santa admin:\n\n```\n%s\n```", $secretSanta->getAdminMessage());
+            $fallbackText .= \sprintf("\n\nHere is a message from the Secret Santa admin:\n\n```\n%s\n```", $secretSanta->getAdminMessage());
         } else {
             $blocks[] = [
                 'type' => 'section',
@@ -129,7 +129,7 @@ class MessageSender
         $footer = 'Organized with <https://secret-santa.team/|Secret-Santa.team>';
 
         if ($admin = $secretSanta->getConfig()->getAdmin()) {
-            $footer .= sprintf(' by admin <@%s>.', $admin->getIdentifier());
+            $footer .= \sprintf(' by admin <@%s>.', $admin->getIdentifier());
         }
 
         $blocks[] = [
@@ -189,7 +189,7 @@ Remember, with great power comes great responsibility!
 
 Happy Secret Santa!';
 
-        $text = sprintf(
+        $text = \sprintf(
             $message,
             $code,
             $spoilUrl

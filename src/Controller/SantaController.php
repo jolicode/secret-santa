@@ -400,12 +400,12 @@ class SantaController extends AbstractController
             }
         }
 
-        throw $this->createNotFoundException(sprintf('Unknown application %s.', $code));
+        throw $this->createNotFoundException(\sprintf('Unknown application %s.', $code));
     }
 
     private function getSecretSantaSessionKey(string $hash): string
     {
-        return sprintf('secret-santa-%s', $hash);
+        return \sprintf('secret-santa-%s', $hash);
     }
 
     private function prepareSecretSanta(Rudolph $rudolph, Request $request, Config $config): SecretSanta

@@ -48,7 +48,7 @@ class ParticipantType extends AbstractType
             ) {
             }
 
-            public function transform($value)
+            public function transform(mixed $value): mixed
             {
                 $users = [];
                 foreach ($value as $identifier) {
@@ -58,7 +58,7 @@ class ParticipantType extends AbstractType
                 return $users;
             }
 
-            public function reverseTransform($value)
+            public function reverseTransform(mixed $value): mixed
             {
                 $identifiers = [];
                 /** @var User $user */
