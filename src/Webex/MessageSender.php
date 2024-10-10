@@ -21,7 +21,7 @@ class MessageSender
     public function __construct(
         readonly private HttpClientInterface $client,
         readonly private RouterInterface $router,
-        readonly private string $webexBotToken
+        readonly private string $webexBotToken,
     ) {
     }
 
@@ -35,7 +35,7 @@ class MessageSender
 
         $receiverUser = $secretSanta->getUser($receiver);
 
-        $text .= sprintf(
+        $text .= \sprintf(
             'Hi!
 
 You have been selected to be part of a Secret Santa 🎅!
@@ -47,7 +47,7 @@ Someone will get you a gift and **you have been chosen to gift:**
         );
 
         if ($userNote = $secretSanta->getUserNote($receiver)) {
-            $text .= sprintf("\n\nHere is some details about %s:\n\n```\n%s\n```", $receiverUser->getName(), $userNote);
+            $text .= \sprintf("\n\nHere is some details about %s:\n\n```\n%s\n```", $receiverUser->getName(), $userNote);
         }
 
         if ($secretSanta->getAdminMessage()) {
@@ -59,7 +59,7 @@ Someone will get you a gift and **you have been chosen to gift:**
         $text .= "\n\n_Organized with Secret-Santa.team";
 
         if ($admin = $secretSanta->getConfig()->getAdmin()) {
-            $text .= sprintf(' by admin %s._', $admin->getName());
+            $text .= \sprintf(' by admin %s._', $admin->getName());
         } else {
             $text .= '_';
         }
@@ -84,7 +84,7 @@ Someone will get you a gift and **you have been chosen to gift:**
 
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void
     {
-        $text = sprintf(
+        $text = \sprintf(
             'Dear Secret Santa **admin**,
 
 In case of trouble or if you need it for whatever reason, here is a way to **retrieve the secret repartition**:
@@ -129,7 +129,7 @@ Happy Secret Santa!',
             ],
             'json' => [
                 'toPersonId' => $string,
-                'markdown' => sprintf(
+                'markdown' => \sprintf(
                     'Hello, thanks for reaching out! If you wish to run a Secret Santa,
                     you must go to %s and click on "Run on Webex"!',
                     $webexLandingUrl

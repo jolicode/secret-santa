@@ -28,7 +28,7 @@ class ApiHelper
     /**
      * @return GuildMember[]
      */
-    public function getMembersInGuild(int $guildId, int $after = null): array
+    public function getMembersInGuild(int $guildId, ?int $after = null): array
     {
         return $this->getClient()->guild->listGuildMembers([
             'guild.id' => $guildId,

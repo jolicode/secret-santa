@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Secret Santa project.
+ *
+ * (c) JoliCode <coucou@jolicode.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace docker;
 
 use Castor\Attribute\AsContext;
@@ -38,7 +47,7 @@ function about(): void
 
     try {
         $routers = http_client()
-            ->request('GET', sprintf('http://%s:8080/api/http/routers', variable('root_domain')))
+            ->request('GET', \sprintf('http://%s:8080/api/http/routers', variable('root_domain')))
             ->toArray()
         ;
         $projectName = variable('project_name');

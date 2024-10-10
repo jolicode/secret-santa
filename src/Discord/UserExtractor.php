@@ -65,7 +65,7 @@ class UserExtractor
                 $member->user->username,
                 [
                     'nickname' => $member->nick ?? null,
-                    'image' => $member->user->avatar ? sprintf('https://cdn.discordapp.com/avatars/%s/%s.png', $member->user->id, $member->user->avatar) : null,
+                    'image' => $member->user->avatar ? \sprintf('https://cdn.discordapp.com/avatars/%s/%s.png', $member->user->id, $member->user->avatar) : null,
                     'groups' => (array) $member->roles,
                 ]
             );
