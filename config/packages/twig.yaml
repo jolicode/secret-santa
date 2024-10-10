@@ -1,5 +1,5 @@
 twig:
-    default_path: '%kernel.project_dir%/templates'
+    file_name_pattern: '*.twig'
     globals:
         bugsnag_api_key: '%env(BUGSNAG_KEY)%'
         bugsnag_release_stage: '%env(BUGSNAG_STAGE)%'
