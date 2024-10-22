@@ -57,3 +57,4 @@ when@prod:
             deprecation:
                 type: error_log
                 channels: [deprecation]
+                formatter: monolog.formatter.json
