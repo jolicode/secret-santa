@@ -99,11 +99,6 @@ class ContentController extends AbstractController
                 'image' => 'digital-darts.png',
             ],
             [
-                'label' => 'Digital Ping Pong',
-                'link' => 'https://digitalpingpong.com/',
-                'image' => 'digital-ping-pong.svg',
-            ],
-            [
                 'label' => 'Elao',
                 'link' => 'https://www.elao.com',
                 'image' => 'elao.jpg',
@@ -143,11 +138,6 @@ class ContentController extends AbstractController
                 'label' => 'Idra',
                 'link' => 'https://www.idracompany.com/',
                 'image' => 'IDRA.png',
-            ],
-            [
-                'label' => 'Ingot Portal',
-                'link' => 'https://ingotportal.com',
-                'image' => 'ingot.jpg',
             ],
             [
                 'label' => 'IS Decisions',
@@ -208,11 +198,6 @@ class ContentController extends AbstractController
                 'label' => 'Perkbox',
                 'link' => 'https://www.perkbox.com/',
                 'image' => 'perkbox-logo.png',
-            ],
-            [
-                'label' => 'PipeCandy',
-                'link' => 'https://pipecandy.com/',
-                'image' => 'pipecandy.png',
             ],
             [
                 'label' => 'Postman',
