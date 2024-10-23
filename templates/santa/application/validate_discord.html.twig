@@ -1,0 +1,10 @@
+{% extends 'santa/validate.html.twig' %}
+
+{% block user_item %}
+    <span class="user-summary">
+        {% if user.extra.image %}
+            <img src="{{ user.extra.image }}" alt=""/>
+        {% endif %}
+        <span>{{ user.name }}</span>
+    </span>
+{% endblock %}

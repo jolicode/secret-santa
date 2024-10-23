@@ -1,0 +1,73 @@
+{% extends 'santa/base.html.twig' %}
+
+{% set step = 3 %}
+
+{% block santa_content %}
+    {{ form_start(form) }}
+
+    <div class="run-block validate-step">
+        <h2>Validate the repartition</h2>
+
+        <p>
+            This is the final step before sending the secret messages to each participant.
+        </p>
+
+        <p>
+            Here, you can <strong>check the repartition</strong> of the Secret Santa to know who each participant must offer a gift to.
+            If you are not satisfied, you can <strong>shuffle the list</strong> again.
+        </p>
+
+        <details>
+            <summary>Ready to be spoiled? Open this box!</summary>
+
+            <p>Here is the secret repartition:</p>
+
+            <div class="user-container">
+                <div class="user-list no-hover" id="user-list">
+                    {% for giver, receiver in config.shuffledUsers %}
+                        <div class="user-item">
+                            {% set user = config.getUser(giver) %}
+                            {{ block('user_item') }}
+                            <span class="text">must offer a gift to</span>
+                            {% set user = config.getUser(receiver) %}
+                            {{ block('user_item') }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="is-center">
+                {% do form.shuffle.setRendered() %}
+                <button name="{{ form.shuffle.vars.full_name }}" type="submit" class="small-button shuffle-button">
+                    <span class="fas fa-dice" aria-hidden="true"></span>
+                    Shuffle again
+                </button>
+            </div>
+        </details>
+    </div>
+
+    <div class="run-block">
+        <h2>All good?</h2>
+
+        <p class="is-center">
+           You are now ready for Secret Santa. It's now time to send secret messages to each participant to inform them
+            of their peer name.
+        </p>
+
+        <div class="is-center">
+            {% do form.submit.setRendered() %}
+            <button name="{{ form.submit.vars.full_name }}" type="submit" class="big-button" id="submit-button">
+                <span class="fas fa-paper-plane" aria-hidden="true"></span>
+                Send the secret messages!
+            </button>
+        </div>
+
+        <p class="is-center">
+            <small>
+                or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
+            </small>
+        </p>
+    </div>
+
+    {{ form_end(form) }}
+{% endblock santa_content %}

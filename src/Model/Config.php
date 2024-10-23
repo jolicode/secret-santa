@@ -19,6 +19,8 @@ class Config
     private array $groups = [];
     /** @var string[] */
     private array $selectedUsers = [];
+    /** @var string[] */
+    private array $shuffledUsers = [];
     private ?string $message = '';
     /** @var array<int, string> */
     private array $notes = [];
@@ -79,6 +81,22 @@ class Config
         $this->availableUsers = $availableUsers;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getShuffledUsers(): array
+    {
+        return $this->shuffledUsers;
+    }
+
+    /**
+     * @param string[] $shuffledUsers
+     */
+    public function setShuffledUsers(array $shuffledUsers): void
+    {
+        $this->shuffledUsers = $shuffledUsers;
+    }
+
     public function getMessage(): ?string
     {
         return $this->message;
@@ -135,5 +153,10 @@ class Config
     public function getGroups(): array
     {
         return $this->groups;
+    }
+
+    public function getUser(string $identifier): ?User
+    {
+        return $this->availableUsers[$identifier] ?? null;
     }
 }
