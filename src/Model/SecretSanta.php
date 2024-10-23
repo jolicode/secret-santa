@@ -40,7 +40,7 @@ class SecretSanta
 
     public function getUser(string $identifier): ?User
     {
-        return $this->config->getAvailableUsers()[$identifier] ?? null;
+        return $this->config->getUser($identifier);
     }
 
     public function getUserNote(string $identifier): string

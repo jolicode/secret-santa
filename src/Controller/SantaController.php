@@ -25,8 +25,10 @@ use JoliCode\SecretSanta\Santa\Spoiler;
 use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,7 +78,7 @@ class SantaController extends AbstractController
     }
 
     #[Route('/participants/{application}', name: 'participants', methods: ['GET', 'POST'])]
-    public function participants(Request $request, string $application): Response
+    public function participants(Rudolph $rudolph, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -102,6 +104,7 @@ class SantaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+            $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
             $this->saveConfig($request, $config);
             if ($form->isValid()) {
                 return $this->redirectToRoute('message', ['application' => $application->getCode()]);
@@ -118,7 +121,7 @@ class SantaController extends AbstractController
     }
 
     #[Route('/message/{application}', name: 'message', methods: ['GET', 'POST'])]
-    public function message(Rudolph $rudolph, FormFactoryInterface $formFactory, Request $request, Spoiler $spoiler, string $application): Response
+    public function message(FormFactoryInterface $formFactory, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -156,7 +159,68 @@ class SantaController extends AbstractController
             $this->saveConfig($request, $config);
 
             if ($form->isValid()) {
-                $secretSanta = $this->prepareSecretSanta($rudolph, $request, $config);
+                return $this->redirectToRoute('validate', ['application' => $application->getCode()]);
+            }
+
+            $errors = array_map(function (FormError $error) {
+                return $error->getMessage();
+            }, iterator_to_array($form->getErrors(true, false)));
+
+            if ($errors) {
+                $errors = array_unique($errors);
+            }
+        }
+
+        $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
+            'application' => $application->getCode(),
+            'admin' => $application->getAdmin(),
+            'config' => $config,
+            'errors' => $errors,
+            'form' => $form->createView(),
+        ]);
+
+        return new Response($content);
+    }
+
+    #[Route('/validate/{application}', name: 'validate', methods: ['GET', 'POST'])]
+    public function validate(Rudolph $rudolph, FormFactoryInterface $formFactory, Spoiler $spoiler, Request $request, string $application): Response
+    {
+        $application = $this->getApplication($application);
+
+        if (!$application->isAuthenticated()) {
+            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+        }
+
+        $errors = [];
+
+        $config = $this->getConfigOrThrow404($request);
+
+        if (!$config->getShuffledUsers()) {
+            if (count($config->getSelectedUsers()) < 2) {
+                return new RedirectResponse($this->router->generate('participants', ['application' => $application->getCode()]));
+            }
+            $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
+        }
+
+        $form = $formFactory->createBuilder()
+            ->add('shuffle', SubmitType::class)
+            ->add('submit', SubmitType::class)
+            ->getForm()
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $shuffleButton = $form->get('shuffle');
+                if ($shuffleButton instanceof SubmitButton && $shuffleButton->isClicked()) {
+                    $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
+                    $this->saveConfig($request, $config);
+
+                    return $this->redirectToRoute('validate', ['application' => $application->getCode()]);
+                }
+
+                $secretSanta = $this->prepareSecretSanta($config);
                 $session = $request->getSession();
                 $session->set(
                     $this->getSecretSantaSessionKey(
@@ -185,7 +249,7 @@ class SantaController extends AbstractController
             }
         }
 
-        $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
+        $content = $this->twig->render('santa/application/validate_' . $application->getCode() . '.html.twig', [
             'application' => $application->getCode(),
             'admin' => $application->getAdmin(),
             'config' => $config,
@@ -408,11 +472,9 @@ class SantaController extends AbstractController
         return \sprintf('secret-santa-%s', $hash);
     }
 
-    private function prepareSecretSanta(Rudolph $rudolph, Request $request, Config $config): SecretSanta
+    private function prepareSecretSanta(Config $config): SecretSanta
     {
-        $selectedUsersAsArray = $config->getSelectedUsers();
-
-        $associatedUsers = $rudolph->associateUsers($selectedUsersAsArray);
+        $associatedUsers = $config->getShuffledUsers();
 
         $hash = md5(serialize($associatedUsers));
 

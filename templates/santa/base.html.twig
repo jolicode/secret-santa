@@ -4,19 +4,38 @@
     <nav class="is-center">
         <ol class="breadcrumb">
             <li class="{{ step >= 1 ? 'current' }}">
-                {% if step == 2 ? 'current' %}
-                    <a href="{{ path('participants', {application: application}) }}"><span class="fas fa-users" aria-hidden="true"></span> Participants</a>
+                {% if step in [2, 3] ? 'current' %}
+                    <a href="{{ path('participants', {application: application}) }}">
                 {% else %}
-                    <span><span class="fas fa-users" aria-hidden="true"></span> Participants</span>
+                    <span>
+                {% endif %}
+                    <span class="fas fa-users" aria-hidden="true"></span> Participants
+                {% if step in [2, 3] ? 'current' %}
+                    </a>
+                {% else %}
+                    </span>
                 {% endif %}
             </li>
             <li class="{{ step >= 2 ? 'current' }}">
-                <span><span class="fas fa-pen" aria-hidden="true"></span> Customization</span>
+                {% if step in [3] ? 'current' %}
+                    <a href="{{ path('message', {application: application}) }}">
+                {% else %}
+                    <span>
+                {% endif %}
+                    <span class="fas fa-pen" aria-hidden="true"></span> Customization
+                {% if step in [3] ? 'current' %}
+                    </a>
+                {% else %}
+                    </span>
+                {% endif %}
             </li>
             <li class="{{ step >= 3 ? 'current' }}">
-                <span><span class="fas fa-paper-plane" aria-hidden="true"></span> Sending</span>
+                <span><span class="fas fa-check" aria-hidden="true"></span> Validation</span>
             </li>
             <li class="{{ step >= 4 ? 'current' }}">
+                <span><span class="fas fa-paper-plane" aria-hidden="true"></span> Sending</span>
+            </li>
+            <li class="{{ step >= 5 ? 'current' }}">
                 <span><span class="fas fa-flag-checkered" aria-hidden="true"></span> Finish</span>
             </li>
         </ol>
