@@ -217,7 +217,17 @@ class SantaController extends AbstractController
                     $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
                     $this->saveConfig($request, $config);
 
-                    return $this->redirectToRoute('validate', ['application' => $application->getCode()]);
+                    $secretSanta = new SecretSanta(
+                        'shuffle',
+                        [],
+                        $config
+                    );
+                    $this->statisticCollector->incrementShuffleCount($secretSanta);
+
+                    return $this->redirectToRoute('validate', [
+                        'application' => $application->getCode(),
+                        'reshuffled' => 1,
+                    ]);
                 }
 
                 $secretSanta = $this->prepareSecretSanta($config);

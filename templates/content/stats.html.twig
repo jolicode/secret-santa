@@ -91,11 +91,13 @@
             {{ stats.singleValue('Participants involved *', counters['users']) }}
             {{ stats.singleValue('Biggest Secret Santa', counters['users-max'], 'participants') }}
             {{ stats.singleValue('Message samples sent *', counters['sample']) }}
+            {{ stats.singleValue('Re-shuffle **', counters['shuffle'] ?? 0) }}
             {{ stats.singleValue('Spoils asked *', counters['spoil']) }}
         </div>
 
         <p class="is-center">
-            * Since 10/2019
+            * Since 10/2019<br>
+            ** Since 11/2024
         </p>
 
         <div class="container-charts">
