@@ -68,8 +68,7 @@
                                 Once authenticated with your favorite Chat tool, you will be prompted with the User
                                 Selection screen.<br/>
                                 We show you all the users in your team. Just select the ones which will take part to
-                                your
-                                Secret Santa by clicking on their names.<br/>
+                                your Secret Santa by clicking on their names.<br/>
                             </p>
 
                             <div class="is-center">
@@ -79,11 +78,9 @@
 
                             <p>
                                 On the second screen, you will be able to customize a bit the message that will be sent
-                                to
-                                every participant.
+                                to every participant.
                                 You can add an optional message that will be sent along the Secret Santa draw. You can
-                                even
-                                add details about every participant to help Santas achieve their mission.
+                                even add details about every participant to help Santas achieve their mission.
                             </p>
 
                             <div class="is-center">
@@ -92,16 +89,15 @@
                             </div>
 
                             <p>
-                                You can always preview the private message that will be sent with the following button,
-                                that
-                                will send you and only you a fake message:
+                                On the third step, you will be able to check the repartition of the Secret Santa if you
+                                want to know who each participant must offer a gift to. If you are not satisfied, you
+                                can shuffle the list again.
                             </p>
-                            <p class="is-center">
-                                <button type="button" class="small-button">
-                                    <span class="fas fa-wrench" aria-hidden="true"></span>
-                                    Send me a fake message
-                                </button>
-                            </p>
+
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/app-step3.png') }}" style="max-width: 80%"
+                                     alt="The validation step" />
+                            </div>
 
                             <p>
                                 Once you are ready, you can submit the Secret Santa by clicking this big red button:
@@ -109,20 +105,17 @@
                             <div class="is-center">
                                 <button type="submit" class="big-button">
                                     <span class="fas fa-paper-plane" aria-hidden="true"></span>
-                                    Shuffle and send Secret Santa messages!
+                                    Send the secret messages!
                                 </button>
                             </div>
                             <p>
                                 This will trigger the following operations:
                             </p>
                             <ol>
-                                <li>Shuffle all the users;</li>
-                                <li>Assign a random user to each user, without collision;</li>
-                                <li><strong>Send a private message to each user</strong> with the user they must gift
-                                    and
-                                    your admin message;
-                                </li>
                                 <li>Send a private message to the admin (you) with details.</li>
+                                <li><strong>Send a private message to each user</strong> with the user they must gift
+                                    and your admin message;
+                                </li>
                             </ol>
                             <p>And that's it, you are done!</p>
                         </details>
@@ -133,8 +126,7 @@
                             <summary>
                                 <h3>
                                     <p><a href="#secret-repartition" class="faq-anchor"><i class="fas fa-link"></i></a>How can I retrieve
-                                        the
-                                        secret repartition ?</p>
+                                        the secret repartition ?</p>
                                 </h3>
                             </summary>
                             <p>
@@ -149,10 +141,9 @@
                             </div>
 
                             <p>
-                                From there, you can click on
-                                "<a href="{{ path('spoil') }}">this page</a>"
-                                in the message, which will take you to a page where you can paste the long code to
-                                receive the secret repartition.
+                                From there, you can click on "<a href="{{ path('spoil') }}">this page</a>" in the
+                                message, which will take you to a page where you can paste the long code to receive the
+                                secret repartition.
                             </p>
                         </details>
                     </li>
@@ -167,10 +158,9 @@
 
                             <p>
                                 Yes! If you need to specify some information for some users in particular (e.g:
-                                allergies, address), you can easily do so! <br/>
-                                On the customization step,
-                                you will see a list of all the participants, and each of them will have a field
-                                next to their name where you can enter the information :
+                                allergies, address), you can easily do so!<br/>
+                                On the customization step, you will see a list of all the participants, and each of them
+                                will have a field next to their name where you can enter the information:
                             </p>
 
                             <div class="is-center">
@@ -193,8 +183,8 @@
                                 </h3>
                             </summary>
                             <p>
-                                Don't worry! The draw works perfectly no matter how many participants
-                                you selected (of course we need a minimum of 2 participants 😉).
+                                Don't worry! The draw works perfectly no matter how many participants you selected (of
+                                course you need a minimum of 2 participants 😉).
                             </p>
                         </details>
                     </li>
@@ -203,13 +193,15 @@
                             <summary>
                                 <h3>
                                     <p><a href="#avoid-association" class="faq-anchor"><i class="fas fa-link"></i></a>Can I make sure
-                                        someone will be matched or not matched with
-                                        someone else?</p>
+                                        someone will be matched or not matched with someone else?</p>
                                 </h3>
                             </summary>
                             <p>
                                 No, the association is purely random, so you cannot do that with our application.
-                                An alternative could be to launch 2 Secret Santa with two groups of people.
+                                But at the validation step, you can shuffle the list again if you are not satisfied with
+                                the repartition.
+                                If you have to many "incompatibilities", an alternative could be to launch 2 Secret
+                                Santa with two groups of people.
                             </p>
                         </details>
                     </li>
@@ -223,9 +215,7 @@
                             </summary>
                             <p>
                                 No, you can't. However, you can still start a new Secret Santa. We advise you to add a
-                                note
-                                in the
-                                message mentioning that this new draw cancels and replaces the old one.
+                                note in the message mentioning that this new draw cancels and replaces the old one.
                             </p>
                         </details>
                     </li>
@@ -239,22 +229,19 @@
                             </summary>
                             <p>
                                 The first step in our application is to retrieve all the users on your Slack workspace
-                                / Discord server - yes we retrieve all the users to allow you to select
-                                the
-                                ones that will participate in your Secret Santa.
+                                / Discord server - yes we retrieve all the users to allow you to select the ones that
+                                will participate in your Secret Santa.
                             </p>
                             <p>
-                                When your team is massive, Slack or Discord API can fail to send us all the
-                                users in a
+                                When your team is massive, Slack or Discord API can fail to send us all the users in a
                                 reasonable duration. That means you will not be able to start a Secret Santa.
-                                A possible workaround would be to create a new Slack workspace / Discord server /
-                                with only the participants.
+                                A possible workaround would be to create a new Slack workspace / Discord server with
+                                only the participants.
                             </p>
                             <p>
                                 The second step is to dispatch a private message to all the selected users. Even if you
-                                started
-                                a Secret Santa with a lot of participants, the application will send all the messages
-                                progressively.
+                                started a Secret Santa with a lot of participants, the application will send all the
+                                messages progressively.
                                 So there should not be any problem at this step.
                             </p>
                         </details>
@@ -282,22 +269,18 @@
                             <summary>
                                 <h3>
                                     <p><a href="#discord-server-dm" class="faq-anchor"><i class="fas fa-link"></i></a>What to do when a
-                                        user does not allow to receive private
-                                        message on a Discord server?</p>
+                                        user does not allow to receive private message on a Discord server?</p>
                                 </h3>
                             </summary>
                             <p>
-                                Discord has an option to allow someone to not receive private message on a their server
-                                they
+                                Discord has an option to allow anyone to not receive private message on a server they
                                 belong to.
                             </p>
                             <p>
                                 If you throw a Secret Santa in a server where a user does not allow to receive private
-                                message,
-                                Discord will prevent us to send them a message. So if you hit this error, you need to
-                                ask
-                                them
-                                to <strong>change their privacy settings</strong> on this server. See the example below:
+                                message, Discord will prevent us to send them their Santa message.
+                                So if you hit this error, you need to ask them to <strong>change their privacy settings</strong>
+                                on this server. See the example below:
                             </p>
                             <div class="is-center">
                                 <img src="{{ asset('images/discord-privacy-settings.gif') }}" style="max-width: 80%"
@@ -305,8 +288,7 @@
                             </div>
                             <p>
                                 Once they made the change, you can safely retry to send the remaining messages. When the
-                                draw is finished,
-                                they can of course re-disable this setting as they wish.
+                                draw is finished, they can of course re-disable this setting as they wish.
                             </p>
                         </details>
                     </li>
@@ -315,8 +297,7 @@
                             <summary>
                                 <h3>
                                     <p><a href="#invalid-user" class="faq-anchor"><i class="fas fa-link"></i></a>Why did someone receive
-                                        <code>@invalid-user</code> as the person to
-                                        gift?</p>
+                                        <code>@invalid-user</code> as the person to gift?</p>
                                 </h3>
                             </summary>
                             <p>
@@ -380,8 +361,7 @@
                                 Simply drop us an email at <a
                                         href="mailto:hello@secret-santa.team">hello@secret-santa.team</a>
                                 with the name, url and logo of the entity you want to add. It's free but if you want to
-                                tweet
-                                or share our app to the world, you are more than welcome.
+                                tweet or share our app to the world, you are more than welcome.
                             </p>
                         </details>
                     </li>

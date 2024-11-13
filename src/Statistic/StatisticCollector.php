@@ -49,6 +49,11 @@ class StatisticCollector
         $this->client->incr('stats:sample');
     }
 
+    public function incrementShuffleCount(SecretSanta $secretSanta): void
+    {
+        $this->client->incr('stats:shuffle');
+    }
+
     public function incrementSpoilCount(): void
     {
         $this->client->incr('stats:spoil');
