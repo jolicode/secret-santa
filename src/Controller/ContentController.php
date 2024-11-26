@@ -103,7 +103,6 @@ class ContentController extends AbstractController
                 'link' => 'https://www.elao.com',
                 'image' => 'elao.jpg',
             ],
-
             [
                 'label' => 'EvaluAgent',
                 'link' => 'https://www.evaluagent.com/',
@@ -138,6 +137,11 @@ class ContentController extends AbstractController
                 'label' => 'Idra',
                 'link' => 'https://www.idracompany.com/',
                 'image' => 'IDRA.png',
+            ],
+            [
+                'label' => 'Intent',
+                'link' => 'https://www.withintent.com/',
+                'image' => 'intent.png',
             ],
             [
                 'label' => 'IS Decisions',
