@@ -21,6 +21,13 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+        default_options:
+            headers:
+                User-Agent: "secret-santa.team"
+            retry_failed:
+                enabled: true
+
 when@test:
     framework:
         test: true

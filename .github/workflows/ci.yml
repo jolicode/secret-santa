@@ -54,4 +54,4 @@ jobs:
               run: castor qa:phpstan
 
             - name: "Run PHP-CS-Fixer"
-              run: castor qa:cs
+              run: castor qa:cs --dry-run

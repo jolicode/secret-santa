@@ -27,13 +27,13 @@
         "nelmio/security-bundle": "^3.4.2",
         "nyholm/psr7": "^1.8.2",
         "predis/predis": "^2.2.2",
-        "restcord/restcord": "dev-feature/update-sf",
         "symfony/asset": ">=7.1.1",
         "symfony/console": ">=7.1.5",
         "symfony/flex": "^2.4.7",
         "symfony/form": ">=7.1.5",
         "symfony/framework-bundle": ">=7.1.5",
         "symfony/http-client": ">=7.1.5",
+        "symfony/mime": "7.1.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": ">=7.1.1",
         "symfony/twig-bundle": ">=7.1.5",
@@ -52,12 +52,6 @@
         "symfony/stopwatch": ">=7.1.1",
         "symfony/var-dumper": ">=7.1.5",
         "symfony/web-profiler-bundle": ">=7.1.4"
-    },
-    "repositories": {
-        "jewome62_restcord": {
-            "type": "vcs",
-            "url": "git@github.com:jewome62/restcord.git"
-        }
     },
     "config": {
         "optimize-autoloader": true,
