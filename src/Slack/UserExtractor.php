@@ -16,7 +16,6 @@ use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\Slack\Api\Model\ObjsUser;
-use JoliCode\Slack\Exception\SlackErrorResponse;
 
 class UserExtractor
 {
@@ -44,17 +43,6 @@ class UserExtractor
                     'limit' => 200,
                     'cursor' => $cursor,
                 ]);
-            } catch (SlackErrorResponse $slackErrorResponse) {
-                if ('ratelimited' === $slackErrorResponse->getErrorCode()) {
-                    sleep(30);
-
-                    $response = $this->clientFactory->getClientForToken($token)->usersList([
-                        'limit' => 200,
-                        'cursor' => $cursor,
-                    ]);
-                } else {
-                    throw new UserExtractionFailedException(SlackApplication::APPLICATION_CODE, 'Could not fetch members in team.', $slackErrorResponse);
-                }
             } catch (\Throwable $t) {
                 throw new UserExtractionFailedException(SlackApplication::APPLICATION_CODE, 'Could not fetch members in team.', $t);
             }
