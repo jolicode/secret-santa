@@ -196,7 +196,7 @@ class SantaController extends AbstractController
         $config = $this->getConfigOrThrow404($request);
 
         if (!$config->getShuffledUsers()) {
-            if (count($config->getSelectedUsers()) < 2) {
+            if (\count($config->getSelectedUsers()) < 2) {
                 return new RedirectResponse($this->router->generate('participants', ['application' => $application->getCode()]));
             }
             $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
