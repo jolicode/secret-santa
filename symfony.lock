@@ -51,23 +51,14 @@
             ".php-cs-fixer.dist.php"
         ]
     },
-    "guzzlehttp/command": {
-        "version": "1.2.1"
-    },
     "guzzlehttp/guzzle": {
         "version": "7.4.1"
-    },
-    "guzzlehttp/guzzle-services": {
-        "version": "1.3.1"
     },
     "guzzlehttp/promises": {
         "version": "1.5.1"
     },
     "guzzlehttp/psr7": {
         "version": "2.1.0"
-    },
-    "guzzlehttp/uri-template": {
-        "version": "v1.0.1"
     },
     "jane-php/json-schema-runtime": {
         "version": "v7.1.5"
@@ -101,9 +92,6 @@
         "files": [
             "config/packages/nelmio_security.yaml"
         ]
-    },
-    "netresearch/jsonmapper": {
-        "version": "v1.6.0"
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
@@ -185,9 +173,6 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
-    },
-    "restcord/restcord": {
-        "version": "dev-Nispeon-patch-2"
     },
     "symfony/asset": {
         "version": "v6.0.1"

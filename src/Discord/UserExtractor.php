@@ -15,8 +15,6 @@ use JoliCode\SecretSanta\Application\DiscordApplication;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
-use RestCord\Model\Guild\GuildMember;
-use RestCord\Model\Guild\Role;
 
 class UserExtractor
 {
@@ -29,10 +27,10 @@ class UserExtractor
      */
     public function extractForGuild(int $guildId): array
     {
-        /** @var GuildMember[] $members */
+        /** @var list<mixed> $members */
         $members = [];
 
-        /** @var GuildMember[] $lastMembers */
+        /** @var list<mixed> $lastMembers */
         $lastMembers = [];
 
         $startTime = time();
@@ -44,8 +42,7 @@ class UserExtractor
             $lastMember = $lastMembers ? end($lastMembers) : null;
 
             try {
-                /** @var GuildMember[] $members */
-                $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember?->user->id);
+                $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember['user']['id'] ?? null);
             } catch (\Throwable $t) {
                 throw new UserExtractionFailedException(DiscordApplication::APPLICATION_CODE, 'Could not fetch members in guild.', $t);
             }
@@ -53,20 +50,20 @@ class UserExtractor
             $members = array_merge($members, $lastMembers);
         } while (!empty($lastMembers));
 
-        $members = array_filter($members, function (GuildMember $member) {
-            return !$member->user->bot;
+        $members = array_filter($members, function (array $member) {
+            return !($member['user']['bot'] ?? false);
         });
 
         $users = [];
 
         foreach ($members as $member) {
             $user = new User(
-                (string) $member->user->id,
-                $member->user->username,
+                (string) $member['user']['id'],
+                $member['user']['username'],
                 [
-                    'nickname' => $member->nick ?? null,
-                    'image' => $member->user->avatar ? \sprintf('https://cdn.discordapp.com/avatars/%s/%s.png', $member->user->id, $member->user->avatar) : null,
-                    'groups' => (array) $member->roles,
+                    'nickname' => $member['nick'] ?? null,
+                    'image' => ($member['user']['avatar'] ?? null) ? \sprintf('https://cdn.discordapp.com/avatars/%s/%s.png', $member['user']['id'], $member['user']['avatar']) : null,
+                    'groups' => (array) $member['roles'],
                 ]
             );
 
@@ -85,19 +82,18 @@ class UserExtractor
      */
     public function extractGroupsForGuild(int $guildId): array
     {
-        /** @var Role[] $roles */
         $roles = $this->apiHelper->getRolesInGuild($guildId);
 
         $groups = [];
 
         foreach ($roles as $role) {
-            if ('@everyone' === $role->name) {
+            if ('@everyone' === $role['name']) {
                 continue;
             }
 
             $group = new Group(
-                (string) $role->id,
-                $role->name
+                (string) $role['id'],
+                $role['name']
             );
 
             $groups[$group->getIdentifier()] = $group;
