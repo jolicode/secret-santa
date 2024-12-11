@@ -33,6 +33,7 @@
         "symfony/form": ">=7.1.5",
         "symfony/framework-bundle": ">=7.1.5",
         "symfony/http-client": ">=7.1.5",
+        "symfony/mime": "7.1.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": ">=7.1.1",
         "symfony/twig-bundle": ">=7.1.5",

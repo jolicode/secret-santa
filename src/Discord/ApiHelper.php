@@ -12,6 +12,8 @@
 namespace JoliCode\SecretSanta\Discord;
 
 use JoliCode\SecretSanta\Model\File;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -56,7 +58,7 @@ class ApiHelper
         return $response->toArray();
     }
 
-    public function sendMessage(int $userId, string $message): void
+    public function sendMessage(int $userId, string $message, ?File $file = null): void
     {
         // Create a private channel with the user
         $response = $this->callApi('POST', '/users/@me/channels', [
@@ -72,14 +74,31 @@ class ApiHelper
         $channel = $response->toArray();
         $channelId = $channel['id'];
 
+        $body = [];
+        $payload = [
+            'content' => $message,
+        ];
+
+        if ($file) {
+            $payload['attachements'][] = [
+                'id' => 0,
+                'description' => 'Secret Santa spoiling code',
+                'filename' => $file->name,
+            ];
+            $body['files[0]'] = new DataPart($file->content, $file->name, 'text/plain');
+        }
+
+        $body['payload_json'] = new DataPart(json_encode($payload), null, 'application/json');
+
+        $formData = new FormDataPart($body);
+
         $options = [
-            'json' => [
-                'content' => $message
-            ],
+            'body' => $formData->bodyToString(),
+            'headers' => $formData->getPreparedHeaders()->toArray(),
         ];
 
         // Send message to the private channel
-        $response = $this->callApi('POST', "/channels/$channelId/messages", $options);
+        $response = $this->callApi('POST', "/channels/{$channelId}/messages", $options);
 
         if (200 !== $response->getStatusCode()) {
             throw new \RuntimeException('Failed to send private message: ' . $response->getContent(false));

@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\Discord;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
+use JoliCode\SecretSanta\Model\File;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
@@ -96,19 +97,17 @@ Someone will get you a gift and **you have been chosen to gift:**
 
 In case of trouble or if you need it for whatever reason, here is a way to **retrieve the secret repartition**:
 
-- Copy the following content:
-```%s```
+- Copy the content of the `secret-santa-spoil-code.txt` file attached to this message
 - Paste the content on <%s> then submit
 
 Remember, with great power comes great responsibility!
 
 Happy Secret Santa!',
-            $code,
             $spoilUrl
         );
 
         try {
-            $this->apiHelper->sendMessage((int) $secretSanta->getConfig()->getAdmin()->getIdentifier(), $text);
+            $this->apiHelper->sendMessage((int) $secretSanta->getConfig()->getAdmin()->getIdentifier(), $text, new File('secret-santa-spoil-code.txt', $code));
         } catch (ClientExceptionInterface $e) {
             $precision = null;
 
