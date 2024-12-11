@@ -11,9 +11,9 @@
 
 namespace JoliCode\SecretSanta\Discord;
 
-use GuzzleHttp\Command\Exception\CommandClientException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 
 class MessageSender
 {
@@ -69,7 +69,7 @@ Someone will get you a gift and **you have been chosen to gift:**
 
         try {
             $this->apiHelper->sendMessage((int) $giver, $text);
-        } catch (CommandClientException $e) {
+        } catch (ClientExceptionInterface $e) {
             $precision = null;
 
             if (($response = $e->getResponse()) && 403 === $response->getStatusCode()) {
@@ -109,7 +109,7 @@ Happy Secret Santa!',
 
         try {
             $this->apiHelper->sendMessage((int) $secretSanta->getConfig()->getAdmin()->getIdentifier(), $text);
-        } catch (CommandClientException $e) {
+        } catch (ClientExceptionInterface $e) {
             $precision = null;
 
             if (($response = $e->getResponse()) && 403 === $response->getStatusCode()) {
