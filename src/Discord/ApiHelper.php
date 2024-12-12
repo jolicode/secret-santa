@@ -67,10 +67,6 @@ class ApiHelper
             ],
         ]);
 
-        if (200 !== $response->getStatusCode()) {
-            throw new \RuntimeException('Failed to create private channel: ' . $response->getContent(false));
-        }
-
         $channel = $response->toArray();
         $channelId = $channel['id'];
 
@@ -100,9 +96,8 @@ class ApiHelper
         // Send message to the private channel
         $response = $this->callApi('POST', "/channels/{$channelId}/messages", $options);
 
-        if (200 !== $response->getStatusCode()) {
-            throw new \RuntimeException('Failed to send private message: ' . $response->getContent(false));
-        }
+        // Force http-client to check the response status code
+        $response->getContent();
     }
 
     /**
