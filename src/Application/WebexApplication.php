@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Model\ApplicationToken;
+use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
@@ -82,9 +83,12 @@ class WebexApplication implements ApplicationInterface
         return $this->groups;
     }
 
-    public function getUsers(): array
+    /**
+     * @return array<User>
+     */
+    public function loadNextBatchOfUsers(Config $config): array
     {
-        [$users, $groups] = $this->userExtractor->extractAll($this->getToken()->getToken());
+        [$users, $groups] = $this->userExtractor->extractAll($this->getToken()->getToken(), $config);
 
         $this->groups = $groups;
 

@@ -10,7 +10,7 @@
             {{ title }}
         </div>
         <div class="value">
-            <span class="number">{{ value|number_format }}</span> {{ unit ?? '' }}
+            <span class="number">{{ value|number_format(0, '.', ' ') }}</span> {{ unit ?? '' }}
         </div>
     </div>
 {% endmacro %}
@@ -93,11 +93,13 @@
             {{ stats.singleValue('Message samples sent *', counters['sample']) }}
             {{ stats.singleValue('Re-shuffle **', counters['shuffle'] ?? 0) }}
             {{ stats.singleValue('Spoils asked *', counters['spoil']) }}
+            {{ stats.singleValue('Biggest team ***', counters['team-size-max']) }}
         </div>
 
         <p class="is-center">
             * Since 10/2019<br>
-            ** Since 11/2024
+            ** Since 11/2024<br>
+            *** Since 10/2025
         </p>
 
         <div class="container-charts">

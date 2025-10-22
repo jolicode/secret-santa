@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Discord;
 
 use JoliCode\SecretSanta\Application\DiscordApplication;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
+use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
 
@@ -23,40 +24,39 @@ class UserExtractor
     }
 
     /**
-     * @return User[]
+     * @return array<User>
      */
-    public function extractForGuild(int $guildId): array
+    public function extractForGuild(int $guildId, Config $config): array
     {
-        /** @var list<mixed> $members */
-        $members = [];
+        if ($config->areUsersLoaded()) {
+            return [];
+        }
 
-        /** @var list<mixed> $lastMembers */
-        $lastMembers = [];
+        $after = $config->getUsersPaginationParameters()['after'] ?? null;
 
-        $startTime = time();
-        do {
-            if ((time() - $startTime) > 19) {
-                throw new UserExtractionFailedException(DiscordApplication::APPLICATION_CODE, 'Took too much time to retrieve all the users on your team.');
-            }
+        try {
+            $members = $this->apiHelper->getMembersInGuild($guildId, $after);
+        } catch (\Throwable $t) {
+            throw new UserExtractionFailedException(DiscordApplication::APPLICATION_CODE, 'Could not fetch members in guild.', $t);
+        }
 
-            $lastMember = $lastMembers ? end($lastMembers) : null;
+        $lastMember = $members ? end($members) : null;
 
-            try {
-                $lastMembers = $this->apiHelper->getMembersInGuild($guildId, $lastMember['user']['id'] ?? null);
-            } catch (\Throwable $t) {
-                throw new UserExtractionFailedException(DiscordApplication::APPLICATION_CODE, 'Could not fetch members in guild.', $t);
-            }
+        $config->setUsersPaginationParameters([
+            'after' => $lastMember['user']['id'] ?? null,
+        ]);
 
-            $members = array_merge($members, $lastMembers);
-        } while (!empty($lastMembers));
-
-        $members = array_filter($members, function (array $member) {
-            return !($member['user']['bot'] ?? false);
-        });
+        if (!$members) {
+            $config->setUsersLoaded(true);
+        }
 
         $users = [];
 
         foreach ($members as $member) {
+            if ($member['user']['bot'] ?? false) {
+                continue;
+            }
+
             $user = new User(
                 (string) $member['user']['id'],
                 $member['user']['username'],
@@ -69,10 +69,6 @@ class UserExtractor
 
             $users[$user->getIdentifier()] = $user;
         }
-
-        uasort($users, function (User $a, User $b) {
-            return strnatcasecmp($a->getName(), $b->getName());
-        });
 
         return $users;
     }

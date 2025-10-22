@@ -12,6 +12,7 @@
 namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Model\ApplicationToken;
+use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Slack\MessageSender;
@@ -81,9 +82,12 @@ class SlackApplication implements ApplicationInterface
         return $this->userExtractor->extractGroups($this->getToken()->getToken());
     }
 
-    public function getUsers(): array
+    /**
+     * @return array<User>
+     */
+    public function loadNextBatchOfUsers(Config $config): array
     {
-        return $this->userExtractor->extractAll($this->getToken()->getToken());
+        return $this->userExtractor->loadNextBatchOfUsers($this->getToken()->getToken(), $config);
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
