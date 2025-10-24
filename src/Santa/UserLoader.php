@@ -34,7 +34,7 @@ class UserLoader
         // Our HTTP client might respect rate limits but just in case, let's be gentle and not spam requests.
         usleep(100000);
 
-        $config->setAvailableUsers(array_merge($config->getAvailableUsers(), $users));
+        $config->setAvailableUsers($config->getAvailableUsers() + $users);
 
         $users = $config->getAvailableUsers();
 
