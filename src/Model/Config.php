@@ -13,7 +13,7 @@ namespace JoliCode\SecretSanta\Model;
 
 class Config
 {
-    /** @var User[] */
+    /** @var array<string|int, User> */
     private array $availableUsers = [];
     /** @var Group[] */
     private array $groups = [];
