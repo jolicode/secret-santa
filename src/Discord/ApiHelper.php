@@ -30,7 +30,7 @@ class ApiHelper
      */
     public function getMembersInGuild(int $guildId, ?int $after = null): array
     {
-        $url = '/guilds/' . $guildId . '/members?limit=200';
+        $url = '/guilds/' . $guildId . '/members?limit=100';
         if ($after) {
             $url .= '&after=' . $after;
         }

@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Webex;
 
+use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\User;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -24,8 +25,12 @@ class UserExtractor
     /**
      * @return array{array<User>, array<Group>}
      */
-    public function extractAll(string $token): array
+    public function extractAll(string $token, Config $config): array
     {
+        if ($config->areUsersLoaded()) {
+            return [[], []];
+        }
+
         $users = [];
         $groups = [];
 
@@ -61,6 +66,8 @@ class UserExtractor
                 $group->addUser($user['personId']);
             }
         }
+
+        $config->setUsersLoaded(true);
 
         return [$users, $groups];
     }

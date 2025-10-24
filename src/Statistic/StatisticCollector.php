@@ -42,6 +42,11 @@ class StatisticCollector
         if ($secretSanta->getUserCount() > $usersMax) {
             $this->client->set('stats:users-max', $secretSanta->getUserCount());
         }
+
+        $teamSizeMax = (int) $this->client->get('stats:team-size-max');
+        if (\count($secretSanta->getConfig()->getAvailableUsers()) > $teamSizeMax) {
+            $this->client->set('stats:team-size-max', \count($secretSanta->getConfig()->getAvailableUsers()));
+        }
     }
 
     public function incrementSampleCount(SecretSanta $secretSanta): void
@@ -75,6 +80,7 @@ class StatisticCollector
             'users-max' => 0,
             'sample' => 0,
             'spoil' => 0,
+            'team-size-max' => 0,
         ];
 
         $keys = $this->client->keys('stats:*');

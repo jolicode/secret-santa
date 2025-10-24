@@ -15,6 +15,7 @@ use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
+use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Form\MessageType;
 use JoliCode\SecretSanta\Form\ParticipantType;
 use JoliCode\SecretSanta\Model\Config;
@@ -22,6 +23,7 @@ use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Santa\MessageDispatcher;
 use JoliCode\SecretSanta\Santa\Rudolph;
 use JoliCode\SecretSanta\Santa\Spoiler;
+use JoliCode\SecretSanta\Santa\UserLoader;
 use JoliCode\SecretSanta\Statistic\StatisticCollector;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,7 +76,57 @@ class SantaController extends AbstractController
 
         $this->saveConfig($request, $config);
 
-        return $this->redirectToRoute('participants', ['application' => $application->getCode()]);
+        return $this->redirectToRoute('load_users', ['application' => $application->getCode()]);
+    }
+
+    #[Route('/load-users/{application}', name: 'load_users', methods: ['GET', 'POST'])]
+    public function loadUsers(UserLoader $userLoader, Request $request, string $application): Response
+    {
+        $application = $this->getApplication($application);
+
+        if (!$application->isAuthenticated()) {
+            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+        }
+
+        $config = $this->getConfigOrThrow404($request);
+
+        if (!$request->isXmlHttpRequest()) {
+            if ($config->areUsersLoaded()) {
+                return new RedirectResponse($this->router->generate('participants', [
+                    'application' => $application->getCode(),
+                ]));
+            }
+
+            $content = $this->twig->render('santa/load_users.html.twig', [
+                'application' => $application->getCode(),
+                'count' => \count($config->getAvailableUsers()),
+            ]);
+
+            return new Response($content);
+        }
+
+        $error = false;
+
+        try {
+            $userLoader->loadUsers($config, $application);
+        } catch (UserExtractionFailedException $e) {
+            $this->logger->error($e->getMessage(), [
+                'exception' => $e,
+            ]);
+            $this->bugsnag->notifyException($e, function ($report) {
+                $report->setSeverity('info');
+            });
+
+            $error = true;
+        }
+
+        $this->saveConfig($request, $config);
+
+        return new JsonResponse([
+            'count' => \count($config->getAvailableUsers()),
+            'error' => $error,
+            'finished' => $config->areUsersLoaded(),
+        ]);
     }
 
     #[Route('/participants/{application}', name: 'participants', methods: ['GET', 'POST'])]
@@ -88,12 +140,8 @@ class SantaController extends AbstractController
 
         $config = $this->getConfigOrThrow404($request);
 
-        // Fetch the users and groups and save them
-        if (!$config->getAvailableUsers()) {
-            $config->setAvailableUsers($application->getUsers());
-            $config->setGroups($application->getGroups());
-
-            $this->saveConfig($request, $config);
+        if (!$config->areUsersLoaded()) {
+            return new RedirectResponse($this->router->generate('load_users', ['application' => $application->getCode()]));
         }
 
         $availableUsers = $config->getAvailableUsers();

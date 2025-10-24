@@ -26,6 +26,13 @@ class Config
     private array $notes = [];
     /** @var array<string, mixed> */
     private array $options = [];
+    private bool $usersLoaded = false;
+    /**
+     * Parameters each application can save to paginate users loading.
+     *
+     * @var array<string, mixed>
+     */
+    private array $usersPaginationParameters = [];
 
     public function __construct(
         private string $application,
@@ -158,5 +165,31 @@ class Config
     public function getUser(string $identifier): ?User
     {
         return $this->availableUsers[$identifier] ?? null;
+    }
+
+    public function areUsersLoaded(): bool
+    {
+        return $this->usersLoaded;
+    }
+
+    public function setUsersLoaded(bool $loaded): void
+    {
+        $this->usersLoaded = $loaded;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getUsersPaginationParameters(): array
+    {
+        return $this->usersPaginationParameters;
+    }
+
+    /**
+     * @param array<string, mixed> $usersPagination
+     */
+    public function setUsersPaginationParameters(array $usersPagination): void
+    {
+        $this->usersPaginationParameters = $usersPagination;
     }
 }

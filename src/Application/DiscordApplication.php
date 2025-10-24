@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Application;
 use JoliCode\SecretSanta\Discord\MessageSender;
 use JoliCode\SecretSanta\Discord\UserExtractor;
 use JoliCode\SecretSanta\Model\ApplicationToken;
+use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
@@ -87,7 +88,10 @@ class DiscordApplication implements ApplicationInterface
         return $this->groups;
     }
 
-    public function getUsers(): array
+    /**
+     * @return array<User>
+     */
+    public function loadNextBatchOfUsers(Config $config): array
     {
         $guildId = $this->getGuildId();
 
@@ -95,7 +99,7 @@ class DiscordApplication implements ApplicationInterface
             throw new \RuntimeException('No guild was selected.');
         }
 
-        $users = $this->userExtractor->extractForGuild($guildId);
+        $users = $this->userExtractor->extractForGuild($guildId, $config);
 
         $this->loadGroups();
 

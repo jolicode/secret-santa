@@ -48,7 +48,7 @@
         "symfony/debug-bundle": ">=7.1.1",
         "symfony/dotenv": ">=7.1.5",
         "symfony/maker-bundle": "^1.61",
-        "symfony/phpunit-bridge": ">=7.1.4",
+        "symfony/phpunit-bridge": "^7.1.4",
         "symfony/stopwatch": ">=7.1.1",
         "symfony/var-dumper": ">=7.1.5",
         "symfony/web-profiler-bundle": ">=7.1.4"

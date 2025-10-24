@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
+use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
@@ -40,11 +41,11 @@ interface ApplicationInterface
     /**
      * An array of User indexed by their identifier.
      *
-     * @return User[]
+     * @return array<User>
      *
      * @throws UserExtractionFailedException
      */
-    public function getUsers(): array;
+    public function loadNextBatchOfUsers(Config $config): array;
 
     /**
      * @throws MessageSendFailedException
