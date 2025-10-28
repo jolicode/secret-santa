@@ -83,9 +83,6 @@ class WebexApplication implements ApplicationInterface
         return $this->groups;
     }
 
-    /**
-     * @return array<User>
-     */
     public function loadNextBatchOfUsers(Config $config): array
     {
         [$users, $groups] = $this->userExtractor->extractAll($this->getToken()->getToken(), $config);

@@ -23,7 +23,7 @@ class UserExtractor
     }
 
     /**
-     * @return array{array<User>, array<Group>}
+     * @return array{array<string|int, User>, array<string|int, Group>}
      */
     public function extractAll(string $token, Config $config): array
     {

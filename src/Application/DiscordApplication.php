@@ -30,7 +30,7 @@ class DiscordApplication implements ApplicationInterface
     private const SESSION_KEY_TOKEN = 'santa.discord.token';
     private const SESSION_KEY_ADMIN = 'santa.discord.admin';
 
-    /** @var Group[]|null */
+    /** @var array<string|int, Group>|null */
     private ?array $groups = null;
 
     public function __construct(

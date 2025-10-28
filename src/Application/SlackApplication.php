@@ -82,9 +82,6 @@ class SlackApplication implements ApplicationInterface
         return $this->userExtractor->extractGroups($this->getToken()->getToken());
     }
 
-    /**
-     * @return array<User>
-     */
     public function loadNextBatchOfUsers(Config $config): array
     {
         return $this->userExtractor->loadNextBatchOfUsers($this->getToken()->getToken(), $config);

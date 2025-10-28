@@ -24,7 +24,7 @@ class UserExtractor
     }
 
     /**
-     * @return array<User>
+     * @return array<string|int, User>
      */
     public function extractForGuild(int $guildId, Config $config): array
     {
@@ -74,7 +74,7 @@ class UserExtractor
     }
 
     /**
-     * @return Group[]
+     * @return array<string|int, Group>
      */
     public function extractGroupsForGuild(int $guildId): array
     {
