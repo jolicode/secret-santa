@@ -1,6 +1,6 @@
 {% extends 'santa/base.html.twig' %}
 
-{% set step = 1 %}
+{% set currentStep = 1 %}
 {% set hasRestrictedUser = hasRestrictedUser|default(false) %}
 
 {% block santa_content %}
