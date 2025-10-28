@@ -47,6 +47,11 @@ class StatisticCollector
         if (\count($secretSanta->getConfig()->getAvailableUsers()) > $teamSizeMax) {
             $this->client->set('stats:team-size-max', \count($secretSanta->getConfig()->getAvailableUsers()));
         }
+
+        $exclusions = array_filter($secretSanta->getConfig()->getExclusions());
+        if (\count($exclusions) > 0) {
+            $this->client->incr('stats:exclusions');
+        }
     }
 
     public function incrementSampleCount(SecretSanta $secretSanta): void
@@ -76,6 +81,7 @@ class StatisticCollector
             'year-app' => [],
             'app' => [],
             'total' => 0,
+            'exclusions' => 0,
             'users' => 0,
             'users-max' => 0,
             'sample' => 0,
