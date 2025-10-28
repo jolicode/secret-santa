@@ -459,6 +459,7 @@ class SantaController extends AbstractController
 
         $content = $this->twig->render('santa/finish.html.twig', [
             'secretSanta' => $secretSanta,
+            'application' => $secretSanta->getConfig()->getApplication(),
         ]);
 
         return new Response($content);

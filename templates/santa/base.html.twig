@@ -1,43 +1,31 @@
 {% extends 'base.html.twig' %}
 
+{% macro step(currentStep, label, icon, step, link = null) %}
+    <li class="{{ step <= currentStep ? 'current' }}">
+        {% if link and step <= currentStep ? 'current' %}
+            <a href="{{ link }}">
+        {% else %}
+            <span>
+        {% endif %}
+
+        <span class="fas fa-{{ icon }}" aria-hidden="true"></span> {{ label }}
+
+        {% if link and step <= currentStep ? 'current' %}
+            </a>
+        {% else %}
+            </span>
+        {% endif %}
+    </li>
+{% endmacro %}
+
 {% block content %}
     <nav class="is-center">
         <ol class="breadcrumb">
-            <li class="{{ step >= 1 ? 'current' }}">
-                {% if step in [2, 3] ? 'current' %}
-                    <a href="{{ path('participants', {application: application}) }}">
-                {% else %}
-                    <span>
-                {% endif %}
-                    <span class="fas fa-users" aria-hidden="true"></span> Participants
-                {% if step in [2, 3] ? 'current' %}
-                    </a>
-                {% else %}
-                    </span>
-                {% endif %}
-            </li>
-            <li class="{{ step >= 2 ? 'current' }}">
-                {% if step in [3] ? 'current' %}
-                    <a href="{{ path('message', {application: application}) }}">
-                {% else %}
-                    <span>
-                {% endif %}
-                    <span class="fas fa-pen" aria-hidden="true"></span> Customization
-                {% if step in [3] ? 'current' %}
-                    </a>
-                {% else %}
-                    </span>
-                {% endif %}
-            </li>
-            <li class="{{ step >= 3 ? 'current' }}">
-                <span><span class="fas fa-check" aria-hidden="true"></span> Validation</span>
-            </li>
-            <li class="{{ step >= 4 ? 'current' }}">
-                <span><span class="fas fa-paper-plane" aria-hidden="true"></span> Sending</span>
-            </li>
-            <li class="{{ step >= 5 ? 'current' }}">
-                <span><span class="fas fa-flag-checkered" aria-hidden="true"></span> Finish</span>
-            </li>
+            {{ _self.step(currentStep, 'Participants', 'users', 1, path('participants', {application: application})) }}
+            {{ _self.step(currentStep, 'Customization', 'pen', 2, path('message', {application: application})) }}
+            {{ _self.step(currentStep, 'Validation', 'check', 3) }}
+            {{ _self.step(currentStep, 'Sending', 'paper-plane', 4) }}
+            {{ _self.step(currentStep, 'Finish', 'flag-checkered', 5) }}
         </ol>
     </nav>
 
