@@ -22,10 +22,11 @@
     <nav class="is-center">
         <ol class="breadcrumb">
             {{ _self.step(currentStep, 'Participants', 'users', 1, path('participants', {application: application})) }}
-            {{ _self.step(currentStep, 'Customization', 'pen', 2, path('message', {application: application})) }}
-            {{ _self.step(currentStep, 'Validation', 'check', 3) }}
-            {{ _self.step(currentStep, 'Sending', 'paper-plane', 4) }}
-            {{ _self.step(currentStep, 'Finish', 'flag-checkered', 5) }}
+            {{ _self.step(currentStep, 'Exclusions', 'ban', 2, path('exclusions', {application: application})) }}
+            {{ _self.step(currentStep, 'Customization', 'pen', 3, path('message', {application: application})) }}
+            {{ _self.step(currentStep, 'Validation', 'check', 4) }}
+            {{ _self.step(currentStep, 'Sending', 'paper-plane', 5) }}
+            {{ _self.step(currentStep, 'Finish', 'flag-checkered', 6) }}
         </ol>
     </nav>
 

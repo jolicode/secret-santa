@@ -1,0 +1,7 @@
+{% extends 'santa/exclusions.html.twig' %}
+
+{% macro user_item(user, imageSize) %}
+    <img src="{{ user.extra.image }}" alt="{{ user.name }}" width="{{ imageSize }}" height="{{ imageSize }}" loading="lazy" />
+    <span title="{{ user.name }} ({{ user.extra.nickname }})">{{ user.name }}</span>
+{% endmacro %}
+

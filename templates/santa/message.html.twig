@@ -1,6 +1,6 @@
 {% extends 'santa/base.html.twig' %}
 
-{% set currentStep = 2 %}
+{% set currentStep = 3 %}
 
 {% block santa_content %}
     <div class="run-block">
@@ -59,17 +59,16 @@
                                 2: 'Or whatever you want ...',
                             } %}
                             {% for child in form.notes %}
-                                {% set user = config.availableUsers[child.vars.name] %}
+                                {% set user = config.getUser(child.vars.name) %}
                                 <label class="user-item notes" for="{{ child.vars.id }}">
-                                        <span class="user-column">
-                                            <span class="user-data">
-                                                {% block user_item %}{% endblock %}
-                                            </span>
-                                            <span class="note-length">
-                                                <span data-length-field="{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
-                                            </span>
+                                    <span class="user-column">
+                                        <span class="user-data">
+                                            {% block user_item %}{% endblock %}
                                         </span>
-
+                                        <span class="user-help note-length">
+                                            <span data-length-field="{{ user.identifier }}">{{ notes[user.identifier]|default('')|length }}</span>&nbsp;/&nbsp;400 characters
+                                        </span>
+                                    </span>
                                     {% if key in input_placeholders|keys %}
                                         {{ form_widget(child, { 'attr': {
                                             'placeholder': input_placeholders[key],

@@ -19,6 +19,8 @@ class Config
     private array $groups = [];
     /** @var list<string|int> */
     private array $selectedUsers = [];
+    /** @var array<string|int, list<string|int>> */
+    private array $exclusions = [];
     /** @var array<string|int, string|int> */
     private array $shuffledUsers = [];
     private ?string $message = '';
@@ -102,6 +104,27 @@ class Config
     public function setShuffledUsers(array $shuffledUsers): void
     {
         $this->shuffledUsers = $shuffledUsers;
+    }
+
+    public function resetUsers(): void
+    {
+        $this->shuffledUsers = [];
+    }
+
+    /**
+     * @return array<string|int, list<string|int>>
+     */
+    public function getExclusions(): array
+    {
+        return $this->exclusions;
+    }
+
+    /**
+     * @param array<string|int, list<string|int>> $exclusions
+     */
+    public function setExclusions(array $exclusions): void
+    {
+        $this->exclusions = $exclusions;
     }
 
     public function getMessage(): ?string
