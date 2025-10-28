@@ -73,7 +73,7 @@ class UserExtractor
     }
 
     /**
-     * @return Group[]
+     * @return array<string, Group>
      */
     public function extractGroups(string $token): array
     {

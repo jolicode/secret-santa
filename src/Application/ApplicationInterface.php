@@ -34,14 +34,14 @@ interface ApplicationInterface
     /**
      * An array of Group indexed by their identifier.
      *
-     * @return Group[]
+     * @return array<string|int, Group>
      */
     public function getGroups(): array;
 
     /**
      * An array of User indexed by their identifier.
      *
-     * @return array<User>
+     * @return array<string|int, User>
      *
      * @throws UserExtractionFailedException
      */

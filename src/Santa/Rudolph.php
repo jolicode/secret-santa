@@ -21,9 +21,9 @@ namespace JoliCode\SecretSanta\Santa;
 class Rudolph
 {
     /**
-     * @param string[] $users
+     * @param list<string|int> $users
      *
-     * @return array<string, string>
+     * @return array<string|int, string|int>
      */
     public function associateUsers(array $users): array
     {
@@ -45,7 +45,7 @@ class Rudolph
     }
 
     /**
-     * @param string[] $users
+     * @param list<string|int> $users
      */
     private function assertUserListCorrect(array $users): void
     {

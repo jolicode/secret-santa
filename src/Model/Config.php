@@ -17,12 +17,12 @@ class Config
     private array $availableUsers = [];
     /** @var Group[] */
     private array $groups = [];
-    /** @var string[] */
+    /** @var list<string|int> */
     private array $selectedUsers = [];
-    /** @var string[] */
+    /** @var array<string|int, string|int> */
     private array $shuffledUsers = [];
     private ?string $message = '';
-    /** @var array<int, string> */
+    /** @var array<string|int, string> */
     private array $notes = [];
     /** @var array<string, mixed> */
     private array $options = [];
@@ -57,7 +57,7 @@ class Config
     }
 
     /**
-     * @return string[]
+     * @return list<string|int>
      */
     public function getSelectedUsers(): array
     {
@@ -65,7 +65,7 @@ class Config
     }
 
     /**
-     * @param string[] $selectedUsers
+     * @param list<string|int> $selectedUsers
      */
     public function setSelectedUsers(array $selectedUsers): void
     {
@@ -73,7 +73,7 @@ class Config
     }
 
     /**
-     * @return User[]
+     * @return array<string|int, User>
      */
     public function getAvailableUsers(): array
     {
@@ -81,7 +81,7 @@ class Config
     }
 
     /**
-     * @param User[] $availableUsers
+     * @param array<string|int, User> $availableUsers
      */
     public function setAvailableUsers(array $availableUsers): void
     {
@@ -89,7 +89,7 @@ class Config
     }
 
     /**
-     * @return string[]
+     * @return array<string|int, string|int>
      */
     public function getShuffledUsers(): array
     {
@@ -97,7 +97,7 @@ class Config
     }
 
     /**
-     * @param string[] $shuffledUsers
+     * @param array<string|int, string|int> $shuffledUsers
      */
     public function setShuffledUsers(array $shuffledUsers): void
     {
@@ -115,7 +115,7 @@ class Config
     }
 
     /**
-     * @return string[]
+     * @return array<string|int, string>
      */
     public function getNotes(): array
     {
@@ -123,7 +123,7 @@ class Config
     }
 
     /**
-     * @param string[] $notes
+     * @param array<string|int, string> $notes
      */
     public function setNotes(array $notes): void
     {
@@ -147,7 +147,7 @@ class Config
     }
 
     /**
-     * @param array<Group> $groups
+     * @param list<Group> $groups
      */
     public function setGroups(array $groups): void
     {
