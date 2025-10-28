@@ -8,7 +8,7 @@
             <img src="{{ user.extra.image }}" alt="" loading="lazy" />
         {% endif %}
         <span>{{ user.name }}</span>
-        <span data-uncheck-user="{{ userForm.vars.id }}" class="fas fa-times" title="Unselect this user"></span>
+        <button type="button" data-uncheck-user="{{ userForm.vars.id }}" class="fas fa-times" title="Unselect this user"></button>
     </span>
 {% endmacro %}
 

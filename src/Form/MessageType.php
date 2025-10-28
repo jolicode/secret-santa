@@ -14,7 +14,6 @@ namespace JoliCode\SecretSanta\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -35,7 +34,7 @@ class MessageType extends AbstractType
                 'error_bubbling' => true,
             ])
             ->add('notes', CollectionType::class, [
-                'entry_type' => TextType::class,
+                'entry_type' => TextareaType::class,
                 'entry_options' => [
                     'constraints' => [
                         new Length([

@@ -15,7 +15,9 @@ use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
+use JoliCode\SecretSanta\Exception\RudolphException;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
+use JoliCode\SecretSanta\Form\ExclusionsType;
 use JoliCode\SecretSanta\Form\MessageType;
 use JoliCode\SecretSanta\Form\ParticipantType;
 use JoliCode\SecretSanta\Model\Config;
@@ -54,6 +56,7 @@ class SantaController extends AbstractController
         private iterable $applications,
         private StatisticCollector $statisticCollector,
         private Client $bugsnag,
+        private Rudolph $rudolph,
     ) {
     }
 
@@ -130,7 +133,7 @@ class SantaController extends AbstractController
     }
 
     #[Route('/participants/{application}', name: 'participants', methods: ['GET', 'POST'])]
-    public function participants(Rudolph $rudolph, Request $request, string $application): Response
+    public function participants(Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -152,16 +155,91 @@ class SantaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
+            $config->resetUsers();
             $this->saveConfig($request, $config);
             if ($form->isValid()) {
-                return $this->redirectToRoute('message', ['application' => $application->getCode()]);
+                return $this->redirectToRoute('exclusions', ['application' => $application->getCode()]);
             }
         }
 
         $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
             'users' => $availableUsers,
             'groups' => $config->getGroups(),
+            'form' => $form->createView(),
+        ]);
+
+        return new Response($content);
+    }
+
+    #[Route('/exclusions/{application}', name: 'exclusions', methods: ['GET', 'POST'])]
+    public function exclusions(FormFactoryInterface $formFactory, Request $request, string $application): Response
+    {
+        $application = $this->getApplication($application);
+
+        if (!$application->isAuthenticated()) {
+            return new RedirectResponse($this->router->generate($application->getAuthenticationRoute()));
+        }
+
+        $errors = [];
+
+        $config = $this->getConfigOrThrow404($request);
+
+        // We remove exclusions from users that aren't selected anymore and create empty ones for those who are
+        // and don't have any yet.
+        $selectedUsers = $config->getSelectedUsers();
+        $exclusions = [];
+        foreach ($config->getExclusions() as $userIdentifier => $excludedUsers) {
+            if (!\in_array($userIdentifier, $selectedUsers, true)) {
+                continue;
+            }
+            $exclusions[$userIdentifier] = array_filter($excludedUsers, function ($excludedUserIdentifier) use ($selectedUsers) {
+                return \in_array($excludedUserIdentifier, $selectedUsers, true);
+            });
+        }
+        foreach ($selectedUsers as $user) {
+            $exclusions[$user] ??= [];
+        }
+
+        $config->setExclusions($exclusions);
+
+        $builder = $formFactory->createBuilder(ExclusionsType::class, $config, [
+            'config' => $config,
+        ]);
+
+        $form = $builder->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            $areExclusionsValid = true;
+
+            try {
+                $config->setShuffledUsers($this->rudolph->associateUsers($config));
+            } catch (RudolphException $e) {
+                $form->addError(new FormError($e->getMessage()));
+                $areExclusionsValid = false;
+            }
+
+            $this->saveConfig($request, $config);
+
+            if ($form->isValid() && $areExclusionsValid) {
+                return $this->redirectToRoute('message', ['application' => $application->getCode()]);
+            }
+
+            $errors = array_map(function (FormError $error) {
+                return $error->getMessage();
+            }, iterator_to_array($form->getErrors(true, false)));
+
+            if ($errors) {
+                $errors = array_unique($errors);
+            }
+        }
+
+        $content = $this->twig->render('santa/application/exclusions_' . $application->getCode() . '.html.twig', [
+            'application' => $application->getCode(),
+            'admin' => $application->getAdmin(),
+            'config' => $config,
+            'errors' => $errors,
             'form' => $form->createView(),
         ]);
 
@@ -231,7 +309,7 @@ class SantaController extends AbstractController
     }
 
     #[Route('/validate/{application}', name: 'validate', methods: ['GET', 'POST'])]
-    public function validate(Rudolph $rudolph, FormFactoryInterface $formFactory, Spoiler $spoiler, Request $request, string $application): Response
+    public function validate(FormFactoryInterface $formFactory, Spoiler $spoiler, Request $request, string $application): Response
     {
         $application = $this->getApplication($application);
 
@@ -247,7 +325,12 @@ class SantaController extends AbstractController
             if (\count($config->getSelectedUsers()) < 2) {
                 return new RedirectResponse($this->router->generate('participants', ['application' => $application->getCode()]));
             }
-            $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
+
+            try {
+                $config->setShuffledUsers($this->rudolph->associateUsers($config));
+            } catch (RudolphException $e) {
+                $errors[] = $e->getMessage();
+            }
         }
 
         $form = $formFactory->createBuilder()
@@ -258,11 +341,11 @@ class SantaController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if (!$errors && $form->isSubmitted()) {
             if ($form->isValid()) {
                 $shuffleButton = $form->get('shuffle');
                 if ($shuffleButton instanceof SubmitButton && $shuffleButton->isClicked()) {
-                    $config->setShuffledUsers($rudolph->associateUsers($config->getSelectedUsers()));
+                    $config->setShuffledUsers($this->rudolph->associateUsers($config));
                     $this->saveConfig($request, $config);
 
                     $secretSanta = new SecretSanta(

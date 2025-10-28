@@ -2,7 +2,7 @@
 
 {% block user_item %}
     {% if user.extra.image %}
-        <img src="{{ user.extra.image }}" alt="{{ user.name }}" />
+        <img src="{{ user.extra.image }}" alt="{{ user.name }}" width="32" height="32" loading="lazy" />
     {% endif %}
     <span title="{{ user.name }}{% if user.extra.nickname %} ({{ user.extra.nickname }}){% endif %}">{{ user.name }}</span>
 {% endblock %}

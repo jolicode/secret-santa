@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block user_item %}
-    <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
+    <img src="{{ user.extra.image }}" alt="{{ user.name }}" width="32" height="32" loading="lazy" />
     <span title="{{ user.name }} ({{ user.extra.nickname }})">{{ user.name }}</span>
 {% endblock %}
 
@@ -24,7 +24,6 @@
 
     </div>
 {% endblock %}
-
 
 {% block message_js %}
     <script src="{{ asset('js/flatpickr.js') }}" nonce="{{ csp_nonce('script') }}"></script>
