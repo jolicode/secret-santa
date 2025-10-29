@@ -20,21 +20,26 @@ class Spoiler
         $givers = [];
 
         $associations = $santa->getAssociations();
-        $firstGiver = array_key_first($associations);
-        $currentGiver = $firstGiver;
 
         // Sort givers array to have a consistent order and reduce spoiler size by using a chain
         // user1 offers to user2 who offers to user3 who offers to ... who offers to user1
-        while ($currentGiver) {
-            $giverUser = $santa->getUser($currentGiver);
-            $givers[] = $giverUser->getName() ?: $giverUser->getIdentifier();
-            $currentGiver = $associations[$currentGiver] ?? null;
-            if ($currentGiver === $firstGiver) {
+        $current = array_key_first($associations);
+
+        do {
+            $giverUser = $santa->getUser($current);
+            $givers[$current] = $giverUser->getName() ?: $giverUser->getIdentifier();
+
+            $next = $associations[$current];
+
+            // Stop when we loop back to the beginning
+            if (array_key_exists($next, $givers)) {
                 break;
             }
-        }
 
-        return 'v3@' . base64_encode(gzencode(json_encode($givers)));
+            $current = $next;
+        } while (true);
+
+        return 'v3@' . base64_encode(gzencode(json_encode(array_values($givers))));
     }
 
     /**
