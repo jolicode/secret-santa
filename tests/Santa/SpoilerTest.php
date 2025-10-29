@@ -43,10 +43,10 @@ class SpoilerTest extends TestCase
 
         $secretSanta = new SecretSanta('yolo', [
             'user1' => 'user2',
-            'user2' => 'user3',
             'user3' => 'user4',
-            'user4' => 'user5',
+            'user2' => 'user3',
             'user5' => 'user1',
+            'user4' => 'user5',
         ], $config);
 
         $code = $this->SUT->encode($secretSanta);
