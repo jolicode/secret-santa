@@ -25,19 +25,19 @@ class Spoiler
         // user1 offers to user2 who offers to user3 who offers to ... who offers to user1
         $current = array_key_first($associations);
 
-        do {
+        while (true) {
             $giverUser = $santa->getUser($current);
             $givers[$current] = $giverUser->getName() ?: $giverUser->getIdentifier();
 
             $next = $associations[$current];
 
             // Stop when we loop back to the beginning
-            if (array_key_exists($next, $givers)) {
+            if (\array_key_exists($next, $givers)) {
                 break;
             }
 
             $current = $next;
-        } while (true);
+        }
 
         return 'v3@' . base64_encode(gzencode(json_encode(array_values($givers))));
     }

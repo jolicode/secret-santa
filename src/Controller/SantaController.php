@@ -183,34 +183,40 @@ class SantaController extends AbstractController
         $errors = [];
 
         $config = $this->getConfigOrThrow404($request);
+        $selectedUsers = $config->getSelectedUsers();
+
+        /** @var true|false $areExclusionsAllowed */
+        $areExclusionsAllowed = false; // \count($selectedUsers) <= 100;
+        $form = null;
 
         // We remove exclusions from users that aren't selected anymore and create empty ones for those who are
         // and don't have any yet.
-        $selectedUsers = $config->getSelectedUsers();
         $exclusions = [];
-        foreach ($config->getExclusions() as $userIdentifier => $excludedUsers) {
-            if (!\in_array($userIdentifier, $selectedUsers, true)) {
-                continue;
+        if ($areExclusionsAllowed) {
+            foreach ($config->getExclusions() as $userIdentifier => $excludedUsers) {
+                if (!\in_array($userIdentifier, $selectedUsers, true)) {
+                    continue;
+                }
+                $exclusions[$userIdentifier] = array_filter($excludedUsers, function ($excludedUserIdentifier) use ($selectedUsers) {
+                    return \in_array($excludedUserIdentifier, $selectedUsers, true);
+                });
             }
-            $exclusions[$userIdentifier] = array_filter($excludedUsers, function ($excludedUserIdentifier) use ($selectedUsers) {
-                return \in_array($excludedUserIdentifier, $selectedUsers, true);
-            });
+            foreach ($selectedUsers as $user) {
+                $exclusions[$user] ??= [];
+            }
+
+            $config->setExclusions($exclusions);
+
+            $builder = $formFactory->createBuilder(ExclusionsType::class, $config, [
+                'config' => $config,
+            ]);
+
+            $form = $builder->getForm();
+
+            $form->handleRequest($request);
         }
-        foreach ($selectedUsers as $user) {
-            $exclusions[$user] ??= [];
-        }
 
-        $config->setExclusions($exclusions);
-
-        $builder = $formFactory->createBuilder(ExclusionsType::class, $config, [
-            'config' => $config,
-        ]);
-
-        $form = $builder->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted()) {
+        if ($form && $form->isSubmitted()) {
             $areExclusionsValid = true;
 
             try {
@@ -240,7 +246,8 @@ class SantaController extends AbstractController
             'admin' => $application->getAdmin(),
             'config' => $config,
             'errors' => $errors,
-            'form' => $form->createView(),
+            'exclusions_allowed' => $areExclusionsAllowed,
+            'form' => $form?->createView(),
         ]);
 
         return new Response($content);

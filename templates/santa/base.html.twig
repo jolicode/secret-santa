@@ -2,7 +2,7 @@
 
 {% macro step(currentStep, label, icon, step, link = null) %}
     <li class="{{ step <= currentStep ? 'current' }}">
-        {% if link and step <= currentStep ? 'current' %}
+        {% if link and step <= currentStep and currentStep < 5 ? 'current' %}
             <a href="{{ link }}">
         {% else %}
             <span>

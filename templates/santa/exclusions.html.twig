@@ -5,264 +5,294 @@
 {% import "santa/application/exclusions_" ~ application ~ ".html.twig" as macros %}
 
 {% block santa_content %}
-    <div class="run-block">
-        {{ form_start(form, {
-            'attr': {'id': 'run_form'},
-            'method': 'POST',
-            'action': path('exclusions', { application: application })
-        }) }}
-            {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
-            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+    {% if form and exclusions_allowed %}
+        <div class="run-block">
+            {{ form_start(form, {
+                'attr': {'id': 'run_form'},
+                'method': 'POST',
+                'action': path('exclusions', { application: application })
+            }) }}
+                {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
+                <button type="submit" disabled style="display: none" aria-hidden="true"></button>
 
-            <h2>Define some exclusions</h2>
+                <h2>Define some exclusions</h2>
 
-            {% if not form.vars.valid %}
-                <span class="error">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    {% for error in errors %}
-                        {% if not loop.first %}
-                        <br>
-                        {% endif %}
-                        {{ error }}
-                    {% endfor %}
-                </span>
-            {% endif %}
+                {% if not form.vars.valid %}
+                    <span class="error">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {% for error in errors %}
+                            {% if not loop.first %}
+                            <br>
+                            {% endif %}
+                            {{ error }}
+                        {% endfor %}
+                    </span>
+                {% endif %}
 
-            <div class="user-field message-step">
-                <p>
-                    Add any exclusions you want to apply to the Secret Santa.
-                    An exclusion indicates that a participant should not be assigned to offer
-                    a gift to another specific participant.
-                </p>
+                <div class="user-field exclusions-step">
+                    <p>
+                        Add any exclusions you want to apply to the Secret Santa.
+                        An exclusion indicates that a participant should not be assigned to offer
+                        a gift to another specific participant.
+                    </p>
 
-                {% apply spaceless %}
-                    <div class="user-container">
-                        <div class="user-list no-hover">
-                            {% set key = 0 %}
-                            {% for child in form.exclusions %}
-                                {% set user = config.getUser(child.vars.name) %}
-                                <div class="user-item exclusions">
-                                    <div class="user-column">
-                                        <span class="user-data">
-                                            {{ macros.user_item(user, 32) }}
-                                        </span>
-                                        <span class="user-help">must not gift those persons</span>
-                                    </div>
-                                    <div class="exclusion-column">
-                                        <div class="exclusion-container" data-form-name="{{ child.vars.full_name }}" data-user-id="{{ user.identifier }}">
-                                            {% for item in child %}
-                                                {% do item.setRendered(true) %}
-                                                {% if item.vars.checked and item.vars.value != user.identifier %}
-                                                    <span class="exclusion-item">
-                                                        {{ macros.user_item(config.getUser(item.vars.value), 20) }}
-                                                        <button type="button" class="fas fa-times js-remove-exclusion" title="Remove from exclusion"></button>
-                                                        <input type="hidden" name="{{ item.vars.full_name }}" value="{{ item.vars.value }}" />
-                                                    </span>
-                                                {% endif %}
-                                            {% endfor %}
+                    {% apply spaceless %}
+                        <div class="user-container">
+                            <div class="user-list no-hover">
+                                {% set key = 0 %}
+                                {% for child in form.exclusions %}
+                                    {% set user = config.getUser(child.vars.name) %}
+                                    <div class="user-item exclusions">
+                                        <div class="user-column">
+                                            <span class="user-data">
+                                                {{ macros.user_item(user, 32) }}
+                                            </span>
+                                            <span class="user-help">must not gift those persons</span>
                                         </div>
-                                        <button class="button js-add-exclusion" type="button">
-                                            <span class="fas fa-plus"></span>
-                                            Add new exclusion
-                                        </button>
+                                        <div class="exclusion-column">
+                                            <div class="exclusion-container" data-form-name="{{ child.vars.full_name }}" data-user-id="{{ user.identifier }}">
+                                                {% for item in child %}
+                                                    {% do item.setRendered(true) %}
+                                                    {% if item.vars.checked and item.vars.value != user.identifier %}
+                                                        <span class="exclusion-item">
+                                                            {{ macros.user_item(config.getUser(item.vars.value), 20) }}
+                                                            <button type="button" class="fas fa-times js-remove-exclusion" title="Remove from exclusion"></button>
+                                                            <input type="hidden" name="{{ item.vars.full_name }}" value="{{ item.vars.value }}" />
+                                                        </span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <button class="button js-add-exclusion" type="button">
+                                                <span class="fas fa-plus"></span>
+                                                Add new exclusion
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                {% set key = key + 1 %}
-                            {% endfor %}
+                                    {% set key = key + 1 %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
-                {% endapply %}
-            </div>
-
-            <div class="run-step">
-                <h2>Ready for next step?</h2>
-
-                <p class="is-center">
-                    You have configured every exclusions? Let's go to the next step.
-                </p>
-
-                <div class="is-center">
-                    <button type="submit" class="big-button" id="submit-button">
-                        <span class="fas fa-pen" aria-hidden="true"></span>
-                        Customize the secret messages!
-                    </button>
+                    {% endapply %}
                 </div>
 
-                <p class="is-center">
-                    <small>
-                        or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                    </small>
+                <div class="run-step">
+                    <h2>Ready for next step?</h2>
+
+                    <p class="is-center">
+                        You have configured every exclusions? Let's go to the next step.
+                    </p>
+
+                    <div class="is-center">
+                        <button type="submit" class="big-button" id="submit-button">
+                            <span class="fas fa-pen" aria-hidden="true"></span>
+                            Customize the secret messages!
+                        </button>
+                    </div>
+
+                    <p class="is-center">
+                        <small>
+                            or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
+                        </small>
+                    </p>
+                </div>
+            {{ form_end(form) }}
+        </div>
+
+        <dialog class="dialog user-dialog">
+            <div class="dialog-header">
+                <div class="dialog-title">Select a user to exclude</div>
+                <button class="dialog-close-button" type="button" aria-label="Close the dialog" autofocus>
+                    <span class="fas fa-times" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="dialog-content">
+                <div class="user-list user-list-simple-rows">
+                    {% for userId in config.selectedUsers %}
+                        {% set user = config.getUser(userId) %}
+                        <div class="user-item js-select-user" data-user-id="{{ userId }}" data-prototype="{{ macros.user_item(user, 20) | e('html_attr') }}">
+                            {{ macros.user_item(user, 32) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </dialog>
+
+        <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
+            /**
+             * I did know this is a global and I feel bad.
+             * Next time I will install 10mb of npm and react javascript to switch a flag :)
+             *
+             * @type {boolean}
+             */
+            let secretSantaFormSubmitted = false;
+            const runForm = document.getElementById('run_form');
+            const submitButton = document.getElementById('submit-button');
+            const addExclusionsButtons = document.querySelectorAll('.js-add-exclusion');
+
+            const userDialog = document.querySelector('.user-dialog');
+            const dialogCloseButtons = userDialog.querySelectorAll('.dialog-close-button');
+            const selectableUsers = userDialog.querySelectorAll('.js-select-user');
+            const removeExclusionButtons = document.querySelectorAll('.js-remove-exclusion');
+
+            let currentExclusionContainer = null;
+
+            /**
+             * Prevent the multi-submit of the form
+             */
+            runForm.addEventListener('submit', function (e) {
+                if (secretSantaFormSubmitted) {
+                    e.preventDefault();
+                } else {
+                    secretSantaFormSubmitted = true;
+                    submitButton.disabled = true;
+                    submitButton.children[0].className = 'fas fa-hourglass-start';
+                }
+            }, false);
+
+            function getExclusionsForUser(exclusionContainer) {
+                const excludedUsers = exclusionContainer.querySelectorAll('input[type="hidden"]');
+                const excludedUserIds = [];
+                excludedUsers.forEach(function (input) {
+                    excludedUserIds.push(input.value);
+                });
+
+                return excludedUserIds;
+            }
+
+            function refreshAddButtonVisibility(exclusionContainer) {
+                const excludedUserIds = getExclusionsForUser(exclusionContainer);
+                const addButton = exclusionContainer.parentElement.querySelector('.js-add-exclusion');
+
+                if (!addButton) {
+                    return;
+                }
+
+                addButton.hidden = excludedUserIds.length >= selectableUsers.length - 1;
+            }
+
+            function openUserSelection(exclusionContainer) {
+                // Store the current exclusion container
+                currentExclusionContainer = exclusionContainer;
+
+                // Hide already excluded users and self
+                const excludedUserIds = getExclusionsForUser(exclusionContainer);
+                selectableUsers.forEach(function (button) {
+                    const userId = button.getAttribute('data-user-id');
+                    if (userId === exclusionContainer.getAttribute('data-user-id') || excludedUserIds.includes(userId)) {
+                        button.hidden = true;
+                    } else {
+                        button.hidden = false;
+                    }
+                });
+
+                userDialog.showModal();
+            }
+
+            function closeUserSelection() {
+                userDialog.close();
+                currentExclusionContainer = null;
+            }
+
+            function removeExclusion(button) {
+                const item = button.closest('.exclusion-item');
+                if (item) {
+                    const container = item.closest('.exclusion-container');
+                    container.removeChild(item);
+
+                    refreshAddButtonVisibility(container);
+                }
+            }
+
+            function selectUser(button) {
+                if (!currentExclusionContainer) {
+                    return;
+                }
+
+                const excludedUserId = button.getAttribute('data-user-id');
+                const santaUserId = currentExclusionContainer.getAttribute('data-user-id');
+
+                if (!excludedUserId || !santaUserId) {
+                    return;
+                }
+
+                const removeExclusionButton = document.createElement('button');
+                removeExclusionButton.type = 'button';
+                removeExclusionButton.className = 'fas fa-times js-remove-exclusion';
+                removeExclusionButton.addEventListener('click', function () {
+                    removeExclusion(removeExclusionButton);
+                });
+
+                const exclusionInput = document.createElement('input');
+                exclusionInput.type = 'hidden';
+                exclusionInput.name = currentExclusionContainer.getAttribute('data-form-name') + '[]';
+                exclusionInput.value = excludedUserId;
+
+                const item = document.createElement('span');
+                item.className = 'exclusion-item';
+                item.innerHTML = button.getAttribute('data-prototype');
+                item.appendChild(removeExclusionButton);
+                item.appendChild(exclusionInput);
+
+                currentExclusionContainer.appendChild(item);
+
+                refreshAddButtonVisibility(currentExclusionContainer);
+
+                closeUserSelection();
+            }
+
+            window.addEventListener('load', function () {
+                dialogCloseButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        closeUserSelection();
+                    });
+                });
+                addExclusionsButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        openUserSelection(button.previousSibling);
+                    });
+                    refreshAddButtonVisibility(button.previousSibling);
+                });
+                removeExclusionButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        removeExclusion(button);
+                    });
+                });
+                selectableUsers.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        selectUser(button);
+                    });
+                });
+            })
+        </script>
+    {% else %}
+        <div class="run-block">
+            <h2>Define some exclusions</h2>
+
+            <div class="exclusions-not-available">
+                {% if false %}
+                    <p>
+                        Exclusions are not enabled because there are too many participants.<br /><br />
+                        Go to the next step to continue.
+                    </p>
+                {% endif %}
+                <p>
+                    Exclusions will be available soon. Stay tuned!<br /><br />
+                    Go to the next step to continue.
                 </p>
             </div>
-        {{ form_end(form) }}
-    </div>
 
-    <dialog class="dialog user-dialog">
-        <div class="dialog-header">
-            <div class="dialog-title">Select a user to exclude</div>
-            <button class="dialog-close-button" type="button" aria-label="Close the dialog" autofocus>
-                <span class="fas fa-times" aria-hidden="true"></span>
-            </button>
-        </div>
-        <div class="dialog-content">
-            <div class="user-list user-list-simple-rows">
-                {% for userId in config.selectedUsers %}
-                    {% set user = config.getUser(userId) %}
-                    <div class="user-item js-select-user" data-user-id="{{ userId }}" data-prototype="{{ macros.user_item(user, 20) | e('html_attr') }}">
-                        {{ macros.user_item(user, 32) }}
-                    </div>
-                {% endfor %}
+            <div class="is-center">
+                <a href="{{ path('message', {application: application}) }}" class="big-button">
+                    <span class="fas fa-pen" aria-hidden="true"></span>
+                    Customize the secret messages!
+                </a>
             </div>
+
+            <p class="is-center">
+                <small>
+                    or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
+                </small>
+            </p>
         </div>
-    </dialog>
-
-    <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-        /**
-         * I did know this is a global and I feel bad.
-         * Next time I will install 10mb of npm and react javascript to switch a flag :)
-         *
-         * @type {boolean}
-         */
-        let secretSantaFormSubmitted = false;
-        const runForm = document.getElementById('run_form');
-        const submitButton = document.getElementById('submit-button');
-        const addExclusionsButtons = document.querySelectorAll('.js-add-exclusion');
-
-        const userDialog = document.querySelector('.user-dialog');
-        const dialogCloseButtons = userDialog.querySelectorAll('.dialog-close-button');
-        const selectableUsers = userDialog.querySelectorAll('.js-select-user');
-        const removeExclusionButtons = document.querySelectorAll('.js-remove-exclusion');
-
-        let currentExclusionContainer = null;
-
-        /**
-         * Prevent the multi-submit of the form
-         */
-        runForm.addEventListener('submit', function (e) {
-            if (secretSantaFormSubmitted) {
-                e.preventDefault();
-            } else {
-                secretSantaFormSubmitted = true;
-                submitButton.disabled = true;
-                submitButton.children[0].className = 'fas fa-hourglass-start';
-            }
-        }, false);
-
-        function getExclusionsForUser(exclusionContainer) {
-            const excludedUsers = exclusionContainer.querySelectorAll('input[type="hidden"]');
-            const excludedUserIds = [];
-            excludedUsers.forEach(function (input) {
-                excludedUserIds.push(input.value);
-            });
-
-            return excludedUserIds;
-        }
-
-        function refreshAddButtonVisibility(exclusionContainer) {
-            const excludedUserIds = getExclusionsForUser(exclusionContainer);
-            const addButton = exclusionContainer.parentElement.querySelector('.js-add-exclusion');
-
-            if (!addButton) {
-                return;
-            }
-
-            addButton.hidden = excludedUserIds.length >= selectableUsers.length - 1;
-        }
-
-        function openUserSelection(exclusionContainer) {
-            // Store the current exclusion container
-            currentExclusionContainer = exclusionContainer;
-
-            // Hide already excluded users and self
-            const excludedUserIds = getExclusionsForUser(exclusionContainer);
-            selectableUsers.forEach(function (button) {
-                const userId = button.getAttribute('data-user-id');
-                if (userId === exclusionContainer.getAttribute('data-user-id') || excludedUserIds.includes(userId)) {
-                    button.hidden = true;
-                } else {
-                    button.hidden = false;
-                }
-            });
-
-            userDialog.showModal();
-        }
-
-        function closeUserSelection() {
-            userDialog.close();
-            currentExclusionContainer = null;
-        }
-
-        function removeExclusion(button) {
-            const item = button.closest('.exclusion-item');
-            if (item) {
-                const container = item.closest('.exclusion-container');
-                container.removeChild(item);
-
-                refreshAddButtonVisibility(container);
-            }
-        }
-
-        function selectUser(button) {
-            if (!currentExclusionContainer) {
-                return;
-            }
-
-            const excludedUserId = button.getAttribute('data-user-id');
-            const santaUserId = currentExclusionContainer.getAttribute('data-user-id');
-
-            if (!excludedUserId || !santaUserId) {
-                return;
-            }
-
-            const removeExclusionButton = document.createElement('button');
-            removeExclusionButton.type = 'button';
-            removeExclusionButton.className = 'fas fa-times js-remove-exclusion';
-            removeExclusionButton.addEventListener('click', function () {
-                removeExclusion(removeExclusionButton);
-            });
-
-            const exclusionInput = document.createElement('input');
-            exclusionInput.type = 'hidden';
-            exclusionInput.name = currentExclusionContainer.getAttribute('data-form-name') + '[]';
-            exclusionInput.value = excludedUserId;
-
-            const item = document.createElement('span');
-            item.className = 'exclusion-item';
-            item.innerHTML = button.getAttribute('data-prototype');
-            item.appendChild(removeExclusionButton);
-            item.appendChild(exclusionInput);
-
-            currentExclusionContainer.appendChild(item);
-
-            refreshAddButtonVisibility(currentExclusionContainer);
-
-            closeUserSelection();
-        }
-
-        window.addEventListener('load', function () {
-            dialogCloseButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    closeUserSelection();
-                });
-            });
-            addExclusionsButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    openUserSelection(button.previousSibling);
-                });
-                refreshAddButtonVisibility(button.previousSibling);
-            });
-            removeExclusionButtons.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    removeExclusion(button);
-                });
-            });
-            selectableUsers.forEach(function (button) {
-                button.addEventListener('click', function () {
-                    selectUser(button);
-                });
-            });
-        })
-    </script>
-
-    {% block message_js %}{% endblock %}
+    {% endif %}
 {% endblock santa_content %}
