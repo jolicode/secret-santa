@@ -32,13 +32,31 @@ class Rudolph
     public function associateUsers(Config $config): array
     {
         $users = $config->getSelectedUsers();
-        $exclusions = $config->getExclusions();
+        $exclusions = array_filter($config->getExclusions());
 
         $this->assertUserListCorrect($config, $users);
         $this->assertExclusionsValid($config, $users, $exclusions);
 
-        $users = array_values($users);
         mt_srand();
+
+        // Simple path: no exclusions, just shuffle and assign in a circle
+        if (!$exclusions) {
+            $associations = [];
+            $userCount = \count($users);
+
+            shuffle($users);
+
+            for ($i = 1; $i < $userCount; ++$i) {
+                $associations[$users[$i - 1]] = $users[$i];
+                $associations[$users[$userCount - 1]] = $users[0];
+            }
+
+            $associations[$users[$userCount - 1]] = $users[0];
+
+            return $associations;
+        }
+
+        $users = array_values($users);
 
         for ($attempt = 0; $attempt < self::MAX_ATTEMPTS; ++$attempt) {
             $shuffled = $users;
