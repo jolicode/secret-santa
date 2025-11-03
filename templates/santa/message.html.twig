@@ -38,6 +38,7 @@
                 }) }}
             </div>
 
+            {% if not form.notes.children is empty %}
             <div class="user-field message-step">
                 <h3>Add optional details about the participants</h3>
 
@@ -86,6 +87,9 @@
                     </div>
                 {% endapply %}
             </div>
+            {% else %}
+                {% do form.notes.setRendered() %}
+            {% endif %}
 
             <div class="user-field message-step">
                 <h3>Not sure how the private messages will render?</h3>

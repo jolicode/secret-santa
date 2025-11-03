@@ -36,10 +36,10 @@
         "symfony/mime": "7.1.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": ">=7.1.1",
-        "symfony/twig-bundle": ">=7.1.5",
+        "symfony/twig-bundle": ">=v7.3.4",
         "symfony/validator": ">=7.1.5",
         "symfony/yaml": ">=7.1.5",
-        "twig/twig": "^3.14",
+        "twig/twig": "^3.22",
         "wohali/oauth2-discord-new": "^1.2.1"
     },
     "require-dev": {
@@ -96,7 +96,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.1.*"
+            "require": "7.3.*"
         }
     }
 }

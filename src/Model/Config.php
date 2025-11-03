@@ -182,7 +182,9 @@ class Config
      */
     public function getGroups(): array
     {
-        return $this->groups;
+        return array_filter($this->groups, static function (Group $group) {
+            return \count($group->getUserIds()) > 0;
+        });
     }
 
     public function getUser(string $identifier): ?User

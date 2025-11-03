@@ -3,7 +3,7 @@
 {% block user_item %}
     <span class="user-summary">
         {% if user.extra.image is defined %}
-            <img src="{{ user.extra.image }}" alt=""/>
+            <img src="{{ user.extra.image }}" alt="" loading="lazy" height="32" width="32" />
         {% endif %}
         <span>{{ user.name }}</span>
     </span>

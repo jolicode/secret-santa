@@ -2,7 +2,7 @@
 
 {% block user_item %}
     <span class="user-summary">
-        <img src="{{ user.extra.image }}" alt="{{ user.name }}"/>
+        <img src="{{ user.extra.image }}" alt="" loading="lazy" height="32" width="32"/>
         <span title="{{ user.name }} ({{ user.extra.nickname }})">{{ user.name }}</span>
     </span>
 {% endblock %}
