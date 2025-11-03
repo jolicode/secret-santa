@@ -10,7 +10,7 @@
         {% if errors is not empty %}
             <span class="error">
                 <i class="fas fa-exclamation-triangle"></i>
-                {%  for error in errors %}<br>{{ error }} {% endfor %}
+                {% for error in errors %}<br>{{ error }}{% endfor %}
             </span>
         {% endif %}
 
