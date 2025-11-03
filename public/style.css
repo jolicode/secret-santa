@@ -701,12 +701,15 @@ textarea {
     border-radius: var(--border-radius);
     padding: 1em;
     margin-bottom: 2em;
+    overflow: auto;
+    max-height: 200px;
 }
 .group-selection .group-list {
     margin-top: 1em
 }
 .group-selection .group-button {
-    margin-right: 1em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
 }
 .group-selection .group-button:hover {
     background-color: var(--color-gray-dark);
@@ -903,6 +906,7 @@ textarea {
     font-size: 0.8em;
     padding: 0.5em;
     display: inline-block;
+    flex-shrink: 0;
 }
 .checked-users-summary {
     margin-top: 3em;

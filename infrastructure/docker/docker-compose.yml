@@ -40,7 +40,7 @@ services:
             - "traefik.http.routers.${PROJECT_NAME}-frontend-unsecure.middlewares=redirect-to-https@file"
 
     redis:
-        image: redis:5
+        image: redis:7.0.11
         volumes:
             - redis-data:/data
         healthcheck:

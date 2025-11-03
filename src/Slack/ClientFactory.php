@@ -26,6 +26,7 @@ class ClientFactory
 
     public function getClientForToken(string $token): Client
     {
+        dd(new \Exception());
         if (!isset($this->clientsByToken[$token])) {
             $this->clientsByToken[$token] = DefaultClientFactory::create($token, $this->httpClient);
         }

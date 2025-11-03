@@ -19,7 +19,6 @@ use JoliCode\SecretSanta\Exception\RudolphException;
 use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Form\ExclusionsType;
 use JoliCode\SecretSanta\Form\MessageType;
-use JoliCode\SecretSanta\Form\ParticipantType;
 use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Santa\MessageDispatcher;
@@ -142,30 +141,33 @@ class SantaController extends AbstractController
         }
 
         $config = $this->getConfigOrThrow404($request);
+        $errors = [];
 
         if (!$config->areUsersLoaded()) {
             return new RedirectResponse($this->router->generate('load_users', ['application' => $application->getCode()]));
         }
 
         $availableUsers = $config->getAvailableUsers();
-        $form = $this->createForm(ParticipantType::class, $config, [
-            'available-users' => $availableUsers,
-        ]);
 
-        $form->handleRequest($request);
+        if ($request->isMethod('POST') && $request->request->has('selectedUsers')) {
+            $selectedUsers = $request->request->all('selectedUsers');
 
-        if ($form->isSubmitted()) {
-            $config->resetUsers();
-            $this->saveConfig($request, $config);
-            if ($form->isValid()) {
+            if (\count($selectedUsers) < 2) {
+                $errors[] = 'You have to select at least 2 users';
+            } else {
+                $config->resetUsers();
+                $config->setSelectedUsers($request->request->all('selectedUsers'));
+                $this->saveConfig($request, $config);
+
                 return $this->redirectToRoute('exclusions', ['application' => $application->getCode()]);
             }
         }
 
         $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
             'users' => $availableUsers,
+            'selectedUsers' => $config->getSelectedUsers(),
             'groups' => $config->getGroups(),
-            'form' => $form->createView(),
+            'errors' => $errors,
         ]);
 
         return new Response($content);
@@ -266,14 +268,19 @@ class SantaController extends AbstractController
 
         $config = $this->getConfigOrThrow404($request);
 
-        // We remove notes from users that aren't selected anymore, and create empty ones for those who are
-        // and don't have any yet.
-        $selectedUsersAsArray = $config->getSelectedUsers();
-        $notes = array_filter($config->getNotes(), function ($userIdentifier) use ($selectedUsersAsArray) {
-            return \in_array($userIdentifier, $selectedUsersAsArray, true);
-        }, \ARRAY_FILTER_USE_KEY);
-        foreach ($config->getSelectedUsers() as $user) {
-            $notes[$user] ??= '';
+        $areNotesAllowed = \count($config->getSelectedUsers()) <= 200;
+        if (!$areNotesAllowed) {
+            $notes = []; // Empty = no notes
+        } else {
+            // We remove notes from users that aren't selected anymore, and create empty ones for those who are
+            // and don't have any yet.
+            $selectedUsersAsArray = $config->getSelectedUsers();
+            $notes = array_filter($config->getNotes(), function ($userIdentifier) use ($selectedUsersAsArray) {
+                return \in_array($userIdentifier, $selectedUsersAsArray, true);
+            }, \ARRAY_FILTER_USE_KEY);
+            foreach ($config->getSelectedUsers() as $user) {
+                $notes[$user] ??= '';
+            }
         }
 
         $config->setNotes($notes);

@@ -4,40 +4,26 @@
 
 {% import _self as current %}
 
-{% macro userSummary(userForm, user) %}
+{% macro userSummary(user) %}
     <span class="user-summary">
         <img src="{{ user.extra.image }}" alt="" loading="lazy" />
-        <span>{{ user.extra.nickname }}</span>
-        <button type="button" data-uncheck-user="{{ userForm.vars.id }}" class="fas fa-times" title="Unselect this user"></button>
+        <span>{{ user.name }}</span>
+        <button type="button" data-uncheck-user="id_{{ user.identifier }}" class="fas fa-times" title="Unselect this user"></button>
     </span>
 {% endmacro %}
 
 {% block user_item %}
-    {% set user = userForm.parent.vars.choices[userForm.vars.name].data %}
-
     <label
             class="user-item {{ user.extra.restricted ? 'restricted' : '' }}"
-            for="{{ userForm.vars.id }}"
+            for="id_{{ user.identifier }}"
             data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname }}"
     >
-
-        <div class="data-summary"
-             data-summary="{{ current.userSummary(userForm, user)|escape('html_attr')|raw }}">
-            {{ form_widget(userForm, {'attr': {
-                'data-identifier': user.identifier
-            }}
-            ) }}
-        </div>
+        <span class="data-summary" data-summary="{{ current.userSummary(user)|escape('html_attr')|raw }}">
+            <input type="checkbox" name="selectedUsers[]"
+               {% if user.identifier in selectedUsers %}checked="checked"{% endif %}
+               value="{{ user.identifier }}" id="id_{{ user.identifier }}">
+        </span>
         <img src="{{ user.extra.image }}" alt="{{ user.name }}" loading="lazy" height="32" width="32" />
         <span>{{ user.name }} ({{ user.extra.nickname }})</span>
-        {% if groups %}
-            <span class="user-groups">
-                {% for group in groups %}
-                    {% if user.identifier in group.userIds %}
-                        <span class="user-group">{{ group.name }}</span>
-                    {% endif %}
-                {% endfor %}
-            </span>
-        {% endif %}
     </label>
 {% endblock %}
