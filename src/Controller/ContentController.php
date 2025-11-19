@@ -244,6 +244,11 @@ class ContentController extends AbstractController
                 'link' => 'https://uppler.com/',
                 'image' => 'uppler.png',
             ],
+            [
+                'label' => 'Yoco Co',
+                'link' => 'https://www.yokoco.com/',
+                'image' => 'yococo.jpg',
+            ],
         ];
 
         $content = $this->twig->render('content/hall_of_fame.html.twig', [
