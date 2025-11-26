@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Webex;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
 
@@ -31,7 +32,7 @@ class WebexProvider extends AbstractProvider
         return 'https://webexapis.com/v1/access_token';
     }
 
-    public function getResourceOwnerDetailsUrl(AccessToken $token)
+    public function getResourceOwnerDetailsUrl(AccessToken $token): string
     {
         throw new \Exception('Not implemented.');
     }
@@ -62,7 +63,7 @@ class WebexProvider extends AbstractProvider
     /**
      * @param array<mixed> $response
      */
-    protected function createResourceOwner(array $response, AccessToken $token)
+    protected function createResourceOwner(array $response, AccessToken $token): ResourceOwnerInterface
     {
         throw new \Exception('Not implemented.');
     }
