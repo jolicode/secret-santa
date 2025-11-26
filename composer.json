@@ -25,7 +25,6 @@
         "doctrine/annotations": "^1.14.4",
         "jolicode/slack-php-api": "^4.7.1",
         "nelmio/security-bundle": "^3.4.2",
-        "nyholm/psr7": "^1.8.2",
         "predis/predis": "^2.2.2",
         "symfony/asset": ">=7.1.1",
         "symfony/console": ">=7.1.5",
