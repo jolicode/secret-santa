@@ -5,6 +5,10 @@ bugsnag:
     notify_release_stages:
         - production
         #- development
+    discard_classes:
+        - Symfony\Component\HttpKernel\Exception\HttpException\RedirectException
+        - Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+        - Symfony\Component\Security\Core\Exception\AccessDeniedException
 
 services:
     Bugsnag\Client:
