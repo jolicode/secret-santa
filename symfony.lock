@@ -32,16 +32,6 @@
     "composer/xdebug-handler": {
         "version": "2.0.3"
     },
-    "doctrine/annotations": {
-        "version": "1.13",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "1.10",
-            "ref": "64d8583af5ea57b7afa4aba4b159907f3a148b05"
-        },
-        "files": []
-    },
     "doctrine/deprecations": {
         "version": "1.1",
         "recipe": {
@@ -53,9 +43,6 @@
     },
     "doctrine/inflector": {
         "version": "2.0.4"
-    },
-    "doctrine/lexer": {
-        "version": "1.2.1"
     },
     "friendsofphp/php-cs-fixer": {
         "version": "3.4",
@@ -77,12 +64,6 @@
     },
     "guzzlehttp/psr7": {
         "version": "2.1.0"
-    },
-    "jane-php/json-schema-runtime": {
-        "version": "v7.1.5"
-    },
-    "jane-php/open-api-runtime": {
-        "version": "v7.1.5"
     },
     "jolicode/slack-php-api": {
         "version": "dev-update-jane-v7"

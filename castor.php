@@ -44,7 +44,7 @@ function create_default_variables(): array
         'extra_domains' => [
             "www.{$projectName}.{$tld}",
         ],
-        'php_version' => '8.3',
+        'php_version' => '8.4',
     ];
 }
 

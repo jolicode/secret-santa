@@ -40,7 +40,7 @@
                 If you are not satisfied, you can <strong>shuffle the list</strong> again.
             </p>
 
-            <details {{ app.request.get('reshuffled') ? 'open' : '' }}>
+            <details {{ app.request.query.get('reshuffled') ? 'open' : '' }}>
                 <summary>Ready to be spoiled? Open this box!</summary>
 
                 <p>Here is the secret repartition:</p>
