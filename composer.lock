@@ -133,12 +133,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/damienalexandre/bugsnag-symfony.git",
-                "reference": "736383c7273cd95804c2a33cf2ee52d1ee2d1cd8"
+                "reference": "52b4c6ece9c063f147322257318dfbb074a0c05f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/damienalexandre/bugsnag-symfony/zipball/736383c7273cd95804c2a33cf2ee52d1ee2d1cd8",
-                "reference": "736383c7273cd95804c2a33cf2ee52d1ee2d1cd8",
+                "url": "https://api.github.com/repos/damienalexandre/bugsnag-symfony/zipball/52b4c6ece9c063f147322257318dfbb074a0c05f",
+                "reference": "52b4c6ece9c063f147322257318dfbb074a0c05f",
                 "shasum": ""
             },
             "require": {
@@ -197,7 +197,7 @@
             "support": {
                 "source": "https://github.com/damienalexandre/bugsnag-symfony/tree/symfony8"
             },
-            "time": "2025-11-27T09:58:47+00:00"
+            "time": "2025-11-27T14:24:48+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -9682,6 +9682,6 @@
     "platform": {
         "php": "^8.4"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
