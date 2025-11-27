@@ -15,6 +15,7 @@ use JoliCode\SecretSanta\Exception\RudolphException;
 use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Santa\Rudolph;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RudolphTest extends TestCase
@@ -26,9 +27,7 @@ class RudolphTest extends TestCase
         $this->SUT = new Rudolph();
     }
 
-    /**
-     * @dataProvider exceptionsDataProvider
-     */
+    #[DataProvider('exceptionsDataProvider')]
     public function testCheckExceptions(Config $config, string $expectedExceptionMessage): void
     {
         $this->expectException(RudolphException::class);
@@ -40,7 +39,7 @@ class RudolphTest extends TestCase
     /**
      * @return iterable<string, array{0: Config, 1: string}>
      */
-    public function exceptionsDataProvider(): iterable
+    public static function exceptionsDataProvider(): iterable
     {
         $config = new Config('app', 'org', null);
         $config->setAvailableUsers([
@@ -112,9 +111,7 @@ class RudolphTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider userListDataProvider
-     */
+    #[DataProvider('userListDataProvider')]
     public function testItCreateAssociations(Config $config): void
     {
         $associations = $this->SUT->associateUsers($config);
@@ -131,7 +128,7 @@ class RudolphTest extends TestCase
     /**
      * @return iterable<string, array{0: Config}>
      */
-    public function userListDataProvider(): iterable
+    public static function userListDataProvider(): iterable
     {
         $config = new Config('app', 'org', null);
         $config->setAvailableUsers([

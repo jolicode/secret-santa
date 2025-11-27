@@ -26,10 +26,10 @@ class MessageType extends AbstractType
             ->add('message', TextareaType::class, [
                 'required' => false,
                 'constraints' => [
-                    new Length([
-                        'max' => 800,
-                        'maxMessage' => 'Your message is too long, it should not exceed {{ limit }} characters.',
-                    ]),
+                    new Length(
+                        max: 800,
+                        maxMessage: 'Your message is too long, it should not exceed {{ limit }} characters.',
+                    ),
                 ],
                 'error_bubbling' => true,
             ])
@@ -37,10 +37,10 @@ class MessageType extends AbstractType
                 'entry_type' => TextareaType::class,
                 'entry_options' => [
                     'constraints' => [
-                        new Length([
-                            'max' => 400,
-                            'maxMessage' => 'Each note should contain less than {{ limit }} characters',
-                        ]),
+                        new Length(
+                            max: 400,
+                            maxMessage: 'Each note should contain less than {{ limit }} characters',
+                        ),
                     ],
                     'error_bubbling' => true,
                 ],

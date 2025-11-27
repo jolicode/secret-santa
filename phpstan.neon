@@ -13,10 +13,6 @@ parameters:
     symfony:
         container_xml_path: '%rootDir%/../../../../../var/cache/test/JoliCode_SecretSanta_KernelTestDebugContainer.xml'
 
-    # Make tests analyses working with Symfony's PHPUnit bridge
-    bootstrapFiles:
-       - vendor/bin/.phpunit/phpunit-9.6-0/vendor/autoload.php
-
     typeAliases:
         ContextData: '''
             array{

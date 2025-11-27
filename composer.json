@@ -19,39 +19,40 @@
         }
     },
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "adam-paterson/oauth2-slack": "^1.1.3",
-        "bugsnag/bugsnag-symfony": "^1.14.2",
-        "doctrine/annotations": "^1.14.4",
+        "bugsnag/bugsnag-symfony": "dev-symfony8",
         "jolicode/slack-php-api": "^4.7.1",
-        "nelmio/security-bundle": "^3.4.2",
-        "nyholm/psr7": "^1.8.2",
+        "nelmio/security-bundle": "dev-symfony8",
         "predis/predis": "^2.2.2",
-        "symfony/asset": ">=7.1.1",
-        "symfony/console": ">=7.1.5",
-        "symfony/flex": "^2.4.7",
-        "symfony/form": ">=7.1.5",
-        "symfony/framework-bundle": ">=7.1.5",
-        "symfony/http-client": ">=7.1.5",
-        "symfony/mime": "7.1.*",
-        "symfony/monolog-bundle": "^3.10",
-        "symfony/runtime": ">=7.1.1",
-        "symfony/twig-bundle": ">=v7.3.4",
-        "symfony/validator": ">=7.1.5",
-        "symfony/yaml": ">=7.1.5",
+        "symfony/asset": "*",
+        "symfony/console": "*",
+        "symfony/flex": "*",
+        "symfony/form": "*",
+        "symfony/framework-bundle": "*",
+        "symfony/http-client": "*",
+        "symfony/mime": "*",
+        "symfony/monolog-bundle": "^4.0",
+        "symfony/runtime": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/validator": "*",
+        "symfony/yaml": "*",
         "twig/twig": "^3.22",
-        "wohali/oauth2-discord-new": "^1.2.1"
+        "wohali/oauth2-discord-new": "^1.2.1",
+        "phpspec/phpspec": "dev-sf8 as 8.0.0",
+        "jane-php/jane-php": "dev-sf8 as v7.9.0",
+        "php-http/client-common": "dev-sf8 as v2.7.0"
     },
     "require-dev": {
-        "symfony/browser-kit": ">=7.1.1",
-        "symfony/css-selector": ">=7.1.1",
-        "symfony/debug-bundle": ">=7.1.1",
-        "symfony/dotenv": ">=7.1.5",
-        "symfony/maker-bundle": "^1.61",
-        "symfony/phpunit-bridge": "^7.1.4",
-        "symfony/stopwatch": ">=7.1.1",
-        "symfony/var-dumper": ">=7.1.5",
-        "symfony/web-profiler-bundle": ">=7.1.4"
+        "phpunit/phpunit": "^12.4",
+        "symfony/browser-kit": "*",
+        "symfony/css-selector": "*",
+        "symfony/debug-bundle": "*",
+        "symfony/dotenv": "*",
+        "symfony/maker-bundle": "*",
+        "symfony/stopwatch": "*",
+        "symfony/var-dumper": "*",
+        "symfony/web-profiler-bundle": "*"
     },
     "config": {
         "optimize-autoloader": true,
@@ -95,8 +96,31 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
-            "require": "7.3.*"
+            "allow-contrib": true,
+            "require": "8.0.*"
         }
-    }
+    },
+    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/damienalexandre/bugsnag-symfony"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/damienalexandre/NelmioSecurityBundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/VincentLanglet/phpspec"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/VincentLanglet/janephp"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/VincentLanglet/client-common"
+        }
+    ]
 }
