@@ -41,7 +41,7 @@ function install(): void
 #[AsTask(description: 'Runs PHPUnit', aliases: ['phpunit'])]
 function phpunit(): int
 {
-    return docker_exit_code('vendor/bin/simple-phpunit');
+    return docker_exit_code('./bin/phpunit');
 }
 
 #[AsTask(description: 'Runs PHPStan', aliases: ['phpstan'])]

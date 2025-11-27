@@ -44,12 +44,12 @@
         "php-http/client-common": "dev-sf8 as v2.7.0"
     },
     "require-dev": {
+        "phpunit/phpunit": "^12.4",
         "symfony/browser-kit": "*",
         "symfony/css-selector": "*",
         "symfony/debug-bundle": "*",
         "symfony/dotenv": "*",
         "symfony/maker-bundle": "*",
-        "symfony/phpunit-bridge": "*",
         "symfony/stopwatch": "*",
         "symfony/var-dumper": "*",
         "symfony/web-profiler-bundle": "*"
