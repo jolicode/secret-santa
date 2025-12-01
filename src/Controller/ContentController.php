@@ -214,6 +214,11 @@ class ContentController extends AbstractController
                 'image' => 'redirectionio.svg',
             ],
             [
+                'label' => 'ROLV Group',
+                'link' => 'https://rolv.pl/',
+                'image' => 'rolv.png',
+            ],
+            [
                 'label' => 'Rome Blockchain Labs',
                 'link' => 'https://romeblockchain.com/',
                 'image' => 'romeblockchain.png',
