@@ -272,4 +272,15 @@ class ContentController extends AbstractController
 
         return new Response($content);
     }
+
+    #[Route('/.well-known/traffic-advice', methods: ['GET'])]
+    public function trafficAdvice(): Response
+    {
+        return new Response(
+            '[{"user_agent":"prefetch-proxy","disallow": true}]',
+            headers: [
+                'Content-Type' => 'application/trafficadvice+json',
+            ]
+        );
+    }
 }
