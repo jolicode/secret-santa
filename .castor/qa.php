@@ -18,7 +18,7 @@ use function Castor\variable;
 use function docker\docker_compose_run;
 use function docker\docker_exit_code;
 
-#[AsTask(description: 'Runs all QA tasks')]
+#[AsTask(description: 'Runs all QA tasks', aliases: ['test'])]
 function all(): int
 {
     install();

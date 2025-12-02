@@ -104,4 +104,13 @@ class ContentControllerTest extends BaseWebTestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertCount(1, $crawler->filter('loc:contains("/faq")'));
     }
+
+    public function testTrafficAdvices(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/.well-known/traffic-advice');
+        $response = $client->getResponse();
+        self::assertResponseIsSuccessful();
+    }
 }
