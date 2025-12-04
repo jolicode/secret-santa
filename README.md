@@ -1,4 +1,12 @@
-# Secret Santa app
+<h1 align="center">
+  <a href="https://github.com/jolicode/secret-santa"><img src="https://jolicode.com/media/original/oss/headers/secret-santa.png" alt="Secret Santa"></a>
+  <br />
+  Secret Santa
+  <br />
+  <sub><em><h6>An application to organize Secret Santa with your Slack / Discord / Webex teams.</h6></em></sub>
+</h1>
+
+# About the project
 
 Just go to https://secret-santa.team/ and have fun.
 
@@ -116,3 +124,8 @@ castor builder
 ### Other tasks
 
 Checkout `castor` to have the list of available tasks.
+
+<br><br>
+<div align="center">
+<a href="https://jolicode.com/"><img src="https://jolicode.com/media/original/oss/footer-github.png?v3" alt="JoliCode is sponsoring this project"></a>
+</div>
