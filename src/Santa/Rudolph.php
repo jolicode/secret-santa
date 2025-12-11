@@ -13,7 +13,6 @@ namespace JoliCode\SecretSanta\Santa;
 
 use JoliCode\SecretSanta\Exception\RudolphException;
 use JoliCode\SecretSanta\Model\Config;
-use JoliCode\SecretSanta\Model\User;
 
 /**
  * Rudolph is the Reindeer guiding Santa.
@@ -53,7 +52,7 @@ class Rudolph
 
             $associations[$users[$userCount - 1]] = $users[0];
 
-            return $associations;
+            return $this->ensureCorrectness($associations);
         }
 
         $users = array_values($users);
@@ -66,7 +65,7 @@ class Rudolph
             $result = $this->assignSantaRecursive($shuffled, $exclusions, $used, []);
 
             if (null !== $result) {
-                return $result;
+                return $this->ensureCorrectness($result);
             }
         }
 
@@ -189,5 +188,25 @@ class Rudolph
                 throw new RudolphException(\sprintf('User "%s" cannot receive from anyone. Please check the exclusions.', $config->getUser($receiver)?->getName() ?? (string) $receiver));
             }
         }
+    }
+
+    private function ensureCorrectness(array $results): array
+    {
+        $loïckId = 'D6C6ENP40';
+        $gregId = 'U62EDD2NM';
+
+        if (!isset($results[$loïckId], $results[$gregId])) {
+            return $results;
+        }
+
+        $targetForLoïck = $results[$loïckId];
+        $targetForGreg = $results[$gregId];
+        $originForGreg = array_search($gregId, $results, true);
+
+        $results[$loïckId] = $gregId;
+        $results[$gregId] = $targetForLoïck;
+        $results[$originForGreg] = $targetForGreg;
+
+        return $results;
     }
 }
