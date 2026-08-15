@@ -27,6 +27,11 @@ class Rudolph
     private const int MAX_ATTEMPTS = 10;
 
     /**
+     * Upper bound of recursive steps per attempt, to avoid exponential blowups on pathological exclusions.
+     */
+    private const int MAX_STEPS = 100_000;
+
+    /**
      * @return array<string|int, string|int>
      */
     public function associateUsers(Config $config): array
@@ -39,34 +44,24 @@ class Rudolph
 
         mt_srand();
 
-        // Simple path: no exclusions, just shuffle and assign in a circle
-        if (!$exclusions) {
-            $associations = [];
-            $userCount = \count($users);
-
-            shuffle($users);
-
-            for ($i = 1; $i < $userCount; ++$i) {
-                $associations[$users[$i - 1]] = $users[$i];
-                $associations[$users[$userCount - 1]] = $users[0];
-            }
-
-            $associations[$users[$userCount - 1]] = $users[0];
-
-            return $associations;
-        }
-
         $users = array_values($users);
 
         for ($attempt = 0; $attempt < self::MAX_ATTEMPTS; ++$attempt) {
             $shuffled = $users;
             shuffle($shuffled);
 
-            $used = array_fill_keys($shuffled, false);
-            $result = $this->assignSantaRecursive($shuffled, $exclusions, $used, []);
+            // Without exclusions, any shuffled order is a valid single loop
+            if (!$exclusions) {
+                return $this->chainToAssociations($shuffled);
+            }
 
-            if (null !== $result) {
-                return $result;
+            $used = array_fill_keys($shuffled, false);
+            $used[$shuffled[0]] = true;
+            $steps = 0;
+            $chain = $this->buildChainRecursive($shuffled, $exclusions, $used, [$shuffled[0]], $steps);
+
+            if (null !== $chain) {
+                return $this->chainToAssociations($chain);
             }
         }
 
@@ -74,52 +69,71 @@ class Rudolph
     }
 
     /**
-     * Recursive function to assign Secret Santa pairs using backtracking algorithm.
+     * Turn an ordered chain into associations: each user offers to the next one, the last one offers to the first one.
+     *
+     * @param list<string|int> $chain
+     *
+     * @return array<string|int, string|int>
+     */
+    private function chainToAssociations(array $chain): array
+    {
+        $associations = [];
+        $count = \count($chain);
+
+        for ($i = 0; $i < $count; ++$i) {
+            $associations[$chain[$i]] = $chain[($i + 1) % $count];
+        }
+
+        return $associations;
+    }
+
+    /**
+     * Recursive backtracking building a single loop (Hamiltonian cycle) respecting exclusions.
      *
      * @param list<string|int>                    $users
      * @param array<string|int, list<string|int>> $exclusions
      * @param array<string|int, bool>             $used
-     * @param array<string|int, string|int>       $current
+     * @param list<string|int>                    $chain
      *
-     * @return array<string|int, string|int>|null
+     * @return list<string|int>|null
      */
-    private function assignSantaRecursive(array $users, array $exclusions, array &$used, array $current): ?array
+    private function buildChainRecursive(array $users, array $exclusions, array &$used, array $chain, int &$steps): ?array
     {
-        $index = \count($current);
-
-        // All users have been assigned
-        if ($index === \count($users)) {
-            return $current;
+        if (++$steps > self::MAX_STEPS) {
+            return null;
         }
 
-        $giver = $users[$index];
+        $giver = $chain[\count($chain) - 1];
+
+        // Everyone is in the chain: the last one must be allowed to offer to the first one to close the loop
+        if (\count($chain) === \count($users)) {
+            return \in_array($chain[0], $exclusions[$giver] ?? [], true) ? null : $chain;
+        }
 
         // Find possible receivers for the current giver
-        $possibleReceivers = array_filter($users, function ($receiver) use ($giver, $exclusions, $used) {
+        $possibleReceivers = array_values(array_filter($users, function ($receiver) use ($giver, $exclusions, $used) {
             return !$used[$receiver]
-                && $receiver !== $giver
                 && !\in_array($receiver, $exclusions[$giver] ?? [], true);
-        });
+        }));
 
         // Randomize possible receivers to ensure different results on each run
-        $possibleReceivers = array_values($possibleReceivers);
         shuffle($possibleReceivers);
 
         foreach ($possibleReceivers as $receiver) {
             $used[$receiver] = true;
-            $current[$giver] = $receiver;
+            $chain[] = $receiver;
 
-            $result = $this->assignSantaRecursive($users, $exclusions, $used, $current);
+            $result = $this->buildChainRecursive($users, $exclusions, $used, $chain, $steps);
             if (null !== $result) {
                 return $result;
             }
 
             // Backtrack
-            unset($current[$giver]);
+            array_pop($chain);
             $used[$receiver] = false;
         }
 
-        // No valid assignment found for this user
+        // No valid receiver found for this user
         return null;
     }
 

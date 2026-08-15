@@ -123,6 +123,69 @@ class RudolphTest extends TestCase
             self::assertContains($user, $associations);
             self::assertNotSame($user, $associations[$user]);
         }
+
+        foreach ($config->getExclusions() as $giver => $excluded) {
+            self::assertNotContains($associations[$giver] ?? null, $excluded);
+        }
+
+        // Associations must form a single loop
+        $visited = [];
+        $current = array_key_first($associations);
+        do {
+            $visited[] = $current;
+            $current = $associations[$current];
+        } while ($current !== array_key_first($associations));
+        self::assertCount(\count($associations), $visited);
+    }
+
+    public function testItAlwaysCreatesASingleLoopWithRandomExclusions(): void
+    {
+        for ($run = 0; $run < 200; ++$run) {
+            $count = random_int(2, 20);
+            $users = [];
+            for ($i = 0; $i < $count; ++$i) {
+                $users['user' . $i] = new User('user' . $i, 'User ' . $i);
+            }
+
+            $config = new Config('app', 'org', null);
+            $config->setAvailableUsers($users);
+            $config->setUsersLoaded(true);
+            $config->setSelectedUsers(array_keys($users));
+
+            // Pick a hidden valid loop and never exclude its edges, so a solution is guaranteed to exist
+            $loop = array_keys($users);
+            shuffle($loop);
+            $allowed = [];
+            foreach ($loop as $i => $giver) {
+                $allowed[$giver] = $loop[($i + 1) % $count];
+            }
+
+            $exclusions = [];
+            foreach (array_keys($users) as $giver) {
+                $exclusions[$giver] = [];
+                foreach (array_keys($users) as $receiver) {
+                    if ($receiver !== $giver && $receiver !== $allowed[$giver] && random_int(0, 100) < 30) {
+                        $exclusions[$giver][] = $receiver;
+                    }
+                }
+            }
+            $config->setExclusions($exclusions);
+
+            $associations = $this->SUT->associateUsers($config);
+
+            self::assertCount($count, $associations);
+            foreach ($associations as $giver => $receiver) {
+                self::assertNotContains($receiver, $exclusions[$giver]);
+            }
+
+            $visited = [];
+            $current = array_key_first($associations);
+            do {
+                $visited[] = $current;
+                $current = $associations[$current];
+            } while ($current !== array_key_first($associations));
+            self::assertCount($count, $visited, 'Associations must form a single loop');
+        }
     }
 
     /**
@@ -186,5 +249,22 @@ class RudolphTest extends TestCase
             'user2' => ['user3'],
         ]);
         yield 'with exclusions' => [$testConfig];
+
+        // Only 2 valid loops exist here: 1>3>2>4>1 and 1>4>2>3>1 - a matching-based algorithm would often
+        // produce two loops (1>2>1 and 3>4>3)
+        $testConfig = clone $config;
+        $testConfig->setSelectedUsers([
+            'user1',
+            'user2',
+            'user3',
+            'user4',
+        ]);
+        $testConfig->setExclusions([
+            'user1' => ['user2'],
+            'user2' => ['user1'],
+            'user3' => ['user4'],
+            'user4' => ['user3'],
+        ]);
+        yield 'exclusions forcing a single loop' => [$testConfig];
     }
 }

@@ -187,8 +187,7 @@ class SantaController extends AbstractController
         $config = $this->getConfigOrThrow404($request);
         $selectedUsers = $config->getSelectedUsers();
 
-        /** @var true|false $areExclusionsAllowed */
-        $areExclusionsAllowed = false; // \count($selectedUsers) <= 100;
+        $areExclusionsAllowed = \count($selectedUsers) <= 100;
         $form = null;
 
         // We remove exclusions from users that aren't selected anymore and create empty ones for those who are
@@ -359,22 +358,29 @@ class SantaController extends AbstractController
             if ($form->isValid()) {
                 $shuffleButton = $form->get('shuffle');
                 if ($shuffleButton instanceof SubmitButton && $shuffleButton->isClicked()) {
-                    $config->setShuffledUsers($this->rudolph->associateUsers($config));
-                    $this->saveConfig($request, $config);
+                    try {
+                        $config->setShuffledUsers($this->rudolph->associateUsers($config));
+                        $this->saveConfig($request, $config);
 
-                    $secretSanta = new SecretSanta(
-                        'shuffle',
-                        [],
-                        $config
-                    );
-                    $this->statisticCollector->incrementShuffleCount($secretSanta);
+                        $secretSanta = new SecretSanta(
+                            'shuffle',
+                            [],
+                            $config
+                        );
+                        $this->statisticCollector->incrementShuffleCount($secretSanta);
 
-                    return $this->redirectToRoute('validate', [
-                        'application' => $application->getCode(),
-                        'reshuffled' => 1,
-                    ]);
+                        return $this->redirectToRoute('validate', [
+                            'application' => $application->getCode(),
+                            'reshuffled' => 1,
+                        ]);
+                    } catch (RudolphException $e) {
+                        // Previous shuffle is kept, we just display the error
+                        $errors[] = $e->getMessage();
+                    }
                 }
+            }
 
+            if (!$errors && $form->isValid()) {
                 $secretSanta = $this->prepareSecretSanta($config);
                 $session = $request->getSession();
                 $session->set(
@@ -395,13 +401,9 @@ class SantaController extends AbstractController
                 return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
             }
 
-            $errors = array_map(function (FormError $error) {
+            $errors = array_unique([...$errors, ...array_map(function (FormError $error) {
                 return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true, false)));
-
-            if ($errors) {
-                $errors = array_unique($errors);
-            }
+            }, iterator_to_array($form->getErrors(true, false)))]);
         }
 
         $content = $this->twig->render('santa/application/validate_' . $application->getCode() . '.html.twig', [
