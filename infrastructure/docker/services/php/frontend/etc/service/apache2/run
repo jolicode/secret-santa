@@ -1,3 +1,6 @@
 #!/bin/sh
 
-exec /usr/sbin/apache2ctl -DFOREGROUND
+# Do not use apache2ctl: it chowns runtime directories, which fails since the
+# container does not run as root
+. /etc/apache2/envvars
+exec /usr/sbin/apache2 -DFOREGROUND

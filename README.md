@@ -45,7 +45,7 @@ Castor supports completion for `bash`, `zsh` & `fish` shells.
 ### Docker environment
 
 The Docker infrastructure provides a web stack with:
-- NGINX
+- Apache
 - Redis
 - PHP
 - Traefik
@@ -96,7 +96,7 @@ installed on your computer - see below).
 
 This stack no longer embeds self-signed SSL certificates. Instead they will be
 generated the first time you start the infrastructure (`castor start`) or if you
-run `castor infra:generate-certificates`. So *HTTPS will work out of the box*.
+run `castor docker:generate-certificates`. So *HTTPS will work out of the box*.
 
 If you have `mkcert` installed on your computer, it will be used to generate
 locally trusted certificates. See [`mkcert` documentation](https://github.com/FiloSottile/mkcert#installation)
@@ -107,9 +107,19 @@ If you don't have `mkcert`, then self-signed certificates will instead be
 generated with openssl. You can configure [infrastructure/docker/services/router/openssl.cnf](infrastructure/docker/services/router/openssl.cnf)
 to tweak certificates.
 
-You can run `castor infra:generate-certificates --force` to recreate new certificates
+You can run `castor docker:generate-certificates --force` to recreate new certificates
 if some were already generated. Remember to restart the infrastructure to make
 use of the new certificates with `castor up` or `castor start`.
+
+### Git worktree support
+
+This stack supports [git worktrees](https://git-scm.com/docs/git-worktree)
+out of the box. If you run `castor start` inside a worktree, the infrastructure
+is fully isolated (project name, volumes, networks, ports) without any
+configuration.
+
+Ports are displayed at the end of `castor start`, or run `castor docker:ports`
+to see them at any time.
 
 ### Builder
 

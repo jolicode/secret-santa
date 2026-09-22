@@ -11,6 +11,11 @@ name: Continuous Integration
 permissions:
     contents: read
 
+env:
+    # Fix for symfony/color detection. We know GitHub Actions can handle it
+    ANSICON: 1
+    CASTOR_CONTEXT: ci
+
 jobs:
     check-dockerfiles:
         name: Check Dockerfile
@@ -33,9 +38,8 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            -
-              name: Setup PHP
-              uses: castor-php/setup-castor@v0.1.0
+            - name: Setup Castor
+              uses: castor-php/setup-castor@v1.1.0
 
             - name: "Build and start the infrastructure"
               run: "castor start && sleep 5"

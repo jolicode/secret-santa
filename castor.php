@@ -19,18 +19,19 @@ use function Castor\variable;
 use function docker\about;
 use function docker\build;
 use function docker\docker_compose_run;
-use function docker\generate_certificates;
 use function docker\up;
 
 // use function docker\workers_start;
 // use function docker\workers_stop;
 
-guard_min_version('0.15.0');
+defined('CASTOR_USE_CHDIR') || define('CASTOR_USE_CHDIR', true);
+
+guard_min_version('v1.8.0');
 
 import(__DIR__ . '/.castor');
 
 /**
- * @return array<string, mixed>
+ * @return array{project_name: string, root_domain: string, extra_domains: string[], php_version: string}
  */
 function create_default_variables(): array
 {
@@ -40,7 +41,6 @@ function create_default_variables(): array
     return [
         'project_name' => $projectName,
         'root_domain' => "{$projectName}.{$tld}",
-        'project_directory' => '.',
         'extra_domains' => [
             "www.{$projectName}.{$tld}",
         ],
@@ -54,11 +54,10 @@ function start(): void
     io()->title('Starting the stack');
 
     // workers_stop();
-    generate_certificates(force: false);
     build();
-    up();
-    cache_clear();
     install();
+    cache_clear();
+    up(profiles: ['default']); // We can't start worker now, they are not installed
     migrate();
     // workers_start();
 
@@ -77,34 +76,35 @@ function install(): void
 
     if (is_file("{$basePath}/composer.json")) {
         io()->section('Installing PHP dependencies');
-        docker_compose_run('composer install -n --prefer-dist --optimize-autoloader');
+        docker_compose_run(['composer', 'install', '-n', '--prefer-dist', '--optimize-autoloader']);
     }
     if (is_file("{$basePath}/yarn.lock")) {
         io()->section('Installing Node.js dependencies');
-        docker_compose_run('yarn install --frozen-lockfile');
+        docker_compose_run(['yarn', 'install', '--immutable']);
     } elseif (is_file("{$basePath}/package.json")) {
         io()->section('Installing Node.js dependencies');
 
         if (is_file("{$basePath}/package-lock.json")) {
-            docker_compose_run('npm ci');
+            docker_compose_run(['npm', 'ci']);
         } else {
-            docker_compose_run('npm install');
+            docker_compose_run(['npm', 'install']);
         }
     }
     if (is_file("{$basePath}/importmap.php")) {
         io()->section('Installing importmap');
-        docker_compose_run('bin/console importmap:install');
+        docker_compose_run(['bin/console', 'importmap:install']);
     }
 
     qa\install();
 }
 
-#[AsTask(description: 'Clear the application cache', namespace: 'app', aliases: ['cache-clear'])]
+#[AsTask(description: 'Clears the application cache', namespace: 'app', aliases: ['cache-clear'])]
 function cache_clear(): void
 {
     io()->title('Clearing the application cache');
 
-    docker_compose_run('rm -rf var/cache/ && bin/console cache:warmup');
+    docker_compose_run(['rm', '-rf', 'var/cache/']);
+    docker_compose_run(['bin/console', 'cache:warmup']);
 }
 
 #[AsTask(description: 'Migrates database schema', namespace: 'app:db', aliases: ['migrate'])]
@@ -112,6 +112,6 @@ function migrate(): void
 {
     // io()->title('Migrating the database schema');
 
-    // docker_compose_run('bin/console doctrine:database:create --if-not-exists');
-    // docker_compose_run('bin/console doctrine:migration:migrate -n --allow-no-migration --all-or-nothing');
+    // docker_compose_run(['bin/console', 'doctrine:database:create', '--if-not-exists']);
+    // docker_compose_run(['bin/console', 'doctrine:migration:migrate', '-n', '--allow-no-migration', '--all-or-nothing']);
 }
