@@ -1,6 +1,6 @@
 # hadolint global ignore=DL3008
 
-FROM debian:12.6-slim AS php-base
+FROM debian:13.5-slim AS php-base
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -11,7 +11,7 @@ RUN apt-get update \
         gnupg \
     && curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
     && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
-    && echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php bookworm main" > /etc/apt/sources.list.d/sury.list \
+    && echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ trixie main" > /etc/apt/sources.list.d/sury.list \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
@@ -41,23 +41,14 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
-# Fake user to maps with the one on the host
-ARG USER_ID
-COPY entrypoint /
-RUN addgroup --gid $USER_ID app && \
-    adduser --system --uid $USER_ID --home /home/app --shell /bin/bash app && \
-    curl -Ls https://github.com/tianon/gosu/releases/download/1.17/gosu-amd64 | \
-        install /dev/stdin /usr/local/bin/gosu && \
-    sed "s/{{ application_user }}/app/g" -i /entrypoint
-
 # Configuration
 COPY base/php-configuration /etc/php/${PHP_VERSION}
 
 ENV PHP_VERSION=${PHP_VERSION}
+ENV HOME=/home/app
+ENV COMPOSER_MEMORY_LIMIT=-1
 
 WORKDIR /var/www
-
-ENTRYPOINT [ "/entrypoint" ]
 
 FROM php-base AS frontend
 
@@ -79,7 +70,14 @@ RUN apt-get update \
 
 COPY frontend/php-configuration /etc/php/${PHP_VERSION}
 COPY frontend/etc/apache2/. /etc/apache2/
+RUN rm -rf /etc/service/
 COPY frontend/etc/service/. /etc/service/
+# The container runs as the host's raw UID (not root), so runit and Apache
+# need their runtime directories to be writable by anyone
+RUN chmod 777 /etc/service/*/supervise/ \
+    && mkdir -p /var/run/apache2 /var/lock/apache2 \
+    && rm -f /var/log/apache2/* \
+    && chmod 777 /var/run/apache2 /var/lock/apache2 /var/log/apache2
 
 RUN phpenmod app-default \
     && phpenmod app-fpm
@@ -94,37 +92,40 @@ FROM php-base AS builder
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-ARG NODEJS_VERSION=20.x
+ARG NODEJS_VERSION=24.x
 RUN curl -s https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/nodesource.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_${NODEJS_VERSION} nodistro main" > /etc/apt/sources.list.d/nodesource.list
 
 # Default toys
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        git \
-        make \
-        nodejs \
-        sudo \
-        unzip \
+        "git" \
+        "make" \
+        "nodejs" \
+        "php${PHP_VERSION}-dev" \
+        "unzip" \
     && apt-get clean \
-    && npm install -g yarn@1.22 \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
+    && corepack enable \
+    && yarn set version stable
 
 # Config
-COPY builder/etc/. /etc/
 COPY builder/php-configuration /etc/php/${PHP_VERSION}
-RUN adduser app sudo \
-    && mkdir /var/log/php \
+RUN mkdir /var/log/php \
     && chmod 777 /var/log/php \
     && phpenmod app-default \
     && phpenmod app-builder
 
 # Composer
-COPY --from=composer/composer:2.9.2 /usr/bin/composer /usr/bin/composer
-RUN mkdir -p "/home/app/.composer/cache" \
-    && chown app: /home/app/.composer -R
+COPY --from=composer/composer:2.10.0 /usr/bin/composer /usr/bin/composer
 
-ADD https://raw.githubusercontent.com/symfony/symfony/refs/heads/7.2/src/Symfony/Component/Console/Resources/completion.bash /tmp/completion.bash
+# Pie
+RUN curl -L --output /usr/local/bin/pie https://github.com/php/pie/releases/download/1.4.5/pie.phar \
+    && chmod +x /usr/local/bin/pie
+
+# Autocompletion
+ADD https://raw.githubusercontent.com/symfony/symfony/refs/heads/7.4/src/Symfony/Component/Console/Resources/completion.bash /tmp/completion.bash
 
 # Composer symfony/console version is too old, and doest not support "API version feature", so we remove it
 # Hey, while we are at it, let's add some more completion
@@ -141,11 +142,12 @@ RUN sed /tmp/completion.bash \
 # Third party tools
 ENV PATH="$PATH:/var/www/tools/bin"
 
-# Good default customization
-RUN cat >> /etc/bash.bashrc <<EOF
+# We can't rely on \u: the container runs as the host's raw UID, which has no
+# /etc/passwd entry, so bash would print "I have no name!" instead.
+RUN cat >> /etc/bash.bashrc <<'EOT'
 . /etc/bash_completion
 
-PS1='\[\e[01;33m\]\u \[\e[00;32m\]\w\[\e[0m\] '
-EOF
+PS1='\[\e[01;33m\]builder \[\e[00;32m\]\w\[\e[0m\] '
+EOT
 
 WORKDIR /var/www

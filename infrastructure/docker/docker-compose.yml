@@ -1,44 +1,24 @@
-include:
-    - docker-compose.worker.yml
-
-volumes:
-    redis-data: {}
-
-services:
-    router:
-        build: services/router
-        volumes:
-            - "/var/run/docker.sock:/var/run/docker.sock"
-            - "./services/router/certs:/etc/ssl/certs"
-        ports:
-            - "80:80"
-            - "443:443"
-            - "8080:8080"
-        networks:
-            - default
-        profiles:
-            - default
-
-    frontend:
+# Templates to factorize the service definitions
+x-templates:
+    worker_base: &worker_base
         build:
             context: services/php
-            target: frontend
+            target: worker
+        user: "${USER_ID}:${USER_ID}"
+        environment:
+            - APP_ENV
         depends_on:
             redis:
                 condition: service_healthy
         volumes:
             - "../..:/var/www:cached"
         profiles:
-            - default
-        labels:
-            - "traefik.enable=true"
-            - "project-name=${PROJECT_NAME}"
-            - "traefik.http.routers.${PROJECT_NAME}-frontend.rule=Host(${PROJECT_DOMAINS})"
-            - "traefik.http.routers.${PROJECT_NAME}-frontend.tls=true"
-            - "traefik.http.routers.${PROJECT_NAME}-frontend-unsecure.rule=Host(${PROJECT_DOMAINS})"
-            # Comment the next line to be able to access frontend via HTTP instead of HTTPS
-            - "traefik.http.routers.${PROJECT_NAME}-frontend-unsecure.middlewares=redirect-to-https@file"
+            - worker
 
+volumes:
+    redis-data: {}
+
+services:
     redis:
         image: redis:7.0.11
         volumes:
@@ -50,3 +30,54 @@ services:
             retries: 5
         profiles:
             - default
+
+    frontend:
+        build:
+            context: services/php
+            target: frontend
+        user: "${USER_ID}:${USER_ID}"
+        environment:
+            - APP_ENV
+        volumes:
+            - "../..:/var/www:cached"
+            - "../../.home:/home/app:cached"
+        depends_on:
+            redis:
+                condition: service_healthy
+        profiles:
+            - default
+        labels:
+            - "traefik.enable=true"
+            - "project-name=${PROJECT_NAME}"
+            - "traefik.http.routers.${PROJECT_NAME}-frontend.rule=Host(${PROJECT_DOMAINS})"
+            - "traefik.http.routers.${PROJECT_NAME}-frontend.tls=true"
+            - "traefik.http.routers.${PROJECT_NAME}-frontend-unsecure.rule=Host(${PROJECT_DOMAINS})"
+            # Comment the next line to be able to access frontend via HTTP instead of HTTPS
+            - "traefik.http.routers.${PROJECT_NAME}-frontend-unsecure.middlewares=redirect-to-https@file"
+
+    # worker_messenger:
+    #     <<: *worker_base
+    #     command: php -d memory_limit=1G /var/www/bin/console messenger:consume async --memory-limit=128M
+
+    builder:
+        build:
+            context: services/php
+            target: builder
+        init: true
+        user: "${USER_ID}:${USER_ID}"
+        environment:
+            - APP_ENV
+            - PHP_CS_FIXER_IGNORE_ENV=1
+            # The following list contains the common environment variables exposed by CI platforms
+            - GITHUB_ACTIONS
+            - CI # Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari
+            - CONTINUOUS_INTEGRATION # Travis CI, Cirrus CI
+            - BUILD_NUMBER # Jenkins, TeamCity
+            - RUN_ID # TaskCluster, dsari
+        volumes:
+            - "../..:/var/www:cached"
+            - "../../.home:/home/app:cached"
+        depends_on:
+            - redis
+        profiles:
+            - builder
