@@ -3,6 +3,7 @@ twig:
     globals:
         bugsnag_api_key: '%env(BUGSNAG_KEY)%'
         bugsnag_release_stage: '%env(BUGSNAG_STAGE)%'
+        bugsnag_app_version: '%env(default::CC_COMMIT_ID)%'
 
 when@test:
     twig:

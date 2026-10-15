@@ -1,6 +1,8 @@
 bugsnag:
     api_key: '%env(BUGSNAG_KEY)%'
     release_stage: '%env(BUGSNAG_STAGE)%'
+    # Clever Cloud exposes the deployed commit, see https://www.clever.cloud/developers/doc/reference/reference-environment-variables/
+    app_version: '%env(default::CC_COMMIT_ID)%'
     user: false
     notify_release_stages:
         - production

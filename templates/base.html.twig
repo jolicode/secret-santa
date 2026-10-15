@@ -30,6 +30,7 @@
             <script nonce="{{ csp_nonce('script') }}">
                 Bugsnag.start({
                     apiKey: '{{ bugsnag_api_key }}',
+                    {% if bugsnag_app_version %}appVersion: '{{ bugsnag_app_version }}',{% endif %}
                     autoTrackSessions: false,
                     collectUserIp: false,
                     redactedKeys: [
