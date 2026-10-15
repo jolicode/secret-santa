@@ -18,8 +18,13 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorageFacto
 
 trait SessionPrepareTrait
 {
-    public function prepareSession(KernelBrowser $client, string $key, mixed $value): void
+    /**
+     * @param string|array<string, mixed> $key A single key, or several attributes at once
+     */
+    public function prepareSession(KernelBrowser $client, string|array $key, mixed $value = null): void
     {
+        $attributes = \is_array($key) ? $key : [$key => $value];
+
         /** @var MockFileSessionStorageFactory $sessionStorageFactory */
         $sessionStorageFactory = self::$kernel->getContainer()->get('test.session.storage.factory.mock_file');
         /** @var MockFileSessionStorage $sessionStorage */
@@ -29,7 +34,7 @@ trait SessionPrepareTrait
         $sessionStorage->start();
         $sessionStorage->setSessionData(
             [
-                '_sf2_attributes' => [$key => $value],
+                '_sf2_attributes' => $attributes,
             ],
         );
 

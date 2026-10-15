@@ -301,9 +301,16 @@ class SantaController extends AbstractController
                 return $this->redirectToRoute('validate', ['application' => $application->getCode()]);
             }
 
-            $errors = array_map(function (FormError $error) {
+            $errors = array_map(function (FormError $error) use ($config) {
+                $origin = $error->getOrigin();
+
+                // Tell which participant the invalid note belongs to
+                if ($origin && 'notes' === $origin->getParent()?->getName()) {
+                    return \sprintf('%s (note for %s)', $error->getMessage(), $config->getUser($origin->getName())?->getName() ?? $origin->getName());
+                }
+
                 return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true, false)));
+            }, iterator_to_array($form->getErrors(true), false));
 
             if ($errors) {
                 $errors = array_unique($errors);
