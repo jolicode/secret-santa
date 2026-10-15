@@ -13,7 +13,6 @@ namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Discord\MessageSender;
 use JoliCode\SecretSanta\Discord\UserExtractor;
-use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\Group;
@@ -100,24 +99,7 @@ class DiscordApplication implements ApplicationInterface
             throw new \RuntimeException('No guild was selected.');
         }
 
-        $users = $this->userExtractor->extractForGuild($guildId, $config);
-
-        $this->loadGroups();
-
-        if ($this->groups) {
-            // Store relation User <-> Group in Group model
-            foreach ($users as $user) {
-                $userGroupIds = $user->getExtra()['groups'] ?? [];
-
-                foreach ($userGroupIds as $userGroupId) {
-                    if (isset($this->groups[$userGroupId])) {
-                        $this->groups[$userGroupId]->addUser($user->getIdentifier());
-                    }
-                }
-            }
-        }
-
-        return $users;
+        return $this->userExtractor->extractForGuild($guildId, $config);
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
@@ -166,11 +148,7 @@ class DiscordApplication implements ApplicationInterface
                 throw new \RuntimeException('No guild was selected.');
             }
 
-            try {
-                $this->groups = $this->userExtractor->extractGroupsForGuild($guildId);
-            } catch (\Throwable $t) {
-                throw new UserExtractionFailedException(self::APPLICATION_CODE, 'Could not fetch roles in guild.', $t);
-            }
+            $this->groups = $this->userExtractor->extractGroupsForGuild($guildId);
         }
     }
 

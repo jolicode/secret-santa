@@ -35,6 +35,17 @@ class UserLoader
 
         $users = $application->loadNextBatchOfUsers($config);
 
+        // Some applications (Discord) give the groups of each user instead of the users of each group.
+        // The config groups are the ones persisted in session, so this works across batches.
+        $groups = $config->getGroups();
+        foreach ($users as $user) {
+            foreach ($user->getExtra()['groups'] ?? [] as $groupId) {
+                if (isset($groups[$groupId])) {
+                    $groups[$groupId]->addUser($user->getIdentifier());
+                }
+            }
+        }
+
         // Our HTTP client might respect rate limits but just in case, let's be gentle and not spam requests.
         usleep(100000);
 

@@ -20,6 +20,7 @@ use JoliCode\SecretSanta\Exception\UserExtractionFailedException;
 use JoliCode\SecretSanta\Form\ExclusionsType;
 use JoliCode\SecretSanta\Form\MessageType;
 use JoliCode\SecretSanta\Model\Config;
+use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Santa\MessageDispatcher;
 use JoliCode\SecretSanta\Santa\Rudolph;
@@ -166,7 +167,7 @@ class SantaController extends AbstractController
         $content = $this->twig->render('santa/application/participants_' . $application->getCode() . '.html.twig', ['application' => $application->getCode(),
             'users' => $availableUsers,
             'selectedUsers' => $config->getSelectedUsers(),
-            'groups' => $config->getGroups(),
+            'groups' => array_filter($config->getGroups(), static fn (Group $group) => \count($group->getUserIds()) > 0),
             'errors' => $errors,
         ]);
 
