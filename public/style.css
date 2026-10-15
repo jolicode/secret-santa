@@ -1601,3 +1601,47 @@ details[open] {
     color: white;
     font-size: 2em;
 }
+.user-dialog .user-search,
+.user-dialog .user-container {
+    border-left: 0 none;
+    border-right: 0 none;
+    border-radius: 0;
+}
+.user-dialog {
+    /* Anchor to the top so the dialog does not jump around when the filtered list changes height */
+    margin-top: 10vh;
+    width: 450px;
+    max-width: 90vw;
+}
+.user-dialog .user-list {
+    max-height: 50vh;
+}
+.user-dialog .user-item span {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.user-dialog .user-item.selected {
+    background-color: var(--color-gray-light);
+    font-weight: bold;
+}
+.user-dialog .user-item.selected::after {
+    content: "\f00c";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-left: auto;
+    margin-right: 1em;
+}
+.user-dialog .dialog-footer {
+    padding: 0.5em 1em;
+}
+.user-dialog .dialog-footer .big-button {
+    font-size: 1em;
+    padding: 0.75em 1.5em;
+}
+.user-dialog .dialog-footer .big-button:disabled {
+    background-color: var(--color-gray);
+    cursor: not-allowed;
+}
