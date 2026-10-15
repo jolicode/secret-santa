@@ -26,7 +26,11 @@ class UserLoader
     public function loadUsers(Config $config, ApplicationInterface $application): void
     {
         if (!$config->getAvailableUsers()) {
-            $config->setGroups($application->getGroups());
+            try {
+                $config->setGroups($application->getGroups());
+            } catch (\Throwable $t) {
+                throw new UserExtractionFailedException($application->getCode(), 'Could not fetch groups.', $t);
+            }
         }
 
         $users = $application->loadNextBatchOfUsers($config);
