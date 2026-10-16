@@ -101,18 +101,31 @@
         <dialog class="dialog user-dialog">
             <div class="dialog-header">
                 <div class="dialog-title">Select a user to exclude</div>
-                <button class="dialog-close-button" type="button" aria-label="Close the dialog" autofocus>
+                <button class="dialog-close-button" type="button" aria-label="Close the dialog">
                     <span class="fas fa-times" aria-hidden="true"></span>
                 </button>
             </div>
             <div class="dialog-content">
-                <div class="user-list user-list-simple-rows">
-                    {% for userId in config.selectedUsers %}
-                        {% set user = config.getUser(userId) %}
-                        <div class="user-item js-select-user" data-user-id="{{ userId }}" data-prototype="{{ macros.user_item(user, 20) | e('html_attr') }}">
-                            {{ macros.user_item(user, 32) }}
-                        </div>
-                    {% endfor %}
+                <div class="user-search">
+                    <input placeholder="🔎    Search user by real name or username" type="text" id="exclusion-search-input" autocomplete="off" autofocus />
+                    <span class="search-cleaner fas fa-times is-hidden" id="exclusion-search-cleaner" title="Empty the query"></span>
+                </div>
+                <div class="user-container">
+                    <div class="user-list user-list-simple-rows" id="exclusion-user-list">
+                        <div class="no-result is-hidden">No user matching.</div>
+                        {% for userId in config.selectedUsers %}
+                            {% set user = config.getUser(userId) %}
+                            <div class="user-item js-select-user" data-user-id="{{ userId }}" data-search-index="{{ user.name ~ ' ' ~ user.extra.nickname|default('') }}" data-prototype="{{ macros.user_item(user, 20) | e('html_attr') }}">
+                                {{ macros.user_item(user, 32) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="dialog-footer">
+                    <button type="button" class="big-button js-confirm-exclusions" disabled>
+                        <span class="fas fa-plus"></span>
+                        Add selected users
+                    </button>
                 </div>
             </div>
         </dialog>
@@ -132,6 +145,11 @@
             const userDialog = document.querySelector('.user-dialog');
             const dialogCloseButtons = userDialog.querySelectorAll('.dialog-close-button');
             const selectableUsers = userDialog.querySelectorAll('.js-select-user');
+            const selectableUserList = document.getElementById('exclusion-user-list');
+            const searchInput = document.getElementById('exclusion-search-input');
+            const searchCleaner = document.getElementById('exclusion-search-cleaner');
+            const noMatch = selectableUserList.querySelector('.no-result');
+            const confirmButton = userDialog.querySelector('.js-confirm-exclusions');
             const removeExclusionButtons = document.querySelectorAll('.js-remove-exclusion');
 
             let currentExclusionContainer = null;
@@ -178,14 +196,41 @@
                 const excludedUserIds = getExclusionsForUser(exclusionContainer);
                 selectableUsers.forEach(function (button) {
                     const userId = button.getAttribute('data-user-id');
-                    if (userId === exclusionContainer.getAttribute('data-user-id') || excludedUserIds.includes(userId)) {
-                        button.hidden = true;
-                    } else {
-                        button.hidden = false;
+                    button.hidden = userId === exclusionContainer.getAttribute('data-user-id') || excludedUserIds.includes(userId);
+                    button.classList.remove('selected');
+                });
+
+                searchInput.value = '';
+                onSearch();
+                refreshConfirmButton();
+                userDialog.showModal();
+                searchInput.focus();
+            }
+
+            function normalize(string) {
+                return string.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+            }
+
+            function onSearch() {
+                const terms = normalize(searchInput.value).split(' ').filter(Boolean);
+                selectableUserList.classList.toggle('hide-not-matching', terms.length > 0);
+                searchCleaner.classList.toggle('is-hidden', terms.length === 0);
+
+                let matchingCount = 0;
+                selectableUsers.forEach(function (button) {
+                    const index = normalize(button.getAttribute('data-search-index'));
+                    const matching = terms.some(function (term) { return index.includes(term); });
+                    button.classList.toggle('not-matching', !matching);
+                    if (!button.hidden && (matching || terms.length === 0)) {
+                        matchingCount++;
                     }
                 });
 
-                userDialog.showModal();
+                noMatch.classList.toggle('is-hidden', matchingCount > 0);
+            }
+
+            function refreshConfirmButton() {
+                confirmButton.disabled = userDialog.querySelectorAll('.js-select-user.selected').length === 0;
             }
 
             function closeUserSelection() {
@@ -204,10 +249,25 @@
             }
 
             function selectUser(button) {
+                button.classList.toggle('selected');
+                refreshConfirmButton();
+            }
+
+            function confirmExclusions() {
                 if (!currentExclusionContainer) {
                     return;
                 }
 
+                userDialog.querySelectorAll('.js-select-user.selected').forEach(function (button) {
+                    addExclusion(button);
+                });
+
+                refreshAddButtonVisibility(currentExclusionContainer);
+
+                closeUserSelection();
+            }
+
+            function addExclusion(button) {
                 const excludedUserId = button.getAttribute('data-user-id');
                 const santaUserId = currentExclusionContainer.getAttribute('data-user-id');
 
@@ -234,10 +294,6 @@
                 item.appendChild(exclusionInput);
 
                 currentExclusionContainer.appendChild(item);
-
-                refreshAddButtonVisibility(currentExclusionContainer);
-
-                closeUserSelection();
             }
 
             window.addEventListener('load', function () {
@@ -262,6 +318,13 @@
                         selectUser(button);
                     });
                 });
+                searchInput.addEventListener('input', onSearch);
+                searchCleaner.addEventListener('click', function () {
+                    searchInput.value = '';
+                    onSearch();
+                    searchInput.focus();
+                });
+                confirmButton.addEventListener('click', confirmExclusions);
             })
         </script>
     {% else %}
