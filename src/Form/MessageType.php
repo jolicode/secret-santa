@@ -42,7 +42,6 @@ class MessageType extends AbstractType
                             maxMessage: 'Each note should contain less than {{ limit }} characters',
                         ),
                     ],
-                    'error_bubbling' => true,
                 ],
                 'required' => false,
             ])
