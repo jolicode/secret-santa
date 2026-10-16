@@ -524,23 +524,11 @@ class SantaController extends AbstractController
         }
 
         $timeout = false;
-        $error = false;
 
         try {
             $messageDispatcher->dispatchRemainingMessages($secretSanta, $application);
         } catch (MessageDispatchTimeoutException $e) {
             $timeout = true;
-        } catch (MessageSendFailedException $e) {
-            $secretSanta->addError($e->getMessage(), $e->getRecipient()->getIdentifier());
-
-            $this->logger->error($e->getMessage(), [
-                'exception' => $e,
-            ]);
-            $this->bugsnag->notifyException($e, function ($report) {
-                $report->setSeverity('info');
-            });
-
-            $error = true;
         }
 
         $this->finishSantaIfDone($request, $secretSanta, $application);
@@ -555,7 +543,7 @@ class SantaController extends AbstractController
         return new JsonResponse([
             'count' => \count($secretSanta->getAssociations()) - \count($secretSanta->getRemainingAssociations()),
             'timeout' => $timeout,
-            'finished' => $error || $secretSanta->isDone(),
+            'finished' => !$secretSanta->hasPendingAssociations(),
         ]);
     }
 

@@ -122,6 +122,14 @@ class SecretSanta
         return empty($this->remainingAssociations);
     }
 
+    /**
+     * Whether some messages remain to be sent, ignoring the ones that already failed.
+     */
+    public function hasPendingAssociations(): bool
+    {
+        return (bool) array_diff_key($this->remainingAssociations, $this->errors);
+    }
+
     public function markAssociationAsProceeded(string $giver): void
     {
         unset($this->remainingAssociations[$giver]);

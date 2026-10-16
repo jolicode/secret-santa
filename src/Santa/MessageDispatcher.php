@@ -11,20 +11,29 @@
 
 namespace JoliCode\SecretSanta\Santa;
 
+use Bugsnag\Client;
 use JoliCode\SecretSanta\Application\ApplicationInterface;
 use JoliCode\SecretSanta\Exception\MessageDispatchTimeoutException;
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
+use Psr\Log\LoggerInterface;
 
 class MessageDispatcher
 {
+    public function __construct(
+        private LoggerInterface $logger,
+        private Client $bugsnag,
+    ) {
+    }
+
     /**
      * Send messages for remaining associations.
+     *
+     * A failure does not stop the dispatch: the error is recorded on the giver and the other messages are still sent.
      *
      * This method is limited to 5 seconds to avoid being timed out by hosting.
      *
      * @throws MessageDispatchTimeoutException
-     * @throws MessageSendFailedException
      */
     public function dispatchRemainingMessages(SecretSanta $secretSanta, ApplicationInterface $application): void
     {
@@ -40,8 +49,19 @@ class MessageDispatcher
                 continue;
             }
 
-            $application->sendSecretMessage($secretSanta, $giver, $receiver);
-            $secretSanta->markAssociationAsProceeded($giver);
+            try {
+                $application->sendSecretMessage($secretSanta, $giver, $receiver);
+                $secretSanta->markAssociationAsProceeded($giver);
+            } catch (MessageSendFailedException $e) {
+                $secretSanta->addError($e->getMessage(), $giver);
+
+                $this->logger->error($e->getMessage(), [
+                    'exception' => $e,
+                ]);
+                $this->bugsnag->notifyException($e, function ($report) {
+                    $report->setSeverity('info');
+                });
+            }
         }
     }
 }
