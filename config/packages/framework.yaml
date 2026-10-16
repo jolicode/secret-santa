@@ -34,8 +34,22 @@ when@test:
         session:
             name: MOCKSESSID
             storage_factory_id: test.session.storage.factory.mock_file
+        http_client:
+            mock_response_factory: JoliCode\SecretSanta\Tests\Fake\FakeChatApiDispatcher
 
     services:
+        JoliCode\SecretSanta\Tests\Fake\FakeSlackApi:
+            public: true
+        JoliCode\SecretSanta\Tests\Fake\FakeDiscordApi:
+            public: true
+        JoliCode\SecretSanta\Tests\Fake\FakeWebexApi:
+            public: true
+        JoliCode\SecretSanta\Tests\Fake\FakeChatApiDispatcher:
+            arguments:
+                - '@JoliCode\SecretSanta\Tests\Fake\FakeSlackApi'
+                - '@JoliCode\SecretSanta\Tests\Fake\FakeDiscordApi'
+                - '@JoliCode\SecretSanta\Tests\Fake\FakeWebexApi'
+
         test.session.storage.factory.mock_file:
             alias: session.storage.factory.mock_file
             public: true
