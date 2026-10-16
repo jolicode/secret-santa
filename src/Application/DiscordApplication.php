@@ -99,24 +99,7 @@ class DiscordApplication implements ApplicationInterface
             throw new \RuntimeException('No guild was selected.');
         }
 
-        $users = $this->userExtractor->extractForGuild($guildId, $config);
-
-        $this->loadGroups();
-
-        if ($this->groups) {
-            // Store relation User <-> Group in Group model
-            foreach ($users as $user) {
-                $userGroupIds = $user->getExtra()['groups'] ?? [];
-
-                foreach ($userGroupIds as $userGroupId) {
-                    if (isset($this->groups[$userGroupId])) {
-                        $this->groups[$userGroupId]->addUser($user->getIdentifier());
-                    }
-                }
-            }
-        }
-
-        return $users;
+        return $this->userExtractor->extractForGuild($guildId, $config);
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
