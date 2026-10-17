@@ -26,7 +26,9 @@
                 We are loading users from your team!
             </h2>
 
-            <p>
+            <p data-load-users-url="{{ url('load_users', {application: application}) }}"
+               data-load-users-error-url="{{ url('load_users', {application: application, error: true}) }}"
+               data-load-users-next-url="{{ url('participants', {application: application}) }}">
                 <span class="js-count-value bold">{{ count }}</span> user(s) loaded so far.
             </p>
 
@@ -37,77 +39,7 @@
             </p>
         {% endif %}
     </div>
-
-    {% if not app.request.query.get('error') %}
-        <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-            const countValues = document.querySelectorAll('.js-count-value');
-
-            function loadRemainingUsers() {
-                fetch('{{ url('load_users', {application: application}) }}', {
-                  method: 'post',
-                  credentials: 'include',
-                  headers: {'X-Requested-With': 'XMLHttpRequest'},
-                })
-                    .then(function(response) {
-                        return response.json();
-                    })
-                    .then(function(response) {
-                        if (response.error) {
-                            window.location.href = '{{ url('load_users', {application: application, error: true}) }}';
-
-                            return;
-                        }
-
-                        if (response.finished) {
-                            updateProgress(response.count, false);
-
-                            window.location.href = '{{ url('participants', {application: application}) }}';
-
-                            return;
-                        }
-
-                        updateProgress(response.count, true);
-
-                        // Use setTimeout with 0ms to defer execution to the next event loop cycle
-                        setTimeout(loadRemainingUsers, 0);
-                    })
-                    .catch(function() {
-                        window.location.href = '{{ url('load_users', {application: application, error: true}) }}';
-                    });
-            }
-
-            let refreshCount = null;
-            function updateProgress(count, animate) {
-                clearInterval(refreshCount);
-
-                if (!animate) {
-                    for(let i=0; i<countValues.length; i++) {
-                        countValues[i].innerHTML = count;
-                    }
-                }
-
-                // Increase the count with animation
-                const currentCount = parseInt(countValues[0].innerHTML, 10);
-                const step = Math.max(1, Math.floor((count - currentCount) / 10));
-                let displayedCount = currentCount;
-
-                refreshCount = setInterval(function() {
-                    displayedCount += step;
-                    if (displayedCount >= count) {
-                        displayedCount = count;
-                        clearInterval(refreshCount);
-                    }
-
-                    for(let i=0; i<countValues.length; i++) {
-                        countValues[i].innerHTML = displayedCount;
-                    }
-                }, 50);
-            }
-
-            (function() {
-                updateProgress({{ count }}, false);
-                loadRemainingUsers();
-            })();
-        </script>
-    {% endif %}
 {% endblock santa_content %}
+{% block javascripts %}
+    {{ importmap(['app', 'santa/load_users'], {nonce: csp_nonce('script')}) }}
+{% endblock %}

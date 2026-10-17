@@ -1,0 +1,22 @@
+framework:
+    asset_mapper:
+        # The paths to make available to the asset mapper.
+        paths:
+            - assets/
+        missing_import_mode: strict
+        # Every supported browser understands import maps natively, and the
+        # polyfill is served from a third-party CDN forbidden by our CSP.
+        importmap_polyfill: false
+
+when@prod:
+    framework:
+        asset_mapper:
+            missing_import_mode: warn
+
+when@test:
+    services:
+        # The default http_client is replaced by the fake chat APIs in the test env, but
+        # importmap:install still has to download the packages from the CDN.
+        asset_mapper.http_client:
+            class: Symfony\Contracts\HttpClient\HttpClientInterface
+            factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
