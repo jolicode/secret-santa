@@ -25,15 +25,18 @@ class UserLoader
      */
     public function loadUsers(Config $config, ApplicationInterface $application): void
     {
-        if (!$config->getAvailableUsers()) {
+        $firstBatch = !$config->getAvailableUsers();
+
+        $users = $application->loadNextBatchOfUsers($config);
+
+        // Some applications (Webex) only know their groups once the users are loaded
+        if ($firstBatch) {
             try {
                 $config->setGroups($application->getGroups());
             } catch (\Throwable $t) {
                 throw new UserExtractionFailedException($application->getCode(), 'Could not fetch groups.', $t);
             }
         }
-
-        $users = $application->loadNextBatchOfUsers($config);
 
         // Some applications (Discord) give the groups of each user instead of the users of each group.
         // The config groups are the ones persisted in session, so this works across batches.
