@@ -15,6 +15,11 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+###> playwright-php/playwright ###
+# pnpm store created next to vendor/ when installing the Playwright server
+/.pnpm-store/
+###< playwright-php/playwright ###
+
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###

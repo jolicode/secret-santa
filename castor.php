@@ -77,6 +77,9 @@ function install(): void
     if (is_file("{$basePath}/composer.json")) {
         io()->section('Installing PHP dependencies');
         docker_compose_run(['composer', 'install', '-n', '--prefer-dist', '--optimize-autoloader']);
+
+        io()->section('Installing the Playwright server and browser for the E2E tests');
+        docker_compose_run(['vendor/bin/playwright-install', 'chromium']);
     }
     if (is_file("{$basePath}/yarn.lock")) {
         io()->section('Installing Node.js dependencies');

@@ -170,6 +170,9 @@
             "bin/phpunit"
         ]
     },
+    "playwright-php/playwright-symfony": {
+        "version": "v0.11.0"
+    },
     "predis/predis": {
         "version": "v1.1.9"
     },

@@ -110,6 +110,11 @@ RUN apt-get update \
     && corepack enable \
     && yarn set version stable
 
+# System libraries needed by the Chromium that Playwright downloads for the E2E tests
+RUN npx -y playwright@1.62 install-deps chromium \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # Config
 COPY builder/php-configuration /etc/php/${PHP_VERSION}
 RUN mkdir /var/log/php \
