@@ -13,11 +13,14 @@ namespace JoliCode\SecretSanta\Slack;
 
 use JoliCode\SecretSanta\Exception\MessageSendFailedException;
 use JoliCode\SecretSanta\Model\SecretSanta;
+use Symfony\Component\Asset\Packages;
 
 class MessageSender
 {
-    public function __construct(private ClientFactory $clientFactory)
-    {
+    public function __construct(
+        private ClientFactory $clientFactory,
+        private Packages $packages,
+    ) {
     }
 
     /**
@@ -198,7 +201,7 @@ Happy Secret Santa!';
         try {
             $response = $this->clientFactory->getClientForToken($token)->chatPostMessage([
                 'channel' => $secretSanta->getConfig()->getAdmin()->getIdentifier(),
-                'icon_url' => 'https://secret-santa.team/images/logo-spoiler.png',
+                'icon_url' => 'https://secret-santa.team' . $this->packages->getUrl('images/logo-spoiler.png'),
                 'text' => $text,
             ]);
 

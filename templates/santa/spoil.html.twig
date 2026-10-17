@@ -2,6 +2,10 @@
 
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/santa.css') }}">
+{% endblock %}
+
 {% block content %}
     <div class="content spoil-block">
         <h2>Spoiling Santa</h2>

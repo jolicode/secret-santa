@@ -40,18 +40,6 @@
                     {% endfor %}
                 </ul>
 
-                <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-                    const revealButton = document.getElementById('reveal');
-
-                    revealButton.addEventListener('click', function(e) {
-                        const receivers = document.querySelectorAll('*[data-receiver]');
-
-                        for (let i=0; i<receivers.length; i++) {
-                            receivers[i].innerHTML = receivers[i].getAttribute('data-receiver');
-                        }
-                    }, false);
-                </script>
-
                 <h3>Explanation</h3>
 
                 {% set errors = secretSanta.uniqueErrors %}
@@ -93,24 +81,6 @@
                     </a>
                 </div>
 
-                <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-                    let secretSantaRetried = false;
-
-                    const retryButton = document.getElementById('retry-button');
-
-                    /**
-                     * Prevent the multi-click of the button
-                     */
-                    retryButton.addEventListener('click', function(e) {
-                        if (secretSantaRetried) {
-                            e.preventDefault();
-                        } else {
-                            secretSantaRetried = true;
-                            retryButton.children[0].className = 'fas fa-hourglass-start';
-                        }
-                    }, false);
-                </script>
-
                 <p>
                     Sorry for the inconvenience. If the retry button did not work, you can still contact them <strong>manually</strong>.
                     <a href="https://github.com/jolicode/secret-santa/issues">Let us know too!</a>
@@ -133,3 +103,6 @@
         </div>
     </div>
 {% endblock santa_content %}
+{% block javascripts %}
+    {{ importmap(['app', 'santa/finish'], {nonce: csp_nonce('script')}) }}
+{% endblock %}

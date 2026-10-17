@@ -21,26 +21,23 @@
             {{ include('_seo.html.twig') }}
         {% endblock %}
 
-        <link rel="stylesheet" href="{{ asset('style.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/purecss/build/pure-min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/purecss/build/grids-responsive-min.css') }}">
         <link rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
+        <link rel="stylesheet" href="{{ asset('styles/fonts.css') }}">
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
         {% block stylesheets %}{% endblock %}
 
         {% if 'production' == bugsnag_release_stage and bugsnag_api_key is not empty %}
-            <script src="{{ asset('js/bugsnag.min.js') }}"></script>
-            <script nonce="{{ csp_nonce('script') }}">
-                Bugsnag.start({
-                    apiKey: '{{ bugsnag_api_key }}',
-                    {% if bugsnag_app_version %}appVersion: '{{ bugsnag_app_version }}',{% endif %}
-                    autoTrackSessions: false,
-                    collectUserIp: false,
-                    redactedKeys: [
-                        /^password$/i,
-                        /^token$/i,
-                        /^state$/i,
-                    ]
-                });
-            </script>
+            <meta name="bugsnag-api-key" content="{{ bugsnag_api_key }}">
+            {% if bugsnag_app_version %}
+                <meta name="bugsnag-app-version" content="{{ bugsnag_app_version }}">
+            {% endif %}
         {% endif %}
+
+        {% block javascripts %}
+            {{ importmap('app', {nonce: csp_nonce('script')}) }}
+        {% endblock %}
     </head>
     <body>
 
