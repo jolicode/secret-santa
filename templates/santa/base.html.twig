@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/santa.css') }}">
+{% endblock %}
+
 {% macro step(currentStep, label, icon, step, link = null) %}
     <li class="{{ step <= currentStep ? 'current' }}">
         {% if link and step <= currentStep and currentStep < 5 ? 'current' %}

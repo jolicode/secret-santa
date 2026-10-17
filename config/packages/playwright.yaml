@@ -2,6 +2,3 @@ when@test:
     playwright:
         # The app forces HTTPS (nelmio_security.forced_ssl), so the browser must start on https
         base_url: 'https://localhost'
-        assets:
-            # Static files of public/ served directly to the browser, without going through the kernel
-            prefixes: ['/css', '/js', '/images', '/fonts', '/fontawesome', '/style.css']

@@ -1,0 +1,561 @@
+:root {
+    --color-primary: #ee3737;
+    --color-primary-dark: #d81212;
+    --color-warning: #ffc520;
+    --color-warning-dark: #ffbb00;
+    --color-black: #222222;
+    --color-gray: #cccccc;
+    --color-gray-light: #eeeeee;
+    --color-gray-dark: #7a7a7a;
+    --color-error: var(--color-primary-dark);
+    --color-error-background: #ffeaea;
+    --color-slack: #ecb22e;
+    --color-webex: #6EBE4A;
+    --color-discord: #7289da;
+    --color-zoom: #0b5cff; /* cf. https://zoom.us/brandguidelines */
+    --border-radius: 5px;
+    --button-border-radius: 10px;
+}
+
+/* Our css \o/ */
+body, html, .pure-g [class *= "pure-u"] {
+  font-family: 'Montserrat', sans-serif;
+    color: var(--color-black);
+}
+html {
+    background-color:var(--color-primary);
+    scroll-behavior: smooth;
+}
+body {
+    background-color:#FFFFFF;
+}
+a:hover {
+    text-decoration: underline;
+}
+a {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+.pure-img-responsive {
+    max-width: 100%;
+    height: auto;
+}
+.img-border {
+    padding: 15px 15px 0;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+    -moz-box-shadow: 0 1px 2px rgba(34,25,25,0.4);
+    -webkit-box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+}
+.is-center {
+    text-align: center;
+}
+.is-hidden {
+     display: none !important;
+ }
+.small-button {
+    display: inline-block;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    font-size: 1em;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    border-radius: var(--button-border-radius);
+    padding: 0.5em;
+}
+.small-button:hover {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+.big-button {
+    display: inline-block;
+    margin-bottom: 1em;
+    margin-top: 1em;
+    font-size: 1.2em;
+    text-decoration: none;
+    background-color: var(--color-primary);
+    border: 0 none;
+    color: white;
+    border-radius: var(--button-border-radius);
+    padding: 1em;
+}
+.big-button:hover {
+    text-decoration: none;
+    background-color: var(--color-primary-dark);
+}
+.big-button.warning-btn {
+    background-color: var(--color-warning);
+    color: var(--color-black) !important;
+}
+.big-button.warning-btn:hover {
+    background-color: var(--color-warning-dark);
+}
+.big-button.bellow {
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    background-color: transparent;
+}
+.hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 0;
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+}
+/**
+ * Header
+ */
+.header {
+  background-color: var(--color-primary);
+}
+@media only screen and (max-width :480px) {
+    .header .pure-menu-list {
+        display: flex;
+        flex-direction: column;
+    }
+    .header .pure-menu-item {
+        margin-top: 0.5em;
+    }
+}
+
+.home-menu {
+    position: relative;
+    display: flex;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1em 0;
+}
+.home-menu .pure-menu-heading a {
+    color: white;
+    text-decoration: none;
+    align-items: center;
+    display: flex;
+}
+.home-menu .pure-menu-heading .site-brand {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+.home-menu .pure-menu-heading .site-headline {
+    font-weight: normal;
+    text-transform: none;
+    margin-top: 0.5em;
+}
+.home-menu .pure-menu-list a {
+    color: white;
+    text-decoration: none;
+}
+.logo-wrapper {
+    float: left;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    position: relative;
+    background-color: white;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.logo-wrapper img {
+  position: absolute;
+  top: 5px;
+  width: 95px;
+}
+.home-menu .pure-menu-link:hover {
+  background-color: white;
+  color: var(--color-primary);
+}
+
+.home-menu .pure-menu-link {
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: var(--button-border-radius);
+  margin-right: 6px;
+}
+
+@media screen and (max-width: 1023px) {
+    .home-menu {
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: 1em;
+    }
+}
+@media screen and (min-width: 1024px) {
+    .home-menu {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+/**
+ * Footer
+ */
+footer {
+    position: static;
+    bottom: 0;
+    padding: 2em;
+    color: white;
+    background-color: var(--color-primary);
+    font-size: 0.9em;
+}
+footer a.support-link {
+    display: inline-block;
+    margin: 0 1em 0.5em;
+    font-size: 1.2em;
+    text-decoration: none;
+    background-color: white;
+    border: 3px solid white;
+    color: var(--color-primary);
+    border-radius: var(--button-border-radius);
+    padding: 1em;
+}
+footer a.support-link:hover {
+    background-color: transparent;
+    color: white;
+}
+footer a {
+    color: white;
+    text-decoration: underline;
+}
+
+/**
+ * Content
+ */
+.content-container {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+.content {
+    padding: 2em 2em;
+}
+.content-head {
+    color: var(--color-primary);
+    font-size: 2em;
+}
+.content-subhead {
+    color: var(--color-primary);
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+/**
+ * Jumbotron
+ */
+.jumbotron {
+    overflow: hidden;
+    position: relative;
+    color: white;
+    background-color: var(--color-primary);
+    padding-bottom: 2em;
+    text-align: center;
+}
+.home .jumbotron {
+    padding-bottom: 10em;
+}
+.jumbotron-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.jumbotron h1 {
+    display: inline-block;
+    text-align: center;
+    font-size: 3em;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+.home .jumbotron h1 {
+    margin-top: 2em;
+}
+.jumbotron a {
+    color: white;
+}
+.jumbotron p {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    box-sizing: content-box;
+    padding: 1em;
+}
+.jumbotron .actions {
+    margin: 0.5em 0 2em;
+}
+.jumbotron .action-slack:hover {
+    color: var(--color-slack);
+}
+.jumbotron .action-discord:hover {
+    color: var(--color-discord);
+}
+.jumbotron .action-zoom:hover {
+    color: var(--color-zoom);
+}
+.jumbotron .action-webex:hover {
+    color: var(--color-webex);
+}
+.jumbotron .action {
+    display: inline-block;
+    margin: 0.5em;
+    font-size: 1.5em;
+    text-decoration: none;
+    background-color: white;
+    border: 3px solid white;
+    color: var(--color-primary);
+    border-radius: 10px;
+    padding: 10px;
+}
+@media screen and (max-width: 860px) {
+    .jumbotron h1 {
+        font-size: 2em;
+        margin-top: 1em;
+    }
+    .jumbotron .action {
+        font-size: 1.5em;
+    }
+}
+
+/**
+ * Sample message
+ */
+.sample-message {
+    padding: 3em;
+    background-color: var(--color-primary);
+    color: white;
+}
+.sample-message-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
+.sample-message h2,
+.sample-message p {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    color: white;
+}
+.sample-message p {
+    font-size: 1.2em;
+}
+.sample-message img {
+    border-radius: 2px;
+}
+
+@media screen and (min-width: 1024px) {
+    .sample-message {
+        display: flex;
+        align-items: center;
+    }
+    .sample-message img {
+        margin-left: 1em;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .sample-message img {
+        margin-top: 1em;
+    }
+}
+
+/**
+ * Error page
+ */
+.error-page {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+}
+.error-page h2 {
+    color: var(--color-primary);
+}
+.error-page .big-button {
+    margin-top: 2em;
+}
+.error-code {
+    display: block;
+    padding: 1.5em;
+    border-radius: var(--border-radius);
+    line-height: 1.5em;
+    text-align: center;
+    color: var(--color-error);
+    background-color: var(--color-error-background);
+}
+.error-code + img {
+    margin-top: 1em;
+}
+.remaining-associations .open {
+    display: block;
+    transition: .2s;
+}
+.remaining-associations .list {
+    display: none;
+    height: 0;
+    text-align: left;
+}
+.remaining-associations.opened .open {
+    display: none;
+}
+.remaining-associations.opened .list {
+    display: block;
+    height: auto;
+}
+
+/**
+ * Rotate effect
+ */
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    from { transform:rotate(0deg); }
+    to { transform:rotate(360deg); }
+}
+
+.spin {
+    display: inline-block;
+    -webkit-animation: spin 5s infinite linear;
+    animation: spin 5s infinite linear;
+}
+
+/**
+ * Breadcrumb
+ */
+.breadcrumb {
+    display: inline-block;
+    padding: 0;
+    margin: 1em 0;
+    background-color: transparent;
+    border-radius: var(--button-border-radius);
+    list-style: none;
+    --color-breadcrumb-background: var(--color-gray-light);
+}
+.breadcrumb::after {
+     clear: both;
+     content: "";
+     display: table;
+ }
+.breadcrumb li {
+    position: relative;
+    padding: 0;
+    margin: 4px 4px 4px 0;
+    float: left;
+}
+.breadcrumb li > * {
+    display: inline-block;
+    position: relative;
+    padding: 1em .8em 1em 2.5em;
+    padding-left: 2.5em;
+    color: var(--color-black);
+    background-color: var(--color-breadcrumb-background);
+    border-color: #edeff0;
+}
+.breadcrumb li > a {
+    text-decoration: none;
+    background-color: var(--color-breadcrumb-background);
+}
+.breadcrumb li:first-of-type > * {
+    padding-left: 1.6em;
+    border-radius: var(--button-border-radius) 0 0 var(--button-border-radius);
+}
+.breadcrumb li:last-of-type > * {
+    padding-right: 1.6em;
+    border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
+}
+.breadcrumb li.current > * {
+    color: white;
+    font-weight: bold;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+ }
+.breadcrumb li.current > a:hover {
+    text-decoration: none;
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+.breadcrumb li::after {
+    display: inline-block;
+    content: '\00bb';
+    margin: 0 .6em;
+    color: var(--color-breadcrumb-background);
+}
+.breadcrumb li::after,
+.breadcrumb li > *::after {
+    /*
+      li > *::after is the colored triangle after each item
+      li::after is the white separator between two items
+    */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 100%;
+    height: 0;
+    width: 0;
+    /* 52px is the height of the li > * element */
+    border: 26px solid transparent;
+    border-right-width: 0;
+    border-left-width: 20px;
+}
+.breadcrumb li::after {
+    /* this is the white separator between two items */
+    z-index: 1;
+    -webkit-transform: translateX(4px);
+    -moz-transform: translateX(4px);
+    -ms-transform: translateX(4px);
+    -o-transform: translateX(4px);
+    transform: translateX(4px);
+    border-left-color: #ffffff;
+    /* reset style */
+    margin: 0;
+}
+.breadcrumb li > *::after {
+    /* this is the colored triangle after each element */
+    z-index: 2;
+    border-left-color: inherit;
+}
+.breadcrumb li:last-of-type::after,
+.breadcrumb li:last-of-type > *::after {
+    /* hide the triangle after the last step */
+    display: none;
+}
+
+/** Override Font Awesome because the logo are not up to date **/
+.custom-fa-slack, .custom-fa-discord, .custom-fa-zoom, .custom-fa-webex {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+.custom-fa-slack:before, .custom-fa-discord:before, .custom-fa-zoom:before, .custom-fa-webex:before {
+    content: ' ';
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: bottom;
+    width: 24px;
+    height: 25px;
+    display: block;
+    position: relative;
+    top: 2px;
+}
+.custom-fa-slack:before {
+    background-image: url("../images/slack-logo.svg");
+}
+.custom-fa-discord:before {
+    background-image: url("../images/discord-logo.svg");
+}
+.custom-fa-zoom:before {
+    background-image: url("../images/zoom-logo.svg");
+}
+.custom-fa-webex:before {
+    top: 0;
+    background-image: url("../images/webex-logo.svg");
+}
