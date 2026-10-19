@@ -154,6 +154,18 @@ class MessageSender
         ];
 
         try {
+            // Posting to a user id only works for users of the bot's workspace: for an external user
+            // (Slack Connect), the direct message has to be opened first and addressed by its channel id
+            if ($secretSanta->getUser($giver)->getExtra()['team'] ?? null) {
+                // The generated client cannot type this polymorphic field and leaves the raw array
+                /** @var array{id: string} $directMessage */
+                $directMessage = $this->clientFactory->getClientForToken($token)->conversationsOpen([
+                    'users' => $giver,
+                ])->getChannel();
+
+                $messageParameters['channel'] = $directMessage['id'];
+            }
+
             if ($schedule && !$isSample) {
                 $messageParameters['post_at'] = (int) $schedule;
                 $response = $this->clientFactory->getClientForToken($token)->chatScheduleMessage($messageParameters);
