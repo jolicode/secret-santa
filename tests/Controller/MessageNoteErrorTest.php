@@ -38,4 +38,26 @@ class MessageNoteErrorTest extends BaseWebTestCase
         self::assertSame(200, $client->getResponse()->getStatusCode());
         self::assertStringContainsString('Each note should contain less than 400 characters (note for Toto 2)', $crawler->text());
     }
+
+    public function testTooLongNoteInSampleMessageNamesTheParticipant(): void
+    {
+        $client = static::createClient();
+
+        $config = new Config('slack', 'toto', null);
+        $config->setAvailableUsers(['toto1' => new User('toto1', 'Toto 1', ['image' => '', 'nickname' => '']), 'toto2' => new User('toto2', 'Toto 2', ['image' => '', 'nickname' => ''])]);
+        $config->setSelectedUsers(['toto1', 'toto2']);
+        $config->setNotes(['toto1' => '', 'toto2' => '']);
+
+        $this->prepareSession($client, [
+            'santa.slack.token' => new ApplicationToken('token', ['team' => 'team']),
+            'santa.slack.admin' => new User('toto1', 'Toto 1'),
+            'config' => $config,
+        ]);
+
+        $client->request('POST', '/sample-message/slack', ['message' => ['message' => '', 'notes' => ['toto1' => '', 'toto2' => str_repeat('a', 401)]]]);
+
+        self::assertSame(200, $client->getResponse()->getStatusCode());
+        $data = json_decode($client->getResponse()->getContent(), true);
+        self::assertContains('Each note should contain less than 400 characters (note for Toto 2)', $data['errors']);
+    }
 }
