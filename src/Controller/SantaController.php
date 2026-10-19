@@ -32,6 +32,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -234,13 +235,7 @@ class SantaController extends AbstractController
                 return $this->redirectToRoute('message', ['application' => $application->getCode()]);
             }
 
-            $errors = array_map(function (FormError $error) {
-                return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true, false)));
-
-            if ($errors) {
-                $errors = array_unique($errors);
-            }
+            $errors = $this->getFormErrors($form, $config);
         }
 
         $content = $this->twig->render('santa/application/exclusions_' . $application->getCode() . '.html.twig', [
@@ -302,20 +297,7 @@ class SantaController extends AbstractController
                 return $this->redirectToRoute('validate', ['application' => $application->getCode()]);
             }
 
-            $errors = array_map(function (FormError $error) use ($config) {
-                $origin = $error->getOrigin();
-
-                // Tell which participant the invalid note belongs to
-                if ($origin && 'notes' === $origin->getParent()?->getName()) {
-                    return \sprintf('%s (note for %s)', $error->getMessage(), $config->getUser($origin->getName())?->getName() ?? $origin->getName());
-                }
-
-                return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true), false));
-
-            if ($errors) {
-                $errors = array_unique($errors);
-            }
+            $errors = $this->getFormErrors($form, $config);
         }
 
         $content = $this->twig->render('santa/application/message_' . $application->getCode() . '.html.twig', [
@@ -409,9 +391,7 @@ class SantaController extends AbstractController
                 return $this->redirectToRoute('send_messages', ['hash' => $secretSanta->getHash()]);
             }
 
-            $errors = array_unique([...$errors, ...array_map(function (FormError $error) {
-                return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true, false)))]);
+            $errors = array_unique([...$errors, ...$this->getFormErrors($form, $config)]);
         }
 
         $content = $this->twig->render('santa/application/validate_' . $application->getCode() . '.html.twig', [
@@ -465,15 +445,7 @@ class SantaController extends AbstractController
 
             $receiver = $candidates ? $candidates[array_rand($candidates)] : $application->getAdmin()->getIdentifier();
 
-            $formErrors = array_map(function (FormError $error) {
-                return $error->getMessage();
-            }, iterator_to_array($form->getErrors(true, false)));
-
-            if ($formErrors) {
-                $formErrors = array_unique($formErrors);
-            }
-
-            $errors = array_merge($errors, $formErrors);
+            $errors = array_merge($errors, $this->getFormErrors($form, $config));
 
             if ($form->isValid()) {
                 $secretSanta = new SecretSanta(
@@ -688,5 +660,24 @@ class SantaController extends AbstractController
             $this->statisticCollector->incrementUsageCount($secretSanta);
             $this->doReset($application, $request);
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getFormErrors(FormInterface $form, Config $config): array
+    {
+        $errors = array_map(function (FormError $error) use ($config) {
+            $origin = $error->getOrigin();
+
+            // Tell which participant the invalid note belongs to
+            if ($origin && 'notes' === $origin->getParent()?->getName()) {
+                return \sprintf('%s (note for %s)', $error->getMessage(), $config->getUser($origin->getName())?->getName() ?? $origin->getName());
+            }
+
+            return $error->getMessage();
+        }, iterator_to_array($form->getErrors(true), false));
+
+        return array_unique($errors);
     }
 }
