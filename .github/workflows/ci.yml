@@ -41,6 +41,12 @@ jobs:
             - name: Setup Castor
               uses: castor-php/setup-castor@v1.1.0
 
+            - name: Cache Playwright browsers
+              uses: actions/cache@v4
+              with:
+                  path: .home/.cache/ms-playwright
+                  key: playwright-${{ hashFiles('composer.lock') }}
+
             - name: "Build and start the infrastructure"
               run: "castor start && sleep 5"
 

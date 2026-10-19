@@ -18,4 +18,5 @@ return [
     Bugsnag\BugsnagBundle\BugsnagBundle::class => ['all' => true],
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
+    Playwright\Symfony\PlaywrightSymfonyBundle::class => ['test' => true],
 ];

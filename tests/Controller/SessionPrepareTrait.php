@@ -23,8 +23,16 @@ trait SessionPrepareTrait
      */
     public function prepareSession(KernelBrowser $client, string|array $key, mixed $value = null): void
     {
-        $attributes = \is_array($key) ? $key : [$key => $value];
+        $client->getCookieJar()->set(new Cookie('MOCKSESSID', $this->storeSession(\is_array($key) ? $key : [$key => $value])));
+    }
 
+    /**
+     * Writes the attributes in a mock session file and returns the session id to put in the MOCKSESSID cookie.
+     *
+     * @param array<string, mixed> $attributes
+     */
+    public function storeSession(array $attributes): string
+    {
         /** @var MockFileSessionStorageFactory $sessionStorageFactory */
         $sessionStorageFactory = self::$kernel->getContainer()->get('test.session.storage.factory.mock_file');
         /** @var MockFileSessionStorage $sessionStorage */
@@ -40,7 +48,6 @@ trait SessionPrepareTrait
 
         $sessionStorage->save();
 
-        $cookie = new Cookie('MOCKSESSID', 'session-mock-id');
-        $client->getCookieJar()->set($cookie);
+        return 'session-mock-id';
     }
 }
