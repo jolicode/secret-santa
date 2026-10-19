@@ -26,6 +26,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 class SlackController extends AbstractController
 {
+    private const SESSION_KEY_SHARED_CHANNEL_CANDIDATES = 'santa.slack.shared_channel_candidates';
+
     public function __construct(
         private string $slackClientId,
         private string $slackClientSecret,
@@ -58,6 +60,8 @@ class SlackController extends AbstractController
                     'chat:write',
                     'users:read',
                     'usergroups:read',
+                    'channels:read',
+                    'groups:read',
                 ],
             ];
             $authUrl = $provider->getAuthorizationUrl($options);
@@ -89,9 +93,43 @@ class SlackController extends AbstractController
 
         $slackApplication->setToken($appToken);
         $slackApplication->setAdmin($admin);
+        $slackApplication->setSharedChannels([]);
+
+        $sharedChannels = $userExtractor->listSharedChannels($token->getToken());
+
+        if ($sharedChannels) {
+            $session->set(self::SESSION_KEY_SHARED_CHANNEL_CANDIDATES, $sharedChannels);
+
+            return $this->redirectToRoute('slack_shared_channels');
+        }
 
         return new RedirectResponse($this->router->generate('run', [
             'application' => $slackApplication->getCode(),
         ]));
+    }
+
+    /**
+     * Let the admin pick which Slack Connect channels bring external participants (none by default).
+     */
+    #[Route('/auth/slack/shared-channels', name: 'slack_shared_channels', methods: ['GET', 'POST'])]
+    public function sharedChannels(Request $request, SlackApplication $slackApplication): Response
+    {
+        if (!$slackApplication->isAuthenticated()) {
+            return $this->redirectToRoute('slack_authenticate');
+        }
+
+        /** @var array<string, string> $candidates */
+        $candidates = $request->getSession()->get(self::SESSION_KEY_SHARED_CHANNEL_CANDIDATES, []);
+
+        if ($request->isMethod('POST')) {
+            $selected = array_intersect_key($candidates, array_flip($request->request->all('channels')));
+            $slackApplication->setSharedChannels($selected);
+
+            return $this->redirectToRoute('run', ['application' => $slackApplication->getCode()]);
+        }
+
+        return $this->render('slack/shared_channels.html.twig', [
+            'channels' => $candidates,
+        ]);
     }
 }

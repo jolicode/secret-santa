@@ -26,4 +26,15 @@ class SlackControllerTest extends BaseWebTestCase
         self::assertSame(302, $response->getStatusCode());
         self::assertStringContainsString('https://slack.com/oauth', $response->getTargetUrl());
     }
+
+    public function testSharedChannelsRequiresAuthentication(): void
+    {
+        $client = static::createClient();
+
+        $client->request('GET', '/auth/slack/shared-channels');
+        $response = $client->getResponse();
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('/auth/slack', $response->getTargetUrl());
+    }
 }

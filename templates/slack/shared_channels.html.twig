@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="content">
+        <h2>Include people from other workspaces?</h2>
+
+        <p>
+            Your workspace has channels shared with other organizations (Slack Connect).
+            Tick the ones whose external members should be able to join the Secret Santa.
+            Leave everything unticked to only draw among your own workspace.
+        </p>
+
+        <form action="{{ path('slack_shared_channels') }}" method="post">
+            {% for id, name in channels %}
+                <label class="user-item" for="channel_{{ id }}">
+                    <input type="checkbox" name="channels[]" value="{{ id }}" id="channel_{{ id }}">
+                    <span>#{{ name }}</span>
+                </label>
+            {% endfor %}
+
+            <p class="help">
+                Note: <em>Every member of a ticked channel will be loaded, so prefer a channel dedicated to the Secret Santa.</em>
+            </p>
+
+            <div class="is-center">
+                <button type="submit" class="big-button">Confirm and access the next step</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

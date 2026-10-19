@@ -69,13 +69,48 @@ class UserExtractor
             $users[$user->getIdentifier()] = $user;
         }
 
+        if ('' === $cursor) {
+            $users += $this->loadExternalUsers($token, $config, $config->getAvailableUsers() + $users);
+        }
+
         return $users;
     }
 
     /**
+     * Channels shared with other workspaces (Slack Connect), as id => name.
+     *
+     * @return array<string, string>
+     */
+    public function listSharedChannels(string $token): array
+    {
+        try {
+            // ponytail: no pagination, first 1000 channels only
+            $response = $this->clientFactory->getClientForToken($token)->conversationsList([
+                'types' => 'public_channel,private_channel',
+                'exclude_archived' => true,
+                'limit' => 1000,
+            ]);
+        } catch (\Throwable) {
+            return [];
+        }
+
+        $channels = [];
+
+        foreach ($response->getChannels() ?? [] as $channel) {
+            if ($channel->getIsExtShared()) {
+                $channels[$channel->getId()] = $channel->getName();
+            }
+        }
+
+        return $channels;
+    }
+
+    /**
+     * @param array<string, string> $sharedChannels Shared channels to expose as groups, as id => name
+     *
      * @return array<string, Group>
      */
-    public function extractGroups(string $token): array
+    public function extractGroups(string $token, array $sharedChannels = []): array
     {
         $groups = [];
 
@@ -96,6 +131,23 @@ class UserExtractor
             $groups[$group->getIdentifier()] = $group;
         }
 
+        // Shared channels (Slack Connect) chosen by the admin become groups too, so cross-workspace participants can be picked
+        foreach ($sharedChannels as $channelId => $channelName) {
+            $group = new Group($channelId, '#' . $channelName);
+
+            // ponytail: no pagination, first 1000 members only
+            $membersResponse = $this->clientFactory->getClientForToken($token)->conversationsMembers([
+                'channel' => $channelId,
+                'limit' => 1000,
+            ]);
+
+            foreach ($membersResponse->getMembers() ?? [] as $userId) {
+                $group->addUser($userId);
+            }
+
+            $groups[$group->getIdentifier()] = $group;
+        }
+
         return $groups;
     }
 
@@ -106,6 +158,39 @@ class UserExtractor
         ])->getUser();
 
         return $this->buildUserFromSlack($slackUser);
+    }
+
+    /**
+     * Users from other workspaces (Slack Connect) are not returned by users.list,
+     * but they are listed as members of the shared channels exposed as groups.
+     *
+     * @param array<string, User> $knownUsers
+     *
+     * @return array<string, User>
+     */
+    private function loadExternalUsers(string $token, Config $config, array $knownUsers): array
+    {
+        $users = [];
+
+        foreach ($config->getGroups() as $group) {
+            foreach ($group->getUserIds() as $userId) {
+                if (isset($knownUsers[$userId]) || isset($users[$userId])) {
+                    continue;
+                }
+
+                // ponytail: one users.info per external user, batch via a dedicated cache if it hits rate limits
+                $slackUser = $this->clientFactory->getClientForToken($token)->usersInfo(['user' => $userId])->getUser();
+
+                if ($slackUser->getIsBot() || $slackUser->getDeleted()) {
+                    continue;
+                }
+
+                $user = $this->buildUserFromSlack($slackUser);
+                $users[$user->getIdentifier()] = $user;
+            }
+        }
+
+        return $users;
     }
 
     private function buildUserFromSlack(ObjsUser $slackUser): User

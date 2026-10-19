@@ -33,6 +33,7 @@ class SlackApplication implements ApplicationInterface
 
     private const SESSION_KEY_TOKEN = 'santa.slack.token';
     private const SESSION_KEY_ADMIN = 'santa.slack.admin';
+    private const SESSION_KEY_SHARED_CHANNELS = 'santa.slack.shared_channels';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -79,7 +80,25 @@ class SlackApplication implements ApplicationInterface
 
     public function getGroups(): array
     {
-        return $this->userExtractor->extractGroups($this->getToken()->getToken());
+        return $this->userExtractor->extractGroups($this->getToken()->getToken(), $this->getSharedChannels());
+    }
+
+    /**
+     * Shared channels (Slack Connect) whose external members can join the Secret Santa, as id => name.
+     *
+     * @return array<string, string>
+     */
+    public function getSharedChannels(): array
+    {
+        return $this->getSession()->get(self::SESSION_KEY_SHARED_CHANNELS, []);
+    }
+
+    /**
+     * @param array<string, string> $sharedChannels
+     */
+    public function setSharedChannels(array $sharedChannels): void
+    {
+        $this->getSession()->set(self::SESSION_KEY_SHARED_CHANNELS, $sharedChannels);
     }
 
     public function loadNextBatchOfUsers(Config $config): array
@@ -126,6 +145,7 @@ class SlackApplication implements ApplicationInterface
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
+        $this->getSession()->remove(self::SESSION_KEY_SHARED_CHANNELS);
     }
 
     public function setToken(ApplicationToken $token): void
