@@ -18,6 +18,10 @@ return [
         'path' => './assets/js/faq.js',
         'entrypoint' => true,
     ],
+    'slack/channels' => [
+        'path' => './assets/js/slack/channels.js',
+        'entrypoint' => true,
+    ],
     'santa/participants' => [
         'path' => './assets/js/santa/participants.js',
         'entrypoint' => true,

@@ -1,0 +1,44 @@
+{% extends 'santa/base.html.twig' %}
+
+{% set currentStep = 0 %}
+{% set application = 'slack' %}
+
+{% block santa_content %}
+    <div class="run-block">
+        <h2>Invite Secret Santa in the shared channels</h2>
+
+        <p>
+            Secret Santa can only message people from another workspace if it is a member of a
+            channel shared with them. It is not in these channels yet:
+        </p>
+
+        <div class="user-container">
+            <div class="user-list user-list-simple-rows no-hover">
+                {% for channel in channels %}
+                    <div class="user-item">
+                        <span>#{{ channel.name }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <p>
+            For each of them, open the channel in Slack, type <code>/invite @Secret Santa</code> and send it.
+            Then come back here and refresh.
+        </p>
+
+        <div class="is-center">
+            <a href="{{ path('slack_channels_invitation') }}" class="big-button">
+                <span class="fas fa-redo" aria-hidden="true"></span>
+                Refresh
+            </a>
+        </div>
+
+        <p class="is-center">
+            <small>
+                or <a href="{{ path('slack_channels') }}">change the channels</a>,
+                or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
+            </small>
+        </p>
+    </div>
+{% endblock santa_content %}
