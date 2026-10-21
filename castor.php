@@ -15,6 +15,7 @@ use function Castor\guard_min_version;
 use function Castor\import;
 use function Castor\io;
 use function Castor\notify;
+use function Castor\run;
 use function Castor\variable;
 use function docker\about;
 use function docker\build;
@@ -26,7 +27,7 @@ use function docker\up;
 
 defined('CASTOR_USE_CHDIR') || define('CASTOR_USE_CHDIR', true);
 
-guard_min_version('v1.8.0');
+guard_min_version('1.9.0');
 
 import(__DIR__ . '/.castor');
 
@@ -117,4 +118,12 @@ function migrate(): void
 
     // docker_compose_run(['bin/console', 'doctrine:database:create', '--if-not-exists']);
     // docker_compose_run(['bin/console', 'doctrine:migration:migrate', '-n', '--allow-no-migration', '--all-or-nothing']);
+}
+
+#[AsTask(description: 'Deploy the application')]
+function deploy(): void
+{
+    io()->title('Deploying the application');
+
+    run('git push git+ssh://git@push-n2-par-clevercloud-customers.services.clever-cloud.com/app_2e11a7d1-37ca-4bd1-8b51-083011a69f18.git main:master');
 }

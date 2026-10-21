@@ -1,6 +1,6 @@
 # hadolint global ignore=DL3008
 
-FROM debian:13.5-slim AS php-base
+FROM debian:13.7-slim AS php-base
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -23,6 +23,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 ARG PHP_VERSION
+# Minimal patch version of each PHP branch, to bump after a security release: it
+# invalidates the build cache (local and registry) of the PHP packages, which would
+# keep the vulnerable version otherwise, and the build fails until Sury publishes it
+ARG PHP_MIN_VERSIONS="8.3.35 8.4.26 8.5.11"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -39,7 +43,13 @@ RUN apt-get update \
         "php${PHP_VERSION}-xml" \
         "php${PHP_VERSION}-zip" \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* \
+    && for min in ${PHP_MIN_VERSIONS}; do \
+        if [ "${min%.*}" = "${PHP_VERSION}" ] && dpkg --compare-versions "$(php -r 'echo PHP_VERSION;')" lt "${min}"; then \
+            echo "PHP ${min} is required, packages.sury.org does not have it yet." >&2; \
+            exit 1; \
+        fi; \
+    done
 
 # Configuration
 COPY base/php-configuration /etc/php/${PHP_VERSION}
@@ -80,7 +90,7 @@ RUN chmod 777 /etc/service/*/supervise/ \
     && chmod 777 /var/run/apache2 /var/lock/apache2 /var/log/apache2
 
 RUN phpenmod app-default \
-    && phpenmod app-fpm
+    && phpenmod -s fpm app-fpm
 
 EXPOSE 80
 
