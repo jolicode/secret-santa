@@ -16,7 +16,9 @@ use Castor\Attribute\AsOption;
 use Castor\Attribute\AsTask;
 use Castor\Context;
 use Castor\Helper\PathHelper;
+use Symfony\Component\Console\Completion\CompletionInput;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ExceptionInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\ExecutableFinder;
@@ -30,6 +32,7 @@ use function Castor\fs;
 use function Castor\http_client;
 use function Castor\io;
 use function Castor\open;
+use function Castor\parallel;
 use function Castor\run;
 use function Castor\variable;
 use function worktree\get_worktree_name;
@@ -55,6 +58,13 @@ function about(): void
     io()->comment('Run <comment>castor help [command]</comment> to display Castor help.');
 
     io()->section('Available URLs for this project:');
+
+    if (!has_router()) {
+        io()->listing([\sprintf('http://127.0.0.1:%s', getenv('HTTP_PORT') ?: '8000')]);
+
+        return;
+    }
+
     $urls = [variable('root_domain'), ...variable('extra_domains')];
 
     $worktreeName = get_worktree_name();
@@ -98,8 +108,7 @@ function open_project(): void
 
 #[AsTask(description: 'Builds the infrastructure', aliases: ['build'])]
 function build(
-    // @phpstan-ignore argument.type (the callable receives a CompletionInput, not a profile)
-    #[AsOption(description: 'The service to build (default: all services)', autocomplete: 'docker\get_service_names')]
+    #[AsOption(description: 'The service to build (default: all services)', autocomplete: 'docker\complete_service_names')]
     ?string $service = null,
     ?string $profile = null,
 ): void {
@@ -107,27 +116,90 @@ function build(
 
     io()->title('Building infrastructure');
 
-    $command = [];
-
-    $command[] = '--profile';
-    if ($profile) {
-        $command[] = $profile;
-    } else {
-        $command[] = '*';
-    }
-
     $command = [
-        ...$command,
+        '--profile', $profile ?: '*',
         'build',
         '--build-arg', 'PHP_VERSION=' . variable('php_version'),
         '--build-arg', 'PROJECT_NAME=' . variable('project_name'),
     ];
 
     if ($service) {
-        $command[] = $service;
+        docker_compose([...$command, $service]);
+
+        return;
     }
 
-    docker_compose($command);
+    // One build per service, in parallel, rather than all of them at once: in a single
+    // BuildKit session, services sharing a stage (e.g. php-base) lose the cache of all
+    // but one of them, see https://github.com/moby/buildkit/issues/6418
+    $services = array_filter(get_services($profile), static fn (array $config) => isset($config['build']));
+
+    // The services with a cache first, the others once they are built: a service
+    // without cache sharing their stages (e.g. a worker) would build these stages from
+    // scratch meanwhile, and these local layers prevent the others from finding the
+    // next steps in their imported cache
+    $waves = [
+        array_keys(array_filter($services, static fn (array $config) => isset($config['build']['cache_from']))),
+        array_keys(array_filter($services, static fn (array $config) => !isset($config['build']['cache_from']))),
+    ];
+
+    $c = context()->withPty(false)->withTty(false);
+
+    foreach ($waves as $wave) {
+        run_builds_in_parallel(array_combine($wave, array_map(
+            static fn (string $service) => static fn (callable $callback) => docker_compose([...$command, $service], $c, callback: $callback),
+            $wave,
+        )));
+    }
+}
+
+/**
+ * Runs the builds in parallel, prefixing each line of their output with the name of
+ * their service: their outputs are mixed otherwise.
+ *
+ * @param array<string, \Closure(callable(string, string, Process): void): Process> $builds
+ */
+function run_builds_in_parallel(array $builds): void
+{
+    if (!$builds) {
+        return;
+    }
+
+    $width = max(array_map(strlen(...), array_keys($builds)));
+
+    parallel(...array_map(
+        static fn (string $service, \Closure $build) => static function () use ($service, $build, $width): void {
+            $prefix = str_pad("[{$service}]", $width + 2) . ' ';
+            $write = static function (string $lines) use ($prefix): void {
+                foreach (explode("\n", $lines) as $line) {
+                    // BuildKit separates its steps with empty lines, useless once prefixed
+                    if ('' !== trim($line)) {
+                        io()->write($prefix . $line . "\n", false, OutputInterface::OUTPUT_RAW);
+                    }
+                }
+            };
+
+            // Only complete lines are written, the end of each stream is kept until its next chunk
+            $buffers = [Process::OUT => '', Process::ERR => ''];
+
+            try {
+                $build(static function (string $type, string $bytes) use (&$buffers, $write): void {
+                    $buffers[$type] .= str_replace("\r\n", "\n", $bytes);
+
+                    if (false !== $position = strrpos($buffers[$type], "\n")) {
+                        $write(substr($buffers[$type], 0, $position));
+                        $buffers[$type] = substr($buffers[$type], $position + 1);
+                    }
+                });
+            } finally {
+                foreach (array_filter($buffers) as $buffer) {
+                    $write($buffer);
+                }
+            }
+        },
+        array_keys($builds),
+        $builds,
+    ));
 }
 
 /**
@@ -135,8 +207,7 @@ function build(
  */
 #[AsTask(description: 'Builds and starts the infrastructure', aliases: ['up'])]
 function up(
-    // @phpstan-ignore argument.type (the callable receives a CompletionInput, not a profile)
-    #[AsOption(description: 'The service to start (default: all services)', autocomplete: 'docker\get_service_names')]
+    #[AsOption(description: 'The service to start (default: all services)', autocomplete: 'docker\complete_service_names')]
     ?string $service = null,
     #[AsOption(mode: InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED)]
     array $profiles = [],
@@ -167,8 +238,7 @@ function up(
  */
 #[AsTask(description: 'Stops the infrastructure', aliases: ['stop'])]
 function stop(
-    // @phpstan-ignore argument.type (the callable receives a CompletionInput, not a profile)
-    #[AsOption(description: 'The service to stop (default: all services)', autocomplete: 'docker\get_service_names')]
+    #[AsOption(description: 'The service to stop (default: all services)', autocomplete: 'docker\complete_service_names')]
     ?string $service = null,
     #[AsOption(mode: InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED)]
     array $profiles = [],
@@ -193,6 +263,12 @@ function stop(
 function builder(#[AsArgsAfterOptionEnd] array $params = []): int
 {
     $context = context()->withEnvironment($_ENV + $_SERVER);
+
+    // Behave like the command run by hand: a TTY in a terminal (colors,
+    // prompts), the forwarded stdin otherwise (CI, pipes, redirections)
+    $context = $context->supportsInteraction()
+        ? $context->toInteractive()
+        : $context->withInput(\STDIN)->withAllowFailure();
 
     return (int) docker_compose_run($params, $context)->getExitCode();
 }
@@ -253,6 +329,11 @@ function destroy(
     }
 
     docker_compose(['down', '--remove-orphans', '--volumes', '--rmi=local'], profiles: ['*']);
+
+    if (!has_router()) {
+        return;
+    }
+
     $files = finder()
         ->in(variable('root_dir') . '/infrastructure/docker/services/router/certs/')
         ->name('*.pem')
@@ -266,6 +347,12 @@ function generate_certificates(
     #[AsOption(description: 'Force the certificates re-generation without confirmation', shortcut: 'f')]
     bool $force = false,
 ): void {
+    if (!has_router()) {
+        io()->comment('No router in this stack, no SSL certificates to generate.');
+
+        return;
+    }
+
     $sslDir = variable('root_dir') . '/infrastructure/docker/services/router/certs';
 
     if (file_exists("{$sslDir}/cert.pem") && !$force) {
@@ -396,14 +483,16 @@ function get_compose_environment(Context $c): array
         'PROJECT_DOMAINS' => $domains,
         'USER_ID' => $c['user_id'],
         'PHP_VERSION' => $c['php_version'],
+        'REGISTRY' => $c['registry'] ?? '',
     ];
 }
 
 /**
- * @param list<string> $subCommand
- * @param list<string> $profiles
+ * @param list<string>                                   $subCommand
+ * @param list<string>                                   $profiles
+ * @param (callable(string, string, Process): void)|null $callback   Receives the output instead of the console
  */
-function docker_compose(array $subCommand, ?Context $c = null, array $profiles = []): Process
+function docker_compose(array $subCommand, ?Context $c = null, array $profiles = [], ?callable $callback = null): Process
 {
     $c ??= context();
     $profiles = $profiles ?: ['default'];
@@ -443,7 +532,7 @@ function docker_compose(array $subCommand, ?Context $c = null, array $profiles =
 
     $command = array_merge($command, $subCommand);
 
-    return run($command, context: $c);
+    return run($command, context: $c, callback: $callback);
 }
 
 /**
@@ -452,12 +541,13 @@ function docker_compose(array $subCommand, ?Context $c = null, array $profiles =
 function docker_compose_run(
     array $params,
     ?Context $c = null,
-    string $service = 'builder',
+    ?string $service = null,
     bool $noDeps = true,
     ?string $workDir = null,
     bool $portMapping = false,
 ): Process {
     $c ??= context();
+    $service ??= $c['docker_compose_run_service'];
 
     $command = [
         'run',
@@ -485,9 +575,10 @@ function docker_compose_run(
 
     if (0 === \count($params)) {
         $params = ['bash'];
-        $c = $c->toInteractive();
+        // A CTRL+C belongs to the shell, and must not stop the task: even when the shell exits with
+        // the code of its last command, 130 after a CTRL+C at the prompt
+        $c = $c->toInteractive()->withTrappedSignals();
     } else {
-        $c = $c->withTty(false)->withPty(false)->withInput(\STDIN)->withAllowFailure();
         $params = array_map(escapeshellarg(...), $params);
     }
 
@@ -515,9 +606,9 @@ function docker_compose_exec(
 
     if (0 === \count($params)) {
         $params = ['bash'];
-        $context = $context->toInteractive();
+        // See docker_compose_run()
+        $context = $context->toInteractive()->withTrappedSignals();
     } else {
-        $context = $context->withTty(false)->withPty(false)->withInput(\STDIN)->withAllowFailure();
         $params = array_map(escapeshellarg(...), $params);
     }
 
@@ -535,7 +626,7 @@ function docker_compose_exec(
 function docker_exit_code(
     array $params,
     ?Context $c = null,
-    string $service = 'builder',
+    ?string $service = null,
     bool $noDeps = true,
     ?string $workDir = null,
 ): int {
@@ -553,7 +644,16 @@ function docker_exit_code(
 }
 
 /**
- * @return array<string, array{profiles?: list<string>, build: array{context: string, dockerfile?: string, cache_from?: list<string>, target?: string}}>
+ * Whether the current stack includes the traefik router (dev), which needs SSL certificates
+ * and gives the project its URLs.
+ */
+function has_router(): bool
+{
+    return isset(get_services()['router']);
+}
+
+/**
+ * @return array<string, array{image?: string, profiles?: list<string>, build?: array{context: string, dockerfile?: string, cache_from?: list<string>, target?: string, additional_contexts?: array<string, string>}}>
  */
 function get_services(?string $profile = null): array
 {
@@ -584,6 +684,16 @@ function get_services(?string $profile = null): array
 function get_service_names(?string $profile = null): array
 {
     return array_keys(get_services($profile));
+}
+
+/**
+ * Autocompletion of the --service options.
+ *
+ * @return list<string>
+ */
+function complete_service_names(CompletionInput $input): array
+{
+    return get_service_names();
 }
 
 #[AsTask(description: 'Displays the ports allocated for the current project', namespace: 'docker')]

@@ -20,7 +20,7 @@ use function Castor\variable;
 use function docker\docker_compose_run;
 use function docker\docker_exit_code;
 
-#[AsTask(description: 'Runs all QA tasks', aliases: ['test'])]
+#[AsTask(description: 'Runs all QA tasks', aliases: ['test', 'qa'])]
 function all(): int
 {
     $cs = cs();
@@ -79,7 +79,7 @@ function phpstan(
 }
 
 #[AsTask(description: 'Runs Security audit')]
-function securityAudit(): int
+function security_audit(): int
 {
     io()->text('Running Composer audit...');
 

@@ -11,6 +11,7 @@
 
 namespace worktree;
 
+use function Castor\slug;
 use function Castor\variable;
 use function docker\get_port_specs;
 
@@ -40,7 +41,8 @@ function get_worktree_name(?string $rootDir = null): ?string
         return null;
     }
 
-    return strtolower(basename(rtrim($gitdir, '/'))) ?: null;
+    // Docker Compose rejects dots and most symbols in a project name, which a directory name may hold
+    return strtolower(slug(basename(rtrim($gitdir, '/')))) ?: null;
 }
 
 /** @return array<string, int> */

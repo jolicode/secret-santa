@@ -31,6 +31,8 @@ function create_default_context(): Context
             'docker-compose.dev.yml',
         ],
         'docker_compose_run_environment' => [],
+        // Service in which `docker_compose_run()` executes commands (composer, bin/console...)
+        'docker_compose_run_service' => 'builder',
         'macos' => false,
         'power_shell' => false,
         // check if posix_geteuid is available, if not, use getmyuid (windows)
@@ -64,9 +66,15 @@ function create_default_context(): Context
         $data['project_name'] .= '-wt-' . $worktreeName;
     }
 
+    // Only when someone can answer the prompts of the commands: stdin is a terminal, outside of
+    // a CI (as for Castor). Otherwise (CI, pipes, AI agents...), a PTY would give them a terminal
+    // nobody types in, and a prompt (composer, bin/console...) would wait forever. Unlike
+    // Context::supportsInteraction(), stdout may be piped (e.g. `castor init | tee init.log`).
+    $canAnswerPrompts = false === getenv('CI') && stream_isatty(\STDIN);
+
     return new Context(
         $data,
-        pty: Process::isPtySupported(),
+        pty: Process::isPtySupported() && $canAnswerPrompts,
         environment: [
             'BUILDKIT_PROGRESS' => 'plain',
         ]
