@@ -103,14 +103,14 @@ class SlackApplication implements ApplicationInterface
             $builder->create('options', FormType::class)
                 ->add('scheduled_at', HiddenType::class, [
                     'constraints' => [
-                        new GreaterThanOrEqual([
-                            'value' => (new \DateTime('+9 minutes'))->getTimestamp(),
-                            'message' => 'You can only schedule a Secret Santa for at least 10 minutes away in the future',
-                        ]),
-                        new LessThanOrEqual([
-                            'value' => (new \DateTime('+120 days'))->getTimestamp(),
-                            'message' => 'You cannot schedule a Secret Santa for over 120 days in the future',
-                        ]),
+                        new GreaterThanOrEqual(
+                            value: (new \DateTime('+9 minutes'))->getTimestamp(),
+                            message: 'You can only schedule a Secret Santa for at least 10 minutes away in the future',
+                        ),
+                        new LessThanOrEqual(
+                            value: (new \DateTime('+120 days'))->getTimestamp(),
+                            message: 'You cannot schedule a Secret Santa for over 120 days in the future',
+                        ),
                     ],
                     'error_bubbling' => true,
                 ])
