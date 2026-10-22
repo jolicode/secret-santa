@@ -15,55 +15,20 @@
             You will be redirected to the finish page automatically once all the messages were sent.
         </p>
 
-        <progress id="count-progress" value="0" max="{{ secretSanta.associations|length }}">
-            <span class="js-count-value">0</span> / {{ secretSanta.associations|length }} messages sent.
+        {% set sentCount = secretSanta.associations|length - secretSanta.remainingAssociations|length %}
+        <progress id="count-progress" value="{{ sentCount }}" max="{{ secretSanta.associations|length }}"
+                  data-url="{{ url('send_messages', {hash: secretSanta.hash}) }}"
+                  data-finish-url="{{ url('finish', {hash: secretSanta.hash}) }}">
+            <span class="js-count-value">{{ sentCount }}</span> / {{ secretSanta.associations|length }} messages sent.
         </progress>
 
         <p>
-            <span class="js-count-value">0</span> / {{ secretSanta.associations|length }} messages sent so far.
+            <span class="js-count-value">{{ sentCount }}</span> / {{ secretSanta.associations|length }} messages sent so far.
             <br />
             <small>Note: the progress is refreshed every 5 seconds.</small>
         </p>
     </div>
-
-    <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-        const countProgress = document.getElementById('count-progress');
-        const countValues = document.querySelectorAll('.js-count-value');
-
-        function sendRemainingMessages() {
-            fetch('{{ url('send_messages', {hash: secretSanta.hash}) }}', {
-              method: 'post',
-              credentials: 'include',
-              headers: {'X-Requested-With': 'XMLHttpRequest'},
-            })
-                .then(function(response) {
-                    return response.json();
-                })
-                .then(function(response) {
-                    updateProgress(response.count);
-
-                    if (response.finished) {
-                        window.location.href = '{{ url('finish', {hash: secretSanta.hash}) }}';
-
-                        return;
-                    }
-
-                    // Use setTimeout to not stack all the call
-                    setTimeout(sendRemainingMessages, 0);
-                })
-        }
-
-        function updateProgress(count) {
-            countProgress.value = count;
-
-            for(let i=0; i<countValues.length; i++) {
-                countValues[i].innerHTML = count;
-            }
-        }
-
-        (function() {
-            updateProgress({{ secretSanta.associations|length - secretSanta.remainingAssociations|length }});
-            sendRemainingMessages();
-        })();
-    </script>
 {% endblock santa_content %}
+{% block javascripts %}
+    {{ importmap(['app', 'santa/send_messages'], {nonce: csp_nonce('script')}) }}
+{% endblock %}

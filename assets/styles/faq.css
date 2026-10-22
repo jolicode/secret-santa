@@ -1,0 +1,58 @@
+/**
+ * FAQ
+ */
+.faq h2 {
+    margin-top: 100px;
+}
+.faq ul {
+    list-style: none;
+    padding-left: 0;
+}
+.faq summary {
+    position: relative;
+    padding-right: 2em;
+}
+.faq-anchor {
+    position: absolute;
+    right: 0;
+}
+details {
+    margin-bottom: 2em;
+    border: 1px solid var(--color-gray);
+    border-radius: var(--border-radius);
+    padding: 1em 1em 0;
+}
+details > summary::before {
+    margin-right: 1ch;
+    display: inline-block;
+    float: left;
+    content: '▶️';
+    transition: 0.2s;
+}
+details[open] > summary {
+    list-style-type: '🔽';
+    border-bottom: 1px solid var(--color-gray);
+    margin-bottom: 1em;
+}
+details[open] > summary::before {
+    transform: rotate(90deg);
+}
+details > summary {
+    margin: -1em -1em 0;
+    padding: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--color-primary);
+}
+details > summary i {
+    margin: 0 10px;
+}
+details > summary h3,
+details > summary p {
+    margin: 0;
+}
+
+details[open] {
+    #padding: 1em;
+}
+

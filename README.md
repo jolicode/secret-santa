@@ -135,6 +135,21 @@ castor builder
 
 Checkout `castor` to have the list of available tasks.
 
+## Frontend assets
+
+JavaScript (`assets/js`), CSS (`assets/styles`), images and fonts live in `assets/` and are served through Symfony's
+[AssetMapper](https://symfony.com/doc/current/frontend/asset_mapper.html):
+no Node.js, no bundler. Third-party libraries are declared in `importmap.php`
+and downloaded into `assets/vendor/` by `composer install` (`importmap:install`).
+
+In production, the packages have to be installed and the assets compiled once per
+deployment. Clever Cloud runs `composer install` with `--no-scripts`, so this is done
+by `clevercloud/post-build.sh`, enabled with the following environment variable:
+
+```
+CC_POST_BUILD_HOOK=./clevercloud/post-build.sh
+```
+
 <br><br>
 <div align="center">
 <a href="https://jolicode.com/"><img src="https://jolicode.com/media/original/oss/footer-github.png?v3" alt="JoliCode is sponsoring this project"></a>

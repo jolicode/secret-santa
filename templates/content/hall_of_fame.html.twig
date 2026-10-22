@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/hall-of-fame.css') }}">
+{% endblock %}
+
 {% block seo %}
     {{ include('_seo.html.twig', {
         title: 'Secret Santa - Hall of Fame',
