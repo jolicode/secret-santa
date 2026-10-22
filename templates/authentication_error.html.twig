@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% set applicationName = exception.applicationCode|capitalize %}
+
+{% block content %}
+    <div class="content error-page">
+        <div class="is-center">
+            <h2>Connection to {{ applicationName }} failed</h2>
+
+            <p>
+                {{ applicationName }} did not let us finish the login. This is usually temporary, and nothing has been sent to anyone.
+                You can safely try again. If the problem persists, feel free to <a href="mailto:hello@secret-santa.team">contact us</a>!
+            </p>
+
+            <p>
+                Technical details, if you need to ask for help:
+            </p>
+
+            <div class="error-code">
+                <p>
+                    {{ exception.message }}
+                    {% if exception.previous %}
+                        <br>{{ exception.previous.message }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="is-center">
+            {% if application %}
+                <a href="{{ path(application.authenticationRoute) }}" class="big-button">
+                    <span class="fas fa-redo" aria-hidden="true"></span>
+                    Try again
+                </a>
+            {% endif %}
+
+            <a href="{{ path('homepage') }}" class="big-button">
+                <span class="fas fa-angle-left" aria-hidden="true"></span>
+                Go back to home page
+            </a>
+        </div>
+    </div>
+{% endblock content %}
