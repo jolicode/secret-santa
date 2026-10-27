@@ -1,0 +1,247 @@
+/**
+ * Home app picture
+ */
+.app-container {
+    text-align:center;
+    margin-top: 48px;
+    position: relative;
+    top: -200px;
+    margin-bottom: -200px;
+    z-index: 1;
+}
+.app-container img {
+    position: relative;
+    max-width: 1080px;
+    margin: auto;
+    width: 100%;
+}
+
+/**
+ * How
+ */
+.how-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+}
+.how-item {
+    margin-top: 2em;
+}
+.how-item > * {
+    margin: 1em;
+}
+.how-item a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+.how-item p {
+    line-height: 1.5em;
+}
+
+/**
+ * Steps
+ */
+.step-feature.reverse {
+    flex-direction: row-reverse;
+}
+.step-feature {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+}
+
+.step-feature-image {
+    padding: 0;
+    display: block;
+    margin: auto;
+    max-width: 440px;
+    width: 100%;
+    margin: 0 30px 0 30px;
+}
+.step-feature-image img {
+    width: 100%;
+}
+
+.step-feature-text p a {
+    color: var(--color-primary);
+}
+.step-feature-text p {
+    box-sizing: border-box;
+    line-height: 1.5em;
+}
+.step-feature-text h3 {
+    color: var(--color-primary);
+    font-size: 1.6em;
+    box-sizing: border-box;
+}
+@media screen and (max-width: 860px) {
+    .step-feature {
+        display: block;
+        align-items: center;
+        text-align: center;
+    }
+    .step-feature p, .step-feature h3 {
+        max-width: 456px;
+        padding: 0 24px 20px;
+        text-align: left;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .step-feature-image {
+        margin: 0 auto;
+    }
+}
+
+/**
+ * What
+ */
+.what-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
+.what-block q,
+.what-block p {
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+
+/**
+ * Why
+ */
+.why-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
+.why-block a {
+    text-decoration: none;
+    color: var(--color-primary);
+}
+.why-block h2,
+.why-block p {
+    text-align: center;
+}
+.why-block p {
+    font-size: 1.2em;
+    line-height: 1.5em;
+}
+/**
+ * Love
+ */
+.love-block {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 0;
+}
+.love-block h2,
+.love-block p {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+.love-block p {
+    font-size: 1.2em;
+}
+
+/**
+ * Logo effect
+ */
+@-webkit-keyframes hvr-buzz {
+  50% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+  100% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+}
+@keyframes hvr-buzz {
+  50% {
+    -webkit-transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
+  }
+  100% {
+    -webkit-transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
+  }
+}
+.hvr-buzz {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px transparent;
+}
+.hvr-buzz:hover, .hvr-buzz:focus, .hvr-buzz:active {
+  -webkit-animation-name: hvr-buzz;
+  animation-name: hvr-buzz;
+  -webkit-animation-duration: 0.15s;
+  animation-duration: 0.15s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+/**
+ * Snow animation
+ * from https://codepen.io/jpschwinghamer/pen/QwwbgO
+ */
+.snow {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    -webkit-animation: snow linear;
+    animation: snow linear;
+}
+.snow.foreground {
+    background-image: url(../images/snow-large.png);
+    -webkit-animation-duration: 15s;
+    animation-duration: 15s;
+}
+.snow.foreground.layered {
+    -webkit-animation-delay: 7.5s;
+    animation-delay: 7.5s;
+}
+.snow.middleground {
+    background-image: url(../images/snow-medium.png);
+    -webkit-animation-duration: 20s;
+    animation-duration: 20s;
+}
+.snow.middleground.layered {
+    -webkit-animation-delay: 10s;
+    animation-delay: 10s;
+}
+@-webkit-keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
+}
+
+@keyframes snow {
+    0% {
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+    100% {
+        -webkit-transform: translate3d(15%, 100%, 0);
+        transform: translate3d(15%, 100%, 0);
+    }
+}

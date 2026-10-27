@@ -101,7 +101,7 @@
                 </p>
 
                 <div class="is-center">
-                    <button type="button" class="small-button" id="sample-message-button">
+                    <button type="button" class="small-button" id="sample-message-button" data-url="{{ url('send_sample_message', {application: application}) }}">
                         <span class="fas fa-wrench" aria-hidden="true"></span>
                         Send me a fake message
                     </button>
@@ -134,80 +134,7 @@
             </div>
         {{ form_end(form) }}
     </div>
-
-    <script type="text/javascript" nonce="{{ csp_nonce('script') }}">
-        /**
-         * I did know this is a global and I feel bad.
-         * Next time I will install 10mb of npm and react javascript to switch a flag :)
-         *
-         * @type {boolean}
-         */
-        let secretSantaFormSubmitted = false;
-        const runForm = document.getElementById('run_form');
-        const message = document.getElementById('message');
-        const fieldLengths = document.querySelectorAll('[data-length-field]');
-        const submitButton = document.getElementById('submit-button');
-
-        /**
-         * Prevent the multi-submit of the form
-         */
-        runForm.addEventListener('submit', function (e) {
-            if (secretSantaFormSubmitted) {
-                e.preventDefault();
-            } else {
-                secretSantaFormSubmitted = true;
-                submitButton.disabled = true;
-                submitButton.children[0].className = 'fas fa-hourglass-start';
-            }
-        }, false);
-
-        /**
-         * Handle sample message send
-         */
-        const sampleMessageButton = document.getElementById('sample-message-button');
-        if (sampleMessageButton) {
-            sampleMessageButton.addEventListener('click', function (e) {
-                const body = new FormData(runForm);
-                fetch('{{ url('send_sample_message', {application: application}) }}', {
-                    method: 'post',
-                    credentials: 'include',
-                    headers: {'X-Requested-With': 'XMLHttpRequest'},
-                    body: body,
-                })
-                    .then(function (response) {
-                        return response.json();
-                    })
-                    .then(function (response) {
-                        if (response.success) {
-                            window.alert('We have sent you a fake message. Check it now before finishing the Secret Santa.');
-                            return;
-                        }
-                        const keys = Object.keys(response.errors);
-                        let message = 'Error when sending the fake message:\n';
-
-                        for (let i = 0; i < keys.length; i++) {
-                            message += response.errors[keys[i]] + "\n";
-                        }
-
-                        window.alert(message);
-                    })
-            }, false);
-        }
-
-        function updateFieldLength(field, fieldLength) {
-            fieldLength.innerHTML = field.value.trim().replace('\r\n', '\n').length;
-        }
-
-        window.addEventListener('load', function () {
-            fieldLengths.forEach(function (fieldLength) {
-                const field = document.querySelector('[data-field="' + fieldLength.getAttribute("data-length-field") + '"]')
-                field.addEventListener('keyup', function () {
-                    updateFieldLength(field, fieldLength)
-                });
-                updateFieldLength(field, fieldLength);
-            });
-        })
-    </script>
-
-    {% block message_js %}{% endblock %}
 {% endblock santa_content %}
+{% block javascripts %}
+    {{ importmap(['app', 'santa/message'], {nonce: csp_nonce('script')}) }}
+{% endblock %}

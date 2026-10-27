@@ -1,0 +1,173 @@
+/**
+ * Stats
+ */
+.legend {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 40px;
+}
+
+.legend .legend-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0 40px;
+}
+
+.legend .legend-item::before {
+    display: inline-block;
+    content: '';
+    padding: 10px;
+    margin: 10px;
+    border-radius: var(--border-radius);
+}
+
+.legend .legend-item.total::before {
+    background-color: var(--color-primary);
+}
+
+.legend .legend-item.slack::before {
+    background-color: var(--color-slack);
+}
+
+.legend .legend-item.discord::before {
+    background-color: var(--color-discord);
+}
+
+.legend .legend-item.zoom::before {
+    background-color: var(--color-zoom);
+}
+
+.legend .legend-item.webex::before {
+    background-color: var(--color-webex);
+}
+
+.single-values {
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.single-value {
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+    color: white;
+    width: 250px;
+}
+
+.single-value .title {
+    font-size: 20px;
+}
+
+.single-value .value {
+    margin-top: 10px;
+}
+
+.single-value .number {
+    font-weight: bold;
+    font-size: 40px;
+}
+
+.container-charts {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.chart {
+    display: flex;
+    align-items: flex-end;
+    margin: 20px 0 40px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 90%;
+}
+
+.graph-counterValue {
+    margin-bottom: 10px;
+}
+
+.graph-counterValue small {
+    font-size: 0.65em;
+    line-height: 1.2em;
+    display: block;
+}
+
+.column-multiple {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
+}
+.column-multiple .graph-bar {
+    margin: 0 5px;
+}
+
+.graph-bar {
+    background-color: var(--color-primary);
+    margin: 1px;
+    color: white;
+    min-height: 1px;
+    width: 40px;
+}
+
+.application-slack {
+    background-color: var(--color-slack);
+}
+
+.application-discord {
+    background-color: var(--color-discord);
+}
+
+.application-zoom {
+    background-color: var(--color-zoom);
+}
+
+.application-webex {
+    background-color: var(--color-webex);
+}
+
+.application-slack-color {
+    color: var(--color-slack);
+}
+
+.application-discord-color {
+    color: var(--color-discord);
+}
+
+.application-zoom-color {
+    color: var(--color-zoom);
+}
+
+.application-webex-color {
+    color: var(--color-webex);
+}
+
+.graph-legend-x {
+    transform: rotate(282deg) translateX(96px) translateY(-14px);
+    width: 150px;
+    margin-top: 85px;
+}
+
+.graph-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 40px;
+    margin-right: 3px;
+}
+
+.column-multiple .graph-column {
+    min-width: auto;
+}

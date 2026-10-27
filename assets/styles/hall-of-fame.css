@@ -1,0 +1,28 @@
+/**
+ * Hall of Fame
+ */
+.hall-of-fame .they-use-it ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0;
+}
+.hall-of-fame .they-use-it li {
+    list-style: none;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2em;
+}
+.hall-of-fame .they-use-it li img {
+    max-height: 100%;
+}
+@media screen and (min-width: 800px) {
+    .hall-of-fame .they-use-it li {
+        width: 21%;
+    }
+}
