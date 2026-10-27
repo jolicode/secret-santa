@@ -50,7 +50,7 @@ class WebexController extends AbstractController
 
         if ($request->query->has('error')) {
             if ('invalid_scope' === $request->query->get('error')) {
-                throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Cannot get the required permissions.');
+                throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Webex refused to grant the permissions we need.');
             }
 
             return $this->redirectToRoute('homepage');
@@ -77,7 +77,7 @@ class WebexController extends AbstractController
         if (!$request->query->get('state') || $request->query->get('state') !== $session->get(WebexApplication::SESSION_KEY_STATE)) {
             $session->remove(WebexApplication::SESSION_KEY_STATE);
 
-            throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Invalid OAuth state.');
+            throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Your sign-in session has expired, or the link was opened in another browser.');
         }
 
         try {
@@ -89,7 +89,7 @@ class WebexController extends AbstractController
 
             $appToken = new ApplicationToken($token->getToken());
         } catch (\Exception $e) {
-            throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Failed to login on Webex.', $e);
+            throw new AuthenticationException(WebexApplication::APPLICATION_CODE, 'Webex did not answer properly when we asked for your account.', $e);
         }
 
         $admin = $userExtractor->getMe($token->getToken());

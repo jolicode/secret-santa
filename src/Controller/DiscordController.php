@@ -71,11 +71,11 @@ class DiscordController extends AbstractController
         if (empty($request->query->get('state')) || ($request->query->get('state') !== $session->get(DiscordApplication::SESSION_KEY_STATE))) {
             $session->remove(DiscordApplication::SESSION_KEY_STATE);
 
-            throw new AuthenticationException(DiscordApplication::APPLICATION_CODE, 'Invalid OAuth state.');
+            throw new AuthenticationException(DiscordApplication::APPLICATION_CODE, 'Your sign-in session has expired, or the link was opened in another browser.');
         }
 
         if (!$request->query->has('guild_id')) {
-            throw new AuthenticationException(DiscordApplication::APPLICATION_CODE, 'No guild_id found.');
+            throw new AuthenticationException(DiscordApplication::APPLICATION_CODE, 'Discord did not tell us which server you picked.');
         }
 
         try {
@@ -94,7 +94,7 @@ class DiscordController extends AbstractController
             /** @var DiscordResourceOwner $user */
             $user = $provider->getResourceOwner($token);
         } catch (\Exception $e) {
-            throw new AuthenticationException(DiscordApplication::APPLICATION_CODE, 'Failed to retrieve data from Discord.', $e);
+            throw new AuthenticationException(DiscordApplication::APPLICATION_CODE, 'Discord did not answer properly when we asked for your account.', $e);
         }
 
         $discordApplication->setToken($appToken);
