@@ -29,10 +29,10 @@ $finder = PhpCsFixer\Finder::create()
     ->ignoreDotFiles(false)
 ;
 
-return (new PhpCsFixer\Config())
+return new PhpCsFixer\Config()
     ->setRiskyAllowed(true)
     ->setRules([
-        '@PHP83Migration' => true,
+        '@PHP8x5Migration' => true,
         '@PhpCsFixer' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,

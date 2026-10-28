@@ -18,7 +18,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class UserExtractor
 {
-    public function __construct(readonly private HttpClientInterface $client)
+    public function __construct(private readonly HttpClientInterface $client)
     {
     }
 

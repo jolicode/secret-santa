@@ -117,7 +117,7 @@ class SantaController extends AbstractController
             $this->logger->error($e->getMessage(), [
                 'exception' => $e,
             ]);
-            $this->bugsnag->notifyException($e, function ($report) {
+            $this->bugsnag->notifyException($e, static function ($report) {
                 $report->setSeverity('info');
             });
 
@@ -200,7 +200,7 @@ class SantaController extends AbstractController
                 if (!\in_array($userIdentifier, $selectedUsers, true)) {
                     continue;
                 }
-                $exclusions[$userIdentifier] = array_filter($excludedUsers, function ($excludedUserIdentifier) use ($selectedUsers) {
+                $exclusions[$userIdentifier] = array_filter($excludedUsers, static function ($excludedUserIdentifier) use ($selectedUsers) {
                     return \in_array($excludedUserIdentifier, $selectedUsers, true);
                 });
             }
@@ -270,7 +270,7 @@ class SantaController extends AbstractController
             // We remove notes from users that aren't selected anymore, and create empty ones for those who are
             // and don't have any yet.
             $selectedUsersAsArray = $config->getSelectedUsers();
-            $notes = array_filter($config->getNotes(), function ($userIdentifier) use ($selectedUsersAsArray) {
+            $notes = array_filter($config->getNotes(), static function ($userIdentifier) use ($selectedUsersAsArray) {
                 return \in_array($userIdentifier, $selectedUsersAsArray, true);
             }, \ARRAY_FILTER_USE_KEY);
             foreach ($config->getSelectedUsers() as $user) {
@@ -419,7 +419,7 @@ class SantaController extends AbstractController
             // Should not happen has the Admin should always be defined
             $errors['no_admin'] = 'You are not allowed to use this feature.';
 
-            $this->bugsnag->notifyError('sample_no_admin', 'Tries to send a sample message without an admin.', function ($report) {
+            $this->bugsnag->notifyError('sample_no_admin', 'Tries to send a sample message without an admin.', static function ($report) {
                 $report->setSeverity('info');
             });
         }
@@ -439,7 +439,7 @@ class SantaController extends AbstractController
         if ($form->isSubmitted()) {
             $notes = array_filter($config->getNotes());
 
-            $candidates = array_filter($notes ? array_keys($notes) : $config->getSelectedUsers(), function ($id) use ($application) {
+            $candidates = array_filter($notes ? array_keys($notes) : $config->getSelectedUsers(), static function ($id) use ($application) {
                 return $application->getAdmin()->getIdentifier() !== $id;
             });
 
@@ -663,11 +663,13 @@ class SantaController extends AbstractController
     }
 
     /**
+     * @param FormInterface<Config> $form
+     *
      * @return string[]
      */
     private function getFormErrors(FormInterface $form, Config $config): array
     {
-        $errors = array_map(function (FormError $error) use ($config) {
+        $errors = array_map(static function (FormError $error) use ($config) {
             $origin = $error->getOrigin();
 
             // Tell which participant the invalid note belongs to

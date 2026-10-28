@@ -197,9 +197,6 @@
     "psr/log": {
         "version": "3.0.0"
     },
-    "ralouphie/getallheaders": {
-        "version": "3.0.3"
-    },
     "symfony/asset": {
         "version": "v6.0.1"
     },

@@ -33,14 +33,14 @@ class MessageDispatcherTest extends TestCase
         ]);
         $secretSanta = new SecretSanta('hash', ['toto1' => 'toto2', 'toto2' => 'toto3', 'toto3' => 'toto1'], $config);
 
-        $application = $this->createMock(ApplicationInterface::class);
-        $application->method('sendSecretMessage')->willReturnCallback(function (SecretSanta $secretSanta, string $giver) {
+        $application = $this->createStub(ApplicationInterface::class);
+        $application->method('sendSecretMessage')->willReturnCallback(static function (SecretSanta $secretSanta, string $giver) {
             if ('toto1' === $giver) {
                 throw new MessageSendFailedException($secretSanta, $secretSanta->getUser($giver));
             }
         });
 
-        $dispatcher = new MessageDispatcher(new NullLogger(), $this->createMock(Client::class));
+        $dispatcher = new MessageDispatcher(new NullLogger(), $this->createStub(Client::class));
         $dispatcher->dispatchRemainingMessages($secretSanta, $application);
 
         self::assertSame(['toto1' => 'toto2'], $secretSanta->getRemainingAssociations());
@@ -51,8 +51,8 @@ class MessageDispatcherTest extends TestCase
         // Retry only hits the failed giver, which now succeeds
         $secretSanta->resetErrors();
         $sent = [];
-        $application = $this->createMock(ApplicationInterface::class);
-        $application->method('sendSecretMessage')->willReturnCallback(function (SecretSanta $secretSanta, string $giver) use (&$sent) {
+        $application = $this->createStub(ApplicationInterface::class);
+        $application->method('sendSecretMessage')->willReturnCallback(static function (SecretSanta $secretSanta, string $giver) use (&$sent) {
             $sent[] = $giver;
         });
         $dispatcher->dispatchRemainingMessages($secretSanta, $application);

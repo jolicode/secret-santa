@@ -134,6 +134,9 @@ class DiscordApplication implements ApplicationInterface
         return $token;
     }
 
+    /**
+     * @param FormBuilderInterface<Config> $builder
+     */
     public function configureMessageForm(FormBuilderInterface $builder): void
     {
     }

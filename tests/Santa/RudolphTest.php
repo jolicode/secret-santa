@@ -138,56 +138,6 @@ class RudolphTest extends TestCase
         self::assertCount(\count($associations), $visited);
     }
 
-    public function testItAlwaysCreatesASingleLoopWithRandomExclusions(): void
-    {
-        for ($run = 0; $run < 200; ++$run) {
-            $count = random_int(2, 20);
-            $users = [];
-            for ($i = 0; $i < $count; ++$i) {
-                $users['user' . $i] = new User('user' . $i, 'User ' . $i);
-            }
-
-            $config = new Config('app', 'org', null);
-            $config->setAvailableUsers($users);
-            $config->setUsersLoaded(true);
-            $config->setSelectedUsers(array_keys($users));
-
-            // Pick a hidden valid loop and never exclude its edges, so a solution is guaranteed to exist
-            $loop = array_keys($users);
-            shuffle($loop);
-            $allowed = [];
-            foreach ($loop as $i => $giver) {
-                $allowed[$giver] = $loop[($i + 1) % $count];
-            }
-
-            $exclusions = [];
-            foreach (array_keys($users) as $giver) {
-                $exclusions[$giver] = [];
-                foreach (array_keys($users) as $receiver) {
-                    if ($receiver !== $giver && $receiver !== $allowed[$giver] && random_int(0, 100) < 30) {
-                        $exclusions[$giver][] = $receiver;
-                    }
-                }
-            }
-            $config->setExclusions($exclusions);
-
-            $associations = $this->SUT->associateUsers($config);
-
-            self::assertCount($count, $associations);
-            foreach ($associations as $giver => $receiver) {
-                self::assertNotContains($receiver, $exclusions[$giver]);
-            }
-
-            $visited = [];
-            $current = array_key_first($associations);
-            do {
-                $visited[] = $current;
-                $current = $associations[$current];
-            } while ($current !== array_key_first($associations));
-            self::assertCount($count, $visited, 'Associations must form a single loop');
-        }
-    }
-
     /**
      * @return iterable<string, array{0: Config}>
      */
@@ -266,5 +216,55 @@ class RudolphTest extends TestCase
             'user4' => ['user3'],
         ]);
         yield 'exclusions forcing a single loop' => [$testConfig];
+    }
+
+    public function testItAlwaysCreatesASingleLoopWithRandomExclusions(): void
+    {
+        for ($run = 0; $run < 200; ++$run) {
+            $count = random_int(2, 20);
+            $users = [];
+            for ($i = 0; $i < $count; ++$i) {
+                $users['user' . $i] = new User('user' . $i, 'User ' . $i);
+            }
+
+            $config = new Config('app', 'org', null);
+            $config->setAvailableUsers($users);
+            $config->setUsersLoaded(true);
+            $config->setSelectedUsers(array_keys($users));
+
+            // Pick a hidden valid loop and never exclude its edges, so a solution is guaranteed to exist
+            $loop = array_keys($users);
+            shuffle($loop);
+            $allowed = [];
+            foreach ($loop as $i => $giver) {
+                $allowed[$giver] = $loop[($i + 1) % $count];
+            }
+
+            $exclusions = [];
+            foreach (array_keys($users) as $giver) {
+                $exclusions[$giver] = [];
+                foreach (array_keys($users) as $receiver) {
+                    if ($receiver !== $giver && $receiver !== $allowed[$giver] && random_int(0, 100) < 30) {
+                        $exclusions[$giver][] = $receiver;
+                    }
+                }
+            }
+            $config->setExclusions($exclusions);
+
+            $associations = $this->SUT->associateUsers($config);
+
+            self::assertCount($count, $associations);
+            foreach ($associations as $giver => $receiver) {
+                self::assertNotContains($receiver, $exclusions[$giver]);
+            }
+
+            $visited = [];
+            $current = array_key_first($associations);
+            do {
+                $visited[] = $current;
+                $current = $associations[$current];
+            } while ($current !== array_key_first($associations));
+            self::assertCount($count, $visited, 'Associations must form a single loop');
+        }
     }
 }

@@ -102,6 +102,9 @@ class WebexApplication implements ApplicationInterface
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl);
     }
 
+    /**
+     * @param FormBuilderInterface<Config> $builder
+     */
     public function configureMessageForm(FormBuilderInterface $builder): void
     {
     }

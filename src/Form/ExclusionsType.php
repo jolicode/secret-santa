@@ -20,6 +20,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+/**
+ * @extends AbstractType<Config>
+ */
 class ExclusionsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -32,14 +35,14 @@ class ExclusionsType extends AbstractType
                 'entry_type' => ChoiceType::class,
                 'entry_options' => [
                     'choices' => $config->getSelectedUsers(),
-                    'choice_label' => function (string|int $userId) use ($config) {
+                    'choice_label' => static function (string|int $userId) use ($config) {
                         return $config->getUser($userId)?->getName() ?? 'Unknown User';
                     },
                     'multiple' => true,
                     'expanded' => true,
                     'constraints' => [
                         new Callback(
-                            function (array $exclusions, ExecutionContextInterface $context) {
+                            static function (array $exclusions, ExecutionContextInterface $context) {
                                 $userId = $context->getObject()->getName();
                                 if (\in_array($userId, $exclusions, true)) {
                                     $context->buildViolation('A user cannot exclude themselves.')->addViolation();

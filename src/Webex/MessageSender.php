@@ -19,9 +19,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class MessageSender
 {
     public function __construct(
-        readonly private HttpClientInterface $client,
-        readonly private RouterInterface $router,
-        readonly private string $webexBotToken,
+        private readonly HttpClientInterface $client,
+        private readonly RouterInterface $router,
+        private readonly string $webexBotToken,
     ) {
     }
 

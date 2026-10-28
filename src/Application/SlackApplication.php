@@ -97,6 +97,9 @@ class SlackApplication implements ApplicationInterface
         $this->messageSender->sendAdminMessage($secretSanta, $code, $spoilUrl, $this->getToken()->getToken());
     }
 
+    /**
+     * @param FormBuilderInterface<Config> $builder
+     */
     public function configureMessageForm(FormBuilderInterface $builder): void
     {
         $builder->add(
@@ -104,11 +107,11 @@ class SlackApplication implements ApplicationInterface
                 ->add('scheduled_at', HiddenType::class, [
                     'constraints' => [
                         new GreaterThanOrEqual(
-                            value: (new \DateTime('+9 minutes'))->getTimestamp(),
+                            value: new \DateTime('+9 minutes')->getTimestamp(),
                             message: 'You can only schedule a Secret Santa for at least 10 minutes away in the future',
                         ),
                         new LessThanOrEqual(
-                            value: (new \DateTime('+120 days'))->getTimestamp(),
+                            value: new \DateTime('+120 days')->getTimestamp(),
                             message: 'You cannot schedule a Secret Santa for over 120 days in the future',
                         ),
                     ],

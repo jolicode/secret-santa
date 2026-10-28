@@ -95,7 +95,7 @@ class UserExtractor
             $groups[$group->getIdentifier()] = $group;
         }
 
-        uasort($groups, function (Group $a, Group $b) {
+        uasort($groups, static function (Group $a, Group $b) {
             return strnatcasecmp($a->getName(), $b->getName());
         });
 

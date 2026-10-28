@@ -11,7 +11,7 @@ parameters:
     inferPrivatePropertyTypeFromConstructor: true
 
     symfony:
-        container_xml_path: '%rootDir%/../../../../../var/cache/test/JoliCode_SecretSanta_KernelTestDebugContainer.xml'
+        containerXmlPath: '%rootDir%/../../../../../var/cache/test/JoliCode_SecretSanta_KernelTestDebugContainer.xml'
 
     typeAliases:
         ContextData: '''
