@@ -15,7 +15,9 @@ use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Tests\Fake\FakeChatApi;
 use JoliCode\SecretSanta\Tests\Fake\FakeWebexApi;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('screenshot')]
 class WebexFullRunTest extends FullRunTestCase
 {
     protected const NAMES = ['W1' => 'Alice', 'W2' => 'Bob', 'W3' => 'Carol', 'W4' => 'Dave', 'W5' => 'Eve'];

@@ -18,6 +18,8 @@
 ###> playwright-php/playwright ###
 # pnpm store created next to vendor/ when installing the Playwright server
 /.pnpm-store/
+# Screenshots, traces and visual diffs of the failed E2E tests
+/test-failures/
 ###< playwright-php/playwright ###
 
 ###> friendsofphp/php-cs-fixer ###

@@ -15,7 +15,9 @@ use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Tests\Fake\FakeChatApi;
 use JoliCode\SecretSanta\Tests\Fake\FakeSlackApi;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('screenshot')]
 class SlackFullRunTest extends FullRunTestCase
 {
     protected const NAMES = ['U1' => 'Alice', 'U2' => 'Bob', 'U3' => 'Carol', 'U4' => 'Dave', 'U5' => 'Eve'];
