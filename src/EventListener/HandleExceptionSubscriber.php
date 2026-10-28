@@ -40,6 +40,7 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
         $exception = $event->getThrowable();
         $statusCode = null;
         $applicationCode = null;
+        $template = 'error.html.twig';
 
         if ($exception instanceof AuthenticationException) {
             $this->logger->error(\sprintf('Authentication error: %s', $exception->getMessage()), [
@@ -52,6 +53,7 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
             });
 
             $statusCode = 401;
+            $template = 'authentication_error.html.twig';
 
             $applicationCode = $exception->getApplicationCode();
         } elseif ($exception instanceof UserExtractionFailedException) {
@@ -72,16 +74,12 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($applicationCode) {
-            $application = $this->getApplication($applicationCode);
+        $application = $applicationCode ? $this->getApplication($applicationCode) : null;
+        $application?->reset();
 
-            if ($application) {
-                $application->reset();
-            }
-        }
-
-        $response = new Response($this->twig->render('error.html.twig', [
+        $response = new Response($this->twig->render($template, [
             'exception' => $exception,
+            'application' => $application,
         ]), $statusCode);
 
         $event->setResponse($response);

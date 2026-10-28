@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% set applicationName = exception.applicationCode|capitalize %}
+
+{% block content %}
+    <div class="content error-page">
+        <div class="is-center">
+            <h2>We could not sign you in with {{ applicationName }}</h2>
+
+            <p>
+                Something went wrong while {{ applicationName }} was signing you in. This usually comes from {{ applicationName }}
+                itself and goes away after a moment, so just try again.
+            </p>
+
+            <p>
+                Still stuck? <a href="mailto:hello@secret-santa.team">Write to us</a> and mention this reason:
+            </p>
+
+            <div class="error-code">
+                <p>{{ exception.message }}</p>
+            </div>
+        </div>
+        <div class="is-center">
+            {% if application %}
+                <a href="{{ path(application.authenticationRoute) }}" class="big-button">
+                    <span class="fas fa-redo" aria-hidden="true"></span>
+                    Try again
+                </a>
+            {% endif %}
+
+            <a href="{{ path('homepage') }}" class="big-button">
+                <span class="fas fa-angle-left" aria-hidden="true"></span>
+                Go back to home page
+            </a>
+        </div>
+    </div>
+{% endblock content %}

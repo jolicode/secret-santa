@@ -70,7 +70,7 @@ class SlackController extends AbstractController
         if (empty($request->query->get('state')) || ($request->query->get('state') !== $session->get(SlackApplication::SESSION_KEY_STATE))) {
             $session->remove(SlackApplication::SESSION_KEY_STATE);
 
-            throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Invalid OAuth state.');
+            throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Your sign-in session has expired, or the link was opened in another browser.');
         }
 
         try {
@@ -84,7 +84,7 @@ class SlackController extends AbstractController
 
             $admin = $userExtractor->getUser($token->getToken(), $token->getValues()['authed_user']['id']);
         } catch (\Exception $e) {
-            throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Failed to retrieve data from Slack.', $e);
+            throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Slack did not answer properly when we asked for your account.', $e);
         }
 
         $slackApplication->setToken($appToken);
