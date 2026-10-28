@@ -57,6 +57,9 @@ interface ApplicationInterface
      */
     public function sendAdminMessage(SecretSanta $secretSanta, string $code, string $spoilUrl): void;
 
+    /**
+     * @param FormBuilderInterface<Config> $builder
+     */
     public function configureMessageForm(FormBuilderInterface $builder): void;
 
     public function reset(): void;

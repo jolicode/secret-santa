@@ -56,7 +56,7 @@ class UserLoader
 
         $users = $config->getAvailableUsers();
 
-        uasort($users, function (User $a, User $b) {
+        uasort($users, static function (User $a, User $b) {
             return strnatcasecmp($a->getName(), $b->getName());
         });
 

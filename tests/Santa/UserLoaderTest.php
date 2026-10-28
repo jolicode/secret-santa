@@ -23,13 +23,13 @@ class UserLoaderTest extends TestCase
 {
     public function testGroupsFailureIsWrappedInUserExtractionFailedException(): void
     {
-        $application = $this->createMock(ApplicationInterface::class);
+        $application = $this->createStub(ApplicationInterface::class);
         $application->method('getCode')->willReturn('discord');
         $application->method('getGroups')->willThrowException(new \RuntimeException('Failed to retrieve roles: {"message": "Unknown Guild", "code": 10004}'));
 
         $this->expectException(UserExtractionFailedException::class);
 
-        (new UserLoader())->loadUsers(new Config('discord', 'toto', null), $application);
+        new UserLoader()->loadUsers(new Config('discord', 'toto', null), $application);
     }
 
     public function testUsersAreLinkedToGroupsAcrossBatches(): void
@@ -40,9 +40,9 @@ class UserLoaderTest extends TestCase
             ['toto2' => new User('toto2', 'Toto 2', ['groups' => ['role1', 'unknown']]), 'toto3' => new User('toto3', 'Toto 3')],
         ];
 
-        $application = $this->createMock(ApplicationInterface::class);
+        $application = $this->createStub(ApplicationInterface::class);
         $application->method('getGroups')->willReturn(['role1' => new Group('role1', 'Role 1'), 'role2' => new Group('role2', 'Role 2')]);
-        $application->method('loadNextBatchOfUsers')->willReturnCallback(function () use (&$batches) {
+        $application->method('loadNextBatchOfUsers')->willReturnCallback(static function () use (&$batches) {
             return array_shift($batches);
         });
 

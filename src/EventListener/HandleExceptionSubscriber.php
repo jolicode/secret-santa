@@ -48,7 +48,7 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
                 'previous' => $exception->getPrevious(),
             ]);
 
-            $this->bugsnag->notifyException($exception, function ($report) {
+            $this->bugsnag->notifyException($exception, static function ($report) {
                 $report->setSeverity('info');
             });
 
@@ -61,7 +61,7 @@ class HandleExceptionSubscriber implements EventSubscriberInterface
                 'exception' => $exception,
             ]);
 
-            $this->bugsnag->notifyException($exception, function ($report) {
+            $this->bugsnag->notifyException($exception, static function ($report) {
                 $report->setSeverity('error');
             });
 

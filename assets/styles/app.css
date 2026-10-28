@@ -432,6 +432,8 @@ details[open] > summary::before {
     transform: rotate(90deg);
 }
 details > summary {
+    /* purecss 3 normalizes summary to list-item, which shows the native marker */
+    display: block;
     margin: -1em -1em 0;
     padding: 1em;
     cursor: pointer;

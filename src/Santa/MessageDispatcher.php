@@ -58,7 +58,7 @@ class MessageDispatcher
                 $this->logger->error($e->getMessage(), [
                     'exception' => $e,
                 ]);
-                $this->bugsnag->notifyException($e, function ($report) {
+                $this->bugsnag->notifyException($e, static function ($report) {
                     $report->setSeverity('info');
                 });
             }

@@ -44,8 +44,6 @@ class Rudolph
 
         mt_srand();
 
-        $users = array_values($users);
-
         for ($attempt = 0; $attempt < self::MAX_ATTEMPTS; ++$attempt) {
             $shuffled = $users;
             shuffle($shuffled);
@@ -111,7 +109,7 @@ class Rudolph
         }
 
         // Find possible receivers for the current giver
-        $possibleReceivers = array_values(array_filter($users, function ($receiver) use ($giver, $exclusions, $used) {
+        $possibleReceivers = array_values(array_filter($users, static function ($receiver) use ($giver, $exclusions, $used) {
             return !$used[$receiver]
                 && !\in_array($receiver, $exclusions[$giver] ?? [], true);
         }));
@@ -146,7 +144,7 @@ class Rudolph
 
         if (\count($filteredUsers) !== \count($users)) {
             $duplicated = array_unique(array_diff_key($users, $filteredUsers));
-            $duplicated = array_map(function ($userId) use ($config) {
+            $duplicated = array_map(static function ($userId) use ($config) {
                 $user = $config->getUser($userId);
 
                 return $user ? $user->getName() : (string) $userId;

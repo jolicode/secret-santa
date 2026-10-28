@@ -56,11 +56,11 @@ return [
         'type' => 'css',
     ],
     'purecss/build/pure-min.css' => [
-        'version' => '0.6.0',
+        'version' => '3.1.0',
         'type' => 'css',
     ],
     'purecss/build/grids-responsive-min.css' => [
-        'version' => '0.6.0',
+        'version' => '3.1.0',
         'type' => 'css',
     ],
     '@bugsnag/js' => [
