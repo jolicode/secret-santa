@@ -36,6 +36,11 @@ a {
     text-decoration: none;
     color: var(--color-primary);
 }
+/* normalize.css v8 (bundled in Pure 3) no longer sets it, unlike the v3 we used to ship. */
+button:not(:disabled),
+input[type=submit]:not(:disabled) {
+    cursor: pointer;
+}
 .pure-img-responsive {
     max-width: 100%;
     height: auto;
