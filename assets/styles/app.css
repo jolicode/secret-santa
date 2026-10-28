@@ -195,34 +195,10 @@ a {
 }
 
 /**
- * Footer
+ * Support links
  */
-footer {
-    position: static;
-    bottom: 0;
+.support {
     padding: 2em;
-    color: white;
-    background-color: var(--color-primary);
-    font-size: 0.9em;
-}
-footer a.support-link {
-    display: inline-block;
-    margin: 0 1em 0.5em;
-    font-size: 1.2em;
-    text-decoration: none;
-    background-color: white;
-    border: 3px solid white;
-    color: var(--color-primary);
-    border-radius: var(--button-border-radius);
-    padding: 1em;
-}
-footer a.support-link:hover {
-    background-color: transparent;
-    color: white;
-}
-footer a {
-    color: white;
-    text-decoration: underline;
 }
 
 /**
