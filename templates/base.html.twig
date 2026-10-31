@@ -77,28 +77,14 @@
             {% block content %}
             {% endblock content %}
 
-            <footer class="footer is-center {% block footerClass %}{% endblock %}">
+            <div class="support is-center">
                 {% block contact %}
-                    <a href="{{ path('faq') }}" class="support-link"><i class="fas fa-life-ring"></i> Need help?</a>
-                    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="far fa-envelope"></i> Contact us!</a>
+                    <a href="{{ path('faq') }}" class="big-button"><i class="fas fa-life-ring"></i> Need help?</a>
+                    <a href="mailto:hello@secret-santa.team" class="big-button"><i class="far fa-envelope"></i> Contact us!</a>
                 {% endblock contact %}
-                <p>
-                    This free service to share the santa spirit is made with ♥ by <a href="https://jolicode.com">JoliCode</a>.
-                    <br>
-                    Hosted gracefully by the awesome people at <a href="https://www.clever-cloud.com/">Clever Cloud</a>.
-                    <br>
-                    Logo lovely crafted by <a href="https://twitter.com/coucou__alex">Alexandre Godreau</a>.
-                    <br>
-                    Emoji provided by <a href="https://www.emojione.com/">Emoji One</a>.
-                    <br>
-                    Sharing gifts since 2015.
-                </p>
-                <p>
-                    <a href="{{ path('terms') }}">Terms of Service</a>
-                    and
-                    <a href="{{ path('privacy_policy') }}">Privacy Policy</a>
-                </p>
-            </footer>
+            </div>
         </div>
+
+        {{ include('_joli_footer.html.twig') }}
     </body>
 </html>
