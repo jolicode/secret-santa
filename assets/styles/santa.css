@@ -333,6 +333,7 @@ textarea {
     display: inline-block;
     flex-shrink: 0;
 }
+.channels-selection,
 .checked-users-summary {
     margin-top: 3em;
     padding-top: 2em;

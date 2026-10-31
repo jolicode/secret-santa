@@ -1,0 +1,113 @@
+{% extends 'santa/base.html.twig' %}
+
+{% set currentStep = 0 %}
+{% set application = 'slack' %}
+
+{% block santa_content %}
+    <div class="run-block">
+        <h2>Select the channels of your Secret Santa</h2>
+
+        {% if error %}
+            <span class="error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <br>{{ error }}
+            </span>
+        {% endif %}
+
+        <form action="{{ path('slack_channels') }}" id="run_form" method="POST">
+            {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
+            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+
+            <div class="pure-g">
+                <div class="pure-u-1 pure-u-lg-1-2">
+                    <div class="run-column run-column-left">
+                        <div class="sticky-container">
+                            <div class="sticky">
+                                <h3 class="is-center">Available channels ({{ channels|length }})</h3>
+
+                                <p class="is-center">
+                                    Below are the channels you are a member of. Select the ones whose members can
+                                    participate to your Secret Santa. Private channels also need Secret Santa to be
+                                    invited in them. A channel shared with other workspaces (Slack Connect) brings
+                                    its external members too.
+                                </p>
+
+                                <div class="user-search">
+                                    <input autofocus placeholder="🔎    Search channel by name" type="text" id="channel-search-input" autocomplete="off" />
+                                    <span class="search-cleaner fas fa-times is-hidden" id="search-cleaner" title="Empty the query"></span>
+                                </div>
+                                {% apply spaceless %}
+                                    <div class="user-container">
+                                        <div class="user-list user-list-simple-rows" id="channel-list">
+                                            <div class="no-result is-hidden" id="no-channel-matching">
+                                                No channel matching.
+                                            </div>
+                                            {% for id, channel in channels %}
+                                                <label class="user-item" for="channel_{{ id }}" data-search-index="{{ channel.name }}">
+                                                    <input type="checkbox" name="channels[]" value="{{ id }}" id="channel_{{ id }}" {{ id in selected ? 'checked' }}>
+                                                    <span>#{{ channel.name }}</span>
+                                                    {% if channel.isShared %}
+                                                        <small>shared with other workspaces</small>
+                                                    {% endif %}
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endapply %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pure-u-1 pure-u-lg-1-2">
+                    <div class="run-column run-column-right">
+                        <div class="sticky-container">
+                            <div class="sticky">
+                                <div class="is-center">
+                                    <h3 class="is-center">Everyone can join?</h3>
+
+                                    <p>
+                                        No need to select channels: everyone in the workspace will be proposed as a participant.
+                                    </p>
+
+                                    <button type="submit" name="scope" value="workspace" class="big-button">
+                                        <span class="fas fa-users" aria-hidden="true"></span>
+                                        Include everyone in the workspace
+                                    </button>
+                                </div>
+
+                                <div class="is-center channels-selection">
+                                    <h3 class="is-center">Or only some channels?</h3>
+
+                                    <p>
+                                        You selected <strong id="checked-channels-count"></strong>.
+                                        Validate the selection and only their members will be proposed as participants.
+                                    </p>
+
+                                    <button type="submit" name="scope" value="channels" class="big-button" id="submit-button">
+                                        <span class="fas fa-hashtag" aria-hidden="true"></span>
+                                        Validate selection
+                                    </button>
+                                </div>
+
+                                <p class="is-center">
+                                    <small>
+                                        or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
+                                    </small>
+                                </p>
+
+                                <div class="checked-users-summary">
+                                    <h3 class="is-center">Summary of your selection</h3>
+                                    <div id="checked-channels-summary" class="is-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock santa_content %}
+
+{% block javascripts %}
+    {{ importmap(['app', 'slack/channels'], {nonce: csp_nonce('script')}) }}
+{% endblock %}
