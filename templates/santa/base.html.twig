@@ -25,6 +25,9 @@
 {% block content %}
     <nav class="is-center">
         <ol class="breadcrumb">
+            {% if application == 'slack' %}
+                {{ _self.step(currentStep, 'Channels', 'hashtag', 0, path('slack_channels')) }}
+            {% endif %}
             {{ _self.step(currentStep, 'Participants', 'users', 1, path('participants', {application: application})) }}
             {{ _self.step(currentStep, 'Exclusions', 'ban', 2, path('exclusions', {application: application})) }}
             {{ _self.step(currentStep, 'Customization', 'pen', 3, path('message', {application: application})) }}

@@ -158,25 +158,12 @@ abstract class FullRunTestCase extends PlaywrightTestCase
     /**
      * Visual regression of a page of the journey, once it is in its final state.
      */
-    private function checkpoint(string $page): void
+    protected function checkpoint(string $page): void
     {
         $this->assertScreenshot(static::application() . '-' . $page);
     }
 
-    /**
-     * @return list<string> Numeric ids are strings for the application, but PHP makes them int array keys
-     */
-    private function ids(): array
-    {
-        return array_map('strval', array_keys(static::NAMES));
-    }
-
-    private function id(int $position): string
-    {
-        return $this->ids()[$position];
-    }
-
-    private function logInAsAdmin(): FakeChatApi
+    protected function logInAsAdmin(): FakeChatApi
     {
         static::bootKernel();
 
@@ -190,9 +177,22 @@ abstract class FullRunTestCase extends PlaywrightTestCase
         return $this->fakeApi();
     }
 
-    private function followRedirect(): void
+    protected function followRedirect(): void
     {
         static::getPlaywrightClient()->followRedirect();
+    }
+
+    /**
+     * @return list<string> Numeric ids are strings for the application, but PHP makes them int array keys
+     */
+    private function ids(): array
+    {
+        return array_map('strval', array_keys(static::NAMES));
+    }
+
+    private function id(int $position): string
+    {
+        return $this->ids()[$position];
     }
 
     /**

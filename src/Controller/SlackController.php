@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Controller;
 use JoliCode\SecretSanta\Application\SlackApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Model\ApplicationToken;
+use JoliCode\SecretSanta\Model\Channel;
 use JoliCode\SecretSanta\Slack\SlackProvider;
 use JoliCode\SecretSanta\Slack\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
@@ -58,6 +59,10 @@ class SlackController extends AbstractController
                     'chat:write',
                     'users:read',
                     'usergroups:read',
+                    'channels:read',
+                    'groups:read',
+                    'im:write',
+                    'team:read',
                 ],
             ];
             $authUrl = $provider->getAuthorizationUrl($options);
@@ -89,9 +94,84 @@ class SlackController extends AbstractController
 
         $slackApplication->setToken($appToken);
         $slackApplication->setAdmin($admin);
+        $slackApplication->setChannels([]);
 
-        return new RedirectResponse($this->router->generate('run', [
-            'application' => $slackApplication->getCode(),
-        ]));
+        return $this->redirectToRoute('slack_channels');
+    }
+
+    /**
+     * Let the admin restrict the participants to the members of some channels, or include the whole workspace.
+     */
+    #[Route('/auth/slack/channels', name: 'slack_channels', methods: ['GET', 'POST'])]
+    public function channels(Request $request, SlackApplication $slackApplication, UserExtractor $userExtractor): Response
+    {
+        $admin = $slackApplication->getAdmin();
+
+        if (!$slackApplication->isAuthenticated() || !$admin) {
+            return $this->redirectToRoute('slack_authenticate');
+        }
+
+        if ($request->isMethod('POST') && 'workspace' === $request->request->get('scope')) {
+            $slackApplication->setChannels([]);
+
+            return $this->redirectToRoute('run', ['application' => $slackApplication->getCode()]);
+        }
+
+        $token = $slackApplication->getToken()->getToken();
+        $channels = $userExtractor->listChannels($token, $admin);
+        $error = null;
+
+        if ($request->isMethod('POST')) {
+            $selected = array_intersect_key($channels, array_flip($request->request->all('channels')));
+
+            if ([] !== $selected) {
+                $groups = [];
+
+                foreach ($selected as $channel) {
+                    $groups[$channel->id] = $userExtractor->loadMembers($token, $channel);
+                }
+
+                $slackApplication->setChannels($groups);
+
+                if (array_filter($selected, static fn (Channel $channel) => $channel->needsInvitation())) {
+                    return $this->redirectToRoute('slack_channels_invitation');
+                }
+
+                return $this->redirectToRoute('run', ['application' => $slackApplication->getCode()]);
+            }
+
+            $error = 'Select at least one channel, or include everyone in the workspace.';
+        }
+
+        return $this->render('slack/channels.html.twig', [
+            'channels' => $channels,
+            'error' => $error,
+            'selected' => array_keys($slackApplication->getChannels()),
+        ]);
+    }
+
+    /**
+     * The bot can only message the external members (Slack Connect) of a channel it has been invited in:
+     * list the chosen shared channels still missing it, until there is none left.
+     */
+    #[Route('/auth/slack/channels/invitation', name: 'slack_channels_invitation', methods: ['GET'])]
+    public function channelsInvitation(SlackApplication $slackApplication, UserExtractor $userExtractor): Response
+    {
+        $admin = $slackApplication->getAdmin();
+
+        if (!$slackApplication->isAuthenticated() || !$admin) {
+            return $this->redirectToRoute('slack_authenticate');
+        }
+
+        $channels = array_intersect_key($userExtractor->listChannels($slackApplication->getToken()->getToken(), $admin), $slackApplication->getChannels());
+        $channels = array_filter($channels, static fn (Channel $channel) => $channel->needsInvitation());
+
+        if ([] === $channels) {
+            return $this->redirectToRoute('run', ['application' => $slackApplication->getCode()]);
+        }
+
+        return $this->render('slack/channels_invitation.html.twig', [
+            'channels' => $channels,
+        ]);
     }
 }
