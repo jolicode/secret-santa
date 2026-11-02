@@ -15,7 +15,9 @@ use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Tests\Fake\FakeChatApi;
 use JoliCode\SecretSanta\Tests\Fake\FakeDiscordApi;
+use PHPUnit\Framework\Attributes\Group;
 
+#[Group('screenshot')]
 class DiscordFullRunTest extends FullRunTestCase
 {
     // Discord shows usernames, the nick of Bob is only used in the messages

@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 abstract class FullRunTestCase extends PlaywrightTestCase
 {
+    use ScreenshotAssertionTrait;
     use SessionPrepareTrait;
 
     /** @var array<string|int, string> User id => name shown on the spoil page, admin first */
@@ -39,6 +40,7 @@ abstract class FullRunTestCase extends PlaywrightTestCase
 
         $page = $this->runUntilFinish($api);
         self::assertPageContains('Well done! All messages were sent');
+        $this->checkpoint('finish');
 
         // Session is cleaned once everything is sent, so the token is gone too
         $this->visit('/participants/' . static::application());
@@ -101,6 +103,7 @@ abstract class FullRunTestCase extends PlaywrightTestCase
 
         $page = $this->runUntilFinish($api);
         self::assertPageContains('All the messages are not sent yet');
+        $this->checkpoint('finish-with-failures');
         self::assertStringContainsString(static::NAMES[$carol] . ' must offer a gift to xxxxx', $page->locator('body')->innerText());
 
         $api->failingUsers = [];
@@ -150,6 +153,14 @@ abstract class FullRunTestCase extends PlaywrightTestCase
         preg_match('/```(.+?)```/s', $adminMessage['text'], $matches);
 
         return $matches[1];
+    }
+
+    /**
+     * Visual regression of a page of the journey, once it is in its final state.
+     */
+    private function checkpoint(string $page): void
+    {
+        $this->assertScreenshot(static::application() . '-' . $page);
     }
 
     /**
@@ -236,6 +247,7 @@ abstract class FullRunTestCase extends PlaywrightTestCase
         // The checkbox itself is styled away, the label is what gets clicked
         $page->locator(\sprintf('label[for="id_%s"]', $dave))->click();
         self::assertSame('4 people', $page->locator('#summary-count')->textContent());
+        $this->checkpoint('participants');
 
         $page->locator('#submit-button')->click();
         $this->followRedirect();
@@ -247,11 +259,13 @@ abstract class FullRunTestCase extends PlaywrightTestCase
         $dialog->waitFor();
         $dialog->locator('#exclusion-search-input')->fill('bob');
         $dialog->locator(\sprintf('.js-select-user[data-user-id="%s"]', $bob))->click();
+        $this->checkpoint('exclusions-dialog');
         $dialog->locator('.js-confirm-exclusions')->click();
         self::assertSame(
             $bob,
             $page->locator(\sprintf('.exclusion-container[data-user-id="%s"] input[type="hidden"]', $alice))->inputValue(),
         );
+        $this->checkpoint('exclusions');
 
         $page->locator('#submit-button')->click();
         $this->followRedirect();
@@ -274,10 +288,12 @@ abstract class FullRunTestCase extends PlaywrightTestCase
         self::assertCount(1, $api->postedMessages());
         self::assertSame($alice, $api->postedMessages()[0]['to']);
         self::assertStringContainsString('Loves chocolate', $api->postedMessages()[0]['text'], 'Sample uses the notes');
+        $this->checkpoint('message');
 
         $page->locator('#submit-button')->click();
         $this->followRedirect();
         $page->waitForURL('**/validate/' . $application);
+        $this->checkpoint('validate');
 
         // The sending page posts in the background until everything is sent, then lands on /finish
         $page->locator('#submit-button')->click();

@@ -135,6 +135,21 @@ castor builder
 
 Checkout `castor` to have the list of available tasks.
 
+## Visual regression tests
+
+Some E2E tests compare full-page screenshots with the reference images of
+`tests/E2E/screenshots/`. They are rendered by the Chromium of the Docker image,
+so they only match from there. After a legitimate change of the UI, regenerate
+them and commit the result:
+
+```bash
+castor qa:update-screenshots
+```
+
+When a comparison fails, the actual, expected and diff images are written in
+`test-failures/`. On the CI, they are uploaded as an artifact of the job, and the
+actual and diff images are posted as a comment of the pull request.
+
 ## Frontend assets
 
 JavaScript (`assets/js`), CSS (`assets/styles`), images and fonts live in `assets/` and are served through Symfony's

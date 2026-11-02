@@ -11,6 +11,11 @@ name: Continuous Integration
 permissions:
     contents: read
 
+# Two runs of a pull request must not race on its visual regressions report
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
 env:
     # Fix for symfony/color detection. We know GitHub Actions can handle it
     ANSICON: 1
@@ -32,6 +37,10 @@ jobs:
     ci:
         name: Continuous Integration
         runs-on: ubuntu-latest
+        permissions:
+            # The visual regressions report: a branch of images and a comment on the pull request
+            contents: write
+            pull-requests: write
         env:
             BUILDKIT_PROGRESS: plain
             CI: 1
@@ -59,6 +68,27 @@ jobs:
 
             - name: "Run PHPUnit"
               run: castor qa:phpunit
+
+            - name: "Upload the screenshots and visual diffs of the failed E2E tests"
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: test-failures
+                  path: test-failures/
+                  if-no-files-found: ignore
+
+            - name: "Report the visual regressions on the pull request"
+              # The token of a pull request from a fork is read-only
+              if: failure() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: castor qa:report-visual-regressions ${{ github.event.pull_request.number }}
+
+            - name: "Remove the visual regressions report from the pull request"
+              if: success() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: castor qa:clear-visual-regressions-report ${{ github.event.pull_request.number }}
 
             - name: "Run PHPStan"
               run: castor qa:phpstan
