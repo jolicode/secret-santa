@@ -6,7 +6,7 @@
     {{ form_start(form) }}
 
     <div class="run-block validate-step">
-        <h2>Validate the repartition</h2>
+        <h2 class="content-head is-center">Validate the repartition</h2>
 
         {% if errors %}
             <span class="error">
@@ -25,11 +25,6 @@
                 </a>
             </div>
 
-            <p class="is-center">
-                <small>
-                    or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                </small>
-            </p>
         {% else %}
             <p>
                 This is the final step before sending the secret messages to each participant.
@@ -68,7 +63,7 @@
                 </div>
             </details>
 
-            <div class="run-block">
+            <div class="run-step">
                 <h2>All good?</h2>
 
                 <p class="is-center">
@@ -84,11 +79,6 @@
                     </button>
                 </div>
 
-                <p class="is-center">
-                    <small>
-                        or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                    </small>
-                </p>
             </div>
         {% endif %}
     </div>

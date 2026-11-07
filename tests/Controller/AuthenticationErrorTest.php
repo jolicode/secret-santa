@@ -25,7 +25,7 @@ class AuthenticationErrorTest extends BaseWebTestCase
         $response = $client->getResponse();
 
         self::assertSame(401, $response->getStatusCode());
-        self::assertSame(\sprintf('We could not sign you in with %s', $applicationName), $crawler->filter('h2')->text());
+        self::assertSame(\sprintf('We could not sign you in with %s', $applicationName), $crawler->filter('h1')->text());
         self::assertStringContainsString('Your sign-in session has expired, or the link was opened in another browser.', $crawler->filter('.error-code')->text());
         self::assertSame($path, $crawler->selectLink('Try again')->attr('href'));
         self::assertCount(1, $crawler->selectLink('Go back to home page'));

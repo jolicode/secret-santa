@@ -65,29 +65,20 @@
 
 {% import _self as stats %}
 
+{% block banner %}
+    <div class="jumbotron">
+        <div class="jumbotron-inner">
+            <h1>Secret Santa Statistics</h1>
+            <p>
+                Ho, ho, ho, here are the statistics of Secret Santa
+                <small>(since 10/2018)</small>
+            </p>
+        </div>
+    </div>
+{% endblock banner %}
+
 {% block content %}
     <div class="stats">
-        <div class="jumbotron">
-            <div class="jumbotron-inner">
-                <h1>Secret Santa Statistics</h1>
-                <p>
-                    Ho, ho, ho, here are the statistics of Secret Santa
-                    <small>(since 10/2018)</small>
-                </p>
-            </div>
-        </div>
-
-        <div>
-            <h2 class="content-head is-center">Legend</h2>
-
-            <div class="legend">
-                <div class="legend-item total">All apps combined</div>
-                {% for application, applicationTotal in counters.app %}
-                    <div class="legend-item {{ application }}">{{ application|title }}</div>
-                {% endfor %}
-            </div>
-        </div>
-
         <h2 class="content-head is-center">Some numbers</h2>
 
         <div class="single-values">
@@ -101,13 +92,20 @@
             {{ stats.singleValue('With exclusions ***', counters['exclusions']) }}
         </div>
 
-        <p class="is-center">
+        <p class="is-center footnotes">
             * Since 10/2019<br>
             ** Since 11/2024<br>
             *** Since 10/2025
         </p>
 
         <div class="container-charts">
+            <div class="legend">
+                <div class="legend-item total">All apps combined</div>
+                {% for application, applicationTotal in counters.app %}
+                    <div class="legend-item {{ application }}">{{ application|title }}</div>
+                {% endfor %}
+            </div>
+
             {{ stats.barGraph('Number of Secret Santa per month', counters['month'], counters['month-max'] ?? 0) }}
             {{ stats.barGraph('Number of Secret Santa per year', counters['year'], counters['year-max'] ?? 0) }}
             {{ stats.barGraph('Number of Secret Santa per application', counters['app'], null, true) }}
@@ -115,3 +113,6 @@
     </div>
 
 {% endblock content %}
+{% block javascripts %}
+    {{ importmap(['app', 'stats'], {nonce: csp_nonce('script')}) }}
+{% endblock %}

@@ -1,11 +1,24 @@
 :root {
-    --color-primary: #ee3737;
-    --color-primary-dark: #d81212;
+    --color-primary: #d32b33;
+    --color-primary-dark: #aa1017;
     --color-warning: #ffc520;
     --color-warning-dark: #ffbb00;
-    --color-black: #222222;
-    --color-gray: #cccccc;
-    --color-gray-light: #eeeeee;
+    /* The deep red of the hero, the header and the footer */
+    --color-night: var(--color-primary-dark);
+    --color-night-2: var(--color-primary);
+    --color-on-night: #fff6f4;
+    --color-on-night-2: #f2c7c9;
+    /* The page itself: cream rather than pure white, ink rather than pure black */
+    --color-cream: #faefe0;
+    --color-ink: #1c1b22;
+    --color-ink-2: #5b5964;
+    --color-line: rgba(28, 27, 34, 0.1);
+    /* Pastel highlights, for the <mark> of a title or the background of a badge */
+    --color-gold: #ffd166;
+    --color-mint: #bfe9d6;
+    --color-black: var(--color-ink);
+    --color-gray: #d9d6d2;
+    --color-gray-light: #f2e6d6;
     --color-gray-dark: #7a7a7a;
     --color-error: var(--color-primary-dark);
     --color-error-background: #ffeaea;
@@ -13,21 +26,63 @@
     --color-webex: #6EBE4A;
     --color-discord: #7289da;
     --color-zoom: #0b5cff; /* cf. https://zoom.us/brandguidelines */
-    --border-radius: 5px;
-    --button-border-radius: 10px;
+    --border-radius: 8px;
+    --border-radius-large: 12px;
+    --button-border-radius: 8px;
+    --shadow-card: 0 2px 8px rgba(28, 27, 34, 0.08);
+    --font-display: 'Montserrat', sans-serif;
+    --font-body: 'Montserrat', sans-serif;
+}
+
+/* The bits of normalize.css we relied on when PureCSS was loaded */
+body {
+    margin: 0;
+}
+/* The JS hides elements with the hidden attribute, which must win over their display: flex */
+[hidden] {
+    display: none !important;
+}
+button, input, select, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: 100%;
+}
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: var(--color-primary);
+}
+
+/* Inline code keeps the body font: the monospace fonts differ between machines, which breaks the screenshot tests */
+code {
+    padding: 0.1em 0.4em;
+    border-radius: var(--border-radius);
+    background-color: var(--color-gray-light);
+    font-family: inherit;
+    font-size: 0.95em;
 }
 
 /* Our css \o/ */
-body, html, .pure-g [class *= "pure-u"] {
-  font-family: 'Montserrat', sans-serif;
-    color: var(--color-black);
+body, html {
+    font-family: var(--font-body);
+    color: var(--color-ink);
 }
+/* The header and the banner are transparent above the night canvas, so they always blend into one block */
 html {
-    background-color:var(--color-primary);
+    background-color: var(--color-night);
     scroll-behavior: smooth;
 }
 body {
-    background-color:#FFFFFF;
+    line-height: 1.6;
+}
+.content-wrapper {
+    background-color: var(--color-cream);
+    /* Keeps the children's top margins inside, otherwise they collapse out and show the night canvas under the header */
+    display: flow-root;
+}
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
 }
 a:hover {
     text-decoration: underline;
@@ -41,16 +96,10 @@ button:not(:disabled),
 input[type=submit]:not(:disabled) {
     cursor: pointer;
 }
-.pure-img-responsive {
-    max-width: 100%;
-    height: auto;
-}
 .img-border {
-    padding: 15px 15px 0;
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
-    -moz-box-shadow: 0 1px 2px rgba(34,25,25,0.4);
-    -webkit-box-shadow: 0 1px 3px rgba(34, 25, 25, 0.4);
+    border: 1px solid var(--color-line);
+    border-radius: var(--border-radius-large);
+    box-shadow: var(--shadow-card);
 }
 .is-center {
     text-align: center;
@@ -119,115 +168,91 @@ input[type=submit]:not(:disabled) {
  * Header
  */
 .header {
-  background-color: var(--color-primary);
+    background-color: transparent;
 }
-@media only screen and (max-width :480px) {
-    .header .pure-menu-list {
-        display: flex;
-        flex-direction: column;
-    }
-    .header .pure-menu-item {
-        margin-top: 0.5em;
-    }
-}
-
 .home-menu {
-    position: relative;
     display: flex;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 1em 0;
-}
-.home-menu .pure-menu-heading a {
-    color: white;
-    text-decoration: none;
     align-items: center;
+    justify-content: space-between;
+    gap: 1em;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1em;
+}
+.home-menu .site-brand {
     display: flex;
-}
-.home-menu .pure-menu-heading .site-brand {
-    font-weight: bold;
-    font-size: 1.5em;
-}
-.home-menu .pure-menu-heading .site-headline {
-    font-weight: normal;
-    text-transform: none;
-    margin-top: 0.5em;
-}
-.home-menu .pure-menu-list a {
+    align-items: center;
+    gap: 0.6em;
     color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-decoration: none;
+}
+.home-menu .site-brand:hover {
     text-decoration: none;
 }
 .logo-wrapper {
-    float: left;
-    height: 100px;
-    width: 100px;
+    height: 56px;
+    width: 56px;
     overflow: hidden;
     position: relative;
     background-color: white;
     border-radius: 50%;
-    margin-right: 10px;
+    flex-shrink: 0;
 }
 .logo-wrapper img {
-  position: absolute;
-  top: 5px;
-  width: 95px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
-.home-menu .pure-menu-link:hover {
-  background-color: white;
-  color: var(--color-primary);
+.home-menu .menu-list {
+    display: flex;
+    align-items: center;
+    gap: 2.5em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
-
-.home-menu .pure-menu-link {
-  background-color: transparent;
-  border: 2px solid white;
-  border-radius: var(--button-border-radius);
-  margin-right: 6px;
+.home-menu .menu-link {
+    display: inline-block;
+    padding: 0.3em 0;
+    border-bottom: 2px solid transparent;
+    color: var(--color-on-night);
+    font-weight: bold;
+    white-space: nowrap;
 }
-
-@media screen and (max-width: 1023px) {
+.home-menu .menu-link i {
+    margin-right: 0.3em;
+    color: var(--color-gold);
+}
+.home-menu .menu-link:hover {
+    color: white;
+    text-decoration: none;
+    border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+.home-menu .menu-link[aria-current="page"] {
+    color: white;
+    border-bottom-color: var(--color-gold);
+}
+@media screen and (max-width: 767px) {
     .home-menu {
         flex-direction: column;
-        align-items: center;
-        padding-bottom: 1em;
     }
-}
-@media screen and (min-width: 1024px) {
-    .home-menu {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
+    .home-menu .menu-list {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 }
 
 /**
- * Footer
+ * Support links
  */
-footer {
-    position: static;
-    bottom: 0;
+.support {
     padding: 2em;
-    color: white;
-    background-color: var(--color-primary);
-    font-size: 0.9em;
+    color: var(--color-ink-2);
 }
-footer a.support-link {
-    display: inline-block;
-    margin: 0 1em 0.5em;
-    font-size: 1.2em;
-    text-decoration: none;
-    background-color: white;
-    border: 3px solid white;
-    color: var(--color-primary);
-    border-radius: var(--button-border-radius);
-    padding: 1em;
-}
-footer a.support-link:hover {
-    background-color: transparent;
-    color: white;
-}
-footer a {
-    color: white;
-    text-decoration: underline;
+.support p {
+    margin: 0;
 }
 
 /**
@@ -241,8 +266,40 @@ footer a {
     padding: 2em 2em;
 }
 .content-head {
-    color: var(--color-primary);
+    color: var(--color-ink);
     font-size: 2em;
+}
+.section-head {
+    margin: 2.5em 0 0.8em;
+    font-size: 1.4em;
+}
+.section-head::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 3px;
+    margin-top: 0.3em;
+    border-radius: 2px;
+    background-color: var(--color-primary);
+}
+.legal {
+    max-width: 760px;
+    margin: 0 auto;
+    line-height: 1.7;
+    color: var(--color-ink-2);
+}
+.legal h1,
+.legal h2 {
+    color: var(--color-ink);
+}
+.content-head.is-center::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 4px;
+    margin: 0.4em auto 0;
+    border-radius: 2px;
+    background-color: var(--color-primary);
 }
 .content-subhead {
     color: var(--color-primary);
@@ -256,17 +313,14 @@ footer a {
 .jumbotron {
     overflow: hidden;
     position: relative;
-    color: white;
-    background-color: var(--color-primary);
-    padding-bottom: 2em;
+    color: var(--color-on-night);
+    background-image: radial-gradient(ellipse at center, var(--color-night-2), transparent 70%);
+    padding: 2em 1em 4em;
     text-align: center;
 }
-.home .jumbotron {
-    padding-bottom: 10em;
-}
 .jumbotron-inner {
-  max-width: 960px;
-  margin: 0 auto;
+    max-width: 960px;
+    margin: 0 auto;
 }
 .jumbotron h1 {
     display: inline-block;
@@ -275,20 +329,24 @@ footer a {
     margin-top: 1em;
     margin-bottom: 0.5em;
 }
-.home .jumbotron h1 {
-    margin-top: 2em;
+.jumbotron h1 mark {
+    background-color: transparent;
+    color: var(--color-gold);
 }
 .jumbotron a {
-    color: white;
+    color: var(--color-on-night);
 }
 .jumbotron p {
     display: block;
     margin: 0 auto;
     text-align: center;
     font-size: 1.2em;
-    line-height: 1.2em;
+    color: var(--color-on-night-2);
     box-sizing: content-box;
     padding: 1em;
+}
+.jumbotron p strong {
+    color: var(--color-on-night);
 }
 .jumbotron .actions {
     margin: 0.5em 0 2em;
@@ -306,64 +364,26 @@ footer a {
     color: var(--color-webex);
 }
 .jumbotron .action {
-    display: inline-block;
-    margin: 0.5em;
-    font-size: 1.5em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0.3em;
+    font-size: 1em;
+    font-weight: bold;
     text-decoration: none;
     background-color: white;
-    border: 3px solid white;
+    color: var(--color-ink);
+    border-radius: var(--button-border-radius);
+    padding: 0.75em 1.2em;
+    box-shadow: var(--shadow-card);
+}
+.jumbotron .action sup {
+    font-size: 0.6em;
     color: var(--color-primary);
-    border-radius: 10px;
-    padding: 10px;
 }
 @media screen and (max-width: 860px) {
     .jumbotron h1 {
         font-size: 2em;
-        margin-top: 1em;
-    }
-    .jumbotron .action {
-        font-size: 1.5em;
-    }
-}
-
-/**
- * Sample message
- */
-.sample-message {
-    padding: 3em;
-    background-color: var(--color-primary);
-    color: white;
-}
-.sample-message-inner {
-    max-width: 960px;
-    margin: 0 auto;
-    position: relative;
-}
-.sample-message h2,
-.sample-message p {
-    font-family: 'Montserrat', sans-serif;
-    text-align: center;
-    color: white;
-}
-.sample-message p {
-    font-size: 1.2em;
-}
-.sample-message img {
-    border-radius: 2px;
-}
-
-@media screen and (min-width: 1024px) {
-    .sample-message {
-        display: flex;
-        align-items: center;
-    }
-    .sample-message img {
-        margin-left: 1em;
-    }
-}
-
-@media screen and (max-width: 1023px) {
-    .sample-message img {
         margin-top: 1em;
     }
 }
@@ -372,28 +392,42 @@ footer a {
  * Error page
  */
 .error-page {
-    max-width: 960px;
+    max-width: 760px;
     margin: 0 auto;
-    position: relative;
-    box-sizing: border-box;
+    line-height: 1.7;
+    color: var(--color-ink-2);
 }
-.error-page h2 {
-    color: var(--color-primary);
+.error-box {
+    margin-top: 1.5em;
+    padding: 2em;
+    border: 1px solid var(--color-line);
+    border-radius: var(--border-radius-large);
+    background-color: white;
+    box-shadow: var(--shadow-card);
+}
+.error-box > p:first-child {
+    margin-top: 0;
 }
 .error-page .big-button {
-    margin-top: 2em;
+    margin: 2em 0 0;
 }
 .error-code {
-    display: block;
     padding: 1.5em;
     border-radius: var(--border-radius);
-    line-height: 1.5em;
     text-align: center;
     color: var(--color-error);
     background-color: var(--color-error-background);
+    overflow-wrap: anywhere;
 }
-.error-code + img {
+.error-page img {
+    max-width: 100%;
     margin-top: 1em;
+    border-radius: var(--border-radius);
+}
+@media screen and (max-width: 767px) {
+    .error-box {
+        padding: 1.25em;
+    }
 }
 .remaining-associations .open {
     display: block;
@@ -420,30 +454,36 @@ details {
     border: 1px solid var(--color-gray);
     border-radius: var(--border-radius);
     padding: 1em 1em 0;
+    background-color: white;
+}
+details > summary {
+    /* The native summary marker is replaced by our chevron */
+    display: flex;
+    align-items: baseline;
+    gap: 0.75em;
+    margin: -1em -1em 0;
+    padding: 1em;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--color-ink);
+}
+details > summary:hover {
+    color: var(--color-primary);
 }
 details > summary::before {
-    margin-right: 1ch;
-    display: inline-block;
-    float: left;
-    content: '▶️';
-    transition: 0.2s;
+    content: '\f054';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 0.8em;
+    color: var(--color-primary);
+    transition: transform 0.2s;
 }
 details[open] > summary {
-    list-style-type: '🔽';
     border-bottom: 1px solid var(--color-gray);
     margin-bottom: 1em;
 }
 details[open] > summary::before {
     transform: rotate(90deg);
-}
-details > summary {
-    /* purecss 3 normalizes summary to list-item, which shows the native marker */
-    display: block;
-    margin: -1em -1em 0;
-    padding: 1em;
-    cursor: pointer;
-    font-weight: bold;
-    color: var(--color-primary);
 }
 details > summary i {
     margin: 0 10px;
@@ -473,124 +513,109 @@ details > summary p {
 }
 
 /**
- * Breadcrumb
+ * Stepper: the progress of the draw, dots joined by a line
  */
-.breadcrumb {
-    display: inline-block;
-    padding: 0;
-    margin: 1em 0;
-    background-color: transparent;
-    border-radius: var(--button-border-radius);
+.stepper {
+    display: flex;
+    justify-content: center;
+    max-width: 960px;
+    margin: 1.5em auto 1em;
+    padding: 0 1em;
     list-style: none;
-    --color-breadcrumb-background: var(--color-gray-light);
 }
-.breadcrumb::after {
-     clear: both;
-     content: "";
-     display: table;
- }
-.breadcrumb li {
+.stepper li {
     position: relative;
-    padding: 0;
-    margin: 4px 4px 4px 0;
-    float: left;
+    flex: 1;
+    max-width: 10em;
+    text-align: center;
 }
-.breadcrumb li > * {
-    display: inline-block;
-    position: relative;
-    padding: 1em .8em 1em 2.5em;
-    padding-left: 2.5em;
-    color: var(--color-black);
-    background-color: var(--color-breadcrumb-background);
-    border-color: #edeff0;
-}
-.breadcrumb li > a {
+.stepper li > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    color: var(--color-ink-2);
+    font-size: 0.9em;
     text-decoration: none;
-    background-color: var(--color-breadcrumb-background);
 }
-.breadcrumb li:first-of-type > * {
-    padding-left: 1.6em;
-    border-radius: var(--button-border-radius) 0 0 var(--button-border-radius);
+.stepper li > a:hover {
+    color: var(--color-primary);
+    text-decoration: none;
 }
-.breadcrumb li:last-of-type > * {
-    padding-right: 1.6em;
-    border-radius: 0 var(--button-border-radius) var(--button-border-radius) 0;
-}
-.breadcrumb li.current > * {
-    color: white;
+.step-dot {
+    /* Above the line joining the dots */
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2em;
+    height: 2.2em;
+    border: 2px solid var(--color-gray);
+    border-radius: 50%;
+    background-color: white;
     font-weight: bold;
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
- }
-.breadcrumb li.current > a:hover {
-    text-decoration: none;
-    background-color: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
+    font-size: 1em;
+    color: var(--color-ink-2);
 }
-.breadcrumb li::after {
-    display: inline-block;
-    content: '\00bb';
-    margin: 0 .6em;
-    color: var(--color-breadcrumb-background);
-}
-.breadcrumb li::after,
-.breadcrumb li > *::after {
-    /*
-      li > *::after is the colored triangle after each item
-      li::after is the white separator between two items
-    */
+/* The line between two dots */
+.stepper li + li::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 100%;
-    height: 0;
-    width: 0;
-    /* 52px is the height of the li > * element */
-    border: 26px solid transparent;
-    border-right-width: 0;
-    border-left-width: 20px;
+    top: 1.1em;
+    right: 50%;
+    left: -50%;
+    height: 2px;
+    background-color: var(--color-gray);
 }
-.breadcrumb li::after {
-    /* this is the white separator between two items */
-    z-index: 1;
-    -webkit-transform: translateX(4px);
-    -moz-transform: translateX(4px);
-    -ms-transform: translateX(4px);
-    -o-transform: translateX(4px);
-    transform: translateX(4px);
-    border-left-color: #ffffff;
-    /* reset style */
-    margin: 0;
+.stepper li + li.step-done::before,
+.stepper li + li.step-current::before {
+    background-color: var(--color-primary);
 }
-.breadcrumb li > *::after {
-    /* this is the colored triangle after each element */
-    z-index: 2;
-    border-left-color: inherit;
+.step-done .step-dot,
+.step-current .step-dot {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary);
+    color: white;
 }
-.breadcrumb li:last-of-type::after,
-.breadcrumb li:last-of-type > *::after {
-    /* hide the triangle after the last step */
-    display: none;
+.step-done .step-dot i {
+    font-size: 0.8em;
+}
+.step-current > * {
+    color: var(--color-ink);
+    font-weight: bold;
+}
+@media screen and (max-width: 767px) {
+    .stepper li {
+        max-width: none;
+    }
+    /* Small screens: only the current step keeps its label */
+    .stepper li:not(.step-current) .step-label {
+        display: none;
+    }
 }
 
 /** Override Font Awesome because the logo are not up to date **/
 .custom-fa-slack, .custom-fa-discord, .custom-fa-zoom, .custom-fa-webex {
     display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    text-rendering: auto;
-    line-height: 1;
-}
-.custom-fa-slack:before, .custom-fa-discord:before, .custom-fa-zoom:before, .custom-fa-webex:before {
-    content: ' ';
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: -0.25em;
     background-size: contain;
     background-repeat: no-repeat;
-    background-position-y: bottom;
-    width: 24px;
-    height: 25px;
-    display: block;
-    position: relative;
-    top: 2px;
+    background-position: center;
+}
+.custom-fa-slack {
+    background-image: url("../images/slack-logo.svg");
+}
+.custom-fa-discord {
+    background-image: url("../images/discord-logo.svg");
+}
+.custom-fa-zoom {
+    background-image: url("../images/zoom-logo.svg");
+}
+.custom-fa-webex {
+    background-image: url("../images/webex-logo.svg");
 }
 .custom-fa-slack:before {
     background-image: url("../images/slack-logo.svg");

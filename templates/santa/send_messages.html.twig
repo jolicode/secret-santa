@@ -3,17 +3,15 @@
 {% set currentStep = 5 %}
 
 {% block santa_content %}
-    <div class="content send-messages is-center">
-        <h2>
-            <span class="fas fa-spinner spin"></span>
-            &nbsp;
-            We are sending private messages!
-        </h2>
+    <div class="content progress-page is-center">
+        <span class="step-icon" aria-hidden="true"><i class="fas fa-spinner spin"></i></span>
+        <h2 class="content-head is-center">Sending the private messages</h2>
 
-        <p>
-            <strong>Do not close the window!</strong><br />
-            You will be redirected to the finish page automatically once all the messages were sent.
-        </p>
+        <div class="progress-box">
+            <p>
+                <strong>Keep this window open.</strong><br />
+                You will be redirected automatically once every message has been sent.
+            </p>
 
         {% set sentCount = secretSanta.associations|length - secretSanta.remainingAssociations|length %}
         <progress id="count-progress" value="{{ sentCount }}" max="{{ secretSanta.associations|length }}"
@@ -22,11 +20,10 @@
             <span class="js-count-value">{{ sentCount }}</span> / {{ secretSanta.associations|length }} messages sent.
         </progress>
 
-        <p>
-            <span class="js-count-value">{{ sentCount }}</span> / {{ secretSanta.associations|length }} messages sent so far.
-            <br />
-            <small>Note: the progress is refreshed every 5 seconds.</small>
+        <p class="progress-count">
+            <strong class="js-count-value">{{ sentCount }}</strong> / {{ secretSanta.associations|length }} messages sent
         </p>
+        </div>
     </div>
 {% endblock santa_content %}
 {% block javascripts %}

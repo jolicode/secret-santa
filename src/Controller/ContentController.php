@@ -28,7 +28,9 @@ class ContentController extends AbstractController
     #[Route('/', name: 'homepage', methods: ['GET'])]
     public function homepage(): Response
     {
-        $content = $this->twig->render('content/homepage.html.twig');
+        $content = $this->twig->render('content/homepage.html.twig', [
+            'totalCount' => $this->statisticCollector->getTotalCount(),
+        ]);
 
         return new Response($content);
     }

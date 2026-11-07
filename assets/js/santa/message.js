@@ -16,12 +16,12 @@ if (sampleMessageButton) {
         postJson(sampleMessageButton.dataset.url, new FormData(runForm))
             .then((response) => {
                 if (response.success) {
-                    window.alert('We have sent you a fake message. Check it now before finishing the Secret Santa.');
+                    window.alert('We have sent you a test message. Check it now before finishing the Secret Santa.');
 
                     return;
                 }
 
-                let message = 'Error when sending the fake message:\n';
+                let message = 'Error when sending the test message:\n';
                 Object.values(response.errors).forEach((error) => {
                     message += error + '\n';
                 });

@@ -8,16 +8,16 @@
 
 {% block content %}
     <div class="content spoil-block">
-        <h2>Spoiling Santa</h2>
+        <h2 class="content-head is-center">Spoiling Santa</h2>
 
         {% if associations %}
-            <p>
-                Here is the secret repartition:
+            <p class="spoil-intro">
+                Here is the secret repartition. Keep it to yourself!
             </p>
 
-            <ul>
+            <ul class="spoil-list">
                 {% for giver,receiver in associations %}
-                    <li><strong>{{ giver }}</strong> must offer a gift to <strong>{{ receiver }}</strong></li>
+                    <li><strong>{{ giver }}</strong> <span>must offer a gift to</span> <strong>{{ receiver }}</strong></li>
                 {% endfor %}
             </ul>
 
@@ -28,25 +28,26 @@
                 </a>
             </div>
         {% else %}
-            <p>
-                Paste below the code you received and submit the form to access the secret repartition.
+            <p class="spoil-intro">
+                As the organizer, you received a private message with a <strong>spoil code</strong> right after the draw.
+                Paste it below to reveal who gifts whom.
             </p>
 
             {% if invalidCode %}
                 <p class="error">
-                    Content could not be decoded. Please make sure you copied correctly the code and try again.
+                    This code could not be decoded. Make sure you copied it entirely and try again.
                 </p>
             {% endif %}
 
-            <form method="post" id="run_form">
+            <form method="post" id="run_form" class="spoil-form">
                 <div class="code-field">
-                    <textarea name="code" id="code" rows="6" placeholder="Paste your code here">{{ code }}</textarea>
+                    <textarea name="code" id="code" rows="6" placeholder="Paste your spoil code here">{{ code }}</textarea>
                 </div>
 
                 <div class="is-center">
                     <button type="submit" class="big-button">
                         <span class="fas fa-user-secret" aria-hidden="true"></span>
-                        Decode!
+                        Reveal the repartition
                     </button>
                 </div>
             </form>

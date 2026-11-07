@@ -38,7 +38,7 @@ class MessageScheduleTest extends BaseWebTestCase
         $crawler = $client->request('POST', '/message/slack', ['message' => ['message' => '', 'notes' => ['toto1' => '', 'toto2' => ''], 'options' => ['scheduled_at' => time() + 60], '_token' => 'csrf-token']], [], ['HTTP_SEC_FETCH_SITE' => 'same-origin']);
 
         self::assertSame(200, $client->getResponse()->getStatusCode());
-        self::assertStringContainsString('You can only schedule a Secret Santa for at least 10 minutes away in the future', $crawler->text());
+        self::assertStringContainsString('The delivery date is less than 10 minutes away, please pick a later time (or deliver immediately).', $crawler->text());
     }
 
     private function prepareSlackSession(KernelBrowser $client): void

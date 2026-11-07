@@ -3,26 +3,26 @@
  */
 .legend {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: center;
-    margin: 20px 0 40px;
+    gap: 0.5em 2em;
+    margin: 2em 0 0;
+    font-size: 0.9em;
+    color: var(--color-ink-2);
 }
 
 .legend .legend-item {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    margin: 0 40px;
+    gap: 0.5em;
 }
 
 .legend .legend-item::before {
     display: inline-block;
     content: '';
-    padding: 10px;
-    margin: 10px;
-    border-radius: var(--border-radius);
+    width: 0.9em;
+    height: 0.9em;
+    border-radius: 3px;
 }
 
 .legend .legend-item.total::before {
@@ -46,51 +46,69 @@
 }
 
 .single-values {
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+    max-width: 1000px;
+    margin: 2em auto;
+    padding: 0 1em;
+}
+
+@media screen and (min-width: 800px) {
+    .single-values {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 .single-value {
-    background-color: var(--color-primary);
-    border-radius: var(--border-radius);
-    padding: 20px;
-    margin: 20px;
+    padding: 1.5em;
+    border: 1px solid var(--color-line);
+    border-radius: var(--border-radius-large);
+    background-color: white;
     text-align: center;
-    color: white;
-    width: 250px;
 }
 
 .single-value .title {
-    font-size: 20px;
+    color: var(--color-ink-2);
 }
 
 .single-value .value {
-    margin-top: 10px;
+    margin-top: 0.3em;
+    color: var(--color-ink-2);
 }
 
+.single-value {
+    min-width: 0;
+}
 .single-value .number {
+    font-family: var(--font-display);
     font-weight: bold;
-    font-size: 40px;
+    font-size: clamp(1.6em, 7vw, 2.4em);
+    letter-spacing: -0.02em;
+    color: var(--color-primary);
+}
+
+.footnotes {
+    font-size: 0.85em;
+    color: var(--color-ink-2);
 }
 
 .container-charts {
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1em;
 }
 
 .chart {
     display: flex;
     align-items: flex-end;
-    margin: 20px 0 40px;
+    margin: 2em 0 3em;
+    padding: 2em 1em 1em;
+    border: 1px solid var(--color-line);
+    border-radius: var(--border-radius-large);
+    background-color: white;
     overflow-x: auto;
     overflow-y: hidden;
-    max-width: 90%;
 }
 
 .graph-counterValue {
@@ -115,6 +133,7 @@
 .graph-bar {
     background-color: var(--color-primary);
     margin: 1px;
+    border-radius: 3px 3px 0 0;
     color: white;
     min-height: 1px;
     width: 40px;
