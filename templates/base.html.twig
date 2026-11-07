@@ -4,16 +4,16 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=2">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=2">
-        <link rel="manifest" href="/site.webmanifest?v=2">
-        <link rel="mask-icon" href="/safari-pinned-tab.svg?v=2" color="#5bbad5">
-        <link rel="shortcut icon" href="/favicon.ico?v=2">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=3">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=3">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=3">
+        <link rel="manifest" href="/site.webmanifest?v=3">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg?v=3" color="#b5273b">
+        <link rel="shortcut icon" href="/favicon.ico?v=3">
         <meta name="apple-mobile-web-app-title" content="Secret Santa">
         <meta name="application-name" content="Secret Santa">
-        <meta name="msapplication-TileColor" content="#ee3737">
-        <meta name="theme-color" content="#ee3737">
+        <meta name="msapplication-TileColor" content="#b5273b">
+        <meta name="theme-color" content="#b5273b">
 
         <meta name="slack-app-id" content="AP0Q2FLEB">
 
@@ -21,8 +21,6 @@
             {{ include('_seo.html.twig') }}
         {% endblock %}
 
-        <link rel="stylesheet" href="{{ asset('vendor/purecss/build/pure-min.css') }}">
-        <link rel="stylesheet" href="{{ asset('vendor/purecss/build/grids-responsive-min.css') }}">
         <link rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
         <link rel="stylesheet" href="{{ asset('styles/fonts.css') }}">
         <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
@@ -42,63 +40,44 @@
     <body>
 
         <header class="header">
-            <div class="home-menu pure-menu pure-menu-horizontal">
-                <div class="pure-menu-heading">
-                    <a href="{{ path('homepage') }}">
-                        <div class="logo-wrapper">
-                            <img src="{{ asset('images/logo' ~ (spoilInProgress is defined ? '-spoiler' : '') ~ '.png') }}" alt="Secret Santa" />
-                        </div>
-                        <div>
-                            <div class="site-brand">
-                                Secret Santa
-                            </div>
-                            <div class="site-headline">
-                                Share the Christmas spirit<br/>with your team
-                            </div>
-                        </div>
-                    </a>
-                </div>
+            <nav class="home-menu">
+                <a class="site-brand" href="{{ path('homepage') }}">
+                    <span class="logo-wrapper">
+                        <img src="{{ asset('images/logo' ~ (spoilInProgress is defined ? '-spoiler' : '') ~ '.png') }}" alt="" />
+                    </span>
+                    Secret Santa
+                </a>
 
-                <ul class="pure-menu-list">
-                    <li class="pure-menu-item">
-                        <a class="pure-menu-link" href="{{ path('hall_of_fame') }}"><i class="fas fa-star"></i> Hall of Fame</a>
+                {% set route = app.request.attributes.get('_route') %}
+                <ul class="menu-list">
+                    <li>
+                        <a class="menu-link" href="{{ path('hall_of_fame') }}"{% if route == 'hall_of_fame' %} aria-current="page"{% endif %}><i class="fas fa-star" aria-hidden="true"></i> Hall of Fame</a>
                     </li>
-                    <li class="pure-menu-item">
-                        <a class="pure-menu-link" href="{{ path('faq') }}"><i class="fas fa-question"></i> Help</a>
+                    <li>
+                        <a class="menu-link" href="{{ path('faq') }}"{% if route == 'faq' %} aria-current="page"{% endif %}><i class="fas fa-question-circle" aria-hidden="true"></i> Help</a>
                     </li>
-                    <li class="pure-menu-item">
-                        <a target="_blank" rel="noreferrer" class="pure-menu-link" href="https://github.com/jolicode/secret-santa/"><i class="fab fa-github"></i> Star us on GitHub</a>
+                    <li>
+                        <a target="_blank" rel="noreferrer" class="menu-link" href="https://github.com/jolicode/secret-santa/"><i class="fab fa-github" aria-hidden="true"></i> GitHub<span class="hidden"> (opens in a new tab)</span></a>
                     </li>
                 </ul>
-            </div>
+            </nav>
         </header>
+
+        <main>
+        {% block banner %}{% endblock banner %}
 
         <div class="content-wrapper">
             {% block content %}
             {% endblock content %}
 
-            <footer class="footer is-center {% block footerClass %}{% endblock %}">
+            <div class="support is-center">
                 {% block contact %}
-                    <a href="{{ path('faq') }}" class="support-link"><i class="fas fa-life-ring"></i> Need help?</a>
-                    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="far fa-envelope"></i> Contact us!</a>
+                    <p>Need help? <a href="{{ path('faq') }}">Read the FAQ</a> or <a href="mailto:hello@secret-santa.team">write to us</a>.</p>
                 {% endblock contact %}
-                <p>
-                    This free service to share the santa spirit is made with ♥ by <a href="https://jolicode.com">JoliCode</a>.
-                    <br>
-                    Hosted gracefully by the awesome people at <a href="https://www.clever-cloud.com/">Clever Cloud</a>.
-                    <br>
-                    Logo lovely crafted by <a href="https://twitter.com/coucou__alex">Alexandre Godreau</a>.
-                    <br>
-                    Emoji provided by <a href="https://www.emojione.com/">Emoji One</a>.
-                    <br>
-                    Sharing gifts since 2015.
-                </p>
-                <p>
-                    <a href="{{ path('terms') }}">Terms of Service</a>
-                    and
-                    <a href="{{ path('privacy_policy') }}">Privacy Policy</a>
-                </p>
-            </footer>
+            </div>
         </div>
+        </main>
+
+        {{ include('_joli_footer.html.twig') }}
     </body>
 </html>

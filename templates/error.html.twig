@@ -1,35 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="content error-page">
-        <div class="is-center">
-            <h2>An unexpected error happened!</h2>
+    <div class="content-container">
+        <div class="content error-page is-center">
+            <h1 class="content-head is-center">An unexpected error happened!</h1>
 
-            <p>
-                Our application was not able to do what you asked for. That's unfortunate, and we hope it didn't break Christmas.
-                Feel free to <a href="mailto:hello@secret-santa.team">contact us</a> if you need assistance!
-            </p>
+            <div class="error-box">
+                <p>
+                    Our application was not able to do what you asked for. That's unfortunate, and we hope it didn't break Christmas.
+                    Feel free to <a href="mailto:hello@secret-santa.team">contact us</a> if you need assistance!
+                </p>
 
-            <p>
-                Here is the evil error that caused this fail:
-            </p>
+                <p>
+                    Here is the evil error that caused this fail:
+                </p>
 
-            <div class="error-code">
-                <p>{{ exception.message }}</p>
+                <div class="error-code">
+                    <p>{{ exception.message }}</p>
+                </div>
+
+                <img alt="" src="{{ asset('images/error-500.gif') }}">
+
+                <div>
+                    <a href="{{ path('homepage') }}" class="big-button">
+                        <span class="fas fa-angle-left" aria-hidden="true"></span>
+                        Go back to home page
+                    </a>
+
+                    <a href="mailto:hello@secret-santa.team" class="big-button">
+                        <span class="far fa-life-ring" aria-hidden="true"></span>
+                        Contact support
+                    </a>
+                </div>
             </div>
-
-            <img class="is-center" alt="Error 500" src="{{ asset('images/error-500.gif') }}">
-        </div>
-        <div class="is-center">
-            <a href="{{ path('homepage') }}" class="big-button">
-                <span class="fas fa-angle-left" aria-hidden="true"></span>
-                Go back to home page
-            </a>
-
-            <a href="mailto:hello@secret-santa.team" class="big-button">
-                <span class="far fa-life-ring" aria-hidden="true"></span>
-                Contact support
-            </a>
         </div>
     </div>
 {% endblock content %}

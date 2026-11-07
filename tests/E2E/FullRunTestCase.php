@@ -87,7 +87,7 @@ abstract class FullRunTestCase extends PlaywrightTestCase
         // The spoil code sent to the admin decodes to the same repartition
         $page = $this->visit('/spoil');
         $page->locator('[name="code"]')->fill($this->spoilCode($adminMessage));
-        $page->getByRole('button', ['name' => 'Decode!'])->click();
+        $page->getByRole('button', ['name' => 'Reveal the repartition'])->click();
         $page->getByText('Here is the secret repartition')->waitFor();
         $text = $page->locator('body')->innerText();
         foreach ($associations as $giver => $receiver) {
@@ -284,7 +284,7 @@ abstract class FullRunTestCase extends PlaywrightTestCase
         });
         $page->locator('#sample-message-button')->click();
         $this->waitUntil($page, static function () use (&$alerts): bool { return [] !== $alerts; });
-        self::assertSame(['We have sent you a fake message. Check it now before finishing the Secret Santa.'], $alerts);
+        self::assertSame(['We have sent you a test message. Check it now before finishing the Secret Santa.'], $alerts);
         self::assertCount(1, $api->postedMessages());
         self::assertSame($alice, $api->postedMessages()[0]['to']);
         self::assertStringContainsString('Loves chocolate', $api->postedMessages()[0]['text'], 'Sample uses the notes');

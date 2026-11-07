@@ -1,0 +1,71 @@
+{# The "How does it work?" timeline, shared by the homepage and the platform landings. `application` selects the sign-in step. #}
+{% set application = application|default(null) %}
+
+<div class="content how-block">
+    <h2 class="content-head is-center">How does it work?</h2>
+
+    <ol class="steps">
+        <li class="step-card">
+            <span class="step-number" aria-hidden="true">01</span>
+            {% if application == 'webex' %}
+                <h3>Sign in with Webex</h3>
+                <p>Click on "Run on Webex" above and connect with your Webex Messaging account. You will be asked to accept the integration permissions, nothing else to install.</p>
+                <div class="step-card-mockup" aria-hidden="true">
+                    <img src="{{ asset('images/webex/login.png') }}" alt="">
+                </div>
+            {% else %}
+                <h3>Sign in with your chat platform</h3>
+                <p>Click on "Run on Slack", "Run on Discord" or "Run on Webex" above. No account to create: your chat login is enough.</p>
+                <div class="step-card-mockup mockup-connect" aria-hidden="true">
+                    <span class="mockup-button"><i class="custom-fa-slack"></i> Slack</span>
+                    <span class="mockup-button"><i class="custom-fa-discord"></i> Discord</span>
+                    <span class="mockup-button"><i class="custom-fa-webex"></i> Webex</span>
+                </div>
+            {% endif %}
+        </li>
+
+        <li class="step-card">
+            <span class="step-number" aria-hidden="true">02</span>
+            <h3>Select the participants</h3>
+            <p>We list all the members of your team (bots excluded, they don't do nice gifts). Tick the ones who take part.</p>
+            <div class="step-card-mockup mockup-users" aria-hidden="true">
+                <span class="mockup-search">🔎 Search user by real name or username</span>
+                <span class="mockup-user"><input type="checkbox" checked tabindex="-1"><span class="mockup-avatar">A</span> Alice (alice)</span>
+                <span class="mockup-user"><input type="checkbox" checked tabindex="-1"><span class="mockup-avatar">B</span> Bob (bob)</span>
+                <span class="mockup-user"><input type="checkbox" tabindex="-1"><span class="mockup-avatar">C</span> Carol (carol)</span>
+                <span class="mockup-user"><input type="checkbox" checked tabindex="-1"><span class="mockup-avatar">D</span> Dave (dave)</span>
+                <span class="mockup-chips"><span class="mockup-chip">Alice ✕</span><span class="mockup-chip">Bob ✕</span><span class="mockup-chip">Dave ✕</span></span>
+            </div>
+        </li>
+
+        <li class="step-card">
+            <span class="step-number" aria-hidden="true">03</span>
+            <h3>Set your rules</h3>
+            <p>Add <strong>exclusions</strong> to keep couples or managers from drawing each other. Write a <strong>message for everyone</strong> (budget, deadline, party date) and, if you like, private notes about each participant, such as a delivery address or a food allergy.</p>
+            <div class="step-card-mockup mockup-rules" aria-hidden="true">
+                <span class="mockup-exclusion"><i class="fas fa-ban"></i> <span class="mockup-chip">Alice</span> must not gift <span class="mockup-chip">Bob</span></span>
+                <span class="mockup-textarea">Oh oh oh 🎅! Our Christmas party takes place on December 14th. Budget: 20€. Good luck in your gift hunting!</span>
+            </div>
+        </li>
+
+        <li class="step-card">
+            <span class="step-number" aria-hidden="true">04</span>
+            <h3>Everyone gets a private message</h3>
+            <p>We shuffle the participants and the Secret Santa bot sends each of them a private message with the name of the person to gift, along with your message.</p>
+            <div class="step-card-mockup mockup-message" aria-hidden="true">
+                <span class="chat-header">
+                    <img src="{{ asset('images/logo.png') }}" alt="" class="chat-avatar">
+                    <strong>Secret Santa Bot</strong> <span class="chat-badge">APP</span> <span class="chat-time">14:31</span>
+                </span>
+                <span>Someone will get you a gift and <strong>you have been chosen to gift:</strong><br>🎁 <span class="chat-mention">@dwarfgrumpy</span> 🎁</span>
+                <span><strong>Here is a message from the Secret Santa admin:</strong><br>Oh oh oh 🎅! Our Christmas party takes place on December 14th. Budget: 20€. Good luck in your gift hunting!</span>
+            </div>
+        </li>
+
+        <li class="step-card">
+            <span class="step-number" aria-hidden="true">05</span>
+            <h3>Buy a gift</h3>
+            <p>Everything is set. Go find a gift for your peer before the party. Merry Christmas!</p>
+        </li>
+    </ol>
+</div>

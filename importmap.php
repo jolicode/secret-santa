@@ -18,6 +18,10 @@ return [
         'path' => './assets/js/faq.js',
         'entrypoint' => true,
     ],
+    'stats' => [
+        'path' => './assets/js/stats.js',
+        'entrypoint' => true,
+    ],
     'santa/participants' => [
         'path' => './assets/js/santa/participants.js',
         'entrypoint' => true,
@@ -53,14 +57,6 @@ return [
     // the templates with asset('vendor/...'), not imported from JS.
     'flatpickr/dist/flatpickr.min.css' => [
         'version' => '4.6.13',
-        'type' => 'css',
-    ],
-    'purecss/build/pure-min.css' => [
-        'version' => '3.1.0',
-        'type' => 'css',
-    ],
-    'purecss/build/grids-responsive-min.css' => [
-        'version' => '3.1.0',
         'type' => 'css',
     ],
     '@bugsnag/js' => [

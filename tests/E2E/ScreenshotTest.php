@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Tests\E2E;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use Playwright\Symfony\Test\PlaywrightTestCase;
+use Predis\Client;
 
 /**
  * Visual regression of the public pages. The pages of the Secret Santa journey are covered
@@ -27,9 +28,20 @@ class ScreenshotTest extends PlaywrightTestCase
     #[DataProvider('providePages')]
     public function testPage(string $name, string $path): void
     {
-        $this->visit($path);
+        static::bootKernel();
+        $redis = static::getContainer()->get(Client::class);
 
-        $this->assertScreenshot($name);
+        // The homepage shows the number of draws: pin it, the counter moves with every run
+        $total = $redis->get('stats:total');
+        $redis->set('stats:total', 12345);
+
+        try {
+            $this->visit($path);
+
+            $this->assertScreenshot($name);
+        } finally {
+            null === $total ? $redis->del('stats:total') : $redis->set('stats:total', $total);
+        }
     }
 
     /**

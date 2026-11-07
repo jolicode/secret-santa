@@ -12,21 +12,26 @@
 {% endblock %}
 
 {% block content %}
-    <div class="hall-of-fame">
+    <div class="faq-page">
         <div class="content-container">
             <div class="content faq">
                 <h1 class="content-head is-center">Help and Frequently Asked Questions</h1>
+                <p class="faq-intro">Everything about your data, the draw, and the chat platforms we support.</p>
+                <nav class="faq-nav" aria-label="FAQ sections">
+                    <a href="#privacy">Privacy</a>
+                    <a href="#using-the-app">Using the app</a>
+                    <a href="#discord">Discord</a>
+                    <a href="#webex">Webex</a>
+                    <a href="#miscellaneous">Miscellaneous</a>
+                </nav>
 
-                <h2>Privacy</h2>
+                <h2 id="privacy" class="section-head">Privacy</h2>
 
                 <ul>
                     <li>
                         <details id="data-collect">
                             <summary>
-                                <h3>
-                                    <p><a href="#data-collect" class="faq-anchor"><i class="fas fa-link"></i></a>What do you do with the
-                                        data you collect?</p>
-                                </h3>
+                                <h3>What do you do with the data you collect? <a href="#data-collect" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 <strong>Short answer</strong>:
@@ -44,10 +49,7 @@
                     <li>
                         <details id="data-retention">
                             <summary>
-                                <h3>
-                                    <p><a href="#data-retention" class="faq-anchor"><i class="fas fa-link"></i></a>How long do you keep the
-                                        collected data?</p>
-                                </h3>
+                                <h3>How long do you keep the collected data? <a href="#data-retention" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 This project do not use a database. Every data is stored only during
@@ -58,15 +60,13 @@
                     </li>
                 </ul>
 
-                <h2>Using the app</h2>
+                <h2 id="using-the-app" class="section-head">Using the app</h2>
 
                 <ul>
                     <li>
                         <details id="howto">
                             <summary>
-                                <h3>
-                                    <p><a href="#howto" class="faq-anchor"><i class="fas fa-link"></i></a>How does it work?</p>
-                                </h3>
+                                <h3>How does it work? <a href="#howto" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 Once authenticated with your favorite Chat tool, you will be prompted with the User
@@ -81,25 +81,36 @@
                             </div>
 
                             <p>
-                                On the second screen, you will be able to customize a bit the message that will be sent
+                                On the second screen, you can add exclusions: pairs of participants who must not be
+                                matched together, such as a couple or a manager and their report. Skip it if you
+                                have none.
+                            </p>
+
+                            <div class="is-center">
+                                <img class="img-border" src="{{ asset('images/app-step2.png') }}" style="max-width: 80%"
+                                     alt="The exclusions form"/>
+                            </div>
+
+                            <p>
+                                On the third screen, you will be able to customize a bit the message that will be sent
                                 to every participant.
                                 You can add an optional message that will be sent along the Secret Santa draw. You can
                                 even add details about every participant to help Santas achieve their mission.
                             </p>
 
                             <div class="is-center">
-                                <img class="img-border" src="{{ asset('images/app-step2.png') }}" style="max-width: 80%"
+                                <img class="img-border" src="{{ asset('images/app-step3.png') }}" style="max-width: 80%"
                                      alt="The customization form"/>
                             </div>
 
                             <p>
-                                On the third step, you will be able to check the repartition of the Secret Santa if you
+                                On the fourth step, you will be able to check the repartition of the Secret Santa if you
                                 want to know who each participant must offer a gift to. If you are not satisfied, you
                                 can shuffle the list again.
                             </p>
 
                             <div class="is-center">
-                                <img class="img-border" src="{{ asset('images/app-step3.png') }}" style="max-width: 80%"
+                                <img class="img-border" src="{{ asset('images/app-step4.png') }}" style="max-width: 80%"
                                      alt="The validation step" />
                             </div>
 
@@ -128,10 +139,7 @@
                     <li>
                         <details id="secret-repartition">
                             <summary>
-                                <h3>
-                                    <p><a href="#secret-repartition" class="faq-anchor"><i class="fas fa-link"></i></a>How can I retrieve
-                                        the secret repartition ?</p>
-                                </h3>
+                                <h3>How can I retrieve the secret repartition ? <a href="#secret-repartition" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 As the organizer of the Secret Santa, you will receive a private message that will look
@@ -154,10 +162,7 @@
                     <li>
                         <details id="custom-message">
                             <summary>
-                                <h3>
-                                    <p><a href="#custom-message" class="faq-anchor"><i class="fas fa-link"></i></a>Can I add a custom message for some members ?
-                                    </p>
-                                </h3>
+                                <h3>Can I add a custom message for some members ? <a href="#custom-message" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
 
                             <p>
@@ -181,10 +186,7 @@
                     <li>
                         <details id="odd">
                             <summary>
-                                <h3>
-                                    <p><a href="#odd" class="faq-anchor"><i class="fas fa-link"></i></a>Will the app work with an odd
-                                        number of participant?</p>
-                                </h3>
+                                <h3>Will the app work with an odd number of participant? <a href="#odd" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 Don't worry! The draw works perfectly no matter how many participants you selected (of
@@ -195,10 +197,7 @@
                     <li>
                         <details id="avoid-association">
                             <summary>
-                                <h3>
-                                    <p><a href="#avoid-association" class="faq-anchor"><i class="fas fa-link"></i></a>Can I make sure
-                                        someone will be matched or not matched with someone else?</p>
-                                </h3>
+                                <h3>Can I make sure someone will be matched or not matched with someone else? <a href="#avoid-association" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 Yes, you can! On the second step of the application, you will be able to fill the
@@ -210,10 +209,7 @@
                     <li>
                         <details id="new-participant">
                             <summary>
-                                <h3>
-                                    <p><a href="#new-participant" class="faq-anchor"><i class="fas fa-link"></i></a>Can I add a new
-                                        participant once messages have been sent?</p>
-                                </h3>
+                                <h3>Can I add a new participant once messages have been sent? <a href="#new-participant" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 No, you can't. However, you can still start a new Secret Santa. We advise you to add a
@@ -223,15 +219,13 @@
                     </li>
                 </ul>
 
-                <h2>Discord</h2>
+                <h2 id="discord" class="section-head">Discord</h2>
 
                 <ul>
                     <li>
                         <details id="discord-bot-offline">
                             <summary>
-                                <h3>
-                                    <p><a href="#discord-bot-offline" class="faq-anchor"><i class="fas fa-link"></i></a>Why is the bot always offline?</p>
-                                </h3>
+                                <h3>Why is the bot always offline? <a href="#discord-bot-offline" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>The bot is only there to send private message to each participant. You won't interact
                                with it directly, so it's always offline.</p>
@@ -242,10 +236,7 @@
                     <li>
                         <details id="discord-server-dm">
                             <summary>
-                                <h3>
-                                    <p><a href="#discord-server-dm" class="faq-anchor"><i class="fas fa-link"></i></a>What to do when a
-                                        user does not allow to receive private message on a Discord server?</p>
-                                </h3>
+                                <h3>What to do when a user does not allow to receive private message on a Discord server? <a href="#discord-server-dm" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 Discord has an option to allow anyone to not receive private message on a server they
@@ -270,10 +261,7 @@
                     <li>
                         <details id="invalid-user">
                             <summary>
-                                <h3>
-                                    <p><a href="#invalid-user" class="faq-anchor"><i class="fas fa-link"></i></a>Why did someone receive
-                                        <code>@invalid-user</code> as the person to gift?</p>
-                                </h3>
+                                <h3>Why did someone receive <code>@invalid-user</code> as the person to gift? <a href="#invalid-user" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 This is due to a known bug of the Discord Android application. The workaround is to open
@@ -284,15 +272,13 @@
                     </li>
                 </ul>
 
-                <h2>Webex</h2>
+                <h2 id="webex" class="section-head">Webex</h2>
 
                 <ul>
                     <li>
                         <details id="webex-account">
                             <summary>
-                                <h3>
-                                    <p><a href="#webex-account" class="faq-anchor"><i class="fas fa-link"></i></a>What kind of Webex account is needed?</p>
-                                </h3>
+                                <h3>What kind of Webex account is needed? <a href="#webex-account" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>The Webex by Cisco integration requires a Free or Paid Webex account.</p>
                         </details>
@@ -300,9 +286,7 @@
                     <li>
                         <details id="webex-setup">
                             <summary>
-                                <h3>
-                                    <p><a href="#webex-setup" class="faq-anchor"><i class="fas fa-link"></i></a>How to add the Webex integration?</p>
-                                </h3>
+                                <h3>How to add the Webex integration? <a href="#webex-setup" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>Head over our <a href="{{ path('webex_landing') }}">dedicated Webex tutorial</a> to learn more about adding Secret Santa on Webex.</p>
                         </details>
@@ -310,9 +294,7 @@
                     <li>
                         <details id="webex-revoke">
                             <summary>
-                                <h3>
-                                    <p><a href="#webex-revoke" class="faq-anchor"><i class="fas fa-link"></i></a>How do I revoke the permission I gave?</p>
-                                </h3>
+                                <h3>How do I revoke the permission I gave? <a href="#webex-revoke" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>We are not storing any token or permission - so consider your Webex account already free from all ties with Secret Santa.</p>
                             <p>Once used, this application will never send you or your contact any message
@@ -322,9 +304,7 @@
                     <li>
                         <details id="webex-missing-people">
                             <summary>
-                                <h3>
-                                    <p><a href="#webex-missing-people" class="faq-anchor"><i class="fas fa-link"></i></a>Some people are not showing up, why?</p>
-                                </h3>
+                                <h3>Some people are not showing up, why? <a href="#webex-missing-people" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>We can only list users from active rooms (that's a limitation of non-admin Webex API's). So it will only list users 
                                 from active rooms (the last 20 rooms are used). Some rooms also have restrictions and the bot cannot list users from them.
@@ -333,16 +313,13 @@
                     </li>
                 </ul>
 
-                <h2>Miscellaneous</h2>
+                <h2 id="miscellaneous" class="section-head">Miscellaneous</h2>
 
                 <ul>
                     <li>
                         <details id="hall-of-fame">
                             <summary>
-                                <h3>
-                                    <p><a href="#hall-of-fame" class="faq-anchor"><i class="fas fa-link"></i></a>How can I add my company /
-                                        organization to your Hall of Fame?</p>
-                                </h3>
+                                <h3>How can I add my company / organization to your Hall of Fame? <a href="#hall-of-fame" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
                             </summary>
                             <p>
                                 Simply drop us an email at <a
@@ -362,6 +339,6 @@
     {{ importmap(['app', 'faq'], {nonce: csp_nonce('script')}) }}
 {% endblock %}
 {% block contact %}
-    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="fas fa-envelope"></i> Did not find an answer
+    <a href="mailto:hello@secret-santa.team" class="big-button"><i class="fas fa-envelope"></i> Did not find an answer
         to your question? Contact us!</a>
 {% endblock contact %}

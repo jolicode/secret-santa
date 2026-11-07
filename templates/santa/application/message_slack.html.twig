@@ -16,14 +16,15 @@
 
 {% block options %}
     <div class="user-field message-step">
-        <h3><label for="{{ form.options.scheduled_at_tz.vars.id }}">Want to schedule the message to a later date?</label></h3>
+        <h3>When should the messages be delivered?</h3>
 
-        <p>If not, you can just leave this field <strong>empty</strong>.</p>
-
-        <div class="scheduling">
-            {{ form_widget(form.options.scheduled_at_tz, {attr: {readonly: 'readonly', 'data-scheduling-display': ''}}) }}
-            <span id="scheduling-clear" class="scheduling-clear fas fa-times" title="Remove the scheduling date"></span>
-        </div>
+        <p class="scheduling-sentence">
+            <label for="{{ form.options.scheduled_at_tz.vars.id }}">Deliver the private messages</label>
+            <span class="scheduling">
+                {{ form_widget(form.options.scheduled_at_tz, {attr: {readonly: 'readonly', placeholder: 'immediately', 'data-scheduling-display': ''}}) }}
+                <span id="scheduling-clear" class="scheduling-clear fas fa-times is-hidden" title="Deliver immediately instead"></span>
+            </span>
+        </p>
 
         {{ form_widget(form.options.scheduled_at, {attr: {style: 'display: none;', 'data-scheduling-timestamp': ''}}) }}
 

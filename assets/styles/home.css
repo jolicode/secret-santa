@@ -1,19 +1,136 @@
 /**
- * Home app picture
+ * Hero
  */
-.app-container {
-    text-align:center;
-    margin-top: 48px;
-    position: relative;
-    top: -200px;
-    margin-bottom: -200px;
-    z-index: 1;
+.home .jumbotron {
+    text-align: left;
 }
-.app-container img {
+.hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3em;
+    align-items: center;
+    max-width: 1200px;
+    padding: 2em 0 0;
     position: relative;
-    max-width: 1080px;
-    margin: auto;
-    width: 100%;
+    z-index: 3;
+}
+@media screen and (min-width: 1024px) {
+    .hero {
+        grid-template-columns: 1.2fr 1fr;
+        padding: 3em 0 1em;
+    }
+}
+.hero h1 {
+    font-size: 3.2em;
+    margin: 0.2em 0 0.4em;
+    text-align: left;
+    text-wrap: balance;
+}
+.hero p {
+    text-align: left;
+    padding: 0;
+    margin: 0 0 1em;
+}
+.hero .hero-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 0.75em;
+}
+.hero .hero-kicker span {
+    padding: 0.2em 0.8em;
+    border-radius: 999px;
+    background-color: var(--color-gold);
+    color: var(--color-ink);
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.hero .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    margin: 1.5em 0;
+}
+.hero .actions .action {
+    margin: 0;
+}
+.hero .hero-counter {
+    margin: 1.5em 0 0;
+    color: var(--color-on-night-2);
+}
+.hero .hero-counter i {
+    margin-right: 0.3em;
+    color: var(--color-gold);
+}
+.hero .hero-counter strong {
+    color: white;
+    font-size: 1.2em;
+}
+@media screen and (max-width: 860px) {
+    .hero h1 {
+        font-size: 2.2em;
+    }
+}
+
+/**
+ * Hero message: the Slack DM received by a participant, in HTML
+ */
+.hero-message {
+    margin: 0;
+    background-color: white;
+    color: var(--color-ink);
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    padding: 1.5em;
+    font-size: 0.9em;
+}
+.hero-message p {
+    color: var(--color-ink);
+    font-size: 1em;
+    line-height: 1.5;
+    margin: 0 0 0.8em;
+}
+.hero-message p strong {
+    color: var(--color-ink);
+}
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.75em;
+}
+.chat-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-gray-light);
+}
+.chat-badge {
+    font-size: 0.7em;
+    font-weight: bold;
+    padding: 0.1em 0.4em;
+    border-radius: 3px;
+    background-color: var(--color-gray-light);
+    color: var(--color-ink-2);
+}
+.chat-time {
+    font-size: 0.8em;
+    color: var(--color-ink-2);
+}
+.chat-mention {
+    background-color: #e8f0fe;
+    color: #1264a3;
+    padding: 0 0.2em;
+    border-radius: 3px;
+}
+.hero-message .chat-footer {
+    font-size: 0.85em;
+    color: var(--color-ink-2);
+}
+.hero-message .chat-footer a {
+    color: #1264a3;
 }
 
 /**
@@ -40,111 +157,335 @@
 }
 
 /**
- * Steps
+ * Steps: a vertical timeline, each step with a small HTML mockup of the matching screen
  */
-.step-feature.reverse {
-    flex-direction: row-reverse;
+.how-block {
+    max-width: 760px;
 }
-.step-feature {
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 24px 0;
-}
-
-.step-feature-image {
+.steps {
+    position: relative;
+    margin: 2em 0 3em;
     padding: 0;
-    display: block;
-    margin: auto;
-    max-width: 440px;
-    width: 100%;
-    margin: 0 30px 0 30px;
+    list-style: none;
 }
-.step-feature-image img {
-    width: 100%;
+.steps::before {
+    content: '';
+    position: absolute;
+    top: 1em;
+    bottom: 1em;
+    left: 1.1em;
+    width: 2px;
+    background-color: var(--color-gray);
+}
+.step-card {
+    position: relative;
+    padding: 0 0 2.5em 4em;
+}
+.step-card:last-child {
+    padding-bottom: 0;
+}
+.step-number {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2em;
+    height: 2.2em;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+}
+.step-card h3 {
+    margin: 0 0 0.5em;
+    font-size: 1.4em;
+}
+.step-card p {
+    margin: 0;
+    line-height: 1.5;
+    color: var(--color-ink-2);
 }
 
-.step-feature-text p a {
+/* The mockups */
+.step-card-mockup {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6em;
+    margin-top: 1em;
+    padding: 1.2em;
+    border: 1px solid var(--color-line);
+    border-radius: var(--border-radius-large);
+    background-color: var(--color-cream);
+    font-size: 0.9em;
+}
+.mockup-connect {
+    justify-content: center;
+}
+.mockup-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.5em 1em;
+    border-radius: var(--button-border-radius);
+    background-color: white;
+    box-shadow: var(--shadow-card);
+    font-weight: bold;
+}
+.mockup-users {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    background-color: white;
+    border: 1px solid var(--color-gray);
+    overflow: hidden;
+}
+.mockup-search {
+    padding: 0.6em 1em;
+    color: var(--color-gray-dark);
+    border-bottom: 1px solid var(--color-gray);
+}
+.mockup-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    padding: 0.4em 1em;
+    border-bottom: 1px solid var(--color-gray);
+}
+.mockup-user input {
+    /* A native checkbox, like the real list, but not interactive */
+    pointer-events: none;
+    margin: 0;
+}
+.mockup-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: var(--border-radius);
+    background-color: var(--color-gold);
+    color: var(--color-ink);
+    font-weight: bold;
+    font-size: 0.85em;
+}
+.mockup-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4em;
+    padding: 0.6em 1em;
+    background-color: var(--color-cream);
+}
+.mockup-chip {
+    padding: 0.2em 0.7em;
+    border-radius: var(--border-radius);
+    background-color: var(--color-gray-light);
+    font-size: 0.9em;
+}
+.mockup-message {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+    background-color: white;
+    border: 1px solid var(--color-gray);
+    line-height: 1.5;
+}
+.mockup-message .chat-header {
+    margin-bottom: 0;
+}
+.mockup-rules {
+    flex-direction: column;
+    align-items: stretch;
+}
+.mockup-exclusion {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    color: var(--color-ink-2);
+}
+.mockup-exclusion i {
     color: var(--color-primary);
 }
-.step-feature-text p {
-    box-sizing: border-box;
-    line-height: 1.5em;
+.mockup-textarea {
+    padding: 0.6em 0.8em;
+    border: 1px solid var(--color-gray);
+    border-radius: var(--border-radius);
+    background-color: white;
 }
-.step-feature-text h3 {
-    color: var(--color-primary);
-    font-size: 1.6em;
-    box-sizing: border-box;
+
+/**
+ * Webex landing: a screenshot instead of the HTML chat card
+ */
+.hero-screenshot {
+    width: 100%;
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
-@media screen and (max-width: 860px) {
-    .step-feature {
-        display: block;
-        align-items: center;
-        text-align: center;
-    }
-    .step-feature p, .step-feature h3 {
-        max-width: 456px;
-        padding: 0 24px 20px;
-        text-align: left;
-        width: 100%;
-        margin: 0 auto;
-    }
-    .step-feature-image {
-        margin: 0 auto;
-    }
+.step-card-mockup img {
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: var(--border-radius);
+    /* The screenshot is a PNG on a white background, blend it into the cream card */
+    mix-blend-mode: multiply;
 }
 
 /**
  * What
  */
+/* The home sections breathe more than the regular pages */
+.home .content {
+    padding: 4em 2em;
+}
+.home .content-head {
+    margin: 0 0 1.5em;
+}
+@media screen and (max-width: 767px) {
+    .home .content {
+        padding: 2.5em 1em;
+    }
+}
+.logo-strip {
+    max-width: 960px;
+    margin: 0 auto;
+    padding-bottom: 0;
+    text-align: center;
+}
+.logo-strip p {
+    margin: 0 0 1em;
+    font-size: 0.9em;
+    color: var(--color-ink-2);
+}
+.logo-strip ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5em 3em;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.logo-strip img {
+    height: 36px;
+    max-width: 140px;
+    object-fit: contain;
+    /* Grayscale keeps the strip quiet, the logos get their colors back on hover */
+    filter: grayscale(1);
+    opacity: 0.6;
+    /* The PNG logos have a white background, multiply hides it on the cream */
+    mix-blend-mode: multiply;
+    transition: 0.2s;
+}
+/* Stacked logos (icon above the name) need more height to read at the same scale */
+.logo-strip img.is-stacked {
+    height: 56px;
+}
+.logo-strip img:hover {
+    filter: none;
+    opacity: 1;
+}
+.logo-strip a {
+    display: inline-block;
+    margin-top: 0.6em;
+    padding: 0.6em 0;
+    font-size: 0.9em;
+    color: var(--color-primary);
+}
+
 .what-block {
     max-width: 960px;
     margin: 0 auto;
     position: relative;
 }
-.what-block q,
-.what-block p {
+.what-block blockquote {
+    position: relative;
+    margin: 0;
+    padding: 1.5em 2em 1.5em 2.5em;
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--border-radius-large);
+    background-color: white;
+    box-shadow: var(--shadow-card);
     font-size: 1.2em;
-    line-height: 1.5em;
+    line-height: 1.6;
+}
+.what-block blockquote::before {
+    content: '\201C';
+    /* Fully inside the box, so no browser can clip it */
+    position: absolute;
+    top: 0.15em;
+    left: 0.35em;
+    font-family: var(--font-display);
+    font-size: 3em;
+    line-height: 1;
+    color: var(--color-gold);
+}
+.what-block .aliases {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1.5em 0 0;
+    color: var(--color-ink-2);
+}
+.what-block .aliases span {
+    padding: 0.3em 0.8em;
+    border: 1px solid var(--color-line);
+    border-radius: var(--border-radius);
+    background-color: white;
+    color: var(--color-ink);
 }
 
 /**
- * Why
+ * Trust: three cards, why the app can be trusted
  */
-.why-block {
-    max-width: 960px;
+.trust-block {
+    max-width: 1080px;
     margin: 0 auto;
-    position: relative;
-}
-.why-block a {
-    text-decoration: none;
-    color: var(--color-primary);
-}
-.why-block h2,
-.why-block p {
-    text-align: center;
-}
-.why-block p {
-    font-size: 1.2em;
-    line-height: 1.5em;
-}
-/**
- * Love
- */
-.love-block {
-    max-width: 960px;
-    margin: 0 auto;
-    position: relative;
     padding-top: 0;
 }
-.love-block h2,
-.love-block p {
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
+.trust {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5em;
+    margin: 2em 0 3em;
+    padding: 0;
+    list-style: none;
 }
-.love-block p {
+@media screen and (min-width: 768px) {
+    .trust {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+.trust-card {
+    padding: 2em;
+    background-color: white;
+    border-radius: var(--border-radius-large);
+    box-shadow: var(--shadow-card);
+}
+.trust-card i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4em;
+    height: 2.4em;
+    border-radius: 50%;
+    background-color: var(--color-gold);
+    color: var(--color-ink);
     font-size: 1.2em;
+}
+.trust-card h3 {
+    margin: 0.8em 0 0.4em;
+    font-size: 1.3em;
+}
+.trust-card p {
+    margin: 0;
+    line-height: 1.5;
+    color: var(--color-ink-2);
 }
 
 /**
@@ -203,17 +544,18 @@
     pointer-events: none;
     -webkit-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
-    -webkit-animation: snow linear;
-    animation: snow linear;
+    -webkit-animation: snow linear infinite;
+    animation: snow linear infinite;
 }
 .snow.foreground {
     background-image: url(../images/snow-large.png);
     -webkit-animation-duration: 15s;
     animation-duration: 15s;
 }
+/* Each pair of layers is offset by half a cycle, one is always covering the banner */
 .snow.foreground.layered {
-    -webkit-animation-delay: 7.5s;
-    animation-delay: 7.5s;
+    -webkit-animation-delay: -7.5s;
+    animation-delay: -7.5s;
 }
 .snow.middleground {
     background-image: url(../images/snow-medium.png);
@@ -221,8 +563,8 @@
     animation-duration: 20s;
 }
 .snow.middleground.layered {
-    -webkit-animation-delay: 10s;
-    animation-delay: 10s;
+    -webkit-animation-delay: -10s;
+    animation-delay: -10s;
 }
 @-webkit-keyframes snow {
     0% {
