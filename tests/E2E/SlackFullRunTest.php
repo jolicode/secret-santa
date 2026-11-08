@@ -22,6 +22,26 @@ class SlackFullRunTest extends FullRunTestCase
 {
     protected const NAMES = ['U1' => 'Alice', 'U2' => 'Bob', 'U3' => 'Carol', 'U4' => 'Dave', 'U5' => 'Eve'];
 
+    /**
+     * The channel step before the journey: the selection, and the invitation asked for a shared
+     * channel the bot is not in.
+     */
+    public function testChannelsStep(): void
+    {
+        $this->logInAsAdmin();
+
+        $this->visit('/auth/slack/channels');
+        // The checkbox itself is styled away, the label is what gets clicked
+        $this->getPage()->locator('label[for="channel_C_SANTA"]')->click();
+        $this->getPage()->locator('label[for="channel_C_OTHER"]')->click();
+        $this->checkpoint('channels');
+
+        $this->getPage()->locator('#submit-button')->click();
+        $this->followRedirect();
+        self::assertStringEndsWith('/auth/slack/channels/invitation', $this->getPage()->url());
+        $this->checkpoint('channels-invitation');
+    }
+
     protected static function application(): string
     {
         return 'slack';

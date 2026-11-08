@@ -57,6 +57,9 @@ class WebexController extends AbstractController
         }
 
         if (!$request->query->has('code')) {
+            // Coming from the homepage: a new Secret Santa starts from scratch, whatever the previous one left in session
+            $webexApplication->reset();
+
             // If we don't have an authorization code then get one
             $options = [
                 'scope' => [

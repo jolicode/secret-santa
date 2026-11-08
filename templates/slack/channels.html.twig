@@ -1,0 +1,115 @@
+{% extends 'santa/base.html.twig' %}
+
+{% set currentStep = 0 %}
+{% set application = 'slack' %}
+
+{% block santa_content %}
+    <div class="run-block">
+        <h2 class="content-head is-center">Who can take part in your Secret Santa?</h2>
+
+        <p class="is-center channels-lead">
+            Either the <strong>members of the channels you pick</strong>, or <strong>everyone in your workspace</strong>.
+            Pick channels to leave part of the team out, or to include people from another workspace through a
+            shared channel (Slack Connect).
+        </p>
+
+        {% if error %}
+            <span class="error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <br>{{ error }}
+            </span>
+        {% endif %}
+
+        <form action="{{ path('slack_channels') }}" id="run_form" method="POST">
+            {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
+            <button type="submit" disabled style="display: none" aria-hidden="true"></button>
+
+            <div class="run-columns">
+                <div>
+                    <div class="run-column run-column-left">
+                        <div class="sticky-container">
+                            <div class="sticky">
+                                <h3>Available channels ({{ channels|length }})</h3>
+
+                                <p class="is-center">
+                                    The channels you are a member of. Private channels also need Secret Santa to be
+                                    invited in them to show up here. A channel shared with other workspaces brings
+                                    its external members too.
+                                </p>
+
+                                <div class="user-search">
+                                    <input autofocus placeholder="🔎    Search channel by name" type="text" id="channel-search-input" autocomplete="off" />
+                                    <span class="search-cleaner fas fa-times is-hidden" id="search-cleaner" title="Empty the query"></span>
+                                </div>
+                                {% apply spaceless %}
+                                    <div class="user-container">
+                                        <div class="user-list user-list-simple-rows" id="channel-list">
+                                            <div class="no-result is-hidden" id="no-channel-matching">
+                                                No channel matching.
+                                            </div>
+                                            {% for id, channel in channels %}
+                                                <label class="user-item" for="channel_{{ id }}" data-search-index="{{ channel.name }}">
+                                                    <input type="checkbox" name="channels[]" value="{{ id }}" id="channel_{{ id }}" {{ id in selected ? 'checked' }}>
+                                                    <span>#{{ channel.name }}</span>
+                                                    {% if channel.isShared %}
+                                                        <small>shared with other workspaces</small>
+                                                    {% endif %}
+                                                </label>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endapply %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="run-column run-column-right">
+                        <div class="sticky-container">
+                            <div class="sticky">
+                                <div class="checked-users-summary">
+                                    <h3>Only the members of some channels</h3>
+                                    <div id="checked-channels-summary" class="is-center"></div>
+                                </div>
+
+                                <div class="is-center">
+                                    <p>
+                                        You selected <strong id="checked-channels-count"></strong>.
+                                        Only members of these channels will be proposed as participants.
+                                    </p>
+
+                                    <button type="submit" name="scope" value="channels" class="big-button" id="submit-button">
+                                        <span class="fas fa-hashtag" aria-hidden="true"></span>
+                                        Continue with these channels
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="run-column">
+                <p class="or-separator" aria-hidden="true">or</p>
+
+                <div class="run-card is-center">
+                    <h3>Everyone in the workspace</h3>
+
+                    <p>
+                        Nothing to pick: every member of your workspace will be proposed as a participant.
+                        People from other workspaces are left out, even through a shared channel.
+                    </p>
+
+                    <button type="submit" name="scope" value="workspace" class="big-button outline">
+                        <span class="fas fa-users" aria-hidden="true"></span>
+                        Continue with everyone
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock santa_content %}
+
+{% block javascripts %}
+    {{ importmap(['app', 'slack/channels'], {nonce: csp_nonce('script')}) }}
+{% endblock %}
