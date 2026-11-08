@@ -13,6 +13,7 @@ namespace JoliCode\SecretSanta\Application;
 
 use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\Config;
+use JoliCode\SecretSanta\Model\Group;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
 use JoliCode\SecretSanta\Slack\MessageSender;
@@ -33,6 +34,7 @@ class SlackApplication implements ApplicationInterface
 
     private const SESSION_KEY_TOKEN = 'santa.slack.token';
     private const SESSION_KEY_ADMIN = 'santa.slack.admin';
+    private const SESSION_KEY_CHANNELS = 'santa.slack.channels';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -79,12 +81,30 @@ class SlackApplication implements ApplicationInterface
 
     public function getGroups(): array
     {
-        return $this->userExtractor->extractGroups($this->getToken()->getToken());
+        return $this->userExtractor->extractGroups($this->getToken()->getToken(), $this->getChannels());
+    }
+
+    /**
+     * Channels the participants are restricted to, with their members, keyed by id. None for the whole workspace.
+     *
+     * @return array<string, Group>
+     */
+    public function getChannels(): array
+    {
+        return $this->getSession()->get(self::SESSION_KEY_CHANNELS, []);
+    }
+
+    /**
+     * @param array<string, Group> $channels
+     */
+    public function setChannels(array $channels): void
+    {
+        $this->getSession()->set(self::SESSION_KEY_CHANNELS, $channels);
     }
 
     public function loadNextBatchOfUsers(Config $config): array
     {
-        return $this->userExtractor->loadNextBatchOfUsers($this->getToken()->getToken(), $config);
+        return $this->userExtractor->loadNextBatchOfUsers($this->getToken()->getToken(), $config, $this->getChannels());
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void
@@ -129,6 +149,7 @@ class SlackApplication implements ApplicationInterface
     {
         $this->getSession()->remove(self::SESSION_KEY_TOKEN);
         $this->getSession()->remove(self::SESSION_KEY_ADMIN);
+        $this->getSession()->remove(self::SESSION_KEY_CHANNELS);
     }
 
     public function setToken(ApplicationToken $token): void
@@ -136,7 +157,7 @@ class SlackApplication implements ApplicationInterface
         $this->getSession()->set(self::SESSION_KEY_TOKEN, $token);
     }
 
-    private function getToken(): ApplicationToken
+    public function getToken(): ApplicationToken
     {
         $token = $this->getSession()->get(self::SESSION_KEY_TOKEN);
 

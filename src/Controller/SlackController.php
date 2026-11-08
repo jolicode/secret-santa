@@ -14,6 +14,7 @@ namespace JoliCode\SecretSanta\Controller;
 use JoliCode\SecretSanta\Application\SlackApplication;
 use JoliCode\SecretSanta\Exception\AuthenticationException;
 use JoliCode\SecretSanta\Model\ApplicationToken;
+use JoliCode\SecretSanta\Model\Channel;
 use JoliCode\SecretSanta\Slack\SlackProvider;
 use JoliCode\SecretSanta\Slack\UserExtractor;
 use League\OAuth2\Client\Token\AccessToken;
@@ -52,15 +53,11 @@ class SlackController extends AbstractController
         }
 
         if (!$request->query->has('code')) {
+            // Coming from the homepage: a new Secret Santa starts from scratch, whatever the previous one left in session
+            $slackApplication->reset();
+
             // If we don't have an authorization code then get one
-            $options = [
-                'scope' => [
-                    'chat:write',
-                    'users:read',
-                    'usergroups:read',
-                ],
-            ];
-            $authUrl = $provider->getAuthorizationUrl($options);
+            $authUrl = $provider->getAuthorizationUrl();
 
             $session->set(SlackApplication::SESSION_KEY_STATE, $provider->getState());
 
@@ -87,11 +84,91 @@ class SlackController extends AbstractController
             throw new AuthenticationException(SlackApplication::APPLICATION_CODE, 'Slack did not answer properly when we asked for your account.', $e);
         }
 
+        $missingScopes = $provider->getMissingScopes($token);
+
+        if ($missingScopes) {
+            throw new AuthenticationException(SlackApplication::APPLICATION_CODE, \sprintf('Slack did not grant Secret Santa all the permissions it needs (missing: %s). Your workspace probably approved an older version of the app: ask a workspace admin to approve its new permissions, then try again.', implode(', ', $missingScopes)));
+        }
+
         $slackApplication->setToken($appToken);
         $slackApplication->setAdmin($admin);
 
-        return new RedirectResponse($this->router->generate('run', [
-            'application' => $slackApplication->getCode(),
-        ]));
+        return $this->redirectToRoute('slack_channels');
+    }
+
+    /**
+     * Let the admin restrict the participants to the members of some channels, or include the whole workspace.
+     */
+    #[Route('/auth/slack/channels', name: 'slack_channels', methods: ['GET', 'POST'])]
+    public function channels(Request $request, SlackApplication $slackApplication, UserExtractor $userExtractor): Response
+    {
+        $admin = $slackApplication->getAdmin();
+
+        if (!$slackApplication->isAuthenticated() || !$admin) {
+            return $this->redirectToRoute('slack_authenticate');
+        }
+
+        if ($request->isMethod('POST') && 'workspace' === $request->request->get('scope')) {
+            $slackApplication->setChannels([]);
+
+            return $this->redirectToRoute('run', ['application' => $slackApplication->getCode()]);
+        }
+
+        $token = $slackApplication->getToken()->getToken();
+        $channels = $userExtractor->listChannels($token, $admin);
+        $error = null;
+
+        if ($request->isMethod('POST')) {
+            $selected = array_intersect_key($channels, array_flip($request->request->all('channels')));
+
+            if ([] !== $selected) {
+                $groups = [];
+
+                foreach ($selected as $channel) {
+                    $groups[$channel->id] = $userExtractor->loadMembers($token, $channel);
+                }
+
+                $slackApplication->setChannels($groups);
+
+                if (array_filter($selected, static fn (Channel $channel) => $channel->needsInvitation())) {
+                    return $this->redirectToRoute('slack_channels_invitation');
+                }
+
+                return $this->redirectToRoute('run', ['application' => $slackApplication->getCode()]);
+            }
+
+            $error = 'Select at least one channel, or include everyone in the workspace.';
+        }
+
+        return $this->render('slack/channels.html.twig', [
+            'channels' => $channels,
+            'error' => $error,
+            'selected' => array_keys($slackApplication->getChannels()),
+        ]);
+    }
+
+    /**
+     * The bot can only message the external members (Slack Connect) of a channel it has been invited in:
+     * list the chosen shared channels still missing it, until there is none left.
+     */
+    #[Route('/auth/slack/channels/invitation', name: 'slack_channels_invitation', methods: ['GET'])]
+    public function channelsInvitation(SlackApplication $slackApplication, UserExtractor $userExtractor): Response
+    {
+        $admin = $slackApplication->getAdmin();
+
+        if (!$slackApplication->isAuthenticated() || !$admin) {
+            return $this->redirectToRoute('slack_authenticate');
+        }
+
+        $channels = array_intersect_key($userExtractor->listChannels($slackApplication->getToken()->getToken(), $admin), $slackApplication->getChannels());
+        $channels = array_filter($channels, static fn (Channel $channel) => $channel->needsInvitation());
+
+        if ([] === $channels) {
+            return $this->redirectToRoute('run', ['application' => $slackApplication->getCode()]);
+        }
+
+        return $this->render('slack/channels_invitation.html.twig', [
+            'channels' => $channels,
+        ]);
     }
 }

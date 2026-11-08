@@ -14,7 +14,9 @@ namespace JoliCode\SecretSanta\Tests\Fake;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Slack Web API: paginated users.list, usergroups.list and chat.postMessage.
+ * Slack Web API: paginated users.list, usergroups.list and chat.postMessage, plus the Slack Connect
+ * methods: users.conversations with shared channels, conversations.members, users.info and team.info
+ * for an external user, and conversations.open to message them.
  */
 final class FakeSlackApi extends FakeChatApi
 {
@@ -47,11 +49,41 @@ final class FakeSlackApi extends FakeChatApi
                 ],
             ],
             '/api/users.list' => $this->usersList((string) ($params['cursor'] ?? '')),
+            '/api/users.conversations' => $this->usersConversations($params['user'] ?? null),
+            '/api/conversations.members' => $this->conversationsMembers($params['channel'], (string) ($params['cursor'] ?? '')),
+            '/api/users.info' => 'UEXT' === $params['user']
+                ? ['ok' => true, 'user' => $this->member('UEXT', 'frank', 'Frank', ['team_id' => 'TEXT', 'is_stranger' => true])]
+                : ['ok' => false, 'error' => 'user_not_found'],
+            '/api/team.info' => ['ok' => true, 'team' => ['id' => 'TEXT', 'name' => 'Other Workspace']],
+            '/api/conversations.open' => ['ok' => true, 'channel' => ['id' => 'D' . $params['users']]],
             '/api/chat.postMessage' => \in_array($params['channel'], $this->failingUsers, true)
                 ? ['ok' => false, 'error' => 'channel_not_found']
                 : ['ok' => true, 'channel' => $params['channel'], 'ts' => '1700000000.000001'],
             default => ['ok' => false, 'error' => 'unknown_method'],
         });
+    }
+
+    /**
+     * The members of each channel: #santa spans two pages, the first one has a next cursor.
+     *
+     * @return array<string, mixed>
+     */
+    private function conversationsMembers(string $channel, string $cursor): array
+    {
+        $pages = [
+            'C_LOCAL' => ['' => ['members' => ['U1', 'U3'], 'next_cursor' => '']],
+            'C_SANTA' => [
+                '' => ['members' => ['U1', 'U2'], 'next_cursor' => 'page2'],
+                'page2' => ['members' => ['UEXT'], 'next_cursor' => ''],
+            ],
+            'C_OTHER' => ['' => ['members' => ['U2', 'UEXT'], 'next_cursor' => '']],
+        ];
+
+        return [
+            'ok' => true,
+            'members' => $pages[$channel][$cursor]['members'],
+            'response_metadata' => ['next_cursor' => $pages[$channel][$cursor]['next_cursor']],
+        ];
     }
 
     /**
@@ -85,6 +117,49 @@ final class FakeSlackApi extends FakeChatApi
             'ok' => true,
             'members' => $pages[$cursor]['members'],
             'response_metadata' => ['next_cursor' => $pages[$cursor]['next_cursor']],
+        ];
+    }
+
+    /**
+     * A channel shared with another workspace (Slack Connect) the bot is a member of, unless overridden.
+     *
+     * @return array<string, mixed>
+     */
+    /**
+     * The channels of the admin U1, or the bot's own ones without a user: the bot is not in #other.
+     *
+     * @return array<string, mixed>
+     */
+    private function usersConversations(?string $user): array
+    {
+        $channels = [
+            $this->channel('C_LOCAL', 'local', ['is_ext_shared' => false]),
+            $this->channel('C_SANTA', 'santa'),
+        ];
+
+        if ('U1' === $user) {
+            $channels[] = $this->channel('C_OTHER', 'other');
+        }
+
+        return [
+            'ok' => true,
+            'channels' => $channels,
+            'response_metadata' => ['next_cursor' => ''],
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $overrides
+     *
+     * @return array<string, mixed>
+     */
+    private function channel(string $id, string $name, array $overrides = []): array
+    {
+        return $overrides + [
+            'id' => $id,
+            'name' => $name,
+            'is_ext_shared' => true,
+            'is_pending_ext_shared' => false,
         ];
     }
 

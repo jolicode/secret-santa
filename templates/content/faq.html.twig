@@ -20,6 +20,7 @@
                 <nav class="faq-nav" aria-label="FAQ sections">
                     <a href="#privacy">Privacy</a>
                     <a href="#using-the-app">Using the app</a>
+                    <a href="#slack">Slack</a>
                     <a href="#discord">Discord</a>
                     <a href="#webex">Webex</a>
                     <a href="#miscellaneous">Miscellaneous</a>
@@ -215,6 +216,56 @@
                                 No, you can't. However, you can still start a new Secret Santa. We advise you to add a
                                 note in the message mentioning that this new draw cancels and replaces the old one.
                             </p>
+                        </details>
+                    </li>
+                </ul>
+
+                <h2 id="slack" class="section-head">Slack</h2>
+
+                <ul>
+                    <li>
+                        <details id="slack-missing-channel">
+                            <summary>
+                                <h3>Why is a channel missing from the list? <a href="#slack-missing-channel" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
+                            </summary>
+                            <p>The list only shows the channels you are a member of: join the channel in Slack, then refresh the page.</p>
+                            <p>A private channel also needs Secret Santa in it, as Slack does not let the app see the private channels
+                               it is not a member of. Open the channel in Slack, type <code>/invite @Secret Santa</code> and send it.</p>
+                            <p>Archived channels are never listed.</p>
+                        </details>
+                    </li>
+                    <li>
+                        <details id="slack-connect">
+                            <summary>
+                                <h3>Can people from another workspace participate? <a href="#slack-connect" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
+                            </summary>
+                            <p>Yes, through a channel shared with their workspace (Slack Connect). Select the shared channel at the
+                               "Channels" step: its external members are listed with the name of their workspace on the participants page.</p>
+                            <p>Slack only lets the app message people it shares a channel with, so Secret Santa has to be invited in the
+                               shared channel. The app tells you which channels miss it and lets you refresh once it is invited.</p>
+                            <p>The "Everyone in the workspace" option only takes the members of your workspace, people from
+                               other workspaces are left out.</p>
+                        </details>
+                    </li>
+                    <li>
+                        <details id="slack-schedule">
+                            <summary>
+                                <h3>Can I schedule the messages? <a href="#slack-schedule" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
+                            </summary>
+                            <p>Yes, on the "Message" step, pick the date and time next to "Deliver the private messages". The messages are
+                               handed to Slack right away and Slack delivers them at the chosen time, with no need to keep the app open.</p>
+                            <p>You receive the admin message immediately, as a reminder of the date and a way to retrieve the repartition.</p>
+                        </details>
+                    </li>
+                    <li>
+                        <details id="slack-permissions">
+                            <summary>
+                                <h3>Slack did not grant all the permissions the app needs, what now? <a href="#slack-permissions" class="faq-anchor" aria-label="Link to this question"><i class="fas fa-link"></i></a></h3>
+                            </summary>
+                            <p>Some workspaces require an admin to approve the apps and their permissions. If your workspace approved an
+                               older version of Secret Santa, Slack signs you in with the old permissions only and the app cannot list
+                               your channels.</p>
+                            <p>Ask a workspace admin to approve the new permissions of Secret Santa, then try again.</p>
                         </details>
                     </li>
                 </ul>
