@@ -10,7 +10,7 @@
     {% set linked = link and step < currentStep and currentStep < 5 %}
     <li class="step-{{ state }}">
         {% if linked %}<a href="{{ link }}">{% else %}<span{% if 'current' == state %} aria-current="step"{% endif %}>{% endif %}
-            <span class="step-dot" aria-hidden="true">{% if 'done' == state %}<i class="fas fa-check"></i>{% else %}{{ step }}{% endif %}</span>
+            <span class="step-dot" aria-hidden="true">{% if 'done' == state %}<i class="fas fa-check"></i>{% endif %}</span>
             <span class="step-label">{{ label }}</span>
         {% if linked %}</a>{% else %}</span>{% endif %}
     </li>
@@ -19,6 +19,9 @@
 {% block content %}
     <nav class="is-center">
         <ol class="stepper">
+            {% if application == 'slack' %}
+                {{ _self.step(currentStep, 'Channels', 0, path('slack_channels')) }}
+            {% endif %}
             {{ _self.step(currentStep, 'Participants', 1, path('participants', {application: application})) }}
             {{ _self.step(currentStep, 'Exclusions', 2, path('exclusions', {application: application})) }}
             {{ _self.step(currentStep, 'Message', 3, path('message', {application: application})) }}

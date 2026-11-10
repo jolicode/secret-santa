@@ -155,6 +155,15 @@ input[type=submit]:not(:disabled) {
 .big-button.warning-btn:hover {
     background-color: var(--color-warning-dark);
 }
+.big-button.outline {
+    background-color: white;
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+}
+.big-button.outline:hover {
+    background-color: var(--color-primary);
+    color: white;
+}
 .big-button.bellow {
     color: var(--color-primary);
     border: 2px solid var(--color-primary);
@@ -531,12 +540,14 @@ details > summary p {
     margin: 1.5em auto 1em;
     padding: 0 1em;
     list-style: none;
+    counter-reset: step;
 }
 .stepper li {
     position: relative;
     flex: 1;
     max-width: 10em;
     text-align: center;
+    counter-increment: step;
 }
 .stepper li > * {
     display: flex;
@@ -586,6 +597,11 @@ details > summary p {
     border-color: var(--color-primary);
     background-color: var(--color-primary);
     color: white;
+}
+/* Numbered by a counter: the Slack workflow has one more step than the others */
+.step-todo .step-dot::before,
+.step-current .step-dot::before {
+    content: counter(step);
 }
 .step-done .step-dot i {
     font-size: 0.8em;
