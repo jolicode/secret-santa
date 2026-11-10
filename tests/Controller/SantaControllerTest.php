@@ -124,7 +124,7 @@ class SantaControllerTest extends BaseWebTestCase
 
         self::assertSame(200, $response->getStatusCode());
 
-        $form = $crawler->selectButton('Decode!')->form();
+        $form = $crawler->selectButton('Reveal the repartition')->form();
         $form['code']->setValue('v2@eyJUb3RvIDEiOiJUb3RvIDIiLCJUb3RvIDIiOiJUb3RvIDMiLCJUb3RvIDMiOiJUb3RvIDEifQ==');
 
         $crawler = $client->submit($form);
@@ -132,9 +132,9 @@ class SantaControllerTest extends BaseWebTestCase
 
         self::assertSame(200, $response->getStatusCode());
         self::assertStringContainsString('Here is the secret repartition', $response->getContent());
-        self::assertStringContainsString('<strong>Toto 1</strong> must offer a gift to <strong>Toto 2</strong>', $response->getContent());
-        self::assertStringContainsString('<strong>Toto 2</strong> must offer a gift to <strong>Toto 3</strong>', $response->getContent());
-        self::assertStringContainsString('<strong>Toto 3</strong> must offer a gift to <strong>Toto 1</strong>', $response->getContent());
+        self::assertStringContainsString('<strong>Toto 1</strong> <span>must offer a gift to</span> <strong>Toto 2</strong>', $response->getContent());
+        self::assertStringContainsString('<strong>Toto 2</strong> <span>must offer a gift to</span> <strong>Toto 3</strong>', $response->getContent());
+        self::assertStringContainsString('<strong>Toto 3</strong> <span>must offer a gift to</span> <strong>Toto 1</strong>', $response->getContent());
     }
 
     public function testSpoilWorksWithInvalidCode(): void
@@ -146,13 +146,13 @@ class SantaControllerTest extends BaseWebTestCase
 
         self::assertSame(200, $response->getStatusCode());
 
-        $form = $crawler->selectButton('Decode!')->form();
+        $form = $crawler->selectButton('Reveal the repartition')->form();
         $form['code']->setValue('v2@yolo');
 
         $crawler = $client->submit($form);
         $response = $client->getResponse();
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertStringContainsString('Content could not be decoded', $response->getContent());
+        self::assertStringContainsString('This code could not be decoded', $response->getContent());
     }
 }

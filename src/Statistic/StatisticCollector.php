@@ -69,6 +69,11 @@ class StatisticCollector
         $this->client->incr('stats:spoil');
     }
 
+    public function getTotalCount(): int
+    {
+        return (int) $this->client->get('stats:total');
+    }
+
     /**
      * @return array<string, mixed>
      */

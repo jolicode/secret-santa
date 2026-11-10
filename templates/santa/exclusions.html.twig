@@ -15,7 +15,7 @@
                 {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
                 <button type="submit" disabled style="display: none" aria-hidden="true"></button>
 
-                <h2>Define some exclusions</h2>
+                <h2 class="content-head is-center">Define some exclusions</h2>
 
                 {% if not form.vars.valid %}
                     <span class="error">
@@ -89,11 +89,6 @@
                         </button>
                     </div>
 
-                    <p class="is-center">
-                        <small>
-                            or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                        </small>
-                    </p>
                 </div>
             {{ form_end(form) }}
         </div>
@@ -132,7 +127,7 @@
 
     {% else %}
         <div class="run-block">
-            <h2>Define some exclusions</h2>
+            <h2 class="content-head is-center">Define some exclusions</h2>
 
             <div class="exclusions-not-available">
                 <p>
@@ -148,11 +143,6 @@
                 </a>
             </div>
 
-            <p class="is-center">
-                <small>
-                    or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                </small>
-            </p>
         </div>
     {% endif %}
 {% endblock santa_content %}

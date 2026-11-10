@@ -11,25 +11,27 @@
     }) }}
 {% endblock %}
 
+{% block banner %}
+    <div class="jumbotron">
+        <div class="jumbotron-inner">
+            <h1>Hall of Fame</h1>
+
+            <p>Running a Secret Santa in your company is a nice way to <strong>make your team happier, stronger and have a bit of fun</strong>.</p>
+            <p>Here is a partial list of all the great companies using Secret Santa - if they are listed here, you know <strong>they care about their employees</strong>.</p>
+        </div>
+    </div>
+{% endblock banner %}
+
 {% block content %}
     <div class="hall-of-fame">
-        <div class="jumbotron">
-            <div class="jumbotron-inner">
-                <h1>Hall of Fame</h1>
-
-                <p>Running a Secret Santa in your company is a nice way to <strong>make your team happier, stronger and have a bit of fun</strong>.</p>
-                <p>Here is a partial list of all the great companies using Secret Santa - if they are listed here, you know <strong>they care about their employees</strong>.</p>
-            </div>
-        </div>
-
         <div class="content they-use-it">
-            <h2 class="content-head is-center"><i class="fas fa-star spin"></i> They use Secret Santa <i class="fas fa-star spin"></i></h2>
+            <h2 class="content-head is-center">They use Secret Santa</h2>
 
             <ul>
                 {% for company in companies %}
                 <li>
                     <a href="{{ company.link }}" rel="nofollow">
-                        <img src="{{ asset('images/hall-of-fame/' ~ company.image) }}" alt="{{ company.label }}" width="160" />
+                        <img src="{{ asset('images/hall-of-fame/' ~ company.image) }}" alt="{{ company.label }}" loading="lazy" />
                     </a>
                 </li>
                 {% endfor %}
@@ -39,5 +41,5 @@
 {% endblock content %}
 
 {% block contact %}
-    <a href="mailto:hello@secret-santa.team" class="support-link"><i class="fas fa-star"></i> Want to be listed? Contact us!</a>
+    <a href="mailto:hello@secret-santa.team" class="big-button"><i class="fas fa-star"></i> Want to be listed? Contact us!</a>
 {% endblock contact %}

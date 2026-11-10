@@ -12,7 +12,7 @@
             {# Prevent implicit submission of the form - no need for JS here (see https://stackoverflow.com/a/51507806/1917092) #}
             <button type="submit" disabled style="display: none" aria-hidden="true"></button>
 
-            <h2>Customize the private messages</h2>
+            <h2 class="content-head is-center">Customize the private messages</h2>
 
             {% if not form.vars.valid %}
                 <span class="error">
@@ -91,24 +91,23 @@
                 {% do form.notes.setRendered() %}
             {% endif %}
 
+            {% block options %}{% endblock %}
+
             <div class="user-field message-step">
-                <h3>Not sure how the private messages will render?</h3>
+                <h3>Want to preview the private message?</h3>
 
                 <p>
-                    The button below allows you (<strong>and only you</strong>) to receive a
-                    <strong>fake message</strong> almost identical to the real ones sent on
-                    the final step. Use it to have a look at how the message will look like.
+                    We can send you, <strong>and only you</strong>, a <strong>test message</strong>
+                    with the text above, exactly as the participants will receive it. Nothing is sent to anyone else.
                 </p>
 
                 <div class="is-center">
                     <button type="button" class="small-button" id="sample-message-button" data-url="{{ url('send_sample_message', {application: application}) }}">
                         <span class="fas fa-wrench" aria-hidden="true"></span>
-                        Send me a fake message
+                        Send me a test message
                     </button>
                 </div>
             </div>
-
-            {% block options %}{% endblock %}
 
             <div class="run-step">
                 <h2>Ready for next step?</h2>
@@ -126,11 +125,6 @@
                     </button>
                 </div>
 
-                <p class="is-center">
-                    <small>
-                        or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                    </small>
-                </p>
             </div>
         {{ form_end(form) }}
     </div>

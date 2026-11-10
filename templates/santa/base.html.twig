@@ -4,37 +4,39 @@
     <link rel="stylesheet" href="{{ asset('styles/santa.css') }}">
 {% endblock %}
 
-{% macro step(currentStep, label, icon, step, link = null) %}
-    <li class="{{ step <= currentStep ? 'current' }}">
-        {% if link and step <= currentStep and currentStep < 5 ? 'current' %}
-            <a href="{{ link }}">
-        {% else %}
-            <span>
-        {% endif %}
-
-        <span class="fas fa-{{ icon }}" aria-hidden="true"></span> {{ label }}
-
-        {% if link and step <= currentStep ? 'current' %}
-            </a>
-        {% else %}
-            </span>
-        {% endif %}
+{% macro step(currentStep, label, step, link = null) %}
+    {% set state = step < currentStep ? 'done' : (step == currentStep ? 'current' : 'todo') %}
+    {# Steps already done can be revisited until the messages are sent #}
+    {% set linked = link and step < currentStep and currentStep < 5 %}
+    <li class="step-{{ state }}">
+        {% if linked %}<a href="{{ link }}">{% else %}<span{% if 'current' == state %} aria-current="step"{% endif %}>{% endif %}
+            <span class="step-dot" aria-hidden="true">{% if 'done' == state %}<i class="fas fa-check"></i>{% else %}{{ step }}{% endif %}</span>
+            <span class="step-label">{{ label }}</span>
+        {% if linked %}</a>{% else %}</span>{% endif %}
     </li>
 {% endmacro %}
 
 {% block content %}
     <nav class="is-center">
-        <ol class="breadcrumb">
-            {{ _self.step(currentStep, 'Participants', 'users', 1, path('participants', {application: application})) }}
-            {{ _self.step(currentStep, 'Exclusions', 'ban', 2, path('exclusions', {application: application})) }}
-            {{ _self.step(currentStep, 'Customization', 'pen', 3, path('message', {application: application})) }}
-            {{ _self.step(currentStep, 'Validation', 'check', 4) }}
-            {{ _self.step(currentStep, 'Sending', 'paper-plane', 5) }}
-            {{ _self.step(currentStep, 'Finish', 'flag-checkered', 6) }}
+        <ol class="stepper">
+            {{ _self.step(currentStep, 'Participants', 1, path('participants', {application: application})) }}
+            {{ _self.step(currentStep, 'Exclusions', 2, path('exclusions', {application: application})) }}
+            {{ _self.step(currentStep, 'Message', 3, path('message', {application: application})) }}
+            {{ _self.step(currentStep, 'Validation', 4) }}
+            {{ _self.step(currentStep, 'Sending', 5) }}
+            {{ _self.step(currentStep, 'Done', 6) }}
         </ol>
     </nav>
 
     <div class="">
         {% block santa_content %}{% endblock %}
     </div>
+
+    {% if currentStep <= 4 %}
+        <p class="is-center">
+            <a class="cancel-link" href="{{ path('cancel', {application: application}) }}">
+                <i class="fas fa-times" aria-hidden="true"></i> Cancel this Secret Santa
+            </a>
+        </p>
+    {% endif %}
 {% endblock %}

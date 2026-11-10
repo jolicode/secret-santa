@@ -3,9 +3,9 @@
 {% set currentStep = 1 %}
 
 {% block santa_content %}
-    <div class="content load-users is-center">
+    <div class="content progress-page is-center">
         {% if app.request.query.get('error') %}
-            <h2>An unexpected error happened!</h2>
+            <h2 class="content-head is-center">An unexpected error happened!</h2>
 
             <p class="error">
                 <span class="fas fa-exclamation-triangle"></span>
@@ -14,29 +14,28 @@
             </p>
 
             <div class="is-center">
-                <a href="{{ path('load_users', {application: application}) }}" class="big-button warning-btn">
+                <a href="{{ path('load_users', {application: application}) }}" class="big-button">
                     <span class="fas fa-redo" aria-hidden="true"></span>
                     Try again
                 </a>
             </div>
         {% else %}
-            <h2>
-                <span class="fas fa-spinner spin"></span>
-                &nbsp;
-                We are loading users from your team!
-            </h2>
+            <span class="step-icon" aria-hidden="true"><i class="fas fa-spinner spin"></i></span>
+            <h2 class="content-head is-center">Loading the members of your team</h2>
 
-            <p data-load-users-url="{{ url('load_users', {application: application}) }}"
-               data-load-users-error-url="{{ url('load_users', {application: application, error: true}) }}"
-               data-load-users-next-url="{{ url('participants', {application: application}) }}">
-                <span class="js-count-value bold">{{ count }}</span> user(s) loaded so far.
-            </p>
+            <div class="progress-box">
+                <p>
+                    <strong>Keep this window open.</strong><br />
+                    Large teams take a moment, you will be redirected automatically once everyone is loaded.
+                </p>
 
-            <p class="is-center">
-                <small>
-                    Please wait for loading to finish or <a href="{{ path('cancel', {application: application}) }}">cancel everything</a>
-                </small>
-            </p>
+                <p class="progress-count"
+                   data-load-users-url="{{ url('load_users', {application: application}) }}"
+                   data-load-users-error-url="{{ url('load_users', {application: application, error: true}) }}"
+                   data-load-users-next-url="{{ url('participants', {application: application}) }}">
+                    <strong class="js-count-value">{{ count }}</strong> members loaded
+                </p>
+            </div>
         {% endif %}
     </div>
 {% endblock santa_content %}

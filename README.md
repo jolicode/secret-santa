@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/jolicode/secret-santa"><img src="https://jolicode.com/media/original/oss/headers/secret-santa.png" alt="Secret Santa"></a>
+  <a href="https://github.com/jolicode/secret-santa"><img src="https://jolicode.com/media/original/oss/headers/secret-santa.png?v2" alt="Secret Santa"></a>
   <br />
   Secret Santa
   <br />

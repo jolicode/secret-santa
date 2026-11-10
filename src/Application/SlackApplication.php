@@ -108,7 +108,7 @@ class SlackApplication implements ApplicationInterface
                     'constraints' => [
                         new GreaterThanOrEqual(
                             value: new \DateTime('+9 minutes')->getTimestamp(),
-                            message: 'You can only schedule a Secret Santa for at least 10 minutes away in the future',
+                            message: 'The delivery date is less than 10 minutes away, please pick a later time (or deliver immediately).',
                         ),
                         new LessThanOrEqual(
                             value: new \DateTime('+120 days')->getTimestamp(),

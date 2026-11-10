@@ -1,18 +1,58 @@
 /**
  * FAQ
  */
-.faq h2 {
-    margin-top: 100px;
+.faq {
+    max-width: 800px;
+    margin: 0 auto;
+}
+.faq-intro {
+    margin: -1em 0 1.5em;
+    text-align: center;
+    color: var(--color-ink-2);
+}
+.faq-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5em;
+    margin-bottom: 2em;
+}
+.faq-nav a {
+    padding: 0.4em 1em;
+    border: 1px solid var(--color-gray);
+    border-radius: var(--border-radius);
+    background-color: white;
+    color: var(--color-ink);
+}
+.faq-nav a:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    text-decoration: none;
 }
 .faq ul {
     list-style: none;
     padding-left: 0;
 }
-.faq summary {
-    position: relative;
-    padding-right: 2em;
+.faq details {
+    margin-bottom: 0.75em;
+}
+.faq summary h3 {
+    flex: 1;
+    font-size: 1.05em;
+    font-weight: bold;
+    letter-spacing: 0;
 }
 .faq-anchor {
-    position: absolute;
-    right: 0;
+    opacity: 0;
+    font-size: 0.85em;
+}
+.faq summary:hover .faq-anchor,
+.faq-anchor:focus {
+    opacity: 1;
+}
+.faq details > p,
+.faq details > ol,
+.faq details > div {
+    line-height: 1.6;
+    color: var(--color-ink-2);
 }

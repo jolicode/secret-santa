@@ -1,28 +1,35 @@
 /**
  * Hall of Fame
  */
-.hall-of-fame .they-use-it ul {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    max-width: 1600px;
+.they-use-it {
+    max-width: 1200px;
     margin: 0 auto;
+}
+.they-use-it ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1em;
+    margin: 2em 0 0;
     padding: 0;
-}
-.hall-of-fame .they-use-it li {
     list-style: none;
+}
+.they-use-it a {
     display: flex;
-    width: 100%;
-    justify-content: center;
     align-items: center;
-    padding-top: 2em;
+    justify-content: center;
+    height: 120px;
+    padding: 1.5em;
+    border: 1px solid var(--color-line);
+    border-radius: var(--border-radius-large);
+    background-color: white;
+    transition: transform 0.15s;
 }
-.hall-of-fame .they-use-it li img {
+.they-use-it a:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-primary);
+}
+.they-use-it img {
+    max-width: 100%;
     max-height: 100%;
-}
-@media screen and (min-width: 800px) {
-    .hall-of-fame .they-use-it li {
-        width: 21%;
-    }
+    object-fit: contain;
 }
