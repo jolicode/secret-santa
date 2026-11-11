@@ -29,6 +29,8 @@ class Config
     /** @var array<string, mixed> */
     private array $options = [];
     private bool $usersLoaded = false;
+    /** Whether the participants were picked from some Slack channels, rather than the whole workspace */
+    private bool $channelRestricted = false;
     /**
      * Parameters each application can save to paginate users loading.
      *
@@ -214,5 +216,29 @@ class Config
     public function setUsersPaginationParameters(array $usersPagination): void
     {
         $this->usersPaginationParameters = $usersPagination;
+    }
+
+    public function isChannelRestricted(): bool
+    {
+        return $this->channelRestricted;
+    }
+
+    public function setChannelRestricted(bool $channelRestricted): void
+    {
+        $this->channelRestricted = $channelRestricted;
+    }
+
+    /**
+     * Whether a selected participant comes from another workspace (Slack Connect).
+     */
+    public function hasExternalUsers(): bool
+    {
+        foreach ($this->selectedUsers as $identifier) {
+            if (($this->getUser((string) $identifier)?->getExtra()['team'] ?? null) !== null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

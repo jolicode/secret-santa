@@ -104,7 +104,10 @@ class SlackApplication implements ApplicationInterface
 
     public function loadNextBatchOfUsers(Config $config): array
     {
-        return $this->userExtractor->loadNextBatchOfUsers($this->getToken()->getToken(), $config, $this->getChannels());
+        $channels = $this->getChannels();
+        $config->setChannelRestricted([] !== $channels);
+
+        return $this->userExtractor->loadNextBatchOfUsers($this->getToken()->getToken(), $config, $channels);
     }
 
     public function sendSecretMessage(SecretSanta $secretSanta, string $giver, string $receiver, bool $isSample = false): void

@@ -83,19 +83,22 @@
 
         <div class="single-values">
             {{ stats.singleValue('Secret Santa thrown', counters['total']) }}
-            {{ stats.singleValue('Participants involved *', counters['users']) }}
+            {{ stats.singleValue('Participants involved (a)', counters['users']) }}
             {{ stats.singleValue('Biggest Secret Santa', counters['users-max'], 'participants') }}
-            {{ stats.singleValue('Message samples sent *', counters['sample']) }}
-            {{ stats.singleValue('Re-shuffle **', counters['shuffle'] ?? 0) }}
-            {{ stats.singleValue('Spoils asked *', counters['spoil']) }}
-            {{ stats.singleValue('Biggest team ***', counters['team-size-max']) }}
-            {{ stats.singleValue('With exclusions ***', counters['exclusions']) }}
+            {{ stats.singleValue('Message samples sent (a)', counters['sample']) }}
+            {{ stats.singleValue('Re-shuffle (b)', counters['shuffle'] ?? 0) }}
+            {{ stats.singleValue('Spoils asked (a)', counters['spoil']) }}
+            {{ stats.singleValue('Biggest team (c)', counters['team-size-max']) }}
+            {{ stats.singleValue('With exclusions (c)', counters['exclusions']) }}
+            {{ stats.singleValue('Restricted to channels (d)', counters['channel']) }}
+            {{ stats.singleValue('With Slack Connect users (d)', counters['external']) }}
         </div>
 
         <p class="is-center footnotes">
-            * Since 10/2019<br>
-            ** Since 11/2024<br>
-            *** Since 10/2025
+            (a) Since 10/2019<br>
+            (b) Since 11/2024<br>
+            (c) Since 10/2025<br>
+            (d) Since 11/2026
         </p>
 
         <div class="container-charts">
