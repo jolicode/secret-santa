@@ -211,6 +211,11 @@ class ContentController extends AbstractController
                 'image' => 'postman.svg',
             ],
             [
+                'label' => 'Premier Octet',
+                'link' => 'https://www.premieroctet.com/',
+                'image' => 'premier-octet.svg',
+            ],
+            [
                 'label' => 'Redirection.io',
                 'link' => 'https://redirection.io/',
                 'image' => 'redirectionio.svg',
