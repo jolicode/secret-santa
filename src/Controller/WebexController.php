@@ -19,6 +19,7 @@ use JoliCode\SecretSanta\Webex\UserExtractor;
 use JoliCode\SecretSanta\Webex\WebexProvider;
 use League\OAuth2\Client\Token\AccessToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,7 @@ class WebexController extends AbstractController
     public function __construct(
         private string $webexClientId,
         private string $webexClientSecret,
+        private string $webexWebhookSecret,
         private RouterInterface $router,
     ) {
     }
@@ -113,22 +115,41 @@ class WebexController extends AbstractController
     #[Route('/bot/webex', name: 'webex_bot', methods: ['POST'])]
     public function bot(Request $request, MessageSender $messageSender): Response
     {
-        $eventData = $request->toArray();
+        // Webex signs each webhook call with the secret given at the webhook creation
+        // https://developer.webex.com/docs/api/guides/webhooks#handling-requests-from-webex
+        $signature = (string) $request->headers->get('X-Spark-Signature');
+        $expectedSignature = hash_hmac('sha1', $request->getContent(), $this->webexWebhookSecret);
 
-        if ('messages' !== $eventData['resource']) {
+        if ('' === $this->webexWebhookSecret || !hash_equals($expectedSignature, $signature)) {
+            return new Response('Invalid signature.', Response::HTTP_FORBIDDEN);
+        }
+
+        try {
+            $eventData = $request->toArray();
+        } catch (JsonException) {
+            return new Response('Invalid payload.', Response::HTTP_BAD_REQUEST);
+        }
+
+        if ('messages' !== ($eventData['resource'] ?? null)) {
             return new Response();
         }
 
-        if ('created' !== $eventData['event']) {
+        if ('created' !== ($eventData['event'] ?? null)) {
             return new Response();
         }
 
         // Avoid to answer to ourselves
-        if ('secret-santa@webex.bot' === $eventData['data']['personEmail']) {
+        if ('secret-santa@webex.bot' === ($eventData['data']['personEmail'] ?? null)) {
             return new Response();
         }
 
-        $messageSender->sendDummyBotAnswer($eventData['data']['personId']);
+        $personId = $eventData['data']['personId'] ?? null;
+
+        if (!\is_string($personId) || '' === $personId) {
+            return new Response('Invalid payload.', Response::HTTP_BAD_REQUEST);
+        }
+
+        $messageSender->sendDummyBotAnswer($personId);
 
         return new Response();
     }
