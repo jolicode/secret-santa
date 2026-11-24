@@ -45,6 +45,7 @@ services:
         arguments:
             $webexClientId: '%env(WEBEX_CLIENT_ID)%'
             $webexClientSecret: '%env(WEBEX_CLIENT_SECRET)%'
+            $webexWebhookSecret: '%env(WEBEX_WEBHOOK_SECRET)%'
 
     JoliCode\SecretSanta\Webex\MessageSender:
         arguments:
