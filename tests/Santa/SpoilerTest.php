@@ -117,4 +117,18 @@ class SpoilerTest extends TestCase
 
         self::assertNull($repartition);
     }
+
+    public function testItRejectsADecompressionBomb(): void
+    {
+        // Valid JSON over 1 MB once inflated: without the decode cap it would parse fine, with it
+        // the decoded content is truncated, the JSON parsing fails and the code is safely rejected
+        // instead of letting a tiny payload exhaust the server memory.
+        $payload = (string) json_encode(array_fill(0, 300_000, 'x'));
+        self::assertGreaterThan(1_000_000, \strlen($payload));
+
+        $bomb = 'v3@' . base64_encode((string) gzencode($payload));
+        self::assertLessThan(100_000, \strlen($bomb));
+
+        self::assertNull($this->SUT->decode($bomb));
+    }
 }
