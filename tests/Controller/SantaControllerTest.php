@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
+use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
@@ -115,6 +116,35 @@ class SantaControllerTest extends BaseWebTestCase
         self::assertCount(1, $crawler->filter('html:contains("toto2 must offer a gift to xxxxx")'));
     }
 
+    public function testFinishPageEscapesHtmlComingFromUserNames(): void
+    {
+        // A display name (and thus the error that quotes it) comes from the chat platform and can
+        // carry HTML: the finish page must render it literally, not as markup.
+        $errorPayload = '<img src=x onerror=alert(1)>';
+        $receiverPayload = '<img src=x onerror=alert(2)>';
+
+        $config = new Config('my_application', 'toto', null);
+        $config->setAvailableUsers([
+            'u1' => new User('u1', 'Alice'),
+            'u2' => new User('u2', $receiverPayload),
+        ]);
+        $config->setSelectedUsers(['u1', 'u2']);
+
+        $secretSanta = new SecretSanta('azerty', ['u1' => 'u2', 'u2' => 'u1'], $config);
+        $secretSanta->addError(\sprintf('Fail to send message to @%s.', $errorPayload), 'u1');
+
+        $client = static::createClient();
+        $this->prepareSession($client, 'secret-santa-azerty', $secretSanta);
+
+        $client->request('GET', '/finish/azerty');
+        $content = (string) $client->getResponse()->getContent();
+
+        self::assertSame(200, $client->getResponse()->getStatusCode());
+        // Would reappear if the error was rendered with |raw or a name was printed unescaped
+        self::assertStringNotContainsString('<img src=x onerror', $content);
+        self::assertStringContainsString('&lt;img src=x onerror=alert(1)&gt;', $content);
+    }
+
     public function testSpoilWorksWithValidCode(): void
     {
         $client = static::createClient();
@@ -154,5 +184,29 @@ class SantaControllerTest extends BaseWebTestCase
 
         self::assertSame(200, $response->getStatusCode());
         self::assertStringContainsString('This code could not be decoded', $response->getContent());
+    }
+
+    public function testParticipantsIgnoresIdsThatWereNotLoaded(): void
+    {
+        $client = static::createClient();
+
+        $config = new Config('slack', 'toto', null);
+        $config->setAvailableUsers([
+            'toto1' => new User('toto1', 'Toto 1', ['image' => '', 'nickname' => '', 'team' => null, 'restricted' => false]),
+            'toto2' => new User('toto2', 'Toto 2', ['image' => '', 'nickname' => '', 'team' => null, 'restricted' => false]),
+        ]);
+        $config->setUsersLoaded(true);
+
+        $this->prepareSession($client, [
+            'santa.slack.token' => new ApplicationToken('token', ['team' => 'team']),
+            'santa.slack.admin' => new User('toto1', 'Toto 1'),
+            'config' => $config,
+        ]);
+
+        // One real participant and one forged id: after filtering only one remains, which is not enough
+        $crawler = $client->request('POST', '/participants/slack', ['selectedUsers' => ['toto1', 'forged-id']]);
+
+        self::assertSame(200, $client->getResponse()->getStatusCode(), 'The forged id is dropped, so the draw does not start.');
+        self::assertStringContainsString('You have to select at least 2 users', $crawler->text());
     }
 }

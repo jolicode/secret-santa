@@ -15,6 +15,8 @@ use JoliCode\SecretSanta\Model\SecretSanta;
 
 class Spoiler
 {
+    private const int MAX_DECODED_BYTES = 1_000_000;
+
     public function encode(SecretSanta $santa): string
     {
         $givers = [];
@@ -111,7 +113,11 @@ class Spoiler
             return null;
         }
 
-        $gzDecoded = gzdecode($base64Decoded);
+        // Bound the inflated size: a spoil code only holds a list of names, and an unbounded
+        // gzdecode() on this public endpoint would let a tiny payload act as a decompression bomb.
+        // Over the cap, gzdecode() stops inflating and warns instead of returning the data, which
+        // we silence here and treat as an invalid (too large) code.
+        $gzDecoded = @gzdecode($base64Decoded, self::MAX_DECODED_BYTES);
 
         if (!$gzDecoded) {
             return null;
