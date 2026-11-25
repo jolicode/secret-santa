@@ -11,6 +11,7 @@
 
 namespace JoliCode\SecretSanta\Tests\Controller;
 
+use JoliCode\SecretSanta\Model\ApplicationToken;
 use JoliCode\SecretSanta\Model\Config;
 use JoliCode\SecretSanta\Model\SecretSanta;
 use JoliCode\SecretSanta\Model\User;
@@ -154,5 +155,29 @@ class SantaControllerTest extends BaseWebTestCase
 
         self::assertSame(200, $response->getStatusCode());
         self::assertStringContainsString('This code could not be decoded', $response->getContent());
+    }
+
+    public function testParticipantsIgnoresIdsThatWereNotLoaded(): void
+    {
+        $client = static::createClient();
+
+        $config = new Config('slack', 'toto', null);
+        $config->setAvailableUsers([
+            'toto1' => new User('toto1', 'Toto 1', ['image' => '', 'nickname' => '', 'team' => null, 'restricted' => false]),
+            'toto2' => new User('toto2', 'Toto 2', ['image' => '', 'nickname' => '', 'team' => null, 'restricted' => false]),
+        ]);
+        $config->setUsersLoaded(true);
+
+        $this->prepareSession($client, [
+            'santa.slack.token' => new ApplicationToken('token', ['team' => 'team']),
+            'santa.slack.admin' => new User('toto1', 'Toto 1'),
+            'config' => $config,
+        ]);
+
+        // One real participant and one forged id: after filtering only one remains, which is not enough
+        $crawler = $client->request('POST', '/participants/slack', ['selectedUsers' => ['toto1', 'forged-id']]);
+
+        self::assertSame(200, $client->getResponse()->getStatusCode(), 'The forged id is dropped, so the draw does not start.');
+        self::assertStringContainsString('You have to select at least 2 users', $crawler->text());
     }
 }

@@ -152,13 +152,18 @@ class SantaController extends AbstractController
         $availableUsers = $config->getAvailableUsers();
 
         if ($request->isMethod('POST') && $request->request->has('selectedUsers')) {
-            $selectedUsers = $request->request->all('selectedUsers');
+            // Keep only ids that were actually loaded from the chat platform, so a forged request
+            // cannot smuggle in an arbitrary id and have the bot message someone outside the team.
+            $selectedUsers = array_values(array_intersect(
+                $request->request->all('selectedUsers'),
+                array_keys($availableUsers),
+            ));
 
             if (\count($selectedUsers) < 2) {
                 $errors[] = 'You have to select at least 2 users';
             } else {
                 $config->resetUsers();
-                $config->setSelectedUsers($request->request->all('selectedUsers'));
+                $config->setSelectedUsers($selectedUsers);
                 $this->saveConfig($request, $config);
 
                 return $this->redirectToRoute('exclusions', ['application' => $application->getCode()]);
