@@ -4,7 +4,7 @@ const retryButton = document.getElementById('retry-button');
 if (revealButton) {
     revealButton.addEventListener('click', () => {
         document.querySelectorAll('[data-receiver]').forEach((receiver) => {
-            receiver.innerHTML = receiver.getAttribute('data-receiver');
+            receiver.textContent = receiver.getAttribute('data-receiver');
         });
     });
 }

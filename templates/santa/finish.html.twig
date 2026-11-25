@@ -51,7 +51,7 @@
 
                 {% for error in errors %}
                     <div class="error-code">
-                        {% if loop.length > 1 %}- {% endif %}{{ error|raw }}
+                        {% if loop.length > 1 %}- {% endif %}{{ error }}
                     </div>
                 {% endfor %}
 
